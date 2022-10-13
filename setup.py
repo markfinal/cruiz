@@ -156,7 +156,7 @@ setup(
     ],
     python_requires=">=3.7, <3.11",
     project_urls={
-        'Documentation': 'https://readthedocs.org/projects/cruiz/',
+        'Documentation': 'https://cruiz.readthedocs.io/en/latest/',
         'GitHub': 'https://github.com/markfinal/cruiz',
     },
 )
