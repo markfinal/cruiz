@@ -155,4 +155,8 @@ setup(
         "Programming Language :: Python :: 3.10",
     ],
     python_requires=">=3.7, <3.11",
+    project_urls={
+        'Documentation': 'https://readthedocs.org/projects/cruiz/',
+        'GitHub': 'https://github.com/markfinal/cruiz',
+    },
 )
