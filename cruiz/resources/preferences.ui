@@ -1,0 +1,1162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PreferencesDialog</class>
+ <widget class="QDialog" name="PreferencesDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>678</width>
+    <height>670</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Preferences</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QToolBox" name="prefs_toolbox">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="prefs_general">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>639</width>
+        <height>275</height>
+       </rect>
+      </property>
+      <attribute name="label">
+       <string>General</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="7" column="2">
+        <widget class="QPushButton" name="prefs_general_busy_colour">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="2">
+        <widget class="QPushButton" name="prefs_general_found_text_background_colour">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QCheckBox" name="prefs_general_usebatching">
+         <property name="text">
+          <string>Use batching for standard output</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="2">
+        <widget class="QLineEdit" name="prefs_general_default_recipe_dir"/>
+       </item>
+       <item row="3" column="2">
+        <widget class="QCheckBox" name="prefs_general_enable_wallclock">
+         <property name="text">
+          <string>Enable wall clock command timing</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2">
+        <widget class="QCheckBox" name="prefs_general_enable_compact">
+         <property name="visible">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Enable compact look</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QCheckBox" name="prefs_general_clearpanes">
+         <property name="text">
+          <string>Clear panes before running each command</string>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="2">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="9" column="2">
+        <widget class="QCheckBox" name="prefs_general_new_recipe_load">
+         <property name="visible">
+          <bool>false</bool>
+         </property>
+         <property name="toolTip">
+          <string>Enable new recipe loading behaviour.
+May help loading recipes that query version information during requirements() methods.
+However, help stop loading recipes if they have mixed versions of dependent packages in their dependency graph or mixed case names of dependent packages on case insensitive file systems.
+</string>
+         </property>
+         <property name="text">
+          <string>New recipe loading behaviour</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Busy icon colour</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Default recipe browsing directory</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QCheckBox" name="prefs_general_combine_panes">
+         <property name="text">
+          <string>Combine output and error panes</string>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="0">
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="label_30">
+         <property name="text">
+          <string>Found text background colour</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QCheckBox" name="prefs_general_enable_darkmode">
+         <property name="toolTip">
+          <string>Dark mode toggles immediately,  but existing Conan output will not change</string>
+         </property>
+         <property name="text">
+          <string>Enable dark mode</string>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="2">
+        <widget class="QLineEdit" name="prefs_general_recipe_editor"/>
+       </item>
+       <item row="15" column="0">
+        <widget class="QLabel" name="label_31">
+         <property name="text">
+          <string>Recipe editor</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="prefs_fonts">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>432</width>
+        <height>233</height>
+       </rect>
+      </property>
+      <attribute name="label">
+       <string>Fonts</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>UI font</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="0">
+           <widget class="QLabel" name="prefs_font_ui_label">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>1</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>The font</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="prefs_font_ui_preview">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>1</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>The quick brown fox jumps over the lazy dog</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QPushButton" name="prefs_font_ui_reset">
+            <property name="text">
+             <string>Reset</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QPushButton" name="prefs_font_ui_change">
+            <property name="text">
+             <string>Change ...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>Output panes font</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <widget class="QLabel" name="prefs_font_output_label">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>1</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>The font</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="prefs_font_output_preview">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>1</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>The quick brown fox jumps over the lazy dog</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QPushButton" name="prefs_font_output_reset">
+            <property name="text">
+             <string>Reset</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QPushButton" name="prefs_font_output_change">
+            <property name="text">
+             <string>Change ...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="prefs_conan">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>343</width>
+        <height>172</height>
+       </rect>
+      </property>
+      <attribute name="label">
+       <string>Conan</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QGroupBox" name="groupBox_3">
+         <property name="title">
+          <string>Logging</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_7">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Conan logging level</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="prefs_conan_log_level">
+            <property name="toolTip">
+             <string>Log Conan commands. Only works when a single recipe has commands run on it</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>CRITICAL</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>ERROR</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>WARNING</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>INFO</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>DEBUG</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>NOTSET</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_4">
+         <property name="title">
+          <string>Parsing conandata</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>YAML path segments to identify version list</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="prefs_conan_version_list_path_segment">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;For example, if your conandata.yml is formatted as&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;  sources:&lt;/p&gt;&lt;p&gt;    1.2.3:&lt;/p&gt;&lt;p&gt;    ... &lt;/p&gt;&lt;p&gt;    4.5.6:&lt;/p&gt;&lt;p&gt;    ... &lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;then specify 'sources' in order to extract the version list&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="prefs_localcache">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>297</width>
+        <height>203</height>
+       </rect>
+      </property>
+      <attribute name="label">
+       <string>Local cache</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QGroupBox" name="groupBox_5">
+         <property name="title">
+          <string>New cache options</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>Config to install</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="prefs_localcache_config_to_install"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_10">
+            <property name="text">
+             <string>Git branch</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="prefs_localcache_config_git_branch"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_6">
+         <property name="title">
+          <string>Forget caches without recipe associations</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_7">
+          <item row="0" column="1">
+           <widget class="QPushButton" name="prefs_localcache_do_forget">
+            <property name="text">
+             <string>Forget</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QComboBox" name="prefs_localcache_forget_cache">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>1</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="prefs_graphviz">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>305</width>
+        <height>79</height>
+       </rect>
+      </property>
+      <attribute name="label">
+       <string>GraphViz</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_8">
+       <item row="2" column="1">
+        <spacer name="verticalSpacer_8">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="prefs_graphviz_bin_directory"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_11">
+         <property name="text">
+          <string>GraphViz bin directory</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="2">
+        <widget class="QLabel" name="label_29">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Download from &lt;a href=&quot;https://graphviz.org/download/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0068da;&quot;&gt;https://graphviz.org/download/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="openExternalLinks">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="prefs_cmake">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>175</width>
+        <height>86</height>
+       </rect>
+      </property>
+      <attribute name="label">
+       <string>CMake</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_9">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_12">
+         <property name="text">
+          <string>CMake bin directory</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="prefs_cmake_cmake_bin_directory"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_13">
+         <property name="text">
+          <string>Ninja bin directory</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="prefs_cmake_ninja_bin_directory"/>
+       </item>
+       <item row="2" column="0">
+        <spacer name="verticalSpacer_6">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="2" column="1">
+        <spacer name="verticalSpacer_7">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="prefs_compilercache">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>405</width>
+        <height>384</height>
+       </rect>
+      </property>
+      <attribute name="label">
+       <string>Compiler cache</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QGroupBox" name="groupBox_7">
+         <property name="title">
+          <string>Default compiler cache</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <widget class="QComboBox" name="prefs_compilercache_default">
+            <property name="toolTip">
+             <string>The default compiler cache that attempts to integrate with Conan's CMake and Autotools helpers. YMMV.</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>None</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>ccache</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>sccache</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>buildcache</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_8">
+         <property name="title">
+          <string>ccache</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_10">
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_15">
+            <property name="text">
+             <string>Location</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="prefs_compilercache_ccache_location"/>
+          </item>
+          <item row="0" column="0" colspan="2">
+           <widget class="QLabel" name="label_14">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Download from &lt;a href=&quot;https://ccache.dev&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0068da;&quot;&gt;https://ccache.dev&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="openExternalLinks">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_9">
+         <property name="title">
+          <string>sccache</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_11">
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_17">
+            <property name="text">
+             <string>Location</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="prefs_compilercache_sccache_location"/>
+          </item>
+          <item row="0" column="0" colspan="2">
+           <widget class="QLabel" name="label_16">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Download from &lt;a href=&quot;https://github.com/mozilla/sccache&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0068da;&quot;&gt;https://github.com/mozilla/sccache&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="openExternalLinks">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_10">
+         <property name="title">
+          <string>buildcache</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_12">
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_19">
+            <property name="text">
+             <string>Location</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="prefs_compilercache_buildcache_location"/>
+          </item>
+          <item row="0" column="0" colspan="2">
+           <widget class="QLabel" name="label_18">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Download from &lt;a href=&quot;https://github.com/mbitsnbites/buildcache&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0068da;&quot;&gt;https://github.com/mbitsnbites/buildcache&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="openExternalLinks">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_13">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="prefs_shortcuts">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>639</width>
+        <height>519</height>
+       </rect>
+      </property>
+      <attribute name="label">
+       <string>Shortcuts</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_13">
+       <item row="4" column="2">
+        <widget class="ShortcutLineEdit" name="prefs_shortcuts_installupdates_edit"/>
+       </item>
+       <item row="10" column="2">
+        <widget class="ShortcutLineEdit" name="prefs_shortcuts_remove_edit"/>
+       </item>
+       <item row="9" column="0">
+        <widget class="QLabel" name="label_23">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;img src=&quot;:/testpackage.svg&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt; conan test&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_20">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;img src=&quot;:/build.svg&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt; conan build&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="ShortcutLineEdit" name="prefs_shortcuts_install_edit"/>
+       </item>
+       <item row="5" column="2">
+        <widget class="ShortcutLineEdit" name="prefs_shortcuts_source_edit"/>
+       </item>
+       <item row="15" column="2">
+        <spacer name="verticalSpacer_12">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="13" column="2">
+        <widget class="ShortcutLineEdit" name="prefs_shortcuts_cmakebuildtoolverbose_edit"/>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_1">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;img src=&quot;:/create.svg&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt; conan create&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="textFormat">
+          <enum>Qt::RichText</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="0">
+        <widget class="QLabel" name="label_25">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;img src=&quot;:/cancel.svg&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt; Cancel current command&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="label_22">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;img src=&quot;:/exportpackage.svg&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt; conan export-pkg&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="0">
+        <widget class="QLabel" name="label_26">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;img src=&quot;:/cmakebuildtool.svg&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt; CMake Build Tool&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;img src=&quot;:/install.svg&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt; conan install (update binaries)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="2">
+        <widget class="ShortcutLineEdit" name="prefs_shortcuts_cmakebuildtool_edit"/>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;img src=&quot;:/source.svg&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt; conan source&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="0">
+        <widget class="QLabel" name="label_27">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;img src=&quot;:/cmakebuildtoolverbose.svg&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt; CMake Build Tool (verbose)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="2">
+        <widget class="ShortcutLineEdit" name="prefs_shortcuts_test_edit"/>
+       </item>
+       <item row="7" column="2">
+        <widget class="ShortcutLineEdit" name="prefs_shortcuts_package_edit"/>
+       </item>
+       <item row="14" column="2">
+        <widget class="ShortcutLineEdit" name="prefs_shortcuts_deletecmakecache_edit"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;img src=&quot;:/install.svg&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt; conan install&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="2">
+        <widget class="ShortcutLineEdit" name="prefs_shortcuts_cancel_edit"/>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="label_21">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;img src=&quot;:/package.svg&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt; conan package&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;img src=&quot;:/imports.svg&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt; conan imports&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="0">
+        <widget class="QLabel" name="label_28">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;img src=&quot;:/removecmakecache.svg&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt; Delete CMakeCache&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="2">
+        <widget class="ShortcutLineEdit" name="prefs_shortcuts_exportpackage_edit"/>
+       </item>
+       <item row="0" column="2">
+        <widget class="ShortcutLineEdit" name="prefs_shortcuts_create_edit"/>
+       </item>
+       <item row="6" column="2">
+        <widget class="ShortcutLineEdit" name="prefs_shortcuts_build_edit"/>
+       </item>
+       <item row="10" column="0">
+        <widget class="QLabel" name="label_24">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;img src=&quot;:/removepackage.svg&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt; conan remove&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="ShortcutLineEdit" name="prefs_shortcuts_imports_edit"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_32">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;img src=&quot;:/create.svg&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt; conan create (update binaries)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="textFormat">
+          <enum>Qt::RichText</enum>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="ShortcutLineEdit" name="prefs_shortcuts_createupdates_edit"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="prefs_recipes">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>98</width>
+        <height>105</height>
+       </rect>
+      </property>
+      <attribute name="label">
+       <string>Recipes</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_7">
+       <item>
+        <widget class="QTableView" name="prefs_recipes_table">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="sizeAdjustPolicy">
+          <enum>QAbstractScrollArea::AdjustToContents</enum>
+         </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="alternatingRowColors">
+          <bool>true</bool>
+         </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::SingleSelection</enum>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+         <attribute name="horizontalHeaderStretchLastSection">
+          <bool>true</bool>
+         </attribute>
+         <attribute name="verticalHeaderVisible">
+          <bool>false</bool>
+         </attribute>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_9">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="prefs_recentconfigs">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>98</width>
+        <height>105</height>
+       </rect>
+      </property>
+      <attribute name="label">
+       <string>Recent configs</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_8">
+       <item>
+        <widget class="QListView" name="prefs_recentconfigs_list">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="sizeAdjustPolicy">
+          <enum>QAbstractScrollArea::AdjustToContents</enum>
+         </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="alternatingRowColors">
+          <bool>true</bool>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_10">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="prefs_recentremotes">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>98</width>
+        <height>105</height>
+       </rect>
+      </property>
+      <attribute name="label">
+       <string>Recent remotes</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_9">
+       <item>
+        <widget class="QListView" name="prefs_recentremotes_list">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="sizeAdjustPolicy">
+          <enum>QAbstractScrollArea::AdjustToContents</enum>
+         </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="alternatingRowColors">
+          <bool>true</bool>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_11">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="prefs_buttons">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+  <action name="actionForget_recipe">
+   <property name="text">
+    <string>Forget recipe</string>
+   </property>
+  </action>
+  <action name="actionForget_config">
+   <property name="text">
+    <string>Forget config</string>
+   </property>
+  </action>
+  <action name="actionForget_remote">
+   <property name="text">
+    <string>Forget remote</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ShortcutLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>cruiz/widgets/shortcutlineedit.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>prefs_buttons</sender>
+   <signal>accepted()</signal>
+   <receiver>PreferencesDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>prefs_buttons</sender>
+   <signal>rejected()</signal>
+   <receiver>PreferencesDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

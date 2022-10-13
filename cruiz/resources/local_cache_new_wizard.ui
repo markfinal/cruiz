@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>NewLocalCacheWizard</class>
+ <widget class="QWizard" name="NewLocalCacheWizard">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>629</width>
+    <height>400</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>600</width>
+    <height>290</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>New Local Cache</string>
+  </property>
+  <property name="wizardStyle">
+   <enum>QWizard::ClassicStyle</enum>
+  </property>
+  <property name="options">
+   <set>QWizard::CancelButtonOnLeft</set>
+  </property>
+  <widget class="QWizardPage" name="preamblePage">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Conan's local cache is a directory that can contain the following:
+* Configuration metadata controlling the behaviour of Conan.
+* Profiles containing logically grouped data controlling package identification.
+* Lists of external Artifactory remotes.
+* Python scripts that hook into Conan commands.
+
+The default local cache is in your home directory.
+Multiple local caches may exist though, and can switch Conan between them via environment variables.</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::MarkdownText</enum>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>cruiz associates recipes with local caches.
+Conan itself does not do this.
+cruiz manages the local caches it is made aware of.</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::MarkdownText</enum>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>This wizard allows the user to create new local caches, or make cruiz aware of existing local caches.</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::MarkdownText</enum>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="NewLocalCacheNamePage" name="namePage">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string>cruiz requires a name to associate with a local cache</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::MarkdownText</enum>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="new_cache_name">
+      <property name="placeholderText">
+       <string>Enter name of the local cache</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="NewLocalCacheLocationPage" name="locationsPage">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <widget class="QLabel" name="label_5">
+      <property name="text">
+       <string>Each local cache exists in a .conan folder in the specified directory.</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::MarkdownText</enum>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>CONAN_USER_HOME</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="userHome"/>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QLabel" name="userHomeShortExplanation">
+      <property name="text">
+       <string>
+
+On Windows, a path to where 'short' package paths are stored is also required.</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::MarkdownText</enum>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="0">
+       <widget class="QLabel" name="userHomeShortLabel">
+        <property name="text">
+         <string>CONAN_USER_HOME_SHORT</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="userHomeShort"/>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWizardPage" name="configPage">
+   <layout class="QVBoxLayout" name="verticalLayout_3">
+    <item>
+     <widget class="QLabel" name="label_7">
+      <property name="text">
+       <string>After creating the new local cache, a configuration can be installed to it to set it up to your site or product policies.</string>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="queryConfigInstall">
+      <property name="text">
+       <string>Install the default configuration to this new local cache?</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QGridLayout" name="gridLayout_4">
+      <item row="0" column="1">
+       <widget class="QLabel" name="configUrl">
+        <property name="text">
+         <string>&lt;empty&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLabel" name="configBranch">
+        <property name="text">
+         <string>&lt;empty&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>URL</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_9">
+        <property name="text">
+         <string>Branch</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="NewLocalCacheCreatePage" name="createPage">
+   <layout class="QVBoxLayout" name="verticalLayout_4">
+    <item>
+     <widget class="QLabel" name="label_10">
+      <property name="text">
+       <string>Click Create to make the following local cache from this summary:</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="summary_name">
+      <property name="text">
+       <string>&lt;name&gt;</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="summary_user_home">
+      <property name="text">
+       <string>&lt;user home&gt;</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="summary_user_home_short">
+      <property name="text">
+       <string>&lt;user home short&gt;</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="summary_install_config">
+      <property name="text">
+       <string>&lt;install configuration&gt;</string>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="summary_switch_to_new">
+      <property name="text">
+       <string>Switch to the new local cache</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="createCache">
+      <property name="text">
+       <string>Create</string>
+      </property>
+      <property name="default">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QProgressBar" name="createProgress">
+      <property name="value">
+       <number>24</number>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPlainTextEdit" name="summary_log">
+      <property name="sizeAdjustPolicy">
+       <enum>QAbstractScrollArea::AdjustToContents</enum>
+      </property>
+      <property name="undoRedoEnabled">
+       <bool>false</bool>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>NewLocalCacheNamePage</class>
+   <extends>QWizardPage</extends>
+   <header>cruiz/manage_local_cache/widgets/newlocalcachewizardpages.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>NewLocalCacheLocationPage</class>
+   <extends>QWizardPage</extends>
+   <header>cruiz/manage_local_cache/widgets/newlocalcachewizardpages.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>NewLocalCacheCreatePage</class>
+   <extends>QWizardPage</extends>
+   <header>cruiz/manage_local_cache/widgets/newlocalcachewizardpages.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

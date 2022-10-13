@@ -1,0 +1,22 @@
+{
+    "[python]": {
+        "editor.rulers": [
+            {
+                "column": 88, // black
+                "color": "#ff0000"
+            },
+            {
+                "column": 79, // pep8
+                "color": "#555500"
+            }
+        ],
+        "editor.detectIndentation": false,
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": true,
+    },
+    "python.formatting.provider": "black",
+    "python.linting.flake8Enabled": true,
+    "python.linting.mypyEnabled": true,
+    "python.linting.enabled": true,
+}

@@ -1,0 +1,1054 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>RecipeWindow</class>
+ <widget class="QMainWindow" name="RecipeWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>847</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>A recipe window</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QTabWidget" name="pane_tabs">
+        <property name="usesScrollButtons">
+         <bool>true</bool>
+        </property>
+        <property name="documentMode">
+         <bool>true</bool>
+        </property>
+        <property name="tabsClosable">
+         <bool>true</bool>
+        </property>
+        <property name="movable">
+         <bool>true</bool>
+        </property>
+        <property name="tabBarAutoHide">
+         <bool>true</bool>
+        </property>
+        <widget class="QWidget" name="default_panes_tab">
+         <attribute name="title">
+          <string>Default</string>
+         </attribute>
+         <layout class="QVBoxLayout" name="verticalLayout_18">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QSplitter" name="paneSplitter">
+            <property name="lineWidth">
+             <number>0</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="handleWidth">
+             <number>0</number>
+            </property>
+            <property name="childrenCollapsible">
+             <bool>false</bool>
+            </property>
+            <widget class="QPlainTextEdit" name="outputPane">
+             <property name="contextMenuPolicy">
+              <enum>Qt::CustomContextMenu</enum>
+             </property>
+             <property name="undoRedoEnabled">
+              <bool>false</bool>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+            <widget class="QPlainTextEdit" name="errorPane">
+             <property name="contextMenuPolicy">
+              <enum>Qt::CustomContextMenu</enum>
+             </property>
+             <property name="undoRedoEnabled">
+              <bool>false</bool>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="RecipeBehaviourToolbar" name="behaviourToolbar">
+   <property name="windowTitle">
+    <string>Recipe behaviours</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="RecipeCommandToolbar" name="commandToolbar">
+   <property name="windowTitle">
+    <string>Recipe commands</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="BuildFeaturesToolbar" name="buildFeaturesToolbar">
+   <property name="windowTitle">
+    <string>Build features</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>true</bool>
+   </attribute>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuRecipe">
+    <property name="title">
+     <string>Recipe</string>
+    </property>
+    <property name="toolTipsVisible">
+     <bool>true</bool>
+    </property>
+    <addaction name="actionOpen_recipe_in_editor"/>
+    <addaction name="actionOpen_recipe_folder"/>
+    <addaction name="actionCopy_recipe_folder_to_clipboard"/>
+    <addaction name="separator"/>
+    <addaction name="actionOpen_another_version"/>
+    <addaction name="separator"/>
+    <addaction name="actionManage_associated_local_cache"/>
+    <addaction name="separator"/>
+    <addaction name="actionReload"/>
+    <addaction name="separator"/>
+    <addaction name="actionClose"/>
+   </widget>
+   <widget class="QMenu" name="menuCommands">
+    <property name="title">
+     <string>Commands</string>
+    </property>
+    <property name="toolTipsVisible">
+     <bool>true</bool>
+    </property>
+    <widget class="QMenu" name="menuLocal_workflow">
+     <property name="title">
+      <string>Local workflow</string>
+     </property>
+     <property name="toolTipsVisible">
+      <bool>true</bool>
+     </property>
+     <widget class="QMenu" name="menuCMake">
+      <property name="title">
+       <string>CMake</string>
+      </property>
+      <addaction name="actionCMakeBuildToolCommand"/>
+      <addaction name="actionCMakeBuildToolVerboseCommand"/>
+      <addaction name="actionCMakeRemoveCacheCommand"/>
+     </widget>
+     <addaction name="actionInstallCommand"/>
+     <addaction name="actionInstallUpdateCommand"/>
+     <addaction name="actionImportsCommand"/>
+     <addaction name="actionSourceCommand"/>
+     <addaction name="actionBuildCommand"/>
+     <addaction name="actionPackageCommand"/>
+     <addaction name="actionExportPackageCommand"/>
+     <addaction name="actionTestCommand"/>
+     <addaction name="menuCMake"/>
+    </widget>
+    <addaction name="actionCreateCommand"/>
+    <addaction name="actionCreateUpdateCommand"/>
+    <addaction name="separator"/>
+    <addaction name="menuLocal_workflow"/>
+    <addaction name="separator"/>
+    <addaction name="actionRemovePackageCommand"/>
+    <addaction name="separator"/>
+    <addaction name="actionCancelCommand"/>
+   </widget>
+   <addaction name="menuRecipe"/>
+   <addaction name="menuCommands"/>
+  </widget>
+  <widget class="QDockWidget" name="conanLogDock">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="floating">
+    <bool>false</bool>
+   </property>
+   <property name="windowTitle">
+    <string>Conan logging</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents">
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QPlainTextEdit" name="conanLog"/>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="conanCommandsDock">
+   <property name="windowTitle">
+    <string>Conan command history</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_2">
+    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="RecipeCommandHistoryWidget" name="conanCommandHistory">
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
+       <property name="alternatingRowColors">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="conanConfigureDock">
+   <property name="windowTitle">
+    <string>Configuration</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_3">
+    <layout class="QVBoxLayout" name="verticalLayout_5">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QScrollArea" name="scrollArea_2">
+       <property name="widgetResizable">
+        <bool>true</bool>
+       </property>
+       <widget class="QWidget" name="scrollAreaWidgetContents_2">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>313</width>
+          <height>211</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_13">
+         <item>
+          <widget class="QGroupBox" name="groupBox_7">
+           <property name="title">
+            <string>Package ID</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_17">
+            <item>
+             <widget class="QLabel" name="configurePackageId">
+              <property name="contextMenuPolicy">
+               <enum>Qt::CustomContextMenu</enum>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="configureOptionsBox">
+           <property name="title">
+            <string>Options</string>
+           </property>
+           <layout class="QGridLayout" name="optionsLayout"/>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBox_2">
+           <property name="title">
+            <string>Package reference namespace</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_19">
+            <item>
+             <widget class="QLineEdit" name="configurePkgRefNamespace">
+              <property name="placeholderText">
+               <string>@user/channel</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="conanLocalWorkflowDock">
+   <property name="windowTitle">
+    <string>Local workflow</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_4">
+    <layout class="QVBoxLayout" name="verticalLayout_6">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QScrollArea" name="scrollArea">
+       <property name="widgetResizable">
+        <bool>true</bool>
+       </property>
+       <widget class="QWidget" name="scrollAreaWidgetContents">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>328</width>
+          <height>535</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_12">
+         <item>
+          <layout class="QGridLayout" name="gridLayout_3">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_7">
+             <property name="text">
+              <string>Working dir</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="localWorkflowCwd">
+             <item>
+              <property name="text">
+               <string>Relative to recipe folder</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Relative to git workspace</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_10">
+             <property name="text">
+              <string>Common subdir</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="localWorkflowCommonSubdir"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="Line" name="line">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBox_4">
+           <property name="title">
+            <string>Conan command folders</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_11">
+            <item>
+             <layout class="QGridLayout" name="gridLayout">
+              <item row="3" column="0">
+               <widget class="QLabel" name="label">
+                <property name="text">
+                 <string>Install</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="QLineEdit" name="localWorkflowImportsFolder"/>
+              </item>
+              <item row="8" column="0">
+               <widget class="QLabel" name="label_5">
+                <property name="text">
+                 <string>Test</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QLabel" name="label_6">
+                <property name="text">
+                 <string>Imports</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="1">
+               <widget class="QLineEdit" name="localWorkflowTestFolder"/>
+              </item>
+              <item row="9" column="0" colspan="2">
+               <widget class="QPushButton" name="localWorkflowExpressionEditor">
+                <property name="text">
+                 <string>Expression editor...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="1">
+               <widget class="QLineEdit" name="localWorkflowSourceFolder"/>
+              </item>
+              <item row="3" column="1">
+               <widget class="QLineEdit" name="localWorkflowInstallFolder"/>
+              </item>
+              <item row="7" column="0">
+               <widget class="QLabel" name="label_4">
+                <property name="text">
+                 <string>Package</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="1">
+               <widget class="QLineEdit" name="localWorkflowBuildFolder"/>
+              </item>
+              <item row="7" column="1">
+               <widget class="QLineEdit" name="localWorkflowPackageFolder"/>
+              </item>
+              <item row="6" column="0">
+               <widget class="QLabel" name="label_3">
+                <property name="text">
+                 <string>Build</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="0">
+               <widget class="QLabel" name="label_2">
+                <property name="text">
+                 <string>Source</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="Line" name="line_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBox_3">
+           <property name="title">
+            <string>Presets</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_10">
+            <item>
+             <widget class="QPushButton" name="localWorkflowClearAll">
+              <property name="text">
+               <string>Clear all</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="localWorkflowCommonBuildFolder">
+              <property name="text">
+               <string>Common 'build' folder</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="localWorkflowProfileAndVersionBasedSubdirs">
+              <property name="text">
+               <string>Profile and version specific subfolders</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="conanDependencyDock">
+   <property name="windowTitle">
+    <string>Dependencies</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_5">
+    <layout class="QVBoxLayout" name="verticalLayout_7">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QScrollArea" name="scrollArea_3">
+       <property name="widgetResizable">
+        <bool>true</bool>
+       </property>
+       <widget class="QWidget" name="scrollAreaWidgetContents_3">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>326</width>
+          <height>531</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_14">
+         <item>
+          <widget class="QTabWidget" name="dependentsTabs">
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <property name="tabBarAutoHide">
+            <bool>true</bool>
+           </property>
+           <widget class="QWidget" name="tab_2">
+            <attribute name="title">
+             <string>List</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_8">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QListView" name="dependenciesPackageList">
+               <property name="contextMenuPolicy">
+                <enum>Qt::CustomContextMenu</enum>
+               </property>
+               <property name="sizeAdjustPolicy">
+                <enum>QAbstractScrollArea::AdjustToContents</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="groupBox_5">
+               <property name="title">
+                <string>Legend</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_15">
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="label_11">
+                  <property name="font">
+                   <font>
+                    <pointsize>10</pointsize>
+                    <bold>true</bold>
+                    <underline>true</underline>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Top-level package</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_12">
+                  <property name="font">
+                   <font>
+                    <pointsize>10</pointsize>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Runtime dependency</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_13">
+                  <property name="font">
+                   <font>
+                    <pointsize>10</pointsize>
+                    <italic>true</italic>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Build dependency</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tab">
+            <attribute name="title">
+             <string>Tree</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_9">
+             <item>
+              <widget class="QTreeView" name="dependenciesPackageTree">
+               <property name="sizeAdjustPolicy">
+                <enum>QAbstractScrollArea::AdjustToContents</enum>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBox_6">
+           <property name="title">
+            <string>Visualisation</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_16">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>20</number>
+            </property>
+            <item>
+             <widget class="DependencyView" name="dependencyView">
+              <property name="sizeAdjustPolicy">
+               <enum>QAbstractScrollArea::AdjustToContents</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout">
+              <item>
+               <spacer name="horizontalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QComboBox" name="dependency_rankdir">
+                <item>
+                 <property name="text">
+                  <string>Left to right</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Top to bottom</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPlainTextEdit" name="dependentsLog">
+           <property name="contextMenuPolicy">
+            <enum>Qt::CustomContextMenu</enum>
+           </property>
+           <property name="sizeAdjustPolicy">
+            <enum>QAbstractScrollArea::AdjustToContents</enum>
+           </property>
+           <property name="undoRedoEnabled">
+            <bool>false</bool>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <action name="actionCreateCommand">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/create.svg</normaloff>:/create.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Create package in local cache</string>
+   </property>
+  </action>
+  <action name="actionCreateUpdateCommand">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/create.svg</normaloff>:/create.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Create package in local cache with latest dependencies</string>
+   </property>
+  </action>
+  <action name="actionImportsCommand">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/imports.svg</normaloff>:/imports.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Import files from dependents</string>
+   </property>
+  </action>
+  <action name="actionInstallCommand">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/install.svg</normaloff>:/install.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Download dependencies and configure</string>
+   </property>
+  </action>
+  <action name="actionInstallUpdateCommand">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/install.svg</normaloff>:/install.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Download latest dependencies and configure</string>
+   </property>
+  </action>
+  <action name="actionSourceCommand">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/source.svg</normaloff>:/source.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Get source code</string>
+   </property>
+  </action>
+  <action name="actionBuildCommand">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/build.svg</normaloff>:/build.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Build source</string>
+   </property>
+  </action>
+  <action name="actionPackageCommand">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/package.svg</normaloff>:/package.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Make local package</string>
+   </property>
+  </action>
+  <action name="actionExportPackageCommand">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/exportpackage.svg</normaloff>:/exportpackage.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Export package to local cache</string>
+   </property>
+  </action>
+  <action name="actionTestCommand">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/testpackage.svg</normaloff>:/testpackage.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Test package in local cache</string>
+   </property>
+  </action>
+  <action name="actionCancelCommand">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/cancel.svg</normaloff>:/cancel.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Cancel running command</string>
+   </property>
+  </action>
+  <action name="actionRemovePackageCommand">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/removepackage.svg</normaloff>:/removepackage.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Remove package from local cache</string>
+   </property>
+  </action>
+  <action name="actionCMakeBuildToolCommand">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/cmakebuildtool.svg</normaloff>:/cmakebuildtool.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Run CMake build tool</string>
+   </property>
+  </action>
+  <action name="actionCMakeBuildToolVerboseCommand">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/cmakebuildtoolverbose.svg</normaloff>:/cmakebuildtoolverbose.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Run CMake build tool (verbose)</string>
+   </property>
+  </action>
+  <action name="actionCMakeRemoveCacheCommand">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/removecmakecache.svg</normaloff>:/removecmakecache.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Delete CMake cache</string>
+   </property>
+  </action>
+  <action name="actionOpen_another_version">
+   <property name="text">
+    <string>Open another version of this recipe...</string>
+   </property>
+   <property name="toolTip">
+    <string>Open another version of this recipe</string>
+   </property>
+  </action>
+  <action name="actionManage_associated_local_cache">
+   <property name="text">
+    <string>Manage associated local cache...</string>
+   </property>
+  </action>
+  <action name="actionClose">
+   <property name="text">
+    <string>Close</string>
+   </property>
+  </action>
+  <action name="actionOpen_recipe_in_editor">
+   <property name="text">
+    <string>Open recipe in editor...</string>
+   </property>
+   <property name="toolTip">
+    <string>Open recipe in editor set in preferences</string>
+   </property>
+  </action>
+  <action name="actionOpen_recipe_folder">
+   <property name="text">
+    <string>Open recipe folder...</string>
+   </property>
+  </action>
+  <action name="actionCopy_recipe_folder_to_clipboard">
+   <property name="text">
+    <string>Copy recipe folder to clipboard</string>
+   </property>
+   <property name="toolTip">
+    <string>Copy recipe folder to clipboard</string>
+   </property>
+  </action>
+  <action name="actionReload">
+   <property name="text">
+    <string>Reload</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>RecipeBehaviourToolbar</class>
+   <extends>QToolBar</extends>
+   <header>cruiz/recipe/toolbars/behaviour.h</header>
+  </customwidget>
+  <customwidget>
+   <class>RecipeCommandToolbar</class>
+   <extends>QToolBar</extends>
+   <header>cruiz/recipe/toolbars/command.h</header>
+  </customwidget>
+  <customwidget>
+   <class>RecipeCommandHistoryWidget</class>
+   <extends>QListWidget</extends>
+   <header>cruiz/recipe/logs/command.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BuildFeaturesToolbar</class>
+   <extends>QToolBar</extends>
+   <header>cruiz/recipe/toolbars/buildfeatures.h</header>
+  </customwidget>
+  <customwidget>
+   <class>DependencyView</class>
+   <extends>QGraphicsView</extends>
+   <header>cruiz/recipe/dependencyview.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LoadRecipeWizard</class>
+ <widget class="QWizard" name="LoadRecipeWizard">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>443</width>
+    <height>330</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Load recipe wizard</string>
+  </property>
+  <property name="wizardStyle">
+   <enum>QWizard::ClassicStyle</enum>
+  </property>
+  <property name="options">
+   <set>QWizard::CancelButtonOnLeft|QWizard::HaveFinishButtonOnEarlyPages|QWizard::NoDefaultButton</set>
+  </property>
+  <widget class="LoadRecipeIntroPage" name="intro">
+   <property name="title">
+    <string>Load Conan recipe</string>
+   </property>
+   <property name="subTitle">
+    <string>Use this wizard to bind to a recipe version, associate with a local cache, and select an initial profile.</string>
+   </property>
+   <attribute name="pageId">
+    <string notr="true">0</string>
+   </attribute>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QPlainTextEdit" name="intro_message">
+      <property name="sizeAdjustPolicy">
+       <enum>QAbstractScrollArea::AdjustToContents</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="LoadRecipeLocalCachePage" name="localcache">
+   <property name="title">
+    <string>Local cache</string>
+   </property>
+   <property name="subTitle">
+    <string>Choose the local cache to associate the recipe with.</string>
+   </property>
+   <attribute name="pageId">
+    <string notr="true">2</string>
+   </attribute>
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <widget class="QComboBox" name="local_cache_name"/>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="manage_caches">
+        <property name="text">
+         <string>Manage local caches...</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="LoadRecipePackageVersionPage" name="packageversion">
+   <property name="title">
+    <string>Package version</string>
+   </property>
+   <property name="subTitle">
+    <string>Choose a version to bind with this instance of the recipe.</string>
+   </property>
+   <attribute name="pageId">
+    <string notr="true">1</string>
+   </attribute>
+   <layout class="QVBoxLayout" name="verticalLayout_3">
+    <item>
+     <widget class="QComboBox" name="version"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="LoadRecipeInitialProfilePage" name="initialprofile">
+   <property name="title">
+    <string>Initial profile</string>
+   </property>
+   <property name="subTitle">
+    <string>Choose the initial profile from the local cache to use with the recipe.</string>
+   </property>
+   <attribute name="pageId">
+    <string notr="true">3</string>
+   </attribute>
+   <layout class="QVBoxLayout" name="verticalLayout_4">
+    <item>
+     <widget class="QComboBox" name="initial_profile"/>
+    </item>
+    <item>
+     <widget class="QPlainTextEdit" name="initial_profile_log">
+      <property name="sizeAdjustPolicy">
+       <enum>QAbstractScrollArea::AdjustToContents</enum>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>LoadRecipeLocalCachePage</class>
+   <extends>QWizardPage</extends>
+   <header>cruiz/load_recipe/pages/localcachepage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>LoadRecipePackageVersionPage</class>
+   <extends>QWizardPage</extends>
+   <header>cruiz/load_recipe/pages/packageversionpage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>LoadRecipeIntroPage</class>
+   <extends>QWizardPage</extends>
+   <header>cruiz/load_recipe/pages/intropage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>LoadRecipeInitialProfilePage</class>
+   <extends>QWizardPage</extends>
+   <header>cruiz/load_recipe/pages/initialprofilepage.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,3 @@
+graft cruiz/resources
+include requirements.txt
+include requirements_dev.txt

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>compilerCacheFrame</class>
+ <widget class="QFrame" name="compilerCacheFrame">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>358</width>
+    <height>50</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Frame</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QCheckBox" name="useCache">
+     <property name="toolTip">
+      <string>Enable specifying the compiler cache for just this recipe.</string>
+     </property>
+     <property name="text">
+      <string>Compiler cache</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QComboBox" name="chooseCache">
+     <property name="toolTip">
+      <string>The recipe specific compiler cache that attempts to integrate with Conan's CMake and Autotools helpers.  The cruiz icon is shown beside the preferences default.  YMMV.</string>
+     </property>
+     <item>
+      <property name="text">
+       <string>None</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>ccache</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>sccache</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>buildcache</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="configureCache">
+     <property name="toolTip">
+      <string>Configure compiler caches for this recipe.</string>
+     </property>
+     <property name="text">
+      <string>Configure...</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
