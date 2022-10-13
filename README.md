@@ -1,8 +1,11 @@
 # cruiz
 
+Conan recipe user interface
+
 Written by Mark Final, (c) 2020-2022.
 
-Conan recipe user interface
+![main action workflow](https://github.com/markfinal/cruiz/actions/workflows/main.yml/badge.svg)
+
 
 ## Documentation
 See the documentation at [Read The Docs](https://cruiz.readthedocs.io/).
