@@ -25,9 +25,11 @@ def get_version() -> str:
 
         def _describe(cwd: str) -> str:
             # annotated tags only
-            return subprocess.check_output(
-                ["git", "describe", "--tags"], cwd=cwd
-            ).decode("utf-8")
+            return (
+                subprocess.check_output(["git", "describe", "--tags"], cwd=cwd)
+                .decode("utf-8")
+                .rstrip()
+            )
 
         try:
             root_dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
