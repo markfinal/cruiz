@@ -24,12 +24,19 @@ def get_version() -> str:
         import sys
 
         def _describe(cwd: str) -> str:
-            # annotated tags only
-            return (
-                subprocess.check_output(["git", "describe", "--tags"], cwd=cwd)
-                .decode("utf-8")
-                .rstrip()
-            )
+            if (
+                "GITHUB_REF_TYPE" in os.environ
+                and os.environ["GITHUB_REF_TYPE"] == "tag"
+            ):
+                # during GitHub actions, prefer to use the ref pushed
+                return os.environ["GITHUB_REF_NAME"]
+            else:
+                # annotated tags only
+                return (
+                    subprocess.check_output(["git", "describe", "--tags"], cwd=cwd)
+                    .decode("utf-8")
+                    .rstrip()
+                )
 
         try:
             root_dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
