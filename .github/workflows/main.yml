@@ -24,14 +24,15 @@ jobs:
       run: python -m pip install build --user
     - name: Build a binary wheel and a source tarball
       run: python -m build --sdist --wheel --outdir dist/ .
-    - name: Publish package to Test PyPI on each push
+    - name: Publish package to Test PyPI on each push to a protected branch
       continue-on-error: true
+      if: github.ref_protected
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         password: ${{ secrets.TEST_PYPI_API_TOKEN }}
         repository_url: https://test.pypi.org/legacy/
-    - name: Publish package to PyPI when pushing a tag
-      if: startsWith(github.ref, 'refs/tags')
+    - name: Publish package to PyPI when pushing a protected tag
+      if: github.ref_protected && startsWith(github.ref, 'refs/tags')
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         password: ${{ secrets.PYPI_API_TOKEN }}
