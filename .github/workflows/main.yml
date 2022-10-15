@@ -32,7 +32,7 @@ jobs:
         password: ${{ secrets.TEST_PYPI_API_TOKEN }}
         repository_url: https://test.pypi.org/legacy/
     - name: Publish package to PyPI when pushing a protected tag
-      if: github.ref_protected && startsWith(github.ref, 'refs/tags')
+      if: startsWith(github.ref, 'refs/tags/v')
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         password: ${{ secrets.PYPI_API_TOKEN }}
