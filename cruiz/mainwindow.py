@@ -267,11 +267,14 @@ class MainWindow(QtWidgets.QMainWindow):
         ssh_agent_color = "red"
         # find the ssh-agent if it is running
         for process in psutil.process_iter():
-            if "ssh-agent" in process.name():
-                ssh_agent_pid = process.pid
-                ssh_agent_text = "SSH agent detected"
-                ssh_agent_color = "darkorange"
-                break
+            try:
+                if "ssh-agent" in process.name():
+                    ssh_agent_pid = process.pid
+                    ssh_agent_text = "SSH agent detected"
+                    ssh_agent_color = "darkorange"
+                    break
+            except psutil.NoSuchProcess:
+                continue
         if ssh_agent_pid:
             try:
                 ssh_add_list_capture = subprocess.run(
