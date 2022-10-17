@@ -98,6 +98,10 @@ def _warning_message_filter(message: str) -> bool:
         return False
     if message.startswith("Populating font family aliases took"):
         return False
+    if message.startswith("QTextCursor::setPosition: Position") and message.endswith(
+        "out of range"
+    ):
+        return False
     return True
 
 
