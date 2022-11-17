@@ -10,27 +10,27 @@ import typing
 from qtpy import QtCore, QtWidgets
 
 
-def search_for_dir_options() -> QtWidgets.QFileDialog.Options:
+def search_for_dir_options() -> QtWidgets.QFileDialog.Option:
     """
     Get standard file dialog options for directory searching.
     """
-    options = QtWidgets.QFileDialog.ShowDirsOnly
+    options = QtWidgets.QFileDialog.Option.ShowDirsOnly
     if platform.system() == "Darwin":
         # have to use the non-native dialog on macOS, otherwise cannot browse
         # into an application bundle
-        options = options | QtWidgets.QFileDialog.DontUseNativeDialog
+        options = options | QtWidgets.QFileDialog.Option.DontUseNativeDialog
     return options
 
 
-def search_for_file_options() -> QtWidgets.QFileDialog.Options:
+def search_for_file_options() -> QtWidgets.QFileDialog.Option:
     """
     Get standard file dialog options for file searching.
     """
-    options = QtWidgets.QFileDialog.Options()
+    options = QtWidgets.QFileDialog.Option(0)
     if platform.system() == "Darwin":
         # have to use the non-native dialog on macOS, otherwise cannot browse
         # into an application bundle
-        options = options | QtWidgets.QFileDialog.DontUseNativeDialog
+        options = options | QtWidgets.QFileDialog.Option.DontUseNativeDialog
     return options
 
 
