@@ -58,6 +58,22 @@ else:
     QShortcut = QtWidgets.QShortcut
 
 
+# copied from distutils.url.strtobool and modified
+def _strtobool(val: str) -> bool:
+    """Convert a string representation of truth to true (1) or false (0).
+
+    True values are 'y', 'yes', 't', 'true', 'on', and '1'; false values
+    are 'n', 'no', 'f', 'false', 'off', and '0'.  Raises ValueError if
+    'val' is anything else.
+    """
+    val = val.lower()
+    if val in ("y", "yes", "t", "true", "on", "1"):
+        return True
+    if val in ("n", "no", "f", "false", "off", "0"):
+        return False
+    raise ValueError("invalid truth value %r" % (val,))
+
+
 class RecipeWidget(QtWidgets.QMainWindow):
     """
     Widget representing a Conan recipe.
@@ -364,12 +380,35 @@ class RecipeWidget(QtWidgets.QMainWindow):
         if not options:
             return []
         default_options = attrs["default_options"]
+        if isinstance(default_options, (tuple, list)):
+            as_dict = {}
+            for entry in default_options:
+                key, value = entry.split("=")
+                as_dict[key] = value
+            default_options = as_dict
+        assert isinstance(
+            default_options, dict
+        ), "Expected default_options to be a dict"
         values: typing.List[typing.Tuple[str, typing.List[typing.Any], typing.Any]] = []
         assert isinstance(options, dict)
         for key, value in options.items():
-            values.append(
-                (key, value, default_options[key] if default_options else None)
-            )
+            if default_options:
+                default_value = default_options[key]
+                if default_value not in value:
+                    if isinstance(value[0], bool):
+                        default_value = _strtobool(default_value)
+                        assert default_value in value, (
+                            f"Cannot find default value '{default_value}' in possible "
+                            f"values {value}"
+                        )
+                    else:
+                        raise TypeError(
+                            f"Don't know how to convert '{default_value}' to type "
+                            f"'{type(value[0])}'"
+                        )
+                values.append((key, value, default_value))
+            else:
+                values.append((key, value, None))
         return values
 
     # TODO: why does this have to be PurePosixPath? to create such a path,
