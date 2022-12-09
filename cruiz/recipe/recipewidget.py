@@ -677,9 +677,18 @@ class RecipeWidget(QtWidgets.QMainWindow):
             ):
                 value_edit = QtWidgets.QLineEdit()
                 if key in options:
-                    value_edit.setText(options[key])
+                    value_text = options[key]
                 else:
-                    value_edit.setText(default_value or "")
+                    if (
+                        isinstance(values, list)
+                        and None in values
+                        and default_value is None
+                    ):
+                        value_text = "None (default)"
+                    else:
+                        value_text = f"{default_value} (default)"
+                value_edit.setText(value_text)
+                value_edit.setProperty("DefaultValue", default_value)
                 value_edit.editingFinished.connect(self._option_any_changed)
                 self._ui.optionsLayout.addWidget(value_edit, i, 1)
             else:
@@ -716,7 +725,17 @@ class RecipeWidget(QtWidgets.QMainWindow):
         )
         settings = RecipeSettings()
         text = widget.text()
-        settings.append_options({name_of_option: text or None})  # type: ignore
+        default_value = widget.property("DefaultValue")
+        if (
+            text.endswith(" (default)")
+            or (str(default_value) == text)
+            or ((default_value is None and text.startswith("None")) or text == "")
+        ):
+            settings.append_options({name_of_option: None})  # type: ignore
+            with BlockSignals(widget):
+                widget.setText(f"{default_value} (default)")
+        else:
+            settings.append_options({name_of_option: text})  # type: ignore
         RecipeSettingsWriter.from_recipe(self.recipe).sync(settings)
         self.configuration_changed.emit()
 
@@ -732,7 +751,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         option_value = widget.itemText(index)
         real_option_value = widget.itemData(index)
         settings = RecipeSettings()
-        if " (default)" in option_value:
+        if option_value.endswith(" (default)"):
             settings.append_options({name_of_option: None})  # type: ignore
         else:
             settings.append_options(
