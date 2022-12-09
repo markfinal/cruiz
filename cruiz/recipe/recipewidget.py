@@ -401,6 +401,10 @@ class RecipeWidget(QtWidgets.QMainWindow):
                             f"Cannot find default value '{default_value}' in possible "
                             f"values {value}"
                         )
+                    elif (isinstance(value, str) and value == "ANY") or (
+                        isinstance(value, list) and "ANY" in value
+                    ):
+                        pass
                     else:
                         raise TypeError(
                             f"Don't know how to convert '{default_value}' to type "
