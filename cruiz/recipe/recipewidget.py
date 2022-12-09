@@ -696,9 +696,9 @@ class RecipeWidget(QtWidgets.QMainWindow):
                     # will never be the default value
                     current_index = value_combo.findText(options[key])
                 else:
-                    if default_value is not None:
+                    try:
                         current_index = values.index(default_value)
-                    else:
+                    except ValueError:
                         current_index = -1
                 value_combo.setCurrentIndex(current_index)
                 value_combo.currentIndexChanged.connect(self._option_combo_changed)
