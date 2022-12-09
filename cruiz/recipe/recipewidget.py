@@ -394,7 +394,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         for key, value in options.items():
             if default_options:
                 default_value = default_options[key]
-                if default_value not in value:
+                if isinstance(value, list) and default_value not in value:
                     if isinstance(value[0], bool):
                         default_value = _strtobool(default_value)
                         assert default_value in value, (
