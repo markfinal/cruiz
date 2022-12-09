@@ -1,6 +1,10 @@
 name: main actions
 on: push
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-test-n-publish:
     name: Build, test and publish package to PyPi
