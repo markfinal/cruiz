@@ -672,7 +672,9 @@ class RecipeWidget(QtWidgets.QMainWindow):
         recipe_options = self._get_options_from_recipe(recipe_attributes)
         for i, (key, values, default_value) in enumerate(recipe_options):
             self._ui.optionsLayout.addWidget(QtWidgets.QLabel(key), i, 0)
-            if isinstance(values, str) and values == "ANY":
+            if (isinstance(values, str) and values == "ANY") or (
+                isinstance(values, list) and "ANY" in values
+            ):
                 value_edit = QtWidgets.QLineEdit()
                 if key in options:
                     value_edit.setText(options[key])
