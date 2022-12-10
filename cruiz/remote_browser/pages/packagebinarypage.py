@@ -322,7 +322,7 @@ class PackageBinaryPage(Page):
                 remote_name=self._ui.remote.currentText(),
                 where=self._artifact_folder,
             )
-            self._context.get_package_details(params, self._log_details, self._complete)
+            self._context.get_package_details(params, self._complete)
 
     def _complete(self, results: typing.Any, exception: typing.Any) -> None:
         self._enable_progress(False)

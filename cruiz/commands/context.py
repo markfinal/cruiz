@@ -145,7 +145,6 @@ class ConanContext(QtCore.QObject):
             PackageRevisionsParameters,
             PackageBinaryParameters,
         ],
-        log_details: LogDetails,
         command_toolbar: typing.Optional[QtWidgets.QWidget],
         continuation: typing.Optional[typing.Callable[[typing.Any, typing.Any], None]],
         enable_history: bool = True,
@@ -153,12 +152,12 @@ class ConanContext(QtCore.QObject):
         added_environment, removed_environment = get_conan_env(self.cache_name)
         parameters.added_environment.update(added_environment)
         parameters.removed_environment.extend(removed_environment)
-        instance = ConanInvocation(self._log_details)
+        instance = ConanInvocation()
         instance.completed.connect(self._completed_invocation)
         instance.finished.connect(self._finished_invocation)
         if command_toolbar:
             instance.finished.connect(command_toolbar.command_ended)
-        instance.invoke(parameters, log_details, continuation)
+        instance.invoke(parameters, self._log_details, continuation)
         self._invocations.append(instance)
         if self.command_history_widget is not None and enable_history:
             # TODO: prefer adding to a model?
@@ -183,7 +182,6 @@ class ConanContext(QtCore.QObject):
     def conancommand(
         self,
         params: CommandParameters,
-        log_details: LogDetails,
         command_toolbar: typing.Optional[QtWidgets.QWidget],
         continuation: typing.Optional[
             typing.Callable[[typing.Any, typing.Any], None]
@@ -193,12 +191,11 @@ class ConanContext(QtCore.QObject):
         Run a conan command, with parameters as provided, and a continuation
         if further processing is needed
         """
-        self._start_invocation(params, log_details, command_toolbar, continuation)
+        self._start_invocation(params, command_toolbar, continuation)
 
     def cmakebuildcommand(
         self,
         params: CommandParameters,
-        log_details: LogDetails,
         command_toolbar: typing.Optional[QtWidgets.QWidget],
         continuation: typing.Optional[
             typing.Callable[[typing.Any, typing.Any], None]
@@ -208,7 +205,10 @@ class ConanContext(QtCore.QObject):
         Invoke the CMake build tool on the build folder of the recipe
         """
         self._start_invocation(
-            params, log_details, command_toolbar, continuation, enable_history=False
+            params,
+            command_toolbar,
+            continuation,
+            enable_history=False,
         )
 
     # pylint: disable=pointless-string-statement
@@ -295,7 +295,7 @@ class ConanContext(QtCore.QObject):
             "removeallpackages", cruiz.workers.removeallpackages.invoke
         )
         params.force = True
-        self._start_invocation(params, self._log_details, None, continuation)
+        self._start_invocation(params, None, continuation)
 
     def remove_local_cache_locks(
         self,
@@ -305,7 +305,7 @@ class ConanContext(QtCore.QObject):
         Run 'conan remove --locks' to remove all lock files from the local cache
         """
         params = CommandParameters("removelocks", cruiz.workers.removelocks.invoke)
-        self._start_invocation(params, self._log_details, None, continuation)
+        self._start_invocation(params, None, continuation)
 
     def install_config(
         self,
@@ -317,7 +317,7 @@ class ConanContext(QtCore.QObject):
         """
         Run 'conan config install <URI> [--args -b branch] [-s source] [-t target]'
         """
-        self._start_invocation(params, self._log_details, None, continuation)
+        self._start_invocation(params, None, continuation)
 
     def remotes_sync(self, remotes: typing.List[ConanRemote]) -> None:
         """
@@ -373,13 +373,12 @@ class ConanContext(QtCore.QObject):
             PackageRevisionsParameters,
             PackageBinaryParameters,
         ],
-        log_details: LogDetails,
         continuation: typing.Optional[typing.Callable[[typing.Any, typing.Any], None]],
     ) -> None:
         """
         Perform one of the actions to get package details from a remote.
         """
-        self._start_invocation(params, log_details, None, continuation)
+        self._start_invocation(params, None, continuation)
 
     def get_package_directory(self, pkgdata: PackageNode) -> str:
         """
@@ -513,7 +512,7 @@ class ConanContext(QtCore.QObject):
         Run an arbitrary Conan command in the local cache.
         """
 
-        self._start_invocation(params, self._log_details, None, continuation)
+        self._start_invocation(params, None, continuation)
 
     # TODO: remove editables
     def get_editables_list(self) -> typing.Dict[str, str]:

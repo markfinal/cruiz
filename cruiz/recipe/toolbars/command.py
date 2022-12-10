@@ -569,7 +569,6 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         self.command_started.emit()
         recipe_widget.recipe.context.conancommand(
             self._make_conan_create_params(recipe_attributes, args),
-            recipe_widget.log_details,
             self,
         )
 
@@ -590,7 +589,6 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         self.command_started.emit()
         recipe_widget.recipe.context.conancommand(
             self._make_conan_install_params(recipe_attributes, args),
-            recipe_widget.log_details,
             self,
         )
 
@@ -609,7 +607,6 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         self.command_started.emit()
         recipe_widget.recipe.context.conancommand(
             self._make_conan_imports_params(recipe_attributes),
-            recipe_widget.log_details,
             self,
         )
 
@@ -622,7 +619,6 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         self.command_started.emit()
         recipe_widget.recipe.context.conancommand(
             self._make_conan_source_params(recipe_attributes),
-            recipe_widget.log_details,
             self,
         )
 
@@ -635,7 +631,6 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         self.command_started.emit()
         recipe_widget.recipe.context.conancommand(
             self._make_conan_build_params(recipe_attributes),
-            recipe_widget.log_details,
             self,
         )
 
@@ -648,7 +643,6 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         self.command_started.emit()
         recipe_widget.recipe.context.conancommand(
             self._make_conan_package_params(recipe_attributes),
-            recipe_widget.log_details,
             self,
         )
 
@@ -661,7 +655,6 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         self.command_started.emit()
         recipe_widget.recipe.context.conancommand(
             self._make_conan_export_package_params(recipe_attributes),
-            recipe_widget.log_details,
             self,
         )
 
@@ -674,7 +667,6 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         self.command_started.emit()
         recipe_widget.recipe.context.conancommand(
             self._make_conan_test_package_params(recipe_attributes),
-            recipe_widget.log_details,
             self,
         )
 
@@ -692,7 +684,6 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         self.command_started.emit()
         recipe_widget.recipe.context.conancommand(
             self._make_conan_remove_package_params(recipe_attributes),
-            recipe_widget.log_details,
             self,
         )
 
@@ -702,7 +693,6 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         # TODO review
         recipe_widget = self._recipe_widget
         recipe = recipe_widget.recipe
-        log_details = recipe_widget.log_details
         params = CommandParameters(
             "cmakebuild", cruiz.workers.cmakebuildtool.invoke
         )  # TODO: verb is wrong
@@ -720,7 +710,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         if args:
             params.arguments.extend(args)
         self.command_started.emit()
-        recipe.context.cmakebuildcommand(params, log_details, self)
+        recipe.context.cmakebuildcommand(params, self)
 
     def _cmake_build(self) -> None:
         self._cmake_build_common()
@@ -732,7 +722,6 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         # TODO: review
         recipe_widget = self._recipe_widget
         recipe = recipe_widget.recipe
-        log_details = recipe_widget.log_details
         params = CommandParameters(
             "cmakeremovecache", cruiz.workers.deletecmakecache.invoke
         )  # TODO: verb is wrong
@@ -743,7 +732,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             build_folder = settings.local_workflow_build_folder.resolve()
             params.build_folder = recipe_widget.resolve_expression(build_folder)
         self.command_started.emit()
-        recipe.context.cmakebuildcommand(params, log_details, self)
+        recipe.context.cmakebuildcommand(params, self)
 
     def _generate_command_tooltip(self, params: CommandParameters) -> str:
         tooltip = StringIO()

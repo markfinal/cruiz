@@ -145,7 +145,7 @@ class PackageRevisionPage(Page):
                 reference=pkgref,
                 remote_name=self._ui.remote.currentText(),
             )
-            self._context.get_package_details(params, self._log_details, self._complete)
+            self._context.get_package_details(params, self._complete)
 
     def _on_restart(self) -> None:
         self._open_start()
