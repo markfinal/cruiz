@@ -82,10 +82,12 @@ class RecipeCommandHistoryWidget(QtWidgets.QListWidget):
         )
 
     def _show_context_menu(self, position: QtCore.QPoint) -> None:
+        if not any(self.selectedItems()):
+            return
         self._menu.exec_(self.mapToGlobal(position))
 
     def _selection_changed(self) -> None:
-        enabled = bool(self.selectedItems())
+        enabled = any(self.selectedItems())
         self._menu.setEnabled(enabled)
 
     def _export_bash(self) -> None:
