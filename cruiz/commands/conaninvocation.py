@@ -47,10 +47,9 @@ class ConanInvocation(QtCore.QObject):
     def __del__(self) -> None:
         logger.debug("-=%d", id(self))
 
-    def __init__(self, log_details: LogDetails) -> None:
+    def __init__(self) -> None:
         logger.debug("+=%d", id(self))
         super().__init__()  # note that parent is None
-        self._log_details = log_details
         self._mp_context = multiprocessing.get_context("spawn")
         self._process_queue = self._mp_context.Queue()
         self._thread = QtCore.QThread()
@@ -119,7 +118,7 @@ class ConanInvocation(QtCore.QObject):
         self._queue_processor.critical_failure.connect(self._critical_failure)
         with GeneralSettingsReader() as settings:
             clear_panes = settings.clear_panes.resolve()
-        if clear_panes and isinstance(log_details, LogDetails):
+        if clear_panes:
             log_details.output.clear()
             if log_details.error:
                 log_details.error.clear()

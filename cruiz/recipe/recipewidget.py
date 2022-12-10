@@ -1040,7 +1040,6 @@ class RecipeWidget(QtWidgets.QMainWindow):
                 params.add_option(params.name, key, value)  # type: ignore
         self._dependency_generate_context.conancommand(
             params,
-            self._dependency_generate_log,
             None,
             self._on_dependency_graph_generated,
         )

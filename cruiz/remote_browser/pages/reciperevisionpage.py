@@ -144,7 +144,7 @@ class RecipeRevisionPage(Page):
                 reference=pkgref,
                 remote_name=self._ui.remote.currentText(),
             )
-            self._context.get_package_details(params, self._log_details, self._complete)
+            self._context.get_package_details(params, self._complete)
 
     def _on_copy_pkgref_to_clip(self) -> None:
         QtWidgets.QApplication.clipboard().setText(self._ui.rrev_pkgref.text())
