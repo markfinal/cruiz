@@ -705,8 +705,14 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             workflow_cwd = settings.local_workflow_cwd.resolve()
             common_subdir = settings.local_workflow_common_subdir.resolve()
             params.cwd = recipe_widget.get_working_dir(workflow_cwd, common_subdir)
-            build_folder = settings.local_workflow_build_folder.resolve()
-            params.build_folder = recipe_widget.resolve_expression(build_folder)
+            layout_build_subdir = (
+                recipe_widget._dependency_graph.root.layout_build_subdir
+            )
+            if layout_build_subdir:
+                params.build_folder = layout_build_subdir
+            else:
+                build_folder = settings.local_workflow_build_folder.resolve()
+                params.build_folder = recipe_widget.resolve_expression(build_folder)
         if args:
             params.arguments.extend(args)
         self.command_started.emit()
@@ -729,8 +735,14 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             workflow_cwd = settings.local_workflow_cwd.resolve()
             common_subdir = settings.local_workflow_common_subdir.resolve()
             params.cwd = recipe_widget.get_working_dir(workflow_cwd, common_subdir)
-            build_folder = settings.local_workflow_build_folder.resolve()
-            params.build_folder = recipe_widget.resolve_expression(build_folder)
+            layout_build_subdir = (
+                recipe_widget._dependency_graph.root.layout_build_subdir
+            )
+            if layout_build_subdir:
+                params.build_folder = layout_build_subdir
+            else:
+                build_folder = settings.local_workflow_build_folder.resolve()
+                params.build_folder = recipe_widget.resolve_expression(build_folder)
         self.command_started.emit()
         recipe.context.cmakebuildcommand(params, self)
 
