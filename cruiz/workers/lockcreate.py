@@ -97,6 +97,12 @@ def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> 
                 # node.conanfile.original_info is only available from Conan 1.47.0+
                 info = None
 
+            # layouts folders were introduced in 1.37
+            try:
+                build_folder = node.conanfile.folders.build
+            except AttributeError:
+                build_folder = None
+
             if node.recipe in (RECIPE_CONSUMER, RECIPE_VIRTUAL):
                 new_node = PackageNode(
                     node.name,
@@ -106,6 +112,7 @@ def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> 
                     node.conanfile.short_paths,
                     info,
                     True,
+                    build_folder,
                 )
                 nodes[node] = new_node
                 continue
@@ -120,6 +127,7 @@ def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> 
                 node.conanfile.short_paths,
                 info,
                 is_runtime,
+                build_folder,
             )
             nodes[node] = new_node
 

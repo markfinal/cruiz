@@ -23,6 +23,7 @@ class PackageNode:
     short_paths: bool
     info: typing.Optional[str]
     is_runtime: bool
+    layout_build_subdir: str
     children: typing.List[PackageNode] = field(default_factory=list)
     parents: typing.List[PackageNode] = field(default_factory=list)
 
@@ -35,6 +36,7 @@ class PackageNode:
             self.short_paths,
             self.info,
             self.is_runtime,
+            self.layout_build_subdir,
             [],
             [],
         )
