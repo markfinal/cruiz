@@ -1,5 +1,16 @@
 name: main actions
-on: push
+on:
+  push:
+    branches-ignore:
+      - main
+      - v*.*
+    tags:
+      - v*
+
+  pull_request:
+    branches:
+      - main
+      - v*.*
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
