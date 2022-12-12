@@ -523,7 +523,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
             self._ui.commandToolbar.configure_actions()  # this is a one off
             self._ui.commandToolbar.refresh_action_shortcuts_and_tooltips(attributes)
         except Exception as exc:
-            logging.debug("Updating toolbars suppressed: '%s'", str(exc))
+            logging.exception("Updating toolbars suppressed: '%s'", str(exc))
             self._ui.commandToolbar.disable_all_actions()
 
     def _create_statusbar(self) -> None:
