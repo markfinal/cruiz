@@ -463,9 +463,13 @@ class RecipeWidget(QtWidgets.QMainWindow):
                     settings_localcache.extra_profile_directories.resolve()
                 )
             extra_profile_dir_name = [
-                x for x in extra_profile_dirs if profile.startswith(x)
+                name
+                for name, profile_dir in extra_profile_dirs.items()
+                if pathlib.Path(profile).is_relative_to(pathlib.Path(profile_dir))
             ]
-            assert len(extra_profile_dir_name) == 1
+            assert (
+                len(extra_profile_dir_name) == 1
+            ), f"Unable to locate profile {profile} on extra dirs {extra_profile_dirs}"
             profile_prefix = f"{extra_profile_dir_name[0]}-"
         else:
             profile_prefix = ""
