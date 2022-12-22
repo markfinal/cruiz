@@ -6,6 +6,7 @@ Utils for worker context managers
 
 from __future__ import annotations
 
+import contextlib
 import datetime
 import multiprocessing
 import os
@@ -56,17 +57,13 @@ class Worker:
     def __enter__(self) -> None:
         multiprocessing.get_logger().debug("%i (child): %s", os.getpid(), self._params)
         clear_conan_env()
-        if isinstance(self._params, CommandParameters):
-            set_env(self._params.added_environment, self._params.removed_environment)
-        elif isinstance(self._params, CommonParameters):
+        if isinstance(self._params, (CommandParameters, CommonParameters)):
             set_env(self._params.added_environment, self._params.removed_environment)
         else:
-            try:
+            with contextlib.suppress(TypeError):
+                # can happen for other types of *Parameters classes
                 if "env" in self._params:
                     set_env(self._params["env"], [])
-            except TypeError:
-                # can happen for other types of *Parameters classes
-                pass
 
         if self._wall_clock is not None:
             self._wall_clock.start()
@@ -153,18 +150,14 @@ def replace_conan_version_struct_with_string(
                 # no cpp_info, so abort further processing
                 continue
             cpp_info["version"] = str(cpp_info["version"])
-            try:
+            with contextlib.suppress(KeyError):
+                # ignore 'components' not being in cpp_info
                 for component_key in cpp_info["components"]:
                     component = cpp_info["components"][component_key]
                     component["version"] = str(component["version"])
-            except KeyError:
-                # ignore 'components' not being in cpp_info
-                pass
-            try:
+            with contextlib.suppress(KeyError):
+                # ignore 'build_modules' not being in cpp_info
                 build_modules: typing.Dict[str, str] = {}
                 for key, value in cpp_info["build_modules"].items():
                     build_modules[key] = value
                 cpp_info["build_modules"] = build_modules
-            except KeyError:
-                # ignore 'build_modules' not being in cpp_info
-                pass

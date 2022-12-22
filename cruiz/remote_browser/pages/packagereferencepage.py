@@ -121,7 +121,7 @@ class PackageReferencePage(Page):
         Get the package reference selected on this page
         """
         selection = self._ui.package_references.selectedIndexes()
-        assert 1 == len(selection)
+        assert len(selection) == 1
         return self._model.data(selection[0], QtCore.Qt.DisplayRole)
 
     def on_local_cache_change(self, text: str) -> None:

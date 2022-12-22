@@ -981,7 +981,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         if text:
             regex = self.sender().validator().regularExpression()
             matches = regex.match(text)
-            assert 3 == matches.lastCapturedIndex()
+            assert matches.lastCapturedIndex() == 3
             user = matches.captured(2)
             channel = matches.captured(3)
             settings.append_attribute(

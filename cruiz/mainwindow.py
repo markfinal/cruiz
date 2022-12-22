@@ -685,7 +685,7 @@ Remove from the recent list?",
         Is the recipe with the given UUID active (i.e. has an open tab)?
         """
         mdi_area = self.centralWidget()
-        for subwindow in mdi_area.subWindowList():
-            if subwindow.widget().recipe.uuid == uuid:
-                return True
-        return False
+        return any(
+            subwindow.widget().recipe.uuid == uuid
+            for subwindow in mdi_area.subWindowList()
+        )

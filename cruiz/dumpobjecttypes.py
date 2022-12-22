@@ -29,9 +29,7 @@ def __examine(obj: typing.Any, loglevel: int, depth: int, prefix: str = "") -> N
     if isinstance(obj, (list, tuple)):
         for i, item in enumerate(obj):
             __examine(item, loglevel, depth + 1, f"{i}: ")
-    elif isinstance(obj, str):
-        pass
-    elif isinstance(obj, bool):
+    elif isinstance(obj, (str, bool)):
         pass
     elif isinstance(obj, dict):
         for key, value in obj.items():
