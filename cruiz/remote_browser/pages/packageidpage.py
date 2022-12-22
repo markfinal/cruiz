@@ -173,7 +173,7 @@ class _FilteringModel(QtCore.QAbstractTableModel):
 
     def headerData(self, section, orientation, role):  # type: ignore
         if role == QtCore.Qt.DisplayRole and orientation == QtCore.Qt.Horizontal:
-            if 0 == section:
+            if section == 0:
                 return "Key"
             return "Value"
         return None
@@ -391,7 +391,7 @@ class PackageIdPage(Page):
     def _on_pid_filter_changed(self, text: str) -> None:
         self._ui.pid_filter_value.setEnabled(True)
         assert self._model._settings
-        if 0 == self.sender().currentIndex():
+        if self.sender().currentIndex() == 0:
             with BlockSignals(self._ui.pid_filter_value) as blocked_widget:
                 blocked_widget.clear()
                 assert self._model._pids

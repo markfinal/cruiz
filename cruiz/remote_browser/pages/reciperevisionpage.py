@@ -89,7 +89,7 @@ class RecipeRevisionPage(Page):
         Get the package reference for the selection on this page
         """
         selection = self._ui.recipe_revisions.selectedIndexes()
-        assert 2 == len(selection)  # num columns in row
+        assert len(selection) == 2  # num columns in row
         rrev = self._model.data(selection[0], QtCore.Qt.DisplayRole)
         return f"{self._previous_pkgref}#{rrev}"
 

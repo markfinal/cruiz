@@ -132,6 +132,5 @@ class LoadRecipeWizard(QtWidgets.QWizard):
         """
         if not self._path.exists():
             raise RecipeDoesNotExistError()
-        if self._uuid:
-            if cruiz.globals.get_main_window().is_recipe_active(self._uuid):
-                raise RecipeAlreadyOpenError()
+        if self._uuid and cruiz.globals.get_main_window().is_recipe_active(self._uuid):
+            raise RecipeAlreadyOpenError()

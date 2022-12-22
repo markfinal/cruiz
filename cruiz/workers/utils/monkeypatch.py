@@ -74,15 +74,15 @@ def _monkey_patch_cmake_helper() -> None:
             defs["CMAKE_VERBOSE_MAKEFILE"] = "TRUE"
 
         # CMake compiler cache support
-        cache_executable = None
-        if str(BuildFeatureConstants.CCACHEEXECUTABLE) in os.environ:
-            cache_executable = os.environ[str(BuildFeatureConstants.CCACHEEXECUTABLE)]
-        if str(BuildFeatureConstants.SCCACHEEXECUTABLE) in os.environ:
-            cache_executable = os.environ[str(BuildFeatureConstants.SCCACHEEXECUTABLE)]
-        if str(BuildFeatureConstants.BUILDCACHEEXECUTABLE) in os.environ:
-            cache_executable = os.environ[
+        cache_executable = os.environ.get(str(BuildFeatureConstants.CCACHEEXECUTABLE))
+        if cache_executable is None:
+            cache_executable = os.environ.get(
+                str(BuildFeatureConstants.SCCACHEEXECUTABLE)
+            )
+        if cache_executable is None:
+            cache_executable = os.environ.get(
                 str(BuildFeatureConstants.BUILDCACHEEXECUTABLE)
-            ]
+            )
         if cache_executable:
             defs = defs or {}
             defs["CMAKE_C_COMPILER_LAUNCHER"] = cache_executable
@@ -135,39 +135,37 @@ def _monkey_patch_autotools_helper() -> None:
         vars: typing.Any = None,
         use_default_install_dirs: typing.Any = True,
     ) -> None:
-        # if using autotools, GCC is almost implied
-        # on macOSX, gcc/g++ do exist and do report being apple clang
-        cache_executable = None
-        if str(BuildFeatureConstants.CCACHEEXECUTABLE) in os.environ:
-            cache_executable = os.environ[str(BuildFeatureConstants.CCACHEEXECUTABLE)]
-            if str(BuildFeatureConstants.CCACHEAUTOTOOLSCONFIGARGS) in os.environ:
-                args = args or []
+        args = args or []
+        cache_executable = os.environ.get(str(BuildFeatureConstants.CCACHEEXECUTABLE))
+        if cache_executable is not None:
+            args.extend(
+                os.environ.get(
+                    str(BuildFeatureConstants.CCACHEAUTOTOOLSCONFIGARGS), ""
+                ).split(" ")
+            )
+        else:
+            cache_executable = os.environ.get(
+                str(BuildFeatureConstants.SCCACHEEXECUTABLE)
+            )
+            if cache_executable is not None:
                 args.extend(
-                    os.environ[
-                        str(BuildFeatureConstants.CCACHEAUTOTOOLSCONFIGARGS)
-                    ].split(" ")
+                    os.environ.get(
+                        str(BuildFeatureConstants.SCCACHEAUTOTOOLSCONFIGARGS), ""
+                    ).split(" ")
                 )
-        if str(BuildFeatureConstants.SCCACHEEXECUTABLE) in os.environ:
-            cache_executable = os.environ[str(BuildFeatureConstants.SCCACHEEXECUTABLE)]
-            if str(BuildFeatureConstants.SCCACHEAUTOTOOLSCONFIGARGS) in os.environ:
-                args = args or []
-                args.extend(
-                    os.environ[
-                        str(BuildFeatureConstants.SCCACHEAUTOTOOLSCONFIGARGS)
-                    ].split(" ")
+            else:
+                cache_executable = os.environ.get(
+                    str(BuildFeatureConstants.BUILDCACHEEXECUTABLE)
                 )
-        if str(BuildFeatureConstants.BUILDCACHEEXECUTABLE) in os.environ:
-            cache_executable = os.environ[
-                str(BuildFeatureConstants.BUILDCACHEEXECUTABLE)
-            ]
-            if str(BuildFeatureConstants.BUILDCACHEAUTOTOOLSCONFIGARGS) in os.environ:
-                args = args or []
-                args.extend(
-                    os.environ[
-                        str(BuildFeatureConstants.BUILDCACHEAUTOTOOLSCONFIGARGS)
-                    ].split(" ")
-                )
+                if cache_executable is not None:
+                    args.extend(
+                        os.environ.get(
+                            str(BuildFeatureConstants.BUILDCACHEAUTOTOOLSCONFIGARGS), ""
+                        ).split(" ")
+                    )
         if cache_executable:
+            # if using autotools, GCC is almost implied
+            # on macOSX, gcc/g++ do exist and do report being apple clang
             vars = vars or {}
             vars["CC"] = f"{cache_executable} gcc"
             vars["CXX"] = f"{cache_executable} g++"
@@ -200,15 +198,15 @@ def _monkey_patch_autotools_helper() -> None:
         target: typing.Optional[str] = None,
         vars: typing.Any = None,
     ) -> None:
-        cache_executable = None
-        if str(BuildFeatureConstants.CCACHEEXECUTABLE) in os.environ:
-            cache_executable = os.environ[str(BuildFeatureConstants.CCACHEEXECUTABLE)]
-        if str(BuildFeatureConstants.SCCACHEEXECUTABLE) in os.environ:
-            cache_executable = os.environ[str(BuildFeatureConstants.SCCACHEEXECUTABLE)]
-        if str(BuildFeatureConstants.BUILDCACHEEXECUTABLE) in os.environ:
-            cache_executable = os.environ[
+        cache_executable = os.environ.get(str(BuildFeatureConstants.CCACHEEXECUTABLE))
+        if cache_executable is None:
+            cache_executable = os.environ.get(
+                str(BuildFeatureConstants.SCCACHEEXECUTABLE)
+            )
+        if cache_executable is None:
+            cache_executable = os.environ.get(
                 str(BuildFeatureConstants.BUILDCACHEEXECUTABLE)
-            ]
+            )
         if cache_executable:
             vars = vars or {}
             vars["CC"] = f"{cache_executable} gcc"

@@ -41,7 +41,7 @@ def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> 
             "CONAN_CMAKE_GENERATOR"
         ]
     if "verbose" in params.arguments:
-        if params.added_environment.get("CONAN_CMAKE_GENERATOR", None) == "Ninja":
+        if params.added_environment.get("CONAN_CMAKE_GENERATOR") == "Ninja":
             build_cmd.append("-v")
         else:
             params.added_environment["VERBOSE"] = "1"
@@ -49,18 +49,17 @@ def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> 
         build_cmd.append(
             f"-j{params.added_environment['CONAN_CPU_COUNT']}"
         )  # suitable for both Make and Ninja
-    with worker.Worker(queue, params):
-        with subprocess.Popen(
-            build_cmd,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            cwd=params.cwd,
-        ) as process:
-            assert process.stdout
-            for line in iter(process.stdout.readline, b""):
-                queue.put(Stdout(line.decode("utf-8")))
-            assert process.stderr
-            for line in iter(process.stderr.readline, b""):
-                queue.put(Stderr(line.decode("utf-8")))
+    with worker.Worker(queue, params), subprocess.Popen(
+        build_cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        cwd=params.cwd,
+    ) as process:
+        assert process.stdout
+        for line in iter(process.stdout.readline, b""):
+            queue.put(Stdout(line.decode("utf-8")))
+        assert process.stderr
+        for line in iter(process.stderr.readline, b""):
+            queue.put(Stderr(line.decode("utf-8")))
 
-            queue.put(Success(process.returncode))
+        queue.put(Success(process.returncode))

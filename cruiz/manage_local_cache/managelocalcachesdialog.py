@@ -212,16 +212,15 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
         super().accept()
 
     def reject(self) -> None:
-        if self._modifications:
-            if (
-                QtWidgets.QMessageBox.question(
-                    self,
-                    "Local cache modifications",
-                    "Do you want to lose unsaved changes to the local cache?",
-                )
-                == QtWidgets.QMessageBox.StandardButton.No
-            ):
-                return
+        if self._modifications and (
+            QtWidgets.QMessageBox.question(
+                self,
+                "Local cache modifications",
+                "Do you want to lose unsaved changes to the local cache?",
+            )
+            == QtWidgets.QMessageBox.StandardButton.No
+        ):
+            return
         self._context.close()
         super().reject()
 
@@ -455,16 +454,16 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
                     del self._modifications["Remotes"]["Add"]
                 if not self._modifications["Remotes"]:
                     del self._modifications["Remotes"]
+                # has the removal of the addition now put the
+                # table back into it's original order?
                 if (
                     "Remotes" in self._modifications
                     and "Reordered" in self._modifications["Remotes"]
+                    and self._ui.remotesTable.same(self._context.get_remotes_list())
                 ):
-                    # has the removal of the addition now put the
-                    # table back into it's original order?
-                    if self._ui.remotesTable.same(self._context.get_remotes_list()):
-                        del self._modifications["Remotes"]["Reordered"]
-                        if not self._modifications["Remotes"]:
-                            del self._modifications["Remotes"]
+                    del self._modifications["Remotes"]["Reordered"]
+                    if not self._modifications["Remotes"]:
+                        del self._modifications["Remotes"]
         else:
             if "Remove" not in self._modifications["Remotes"]:
                 self._modifications["Remotes"]["Remove"] = []

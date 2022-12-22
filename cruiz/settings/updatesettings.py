@@ -253,12 +253,13 @@ def _patch_settings_from_v1(settings: QtCore.QSettings) -> None:
         settings.remove(editable_group)
     for editable_uuid_str, editable_array in editable_data.items():
         group = f"Recipe/{editable_uuid_str}"
-        with SettingsGroup(settings, group):
-            with SettingsWriteArray(settings, "Editables", len(editable_array)):
-                for i, editable_dict in enumerate(editable_array):
-                    settings.setArrayIndex(i)
-                    for key, value in editable_dict.items():
-                        settings.setValue(key, value)
+        with SettingsGroup(settings, group), SettingsWriteArray(
+            settings, "Editables", len(editable_array)
+        ):
+            for i, editable_dict in enumerate(editable_array):
+                settings.setArrayIndex(i)
+                for key, value in editable_dict.items():
+                    settings.setValue(key, value)
 
 
 def _patch_settings_from_v0(settings: QtCore.QSettings) -> None:

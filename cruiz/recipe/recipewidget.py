@@ -378,7 +378,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
     def _get_options_from_recipe(
         self, attrs: typing.Dict[str, str]
     ) -> typing.List[typing.Tuple[str, typing.List[typing.Any], typing.Any]]:
-        options = attrs.get("options", None)
+        options = attrs.get("options")
         if not options:
             return []
         default_options = attrs["default_options"]
@@ -507,11 +507,11 @@ class RecipeWidget(QtWidgets.QMainWindow):
         return expression
 
     def _update_window_title(self, attributes: typing.Dict[str, str]) -> None:
-        version_in_recipe = attributes.get("version", None)
+        version_in_recipe = attributes.get("version")
         if version_in_recipe is not None:
             self._ui.actionOpen_another_version.setEnabled(False)
         version = version_in_recipe or self.recipe.version
-        name = attributes.get("name", None)
+        name = attributes.get("name")
         if self.recipe.user:
             package = f"{name}/{version}@{self.recipe.user}/{self.recipe.channel}"
         else:
@@ -983,7 +983,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         if text:
             regex = self.sender().validator().regularExpression()
             matches = regex.match(text)
-            assert 3 == matches.lastCapturedIndex()
+            assert matches.lastCapturedIndex() == 3
             user = matches.captured(2)
             channel = matches.captured(3)
             settings.append_attribute(
@@ -1035,7 +1035,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         # calculate lock file
         params = CommandParameters("lock create", cruiz.workers.lockcreate.invoke)
         params.recipe_path = self.recipe.path
-        params.name = recipe_attributes.get("name", None)
+        params.name = recipe_attributes.get("name")
         params.version = self.recipe.version
         params.user = self.recipe.user
         params.channel = self.recipe.channel
