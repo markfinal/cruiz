@@ -149,31 +149,35 @@ class _PackageBinaryModel(QtCore.QAbstractItemModel):
         return super().createIndex(row, column, node)
 
     def headerData(self, section, orientation, role):  # type: ignore
-        if role == QtCore.Qt.DisplayRole and orientation == QtCore.Qt.Horizontal:
-            if section == 0:
-                return "Path"
+        if (
+            role == QtCore.Qt.DisplayRole
+            and orientation == QtCore.Qt.Horizontal
+            and section == 0
+        ):
+            return "Path"
         return None
 
     def data(self, index, role):  # type: ignore
         node = index.internalPointer()
-        if role == QtCore.Qt.DisplayRole:
-            if index.column() == 0:
-                return pathlib.Path(node.path).name
-        if role == QtCore.Qt.ToolTipRole:
-            if index.column() == 0:
-                if node.is_file and node.link_target:
-                    return f"Symbolic link to {node.link_target}"
-        if role == QtCore.Qt.DecorationRole:
-            if index.column() == 0:
-                if node.is_file:
-                    if node.link_target:
-                        return self._parent_object.style().standardIcon(
-                            QtWidgets.QStyle.SP_FileLinkIcon
-                        )
-                else:
-                    return QtWidgets.QFileIconProvider().icon(
-                        QtWidgets.QFileIconProvider.Folder
+        if role == QtCore.Qt.DisplayRole and index.column() == 0:
+            return pathlib.Path(node.path).name
+        if (
+            role == QtCore.Qt.ToolTipRole
+            and index.column() == 0
+            and node.is_file
+            and node.link_target
+        ):
+            return f"Symbolic link to {node.link_target}"
+        if role == QtCore.Qt.DecorationRole and index.column() == 0:
+            if node.is_file:
+                if node.link_target:
+                    return self._parent_object.style().standardIcon(
+                        QtWidgets.QStyle.SP_FileLinkIcon
                     )
+            else:
+                return QtWidgets.QFileIconProvider().icon(
+                    QtWidgets.QFileIconProvider.Folder
+                )
         return None
 
     def flags(self, index):  # type: ignore
@@ -357,7 +361,7 @@ class PackageBinaryPage(Page):
 
     def _on_file_menu(self, position: QtCore.QPoint) -> None:
         selection = self._ui.package_binary.selectedIndexes()
-        assert 1 == len(selection)
+        assert len(selection) == 1
         node = selection[0].internalPointer()
         if not node.is_file:
             return
@@ -371,7 +375,7 @@ class PackageBinaryPage(Page):
 
     def _on_file_save(self) -> None:
         selection = self._ui.package_binary.selectedIndexes()
-        assert 1 == len(selection)
+        assert len(selection) == 1
         node = selection[0].internalPointer()
         new_path, _ = QtWidgets.QFileDialog.getSaveFileName(
             self, f"Save {node.path} from package", "", ""

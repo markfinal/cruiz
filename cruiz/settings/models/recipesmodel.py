@@ -82,9 +82,8 @@ class RecipesModel(QtCore.QAbstractTableModel):
 
     def flags(self, index):  # type: ignore
         def_flags = super().flags(index)
-        if self._uuids:
-            if cruiz.globals.get_main_window().is_recipe_active(
-                self._uuids[index.row()]
-            ):
-                return def_flags & ~QtCore.Qt.ItemIsEnabled  # type: ignore[operator]
+        if self._uuids and cruiz.globals.get_main_window().is_recipe_active(
+            self._uuids[index.row()]
+        ):
+            return def_flags & ~QtCore.Qt.ItemIsEnabled  # type: ignore[operator]
         return def_flags
