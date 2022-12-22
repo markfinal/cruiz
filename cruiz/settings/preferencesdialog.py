@@ -99,6 +99,8 @@ from cruiz.widgets.util import BlockSignals, search_for_file_options
 
 from cruiz.constants import DEFAULT_CACHE_NAME
 
+import cruiz.globals
+
 
 class PreferencesDialog(QtWidgets.QDialog):
     """
@@ -415,6 +417,7 @@ class PreferencesDialog(QtWidgets.QDialog):
         self._ui.prefs_shortcuts_deletecmakecache_edit.textChanged.connect(
             self._shortcuts_change_deletecmakecache
         )
+        self._refresh_shortcut_icons()
 
     def _setup_recipes_toolbox(self) -> None:
         self._prefs_recipes_model = RecipesModel()
@@ -1245,3 +1248,36 @@ class PreferencesDialog(QtWidgets.QDialog):
         )
         if result == QtWidgets.QMessageBox.StandardButton.Yes:
             factory_reset()
+
+    def on_theme_changed(self) -> None:
+        """
+        Slot invoked when the application theme is changed
+        """
+        self._refresh_shortcut_icons()
+
+    def _refresh_shortcut_icons(self) -> None:
+        theme_selector = cruiz.globals.get_main_window().theme_selector
+
+        def _set_pixmap(label: QtWidgets.QLabel, name: str) -> None:
+            size = 32
+            label.setPixmap(
+                QtGui.QPixmap(theme_selector.select(name)).scaled(size, size)
+            )
+
+        _set_pixmap(self._ui.shortcut_conan_create, ":/create.svg")
+        _set_pixmap(self._ui.shortcut_conan_create_update, ":/create.svg")
+        _set_pixmap(self._ui.shortcut_conan_install, ":/install.svg")
+        _set_pixmap(self._ui.shortcut_conan_install_update, ":/install.svg")
+        _set_pixmap(self._ui.shortcut_conan_imports, ":/imports.svg")
+        _set_pixmap(self._ui.shortcut_conan_source, ":/source.svg")
+        _set_pixmap(self._ui.shortcut_conan_build, ":/build.svg")
+        _set_pixmap(self._ui.shortcut_conan_package, ":/package.svg")
+        _set_pixmap(self._ui.shortcut_conan_export_pkg, ":/exportpackage.svg")
+        _set_pixmap(self._ui.shortcut_conan_test, ":/testpackage.svg")
+        _set_pixmap(self._ui.shortcut_conan_remove, ":/removepackage.svg")
+        _set_pixmap(self._ui.shortcut_cancel, ":/cancel.svg")
+        _set_pixmap(self._ui.shortcut_cmake_build, ":/cmakebuildtool.svg")
+        _set_pixmap(
+            self._ui.shortcut_cmake_build_verbose, ":/cmakebuildtoolverbose.svg"
+        )
+        _set_pixmap(self._ui.shortcut_delete_cmake_cache, ":/removecmakecache.svg")

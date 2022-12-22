@@ -846,46 +846,26 @@
    </widget>
   </widget>
   <action name="actionCreateCommand">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/create.svg</normaloff>:/create.svg</iconset>
-   </property>
    <property name="text">
     <string>Create package in local cache</string>
    </property>
   </action>
   <action name="actionCreateUpdateCommand">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/create.svg</normaloff>:/create.svg</iconset>
-   </property>
    <property name="text">
     <string>Create package in local cache with latest dependencies</string>
    </property>
   </action>
   <action name="actionImportsCommand">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/imports.svg</normaloff>:/imports.svg</iconset>
-   </property>
    <property name="text">
     <string>Import files from dependents</string>
    </property>
   </action>
   <action name="actionInstallCommand">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/install.svg</normaloff>:/install.svg</iconset>
-   </property>
    <property name="text">
     <string>Download dependencies and configure</string>
    </property>
   </action>
   <action name="actionInstallUpdateCommand">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/install.svg</normaloff>:/install.svg</iconset>
-   </property>
    <property name="text">
     <string>Download latest dependencies and configure</string>
    </property>

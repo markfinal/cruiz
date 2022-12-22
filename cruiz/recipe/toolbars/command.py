@@ -24,6 +24,8 @@ from cruiz.environ import EnvironSaver
 
 from cruiz.exceptions import RecipeInspectionError
 
+import cruiz.globals
+
 if PYSIDE6:
     QAction = QtGui.QAction
     QActionGroup = QtGui.QActionGroup
@@ -157,82 +159,114 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             cmake_build_tool_verbose = settings.cmake_build_tool_verbose.resolve()
             remove_cmakecache = settings.delete_cmake_cache.resolve()
 
-        def _configure(
-            action: QAction, shortcut: str, params: CommandParameters
+        theme_selector = cruiz.globals.get_main_window().theme_selector
+
+        def _configure_conan_action(
+            action: QAction, shortcut: str, params: CommandParameters, icon_path: str
         ) -> None:
             action.setShortcut(QtGui.QKeySequence(shortcut))
             action.setToolTip(self._generate_command_tooltip(params))
+            action.setIcon(QtGui.QIcon(theme_selector.select(icon_path)))
+
+        def _configure_non_conan_action(
+            action: QAction, shortcut: str, tooltip: str, icon_path: str
+        ) -> None:
+            action.setShortcut(QtGui.QKeySequence(shortcut))
+            action.setToolTip(tooltip)
+            action.setIcon(QtGui.QIcon(theme_selector.select(icon_path)))
 
         recipe_ui = self.parent()._ui
-        _configure(
+        _configure_conan_action(
             recipe_ui.actionCreateCommand,
             conan_create,
             self._make_conan_create_params(recipe_attributes, None),
+            ":/create.svg",
         )
-        _configure(
+        _configure_conan_action(
             recipe_ui.actionCreateUpdateCommand,
             conan_create_updates,
             self._make_conan_create_params(recipe_attributes, ["-u"]),
+            ":/create.svg",
         )
-        _configure(
+        _configure_conan_action(
             recipe_ui.actionInstallCommand,
             conan_install,
             self._make_conan_install_params(recipe_attributes, None),
+            ":/install.svg",
         )
-        _configure(
+        _configure_conan_action(
             recipe_ui.actionInstallUpdateCommand,
             conan_install_updates,
             self._make_conan_install_params(recipe_attributes, ["-u"]),
+            ":/install.svg",
         )
-        _configure(
+        _configure_conan_action(
             recipe_ui.actionImportsCommand,
             conan_imports,
             self._make_conan_imports_params(recipe_attributes),
+            ":/imports.svg",
         )
-        _configure(
+        _configure_conan_action(
             recipe_ui.actionSourceCommand,
             conan_source,
             self._make_conan_source_params(recipe_attributes),
+            ":/source.svg",
         )
-        _configure(
+        _configure_conan_action(
             recipe_ui.actionBuildCommand,
             conan_build,
             self._make_conan_build_params(recipe_attributes),
+            ":/build.svg",
         )
-        _configure(
+        _configure_conan_action(
             recipe_ui.actionPackageCommand,
             conan_package,
             self._make_conan_package_params(recipe_attributes),
+            ":/package.svg",
         )
-        _configure(
+        _configure_conan_action(
             recipe_ui.actionExportPackageCommand,
             conan_exportpkg,
             self._make_conan_export_package_params(recipe_attributes),
+            ":/exportpackage.svg",
         )
-        _configure(
+        _configure_conan_action(
             recipe_ui.actionTestCommand,
             conan_test,
             self._make_conan_test_package_params(recipe_attributes),
+            ":/testpackage.svg",
         )
-        _configure(
+        _configure_conan_action(
             recipe_ui.actionRemovePackageCommand,
             conan_remove,
             self._make_conan_remove_package_params(recipe_attributes),
+            ":/removepackage.svg",
         )
-        recipe_ui.actionCancelCommand.setShortcut(QtGui.QKeySequence(cancel))
-        recipe_ui.actionCancelCommand.setToolTip("Cancel the currently running command")
-        recipe_ui.actionCMakeBuildToolCommand.setShortcut(
-            QtGui.QKeySequence(cmake_build_tool)
+
+        _configure_non_conan_action(
+            recipe_ui.actionCancelCommand,
+            cancel,
+            "Cancel the currently running command",
+            ":/cancel.svg",
         )
-        recipe_ui.actionCMakeBuildToolCommand.setToolTip("CMake build")
-        recipe_ui.actionCMakeBuildToolVerboseCommand.setShortcut(
-            QtGui.QKeySequence(cmake_build_tool_verbose)
+        _configure_non_conan_action(
+            recipe_ui.actionCMakeBuildToolCommand,
+            cmake_build_tool,
+            "CMake build",
+            ":/cmakebuildtool.svg",
         )
-        recipe_ui.actionCMakeBuildToolVerboseCommand.setToolTip("CMake verbose build")
-        recipe_ui.actionCMakeRemoveCacheCommand.setShortcut(
-            QtGui.QKeySequence(remove_cmakecache)
+        _configure_non_conan_action(
+            recipe_ui.actionCMakeBuildToolVerboseCommand,
+            cmake_build_tool_verbose,
+            "CMake verbose build",
+            ":/cmakebuildtoolverbose.svg",
         )
-        recipe_ui.actionCMakeRemoveCacheCommand.setToolTip("Remove CMake cache")
+        _configure_non_conan_action(
+            recipe_ui.actionCMakeRemoveCacheCommand,
+            remove_cmakecache,
+            "Remove CMake cache",
+            ":/removecmakecache.svg",
+        )
 
     def _command_started(self) -> None:
         self._idle_group.setEnabled(False)

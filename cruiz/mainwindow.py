@@ -12,11 +12,13 @@ import os
 import pathlib
 import platform
 import subprocess
+import threading
 import time
 import typing
 
 from qtpy import QtCore, QtGui, QtWidgets, PYSIDE6
 import psutil
+import darkdetect
 
 from cruiz.exceptions import (
     InconsistentSettingsError,
@@ -76,9 +78,22 @@ class MainWindow(QtWidgets.QMainWindow):
     remote_added_to_cache = QtCore.Signal(str)
     preferences_updated = QtCore.Signal()
     local_cache_changed = QtCore.Signal(str)
+    theme_changed = QtCore.Signal()
 
     def __del__(self) -> None:
         logger.debug("-=%d", id(self))
+
+    def _on_theme_change(self, theme: str) -> None:
+        assert theme in ["Dark", "Light"]
+        self.theme_selector.setExtraSelectors([theme])
+        self.theme_changed.emit()
+
+    def _initialise_theme_detection(self) -> None:
+        thread = threading.Thread(
+            target=darkdetect.listener, args=(self._on_theme_change,)
+        )
+        thread.daemon = True
+        thread.start()
 
     def __init__(self) -> None:
         # pylint: disable=too-many-statements, global-statement
@@ -86,6 +101,10 @@ class MainWindow(QtWidgets.QMainWindow):
         log_created_widget(self, logger)
 
         assert not cruiz.globals.CRUIZ_MAINWINDOW
+
+        self.theme_selector = QtCore.QFileSelector(self)
+        self._initialise_theme_detection()
+        self._on_theme_change("Dark" if darkdetect.isDark() else "Light")
 
         self._systray = None
         if QtWidgets.QSystemTrayIcon.isSystemTrayAvailable():
@@ -428,6 +447,7 @@ Remove from the recent list?",
         recipe_widget = RecipeWidget(recipe_path, recipe_uuid, wizard.local_cache)
         self.local_cache_changed.connect(recipe_widget.on_local_cache_changed)
         self.preferences_updated.connect(recipe_widget.on_preferences_update)
+        self.theme_changed.connect(recipe_widget.on_theme_change)
         self.centralWidget().addSubWindow(recipe_widget)
         recipe_widget.show()
         recipe_widget.setFocus(QtCore.Qt.ActiveWindowFocusReason)
@@ -456,6 +476,7 @@ Remove from the recent list?",
     def _edit_preferences_new(self) -> None:
         dialog = PreferencesDialog()
         dialog.preferences_updated.connect(self.preferences_updated)
+        self.theme_changed.connect(dialog.on_theme_changed)
         dialog.exec_()
 
     def _manage_local_caches(self, cache_name: typing.Optional[str] = None) -> None:

@@ -7,8 +7,11 @@ Get environment for Conan
 import logging
 import typing
 
+import darkdetect
+
 from cruiz.settings.managers.conanpreferences import ConanSettingsReader
-from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
+
+# from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
 from cruiz.settings.managers.namedlocalcache import NamedLocalCacheSettingsReader
 
 
@@ -34,9 +37,12 @@ def get_conan_env(
         env["CONAN_USER_HOME"] = home_dir
     if short_home_dir:
         env["CONAN_USER_HOME_SHORT"] = short_home_dir
+    """
     with GeneralSettingsReader() as settings:
         use_dark_mode = settings.use_dark_mode.resolve()
     env["CONAN_COLOR_DARK"] = "0" if use_dark_mode else "1"
+    """
+    env["CONAN_COLOR_DARK"] = "0" if darkdetect.isDark() else "1"
     with ConanSettingsReader() as settings:
         log_level = settings.log_level.resolve()
     env["CONAN_LOGGING_LEVEL"] = log_level

@@ -598,6 +598,13 @@ class RecipeWidget(QtWidgets.QMainWindow):
         self._set_pane_font()
         self._update_widget_colours_from_settings()
 
+    def on_theme_change(self) -> None:
+        """
+        Slot called when the application theme is changed
+        """
+        attributes = self.get_recipe_attributes()
+        self._ui.commandToolbar.refresh_action_shortcuts_and_tooltips(attributes)
+
     def _on_local_workflow_update(self) -> None:
         attributes = self.get_recipe_attributes()
         self._ui.commandToolbar.refresh_action_shortcuts_and_tooltips(attributes)
