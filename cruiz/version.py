@@ -44,7 +44,7 @@ def get_version() -> str:
             root_dir = os.path.dirname(sys.argv[0])
         try:
             ref_description = _describe(root_dir)
-        except subprocess.CalledProcessError:
+        except (FileNotFoundError, subprocess.CalledProcessError):
             return "0.0.0"
         ref_split = ref_description.split("-")
         # drop the v prefix from the tag
