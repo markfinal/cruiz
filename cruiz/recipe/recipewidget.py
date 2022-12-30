@@ -11,7 +11,11 @@ import re
 import typing
 
 from qtpy import QtCore, QtGui, QtWidgets
-import git
+
+try:
+    import git
+except ImportError as exc:
+    print(exc)
 
 from cruiz.pyside6.recipe_window import Ui_RecipeWindow
 
@@ -84,6 +88,8 @@ class RecipeWidget(QtWidgets.QMainWindow):
             self._git_repository: typing.Optional[git.Repo] = git.Repo(
                 path, search_parent_directories=True
             )
+        except NameError:
+            self._git_repository = None
         except git.exc.InvalidGitRepositoryError:  # type: ignore
             self._git_repository = None
         self._ui.paneSplitter.setStretchFactor(0, 4)
@@ -1064,6 +1070,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         if exception:
             if payload is None:
                 self._ui.configurePackageId.setText("Failed")
+                self._dependency_graph = None
             lines = str(exception).splitlines()
             html = ""
             for line in lines:
@@ -1076,6 +1083,8 @@ class RecipeWidget(QtWidgets.QMainWindow):
             )
 
     def _visualise_dependencies(self, rank_dir_index: int) -> None:
+        if self._dependency_graph is None:
+            return
         # list visualisation of dependencies
         self._dependencies_list_model = DependenciesListModel(self._dependency_graph)
         self._ui.dependenciesPackageList.setModel(self._dependencies_list_model)
