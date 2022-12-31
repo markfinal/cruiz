@@ -134,7 +134,11 @@ def main() -> int:
         QtCore.Qt.AA_UseHighDpiPixmaps, True
     )  # use highdpi icons
 
+    print(QtWidgets.QStyleFactory.keys())
+
     app = Application(sys.argv)
     window = MainWindow()
     window.showNormal()
+    print(qApp.style().metaObject().className())
+    print(qApp.style().objectName())
     sys.exit(app.exec_())
