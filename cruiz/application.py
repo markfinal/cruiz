@@ -23,6 +23,7 @@ class Application(QtWidgets.QApplication):
 
     def __init__(self, argv: typing.List[str]) -> None:
         super().__init__(argv)
+        self.installEventFilter(self)
         ensure_default_local_cache()
         self.setAttribute(QtCore.Qt.AA_DontUseNativeMenuBar)
         self.setWindowIcon(QtGui.QPixmap(":/cruiz.png"))
@@ -56,3 +57,8 @@ class Application(QtWidgets.QApplication):
             self.setFont(QtGui.QFont(*font_details))
         else:
             self.setFont(self.default_font)
+
+    def eventFilter(self, object, event):
+        if object == self:
+            print(event.type())
+        return super().eventFilter(object, event)
