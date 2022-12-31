@@ -13,6 +13,7 @@ import tarfile
 import tempfile
 import typing
 
+import darkdetect
 from qtpy import QtCore, QtGui, QtWidgets, PYSIDE2
 
 if PYSIDE2:
@@ -32,6 +33,7 @@ else:
     from cruiz.pyside6.remote_browser_fileview import Ui_remote_browser_fileview
 
 from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
+from cruiz.settings.managers.basesettings import ThemeMode
 
 from .page import Page
 
@@ -238,13 +240,23 @@ class _FileViewer(QtWidgets.QDialog):
                 contents = data_file.readlines()
             html_path = pathlib.Path(path.with_suffix(".html"))
         html_path.parent.mkdir(parents=True, exist_ok=True)
+        """
         with GeneralSettingsReader() as settings:
             use_dark_mode = settings.use_dark_mode.resolve()
+        """
+        with GeneralSettingsReader() as settings:
+            theme = settings.theme.resolve()
+        if theme == ThemeMode.AUTO:
+            is_dark = darkdetect.isDark()
+        elif theme == ThemeMode.DARK:
+            is_dark = True
+        else:
+            is_dark = False
         with open(html_path, "wt", encoding="utf-8") as html_file:
             url_start = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0"
             html_file.write("<html>")
             html_file.write("<head>")
-            if use_dark_mode:
+            if is_dark:
                 html_file.write(
                     f'<link rel="stylesheet" href="{url_start}/styles/dark.min.css">'
                 )

@@ -11,8 +11,9 @@ import darkdetect
 
 from cruiz.settings.managers.conanpreferences import ConanSettingsReader
 
-# from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
+from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
 from cruiz.settings.managers.namedlocalcache import NamedLocalCacheSettingsReader
+from cruiz.settings.managers.basesettings import ThemeMode
 
 
 logger = logging.getLogger(__name__)
@@ -42,7 +43,15 @@ def get_conan_env(
         use_dark_mode = settings.use_dark_mode.resolve()
     env["CONAN_COLOR_DARK"] = "0" if use_dark_mode else "1"
     """
-    env["CONAN_COLOR_DARK"] = "0" if darkdetect.isDark() else "1"
+    with GeneralSettingsReader() as settings:
+        theme = settings.theme.resolve()
+    if theme == ThemeMode.AUTO:
+        is_dark = darkdetect.isDark()
+    elif theme == ThemeMode.DARK:
+        is_dark = True
+    else:
+        is_dark = False
+    env["CONAN_COLOR_DARK"] = "0" if is_dark else "1"
     with ConanSettingsReader() as settings:
         log_level = settings.log_level.resolve()
     env["CONAN_LOGGING_LEVEL"] = log_level

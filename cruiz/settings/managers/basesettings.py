@@ -168,6 +168,32 @@ class WorkflowCwdSetting:
         return self.value or self.fallback
 
 
+class ThemeMode(IntEnum):
+    """
+    Supported themes
+    """
+
+    AUTO = 0
+    LIGHT = 1
+    DARK = 2
+
+
+@dataclass
+class ThemeModeSetting:
+    """
+    Setting value representing the enum ThemeMode, with a fallback
+    """
+
+    value: typing.Optional[ThemeMode]
+    fallback: ThemeMode
+
+    def resolve(self) -> ThemeMode:
+        """
+        Resolve the setting value, either the current value or the fallback
+        """
+        return self.value or self.fallback
+
+
 class BaseSettings:
     """
     Common settings functionality
@@ -294,7 +320,7 @@ class CommonSettings:
         if settings.contains(map.settings_key):
             if map.type == BoolSetting:
                 value = settings.value(map.settings_key, type=bool)
-            elif map.type in (IntSetting, WorkflowCwdSetting):
+            elif map.type in (IntSetting, WorkflowCwdSetting, ThemeModeSetting):
                 value = settings.value(map.settings_key, type=int)
             else:
                 value = settings.value(map.settings_key)

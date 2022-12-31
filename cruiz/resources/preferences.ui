@@ -25,51 +25,37 @@
         <x>0</x>
         <y>0</y>
         <width>733</width>
-        <height>275</height>
+        <height>311</height>
        </rect>
       </property>
       <attribute name="label">
        <string>General</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="7" column="2">
-        <widget class="QPushButton" name="prefs_general_busy_colour">
+       <item row="16" column="2">
+        <widget class="QLineEdit" name="prefs_general_recipe_editor"/>
+       </item>
+       <item row="4" column="2">
+        <widget class="QCheckBox" name="prefs_general_enable_darkmode">
+         <property name="toolTip">
+          <string>Dark mode toggles immediately,  but existing Conan output will not change</string>
+         </property>
          <property name="text">
-          <string/>
+          <string>Enable dark mode</string>
          </property>
         </widget>
        </item>
-       <item row="8" column="2">
-        <widget class="QPushButton" name="prefs_general_found_text_background_colour">
+       <item row="9" column="0">
+        <widget class="QLabel" name="label_30">
          <property name="text">
-          <string/>
+          <string>Found text background colour</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="2">
-        <widget class="QCheckBox" name="prefs_general_usebatching">
+       <item row="7" column="0">
+        <widget class="QLabel" name="label">
          <property name="text">
-          <string>Use batching for standard output</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="2">
-        <widget class="QLineEdit" name="prefs_general_default_recipe_dir"/>
-       </item>
-       <item row="3" column="2">
-        <widget class="QCheckBox" name="prefs_general_enable_wallclock">
-         <property name="text">
-          <string>Enable wall clock command timing</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="2">
-        <widget class="QCheckBox" name="prefs_general_enable_compact">
-         <property name="visible">
-          <bool>false</bool>
-         </property>
-         <property name="text">
-          <string>Enable compact look</string>
+          <string>Default recipe browsing directory</string>
          </property>
         </widget>
        </item>
@@ -80,8 +66,15 @@
          </property>
         </widget>
        </item>
-       <item row="16" column="2">
-        <spacer name="verticalSpacer">
+       <item row="9" column="2">
+        <widget class="QPushButton" name="prefs_general_found_text_background_colour">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="17" column="0">
+        <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -93,7 +86,48 @@
          </property>
         </spacer>
        </item>
-       <item row="9" column="2">
+       <item row="6" column="2">
+        <widget class="QCheckBox" name="prefs_general_enable_compact">
+         <property name="visible">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Enable compact look</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QCheckBox" name="prefs_general_usebatching">
+         <property name="text">
+          <string>Use batching for standard output</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="2">
+        <widget class="QLineEdit" name="prefs_general_default_recipe_dir"/>
+       </item>
+       <item row="8" column="2">
+        <widget class="QPushButton" name="prefs_general_busy_colour">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="0">
+        <widget class="QLabel" name="label_31">
+         <property name="text">
+          <string>Recipe editor</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Busy icon colour</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="2">
         <widget class="QCheckBox" name="prefs_general_new_recipe_load">
          <property name="visible">
           <bool>false</bool>
@@ -109,20 +143,6 @@ However, help stop loading recipes if they have mixed versions of dependent pack
          </property>
         </widget>
        </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Busy icon colour</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Default recipe browsing directory</string>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="2">
         <widget class="QCheckBox" name="prefs_general_combine_panes">
          <property name="text">
@@ -130,8 +150,15 @@ However, help stop loading recipes if they have mixed versions of dependent pack
          </property>
         </widget>
        </item>
-       <item row="16" column="0">
-        <spacer name="verticalSpacer_3">
+       <item row="3" column="2">
+        <widget class="QCheckBox" name="prefs_general_enable_wallclock">
+         <property name="text">
+          <string>Enable wall clock command timing</string>
+         </property>
+        </widget>
+       </item>
+       <item row="17" column="2">
+        <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -143,30 +170,29 @@ However, help stop loading recipes if they have mixed versions of dependent pack
          </property>
         </spacer>
        </item>
-       <item row="8" column="0">
-        <widget class="QLabel" name="label_30">
-         <property name="text">
-          <string>Found text background colour</string>
-         </property>
+       <item row="5" column="2">
+        <widget class="QComboBox" name="prefs_general_theme">
+         <item>
+          <property name="text">
+           <string>Sync with operating system theme</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Light mode</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Dark mode</string>
+          </property>
+         </item>
         </widget>
        </item>
-       <item row="4" column="2">
-        <widget class="QCheckBox" name="prefs_general_enable_darkmode">
-         <property name="toolTip">
-          <string>Dark mode toggles immediately,  but existing Conan output will not change</string>
-         </property>
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_33">
          <property name="text">
-          <string>Enable dark mode</string>
-         </property>
-        </widget>
-       </item>
-       <item row="15" column="2">
-        <widget class="QLineEdit" name="prefs_general_recipe_editor"/>
-       </item>
-       <item row="15" column="0">
-        <widget class="QLabel" name="label_31">
-         <property name="text">
-          <string>Recipe editor</string>
+          <string>Theme</string>
          </property>
         </widget>
        </item>
@@ -177,7 +203,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>691</width>
+        <width>733</width>
         <height>233</height>
        </rect>
       </property>
@@ -303,7 +329,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>706</width>
+        <width>748</width>
         <height>232</height>
        </rect>
       </property>
@@ -413,7 +439,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>706</width>
+        <width>748</width>
         <height>232</height>
        </rect>
       </property>
@@ -496,7 +522,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>706</width>
+        <width>748</width>
         <height>232</height>
        </rect>
       </property>
@@ -544,7 +570,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>706</width>
+        <width>748</width>
         <height>232</height>
        </rect>
       </property>
@@ -605,7 +631,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>691</width>
+        <width>733</width>
         <height>384</height>
        </rect>
       </property>
@@ -755,8 +781,8 @@ However, help stop loading recipes if they have mixed versions of dependent pack
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-257</y>
-        <width>691</width>
+        <y>0</y>
+        <width>733</width>
         <height>489</height>
        </rect>
       </property>
@@ -1207,7 +1233,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>706</width>
+        <width>748</width>
         <height>232</height>
        </rect>
       </property>
@@ -1263,7 +1289,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>706</width>
+        <width>748</width>
         <height>232</height>
        </rect>
       </property>
@@ -1310,7 +1336,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>706</width>
+        <width>748</width>
         <height>232</height>
        </rect>
       </property>

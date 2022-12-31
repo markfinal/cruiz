@@ -232,6 +232,7 @@ class PreferencesDialog(QtWidgets.QDialog):
         self._ui.prefs_general_enable_darkmode.stateChanged.connect(
             self._general_darkmode
         )
+        self._ui.prefs_general_theme.currentIndexChanged.connect(self._general_theme)
         self._ui.prefs_general_enable_compact.stateChanged.connect(
             self._general_compactlook
         )
@@ -514,6 +515,8 @@ class PreferencesDialog(QtWidgets.QDialog):
                 blocked_widget.setChecked(settings.enable_command_timing.resolve())
             with BlockSignals(self._ui.prefs_general_enable_darkmode) as blocked_widget:
                 blocked_widget.setChecked(settings.use_dark_mode.resolve())
+            with BlockSignals(self._ui.prefs_general_theme) as blocked_widget:
+                blocked_widget.setCurrentIndex(settings.theme.resolve())
             with BlockSignals(self._ui.prefs_general_enable_compact) as blocked_widget:
                 blocked_widget.setChecked(settings.use_compact_look.resolve())
             with BlockSignals(
@@ -563,6 +566,10 @@ class PreferencesDialog(QtWidgets.QDialog):
 
     def _general_darkmode(self, state: int) -> None:
         self._prefs_general.use_dark_mode = state == QtCore.Qt.Checked  # type: ignore
+        self.modified.emit()
+
+    def _general_theme(self, state: int) -> None:
+        self._prefs_general.theme = state  # type: ignore
         self.modified.emit()
 
     def _general_compactlook(self, state: int) -> None:

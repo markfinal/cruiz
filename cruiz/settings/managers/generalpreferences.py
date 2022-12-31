@@ -16,6 +16,8 @@ from .basesettings import (
     ColourSetting,
     ComparableCommonSettings,
     SettingMeta,
+    ThemeMode,
+    ThemeModeSetting,
 )
 from .writermixin import _WriterMixin
 from .valueclasses import ScalarValue
@@ -46,6 +48,9 @@ class GeneralSettings(ComparableCommonSettings):
                 "EnableCommandTimings", BoolSetting, False, ScalarValue
             ),
             "use_dark_mode": SettingMeta("DarkMode", BoolSetting, False, ScalarValue),
+            "theme": SettingMeta(
+                "Theme", ThemeModeSetting, ThemeMode.AUTO, ScalarValue
+            ),
             "use_compact_look": SettingMeta(
                 "UseCompactLook", BoolSetting, False, ScalarValue
             ),
@@ -125,6 +130,17 @@ class GeneralSettings(ComparableCommonSettings):
 
     @use_dark_mode.setter
     def use_dark_mode(self, value: bool) -> None:
+        self._set_value_via_meta(value)
+
+    @property
+    def theme(self) -> ThemeModeSetting:
+        """
+        Get the theme of the application
+        """
+        return self._get_value_via_meta()
+
+    @theme.setter
+    def theme(self, value: ThemeMode) -> None:
         self._set_value_via_meta(value)
 
     @property
