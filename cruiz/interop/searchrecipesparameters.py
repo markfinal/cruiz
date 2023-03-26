@@ -17,8 +17,8 @@ class SearchRecipesParameters(CommonParameters):
     """
 
     def __init__(self, **args: typing.Any) -> None:
-        import cruiz.workers.remotesearch
+        import cruiz.workers.api as workers_api
 
-        super().__init__(cruiz.workers.remotesearch.invoke)
+        super().__init__(workers_api.remotesearch.invoke)
         for k, v in args.items():
             self.__setattr__(k, v)

@@ -15,8 +15,8 @@ class PackageIdParameters(CommonParameters):
     """
 
     def __init__(self, **args: typing.Any) -> None:
-        import cruiz.workers.packagedetails
+        import cruiz.workers.api as workers_api
 
-        super().__init__(cruiz.workers.packagedetails.invoke)
+        super().__init__(workers_api.packagedetails.invoke)
         for k, v in args.items():
             self.__setattr__(k, v)

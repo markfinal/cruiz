@@ -10,8 +10,8 @@ import multiprocessing
 from pathlib import Path
 
 from cruiz.interop.commandparameters import CommandParameters
-from .utils import worker
-from .utils.message import Message, Success, Stdout
+from cruiz.workers.utils import worker
+from cruiz.workers.utils.message import Message, Success, Stdout
 
 
 def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> None:

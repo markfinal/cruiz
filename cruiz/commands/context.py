@@ -24,26 +24,7 @@ from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
 from cruiz.recipe.logs.command import CommandListWidgetItem
 from cruiz.settings.managers.namedlocalcache import NamedLocalCacheSettingsReader
 
-import cruiz.workers.create
-import cruiz.workers.imports
-import cruiz.workers.install
-import cruiz.workers.source
-import cruiz.workers.build
-import cruiz.workers.package
-import cruiz.workers.exportpackage
-import cruiz.workers.testpackage
-import cruiz.workers.cmakebuildtool
-import cruiz.workers.deletecmakecache
-import cruiz.workers.removepackage
-import cruiz.workers.removeallpackages
-import cruiz.workers.removelocks
-import cruiz.workers.configinstall
-import cruiz.workers.remotesearch
-import cruiz.workers.reciperevisions
-import cruiz.workers.packagedetails
-import cruiz.workers.packagerevisions
-import cruiz.workers.packagebinary
-import cruiz.workers.arbitrary
+import cruiz.workers.api as workers_api
 
 from cruiz.recipe.logs.command import RecipeCommandHistoryWidget
 from cruiz.constants import DEFAULT_CACHE_NAME
@@ -289,7 +270,7 @@ class ConanContext(QtCore.QObject):
         Run 'conan remove [-f] *'
         """
         params = CommandParameters(
-            "removeallpackages", cruiz.workers.removeallpackages.invoke
+            "removeallpackages", workers_api.removeallpackages.invoke
         )
         params.force = True
         self._start_invocation(params, None, continuation)
@@ -301,7 +282,7 @@ class ConanContext(QtCore.QObject):
         """
         Run 'conan remove --locks' to remove all lock files from the local cache
         """
-        params = CommandParameters("removelocks", cruiz.workers.removelocks.invoke)
+        params = CommandParameters("removelocks", workers_api.removelocks.invoke)
         self._start_invocation(params, None, continuation)
 
     def install_config(

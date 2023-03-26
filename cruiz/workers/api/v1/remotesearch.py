@@ -11,8 +11,8 @@ import re
 
 from cruiz.interop.searchrecipesparameters import SearchRecipesParameters
 
-from .utils import worker
-from .utils.message import Message, Success
+from cruiz.workers.utils import worker
+from cruiz.workers.utils.message import Message, Success
 
 
 def invoke(

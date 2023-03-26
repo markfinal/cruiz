@@ -15,8 +15,8 @@ class PackageRevisionsParameters(CommonParameters):
     """
 
     def __init__(self, **args: typing.Any) -> None:
-        import cruiz.workers.packagerevisions
+        import cruiz.workers.api as workers_api
 
-        super().__init__(cruiz.workers.packagerevisions.invoke)
+        super().__init__(workers_api.packagerevisions.invoke)
         for k, v in args.items():
             self.__setattr__(k, v)
