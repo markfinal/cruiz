@@ -16,7 +16,7 @@ from qtpy import QtCore
 
 from cruiz.dumpobjecttypes import dump_object_types
 
-import cruiz.workers.endmessagethread
+import cruiz.workers.api as workers_api
 import cruiz.workers.utils.message
 
 logger = logging.getLogger(__name__)
@@ -53,7 +53,7 @@ class MessageReplyProcessor(QtCore.QObject):
         """
         # start a process to shut down the thread
         shutdown_process = self._mp_context.Process(
-            target=cruiz.workers.endmessagethread.invoke, args=(self._queue,)
+            target=workers_api.endmessagethread.invoke, args=(self._queue,)
         )
         shutdown_process.start()
         shutdown_process.join()

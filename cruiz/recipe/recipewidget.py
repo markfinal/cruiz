@@ -34,7 +34,7 @@ from cruiz.settings.managers.namedlocalcache import NamedLocalCacheSettingsReade
 from cruiz.settings.managers.fontpreferences import FontSettingsReader, FontUsage
 from cruiz.widgets.util import BlockSignals, clear_widgets_from_layout
 from cruiz.revealonfilesystem import reveal_on_filesystem
-import cruiz.workers.lockcreate
+import cruiz.workers.api as workers_api
 from cruiz.model.graphaslistmodel import DependenciesListModel, DependenciesTreeModel
 from cruiz.manage_local_cache import ManageLocalCachesDialog
 import cruiz.revealonfilesystem
@@ -1040,7 +1040,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         self._ui.dependenciesPackageList.setModel(None)  # type: ignore[arg-type]
         self._ui.dependencyView.clear()
         # calculate lock file
-        params = CommandParameters("lock create", cruiz.workers.lockcreate.invoke)
+        params = CommandParameters("lock create", workers_api.lockcreate.invoke)
         params.recipe_path = self.recipe.path
         params.name = recipe_attributes.get("name")
         params.version = self.recipe.version

@@ -15,7 +15,7 @@ from cruiz.settings.managers.recipe import RecipeSettings, RecipeSettingsReader
 from cruiz.settings.managers.shortcuts import ShortcutSettingsReader
 from cruiz.settings.managers.compilercachepreferences import CompilerCacheSettingsReader
 
-import cruiz.workers.install
+import cruiz.workers.api as workers_api
 
 from cruiz.interop.commandparameters import CommandParameters
 
@@ -413,7 +413,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
     ) -> CommandParameters:
         params = self._make_common_params(
             "create",
-            cruiz.workers.create.invoke,
+            workers_api.create.invoke,
             recipe_attributes,
             with_pkgref=True,
             with_profile=True,
@@ -430,7 +430,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
     ) -> CommandParameters:
         params = self._make_common_params(
             "install",
-            cruiz.workers.install.invoke,
+            workers_api.install.invoke,
             recipe_attributes,
             with_pkgref=True,
             with_cwd=True,
@@ -447,7 +447,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
     ) -> CommandParameters:
         return self._make_common_params(
             "imports",
-            cruiz.workers.imports.invoke,
+            workers_api.imports.invoke,
             recipe_attributes,
             with_cwd=True,
             with_install_folder=True,
@@ -459,7 +459,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
     ) -> CommandParameters:
         return self._make_common_params(
             "source",
-            cruiz.workers.source.invoke,
+            workers_api.source.invoke,
             recipe_attributes,
             with_cwd=True,
             with_install_folder=True,
@@ -471,7 +471,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
     ) -> CommandParameters:
         return self._make_common_params(
             "build",
-            cruiz.workers.build.invoke,
+            workers_api.build.invoke,
             recipe_attributes,
             with_cwd=True,
             with_install_folder=True,
@@ -486,7 +486,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
     ) -> CommandParameters:
         return self._make_common_params(
             "package",
-            cruiz.workers.package.invoke,
+            workers_api.package.invoke,
             recipe_attributes,
             with_cwd=True,
             with_install_folder=True,
@@ -501,7 +501,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
     ) -> CommandParameters:
         return self._make_common_params(
             "export-pkg",
-            cruiz.workers.exportpackage.invoke,
+            workers_api.exportpackage.invoke,
             recipe_attributes,
             with_cwd=True,
             with_pkgref=True,
@@ -521,7 +521,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
     ) -> CommandParameters:
         params = self._make_common_params(
             "test",
-            cruiz.workers.testpackage.invoke,
+            workers_api.testpackage.invoke,
             recipe_attributes,
             with_recipe_path=False,
             with_cwd=True,
@@ -541,7 +541,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
     ) -> CommandParameters:
         return self._make_common_params(
             "remove",
-            cruiz.workers.removepackage.invoke,
+            workers_api.removepackage.invoke,
             recipe_attributes,
             with_explicit_name=True,
             with_pkgref=True,
@@ -687,7 +687,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         recipe_widget = self._recipe_widget
         recipe = recipe_widget.recipe
         params = CommandParameters(
-            "cmakebuild", cruiz.workers.cmakebuildtool.invoke
+            "cmakebuild", workers_api.cmakebuildtool.invoke
         )  # TODO: verb is wrong
         with RecipeSettingsReader.from_recipe(recipe) as settings:
             num_cores = settings.num_cpu_cores
@@ -722,7 +722,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         recipe_widget = self._recipe_widget
         recipe = recipe_widget.recipe
         params = CommandParameters(
-            "cmakeremovecache", cruiz.workers.deletecmakecache.invoke
+            "cmakeremovecache", workers_api.deletecmakecache.invoke
         )  # TODO: verb is wrong
         with RecipeSettingsReader.from_recipe(recipe) as settings:
             workflow_cwd = settings.local_workflow_cwd.resolve()

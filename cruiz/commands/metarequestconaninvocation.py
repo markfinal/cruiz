@@ -16,7 +16,7 @@ from qtpy import QtCore
 
 from cruiz.interop.commandparameters import CommandParameters
 import cruiz.workers.utils.message
-import cruiz.workers.meta
+import cruiz.workers.api as workers_api
 from cruiz.dumpobjecttypes import dump_object_types
 
 from .conanenv import get_conan_env
@@ -48,7 +48,7 @@ class MetaRequestConanInvocation(QtCore.QObject):
         self._request_queue = self._mp_context.JoinableQueue()
         self._reply_queue = self._mp_context.Queue()
         self.active = False
-        params = CommandParameters("meta", cruiz.workers.meta.invoke)
+        params = CommandParameters("meta", workers_api.meta.invoke)
         added_environment, removed_environment = get_conan_env(cache_name)
         params.added_environment.update(added_environment)
         params.removed_environment.extend(removed_environment)

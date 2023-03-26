@@ -17,8 +17,8 @@ class RecipeRevisionsParameters(CommonParameters):
     """
 
     def __init__(self, **args: typing.Any) -> None:
-        import cruiz.workers.reciperevisions
+        import cruiz.workers.api as workers_api
 
-        super().__init__(cruiz.workers.reciperevisions.invoke)
+        super().__init__(workers_api.reciperevisions.invoke)
         for k, v in args.items():
             self.__setattr__(k, v)

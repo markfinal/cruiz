@@ -46,7 +46,8 @@ class QtLogger(logging.Handler, metaclass=_Singleton):
         ] = None
 
     def set_queue(
-        self, queue: multiprocessing.Queue[cruiz.workers.utils.message.Message]
+        self,
+        queue: multiprocessing.Queue[cruiz.workers.utils.message.Message],
     ) -> None:
         """
         Set the multiprocessing queue to send messages with.

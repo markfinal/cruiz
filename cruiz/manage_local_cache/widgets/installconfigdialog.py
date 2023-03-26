@@ -19,7 +19,7 @@ from cruiz.settings.managers.recentconanconfigs import (
     RecentConanConfigSettings,
     RecentConanConfigSettingsWriter,
 )
-import cruiz.workers
+import cruiz.workers.api as workers_api
 
 
 class InstallConfigDialog(QtWidgets.QDialog):
@@ -59,7 +59,7 @@ class InstallConfigDialog(QtWidgets.QDialog):
 
     def _install(self) -> None:
         self._ui.progressBar.setMaximum(0)
-        params = CommandParameters("install_config", cruiz.workers.configinstall.invoke)
+        params = CommandParameters("install_config", workers_api.configinstall.invoke)
         named_args = params.named_arguments
         named_args["pathOrUrl"] = self._ui.pathOrUrl.text().strip()
         if self._ui.gitBranch.text():

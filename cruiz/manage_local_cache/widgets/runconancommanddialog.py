@@ -13,7 +13,7 @@ from cruiz.interop.commandparameters import CommandParameters
 
 from cruiz.pyside6.local_cache_run_command_dialog import Ui_RunConanCommandDialog
 
-import cruiz.workers.arbitrary
+import cruiz.workers.api as workers_api
 
 
 class RunConanCommandDialog(QtWidgets.QDialog):
@@ -41,7 +41,7 @@ class RunConanCommandDialog(QtWidgets.QDialog):
 
     def _on_run(self) -> None:
         args = self._ui.arguments.text().split()
-        params = CommandParameters(args[0], cruiz.workers.arbitrary.invoke)
+        params = CommandParameters(args[0], workers_api.arbitrary.invoke)
         params.arguments.extend(args[1:])
         self._ui.arguments.setEnabled(False)
         self._ui.run.setEnabled(False)

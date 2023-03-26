@@ -17,7 +17,7 @@ from cruiz.settings.managers.namedlocalcache import NamedLocalCacheCreator
 from cruiz.widgets.util import search_for_dir_options
 from cruiz.constants import DEFAULT_CACHE_NAME
 
-import cruiz.workers
+import cruiz.workers.api as workers_api
 
 from cruiz.pyside6.local_cache_new_wizard import Ui_NewLocalCacheWizard
 
@@ -137,7 +137,7 @@ class NewLocalCacheWizard(QtWidgets.QWizard):
             if config_install:
                 self._context.change_cache(name)
                 params = CommandParameters(
-                    "install_config", cruiz.workers.configinstall.invoke
+                    "install_config", workers_api.configinstall.invoke
                 )
                 named_args = params.named_arguments
                 named_args["pathOrUrl"] = config_install
