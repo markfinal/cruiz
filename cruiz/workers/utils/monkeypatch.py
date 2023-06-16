@@ -14,7 +14,6 @@ from cruiz.constants import BuildFeatureConstants
 
 
 def _monkey_patch_logger() -> None:
-
     # Monkey patched version of conans.util.log.configure_logger
     # that does not always remove handlers, keeps the qt handler
     def qt_configure_logger(
