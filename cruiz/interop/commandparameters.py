@@ -57,6 +57,7 @@ class CommandParameters(CommonParameters):
         self._time_commands: typing.Optional[bool] = None
         self._v2_omit_test_folder: typing.Optional[bool] = None
         self._v2_needs_reference: typing.Optional[bool] = None
+        self._extra_options: typing.Optional[str] = None
 
     def to_args(self) -> typing.List[str]:
         """
@@ -400,12 +401,18 @@ class CommandParameters(CommonParameters):
         """
         return self._options
 
-    def add_option(self, package_name: str, key: str, value: str) -> None:
+    def add_option(
+        self, package_name: typing.Optional[str], key: str, value: str
+    ) -> None:
         """
         Add an option key-value pair.
+        If package_name is provided, the option key is prefixed with package_name:
         """
         assert key not in self._options
-        self._options[f"{package_name}:{key}"] = value
+        if package_name:
+            self._options[f"{package_name}:{key}"] = value
+        else:
+            self._options[key] = value
 
     @property
     def force(self) -> typing.Optional[bool]:
@@ -500,3 +507,15 @@ class CommandParameters(CommonParameters):
     @v2_need_reference.setter
     def v2_need_reference(self, value: typing.Optional[bool]) -> None:
         self._v2_needs_reference = value
+
+    @property
+    def extra_options(self) -> typing.Optional[str]:
+        """
+        Get the extra options string.
+        May be None.
+        """
+        return self._extra_options
+
+    @extra_options.setter
+    def extra_options(self, value: typing.Optional[str]) -> None:
+        self._extra_options = value

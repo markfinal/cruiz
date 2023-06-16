@@ -316,8 +316,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>313</width>
-          <height>211</height>
+          <width>312</width>
+          <height>281</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_13">
@@ -349,6 +349,21 @@
             <string>Options</string>
            </property>
            <layout class="QGridLayout" name="optionsLayout"/>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBox">
+           <property name="toolTip">
+            <string>A comma separated list of &lt;pkg&gt;:&lt;option&gt;=&lt;value&gt;</string>
+           </property>
+           <property name="title">
+            <string>Additional options</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_20">
+            <item>
+             <widget class="QLineEdit" name="configureAdditionalOptions"/>
+            </item>
+           </layout>
           </widget>
          </item>
          <item>
@@ -418,7 +433,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>328</width>
+          <width>327</width>
           <height>535</height>
          </rect>
         </property>
@@ -633,7 +648,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>326</width>
+          <width>214</width>
           <height>531</height>
          </rect>
         </property>

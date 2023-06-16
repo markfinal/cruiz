@@ -257,11 +257,22 @@ class RecipeWidget(QtWidgets.QMainWindow):
         self._ui.localWorkflowExpressionEditor.clicked.connect(
             self._local_workflow_expression_editor
         )
+        extra_option_list_regex = QtCore.QRegularExpression(
+            # of the form <pkg>:<option>=<value,[<repeat>]
+            r"^$|^([^:=,\s]+:[^=,\s]+=[^,\s]+)(\s*,\s*[^:=,\s]+:[^=,\s]+=[^,\s]+)*$"
+        )
+        extra_option_list_validator = QtGui.QRegularExpressionValidator(
+            extra_option_list_regex, self
+        )
+        self._ui.configureAdditionalOptions.setValidator(extra_option_list_validator)
         rgx = QtCore.QRegularExpression(r"(^$|^@([a-zA-Z]+)\/([a-zA-Z]+)$)")
         comValidator = QtGui.QRegularExpressionValidator(rgx, self)
         self._ui.configurePkgRefNamespace.setValidator(comValidator)
         self._ui.configurePkgRefNamespace.editingFinished.connect(
             self._configure_packageref_namespace
+        )
+        self._ui.configureAdditionalOptions.editingFinished.connect(
+            self._configure_additional_options
         )
         self._ui.configurePackageId.customContextMenuRequested.connect(
             self._on_configure_packageid_context_menu
@@ -700,6 +711,9 @@ class RecipeWidget(QtWidgets.QMainWindow):
             assert "channel" in attributes
             with BlockSignals(self._ui.configurePkgRefNamespace) as blocked_widget:
                 blocked_widget.setText(f"@{attributes['user']}/{attributes['channel']}")
+        if "extra_config_options" in attributes:
+            with BlockSignals(self._ui.configureAdditionalOptions) as blocked_widget:
+                blocked_widget.setText(attributes["extra_config_options"])
         clear_widgets_from_layout(self._ui.optionsLayout)
         recipe_options = self._get_options_from_recipe(recipe_attributes)
         for i, (key, values, default_value) in enumerate(recipe_options):
@@ -1020,6 +1034,16 @@ class RecipeWidget(QtWidgets.QMainWindow):
         RecipeSettingsWriter.from_recipe(self.recipe).sync(settings)
         self.configuration_changed.emit()
 
+    def _configure_additional_options(self) -> None:
+        text = self.sender().text()
+        settings = RecipeSettings()
+        if text:
+            settings.append_attribute({"extra_config_options": text})  # type: ignore
+        else:
+            settings.append_attribute({"extra_config_options": None})  # type: ignore
+        RecipeSettingsWriter.from_recipe(self.recipe).sync(settings)
+        self.configuration_changed.emit()
+
     def _open_recipe_in_editor(self) -> None:
         # TODO: make the editor a preference
         with GeneralSettingsReader() as settings:
@@ -1070,6 +1094,11 @@ class RecipeWidget(QtWidgets.QMainWindow):
             for key, value in settings.options.resolve().items():
                 # TODO: is this the most efficient algorithm?
                 params.add_option(params.name, key, value)  # type: ignore
+            attributes = settings.attribute_overrides.resolve()
+            if "extra_config_options" in attributes:
+                for keyvalue in attributes["extra_config_options"].split(","):
+                    option_name, option_value = keyvalue.split("=")
+                    params.add_option(None, option_name, option_value)
         self._dependency_generate_context.conancommand(
             params,
             None,
