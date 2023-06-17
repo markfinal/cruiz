@@ -6,6 +6,7 @@ Any monkeypatching required
 
 import logging
 import os
+import pathlib
 import typing
 
 import conans
@@ -169,7 +170,7 @@ def _monkey_patch_autotools_helper() -> None:
             vars = vars or {}
             vars["CC"] = f"{cache_executable} gcc"
             vars["CXX"] = f"{cache_executable} g++"
-            vars["PATH"] = [os.path.dirname(cache_executable)]
+            vars["PATH"] = [os.fspath(pathlib.Path(cache_executable).parent)]
 
         # now execute the old function
         original_autotools_build_helper_configure(
@@ -211,7 +212,7 @@ def _monkey_patch_autotools_helper() -> None:
             vars = vars or {}
             vars["CC"] = f"{cache_executable} gcc"
             vars["CXX"] = f"{cache_executable} g++"
-            vars["PATH"] = [os.path.dirname(cache_executable)]
+            vars["PATH"] = [os.fspath(pathlib.Path(cache_executable).parent)]
 
         # now execute the old function
         original_autotools_build_helper_make(self, args, make_program, target, vars)

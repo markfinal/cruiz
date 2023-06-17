@@ -6,7 +6,6 @@ A context object wrapping the Conan API
 
 from contextlib import contextmanager
 import logging
-import os
 import pathlib
 import typing
 
@@ -229,13 +228,12 @@ class ConanContext(QtCore.QObject):
     @staticmethod
     def _make_hard_link(source: pathlib.Path, link: pathlib.Path) -> None:
         if link.exists():
-            if os.path.samefile(source, link):
+            if source.samefile(link):
                 return
             # the inode may have changed, so just remove the old link, and recreate
-            os.unlink(link)
-        if not link.parent.exists():
-            os.makedirs(link.parent)
-        os.link(source, link)
+            link.unlink()
+        link.parent.mkdir(parents=True, exist_ok=True)
+        link.hardlink_to(source)
 
     def editable_add(
         self,
@@ -380,7 +378,7 @@ class ConanContext(QtCore.QObject):
         """
         self._start_invocation(params, None, continuation)
 
-    def get_package_directory(self, pkgdata: PackageNode) -> str:
+    def get_package_directory(self, pkgdata: PackageNode) -> pathlib.Path:
         """
         Get the package directory for the specified package.
         """
@@ -399,7 +397,7 @@ class ConanContext(QtCore.QObject):
             else:
                 raise Exception("Get package directory failed") from exception
         else:
-            assert isinstance(package_dir, str)
+            assert isinstance(package_dir, pathlib.Path)
         return package_dir
 
     def cancel(self) -> None:
@@ -438,7 +436,7 @@ class ConanContext(QtCore.QObject):
             else:
                 raise Exception("Get profiles directory failed") from exception
         else:
-            assert isinstance(profiles_dir, str)
+            assert isinstance(profiles_dir, pathlib.Path)
         return pathlib.Path(profiles_dir)
 
     def all_profile_dirs(self) -> typing.List[pathlib.Path]:

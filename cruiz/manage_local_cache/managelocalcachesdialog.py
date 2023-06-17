@@ -6,6 +6,7 @@ Dialog for managing local caches
 
 from enum import IntEnum
 import os
+import pathlib
 import platform
 import shutil
 import stat
@@ -195,10 +196,10 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
         self._modified.connect(self._on_modification)
 
     def _open_conan_user_home(self) -> None:
-        reveal_on_filesystem(self._ui.conan_user_home.text())
+        reveal_on_filesystem(pathlib.Path(self._ui.conan_user_home.text()))
 
     def _open_conan_user_home_short(self) -> None:
-        reveal_on_filesystem(self._ui.conan_user_home_short.text())
+        reveal_on_filesystem(pathlib.Path(self._ui.conan_user_home_short.text()))
 
     def _on_modification(self) -> None:
         self._ui.buttonBox.button(QtWidgets.QDialogButtonBox.Apply).setEnabled(
@@ -340,7 +341,7 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
             enabled_item.setCheckState(
                 QtCore.Qt.Checked if hook.enabled else QtCore.Qt.Unchecked
             )
-            name_item = QtWidgets.QTableWidgetItem(hook.path)
+            name_item = QtWidgets.QTableWidgetItem(os.fspath(hook.path))
             name_item.setFlags(
                 QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable  # type: ignore
             )
@@ -520,7 +521,7 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
             path_item = self._ui.hooksTable.item(
                 item.row(), ManageLocalCachesDialog._HooksTableColumnIndex.PATH
             )
-            hook_path = path_item.text().strip()
+            hook_path = pathlib.Path(path_item.text().strip())
             item_enabled = bool(item.checkState())
             hooks = self._context.get_hooks_list()
             hook = next(item for item in hooks if item.has_path(hook_path))
@@ -569,15 +570,16 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
             self._update_cache_details(self._context.cache_name)
 
     @staticmethod
-    def _delete_tree_with_readonly_files(dir_path: str) -> None:
-        if not os.path.isdir(dir_path):
+    def _delete_tree_with_readonly_files(dir_path: pathlib.Path) -> None:
+        if not dir_path.is_dir():
             return
 
         def make_writeable(action: typing.Any, name: str, exc: typing.Any) -> None:
             # pylint: disable=unused-argument
             if exc[0] is PermissionError:
-                os.chmod(name, stat.S_IWRITE)
-                os.remove(name)
+                name_path = pathlib.Path(name)
+                name_path.chmod(stat.S_IWRITE)
+                name_path.unlink()
             else:
                 raise exc[1]
 
@@ -593,11 +595,11 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
         if result == QtWidgets.QMessageBox.StandardButton.No:
             return
         with NamedLocalCacheSettingsReader(cache_name) as settings:
-            home_dir = settings.home_dir.resolve()
-            short_home_dir = settings.short_home_dir.resolve()
+            home_dir = pathlib.Path(settings.home_dir.resolve())
+            short_home_dir = pathlib.Path(settings.short_home_dir.resolve())
 
         assert home_dir  # because it's non-default
-        conan_home_dir = os.path.join(home_dir, ".conan")
+        conan_home_dir = home_dir / ".conan"
         # since this is destructive, check again
         result = QtWidgets.QMessageBox.question(
             self,

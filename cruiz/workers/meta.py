@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import multiprocessing
 import os
+import pathlib
 import urllib.parse
 import typing
 
@@ -57,17 +58,17 @@ def _remotes_sync(api: typing.Any, remotes: typing.List[str]) -> None:
         api.remote_set_disabled_state(remote.name, not remote.enabled)
 
 
-def _profiles_dir(api: typing.Any) -> str:
+def _profiles_dir(api: typing.Any) -> pathlib.Path:
     # pylint: disable=pointless-statement
     try:
         # Conan 1.18+
-        profile_dir = api.app.cache.profiles_path
-        if not os.path.isdir(profile_dir):
+        profile_dir = pathlib.Path(api.app.cache.profiles_path)
+        if not profile_dir.is_dir():
             # this creates the default profile
             api.app.cache.default_profile
     except AttributeError:
-        profile_dir = api._cache.profiles_path
-        if not os.path.isdir(profile_dir):
+        profile_dir = pathlib.Path(api._cache.profiles_path)
+        if not profile_dir.is_dir():
             # this creates the default profile
             api._cache.default_profile
     return profile_dir
@@ -120,13 +121,13 @@ def _package_dir(
     package_id: str,
     package_revision: str,
     short_paths: bool,
-) -> str:
+) -> pathlib.Path:
     from conans.model.ref import PackageReference
 
     layout, file_ref = _get_package_layout(api, reference, short_paths)
     pref = PackageReference(file_ref, package_id, package_revision)
     package_dir = layout.package(pref)
-    return package_dir
+    return pathlib.Path(package_dir)
 
 
 def _package_export_dir(api: typing.Any, reference: str, short_paths: bool) -> str:
@@ -186,23 +187,23 @@ def _enabled_hooks(api: typing.Any) -> bool:
     return result
 
 
-def _available_hooks(api: typing.Any) -> typing.List[str]:
+def _available_hooks(api: typing.Any) -> typing.List[pathlib.Path]:
     try:
         # conan 1.18+
-        hooks_dir = api.app.cache.hooks_path
+        hooks_dir = pathlib.Path(api.app.cache.hooks_path)
     except AttributeError:
-        hooks_dir = api._cache.hooks_path
-    if not hooks_dir or not os.path.isdir(hooks_dir):
+        hooks_dir = pathlib.Path(api._cache.hooks_path)
+    if not hooks_dir or not hooks_dir.is_dir():
         return []
-    hook_files = []
+    hook_files: typing.List[pathlib.Path] = []
     for root, dirs, files in os.walk(hooks_dir):
         if ".git" in dirs:
             # ignore .git folders
             dirs.remove(".git")
         for file in files:
             if file.endswith(".py"):
-                full_path = os.path.join(root, file)
-                stored_path = os.path.relpath(full_path, hooks_dir)
+                full_path = pathlib.Path(root) / file
+                stored_path = full_path.relative_to(hooks_dir)
                 hook_files.append(stored_path)
     return hook_files
 
@@ -210,12 +211,12 @@ def _available_hooks(api: typing.Any) -> typing.List[str]:
 def _hooks_get(api: typing.Any) -> typing.List[ConanHook]:
     try:
         # conan 1.18+
-        hooks_dir = api.app.cache.hooks_path
+        hooks_dir = pathlib.Path(api.app.cache.hooks_path)
         enabled_hooks = api.app.cache.config.hooks
     except AttributeError:
-        hooks_dir = api._cache.hooks_path
+        hooks_dir = pathlib.Path(api._cache.hooks_path)
         enabled_hooks = api._cache.config.hooks
-    if not hooks_dir or not os.path.isdir(hooks_dir):
+    if not hooks_dir or not hooks_dir.is_dir():
         return []
     hook_files: typing.List[ConanHook] = []
     for root, dirs, files in os.walk(hooks_dir):
@@ -224,10 +225,10 @@ def _hooks_get(api: typing.Any) -> typing.List[ConanHook]:
             dirs.remove(".git")
         for file in files:
             if file.endswith(".py"):
-                full_path = os.path.join(root, file)
-                stored_path = os.path.relpath(full_path, hooks_dir)
+                full_path = pathlib.Path(root) / file
+                stored_path = full_path.relative_to(hooks_dir)
                 hook_enabled = (
-                    file in enabled_hooks or os.path.splitext(file)[0] in enabled_hooks
+                    file in enabled_hooks or pathlib.Path(file).stem in enabled_hooks
                 )
                 hook_files.append(ConanHook(stored_path, hook_enabled))
     return hook_files
@@ -240,10 +241,10 @@ def _hooks_sync(api: typing.Any, hook_changes: typing.List[str]) -> None:
         if hook.enabled:
             _set_config(api, hook_config, None)
         else:
-            if _has_config_option(api, "hooks", hook.path):
+            if _has_config_option(api, "hooks", os.fspath(hook.path)):
                 _rm_config(api, hook_config)
             else:
-                no_ext_path = os.path.splitext(hook.path)[0]
+                no_ext_path = hook.path.stem
                 hook_config = f"hooks.{no_ext_path}"
                 assert _has_config_option(api, "hooks", no_ext_path)
                 _rm_config(api, hook_config)

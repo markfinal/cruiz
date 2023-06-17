@@ -217,18 +217,18 @@ class _FileViewer(QtWidgets.QDialog):
         if archive:
             with tarfile.open(archive, "r") as tar:
                 tar.extract(str(path), path=archive.parent)
-            with open(archive.parent / path, "rt", encoding="utf-8") as data_file:
+            with (archive.parent / path).open("rt", encoding="utf-8") as data_file:
                 contents = data_file.readlines()
             html_path = archive.parent / path
             html_path = html_path.with_suffix(".html")
         else:
-            with open(path, "rt", encoding="utf-8") as data_file:
+            with path.open("rt", encoding="utf-8") as data_file:
                 contents = data_file.readlines()
             html_path = pathlib.Path(path.with_suffix(".html"))
         html_path.parent.mkdir(parents=True, exist_ok=True)
         with GeneralSettingsReader() as settings:
             use_dark_mode = settings.use_dark_mode.resolve()
-        with open(html_path, "wt", encoding="utf-8") as html_file:
+        with html_path.open("wt", encoding="utf-8") as html_file:
             url_start = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0"
             html_file.write("<html>")
             html_file.write("<head>")
@@ -386,7 +386,8 @@ class PackageBinaryPage(Page):
             with tarfile.open(self._artifact_folder / node.container, "r") as tar:
                 contents_object = tar.extractfile(node.tar_info)
                 assert contents_object
-                with open(new_path, "wb") as writer:
+                new_path_path = pathlib.Path(new_path)
+                with new_path_path.open("wb") as writer:
                     writer.write(contents_object.read())
         else:
             shutil.copyfile(self._artifact_folder / node.path, new_path)
