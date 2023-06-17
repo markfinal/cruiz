@@ -115,8 +115,6 @@ class MainWindow(QtWidgets.QMainWindow):
         open_recipe_action.setShortcut(QtGui.QKeySequence("Ctrl+O"))
         open_recipe_action.triggered.connect(self._open_recipe)
 
-        self._recent_recipe_menu = QtWidgets.QMenu("Recent recipes", self)
-
         exit_action = QtGui.QAction("&Quit", self)
         exit_action.setMenuRole(QtGui.QAction.QuitRole)
         exit_action.setShortcut(QtGui.QKeySequence("Ctrl+Q"))
@@ -140,6 +138,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         menubar = self.menuBar()
         file_menu = menubar.addMenu("&File")
+        self._recent_recipe_menu = QtWidgets.QMenu("Recent recipes", file_menu)
         file_menu.aboutToShow.connect(self._rebuild_recent_recipe_menu)
         file_menu.addAction(open_recipe_action)
         file_menu.addMenu(self._recent_recipe_menu)

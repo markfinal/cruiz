@@ -1067,13 +1067,15 @@ class PreferencesDialog(QtWidgets.QDialog):
         forget_recipe_action.setData(uuid)
         forget_recipe_action.triggered.connect(self._recipes_forget_recipe)
         menu.addSeparator()
-        menu.addMenu(self._recipes_build_change_cache_menu(uuid)).setText(
+        menu.addMenu(self._recipes_build_change_cache_menu(uuid, menu)).setText(
             "Change local cache to"
         )
         menu.exec_(self._ui.prefs_recipes_table.viewport().mapToGlobal(position))
 
-    def _recipes_build_change_cache_menu(self, uuid: QtCore.QUuid) -> QtWidgets.QMenu:
-        menu = QtWidgets.QMenu(self)
+    def _recipes_build_change_cache_menu(
+        self, uuid: QtCore.QUuid, parent_menu: QtWidgets.QMenu
+    ) -> QtWidgets.QMenu:
+        menu = QtWidgets.QMenu(parent_menu)
         with RecipeSettingsReader.from_uuid(uuid) as settings:
             uuid_local_cache = settings.local_cache_name.resolve()
         with AllNamedLocalCacheSettingsReader() as cache_names:
