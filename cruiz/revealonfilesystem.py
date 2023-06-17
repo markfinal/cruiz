@@ -9,6 +9,7 @@ FileUtils::showInGraphicalShell
 """
 
 import os
+import pathlib
 import platform
 
 from qtpy import QtCore, QtWidgets
@@ -51,17 +52,16 @@ def _use_xdg_open(file_info: QtCore.QFileInfo) -> None:
     QtCore.QProcess.startDetached(xdg_open_path, script_args)
 
 
-# TODO: pathlib instead?
-def reveal_on_filesystem(path: str) -> None:
+def reveal_on_filesystem(path: pathlib.Path) -> None:
     """
     Reveal the path in a filesystem GUI
     """
-    file_info = QtCore.QFileInfo(path)
-    if not file_info.exists():
+    if not path.exists():
         QtWidgets.QMessageBox.critical(
             None, "Cannot reveal path", f"Path '{path}' does not exist"  # type: ignore
         )
         return
+    file_info = QtCore.QFileInfo(path)
     if platform.system() == "Darwin":
         _use_finder(file_info)
     elif platform.system() == "Windows":

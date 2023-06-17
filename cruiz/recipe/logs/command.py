@@ -4,7 +4,7 @@
 Recipe command log window
 """
 
-import os
+import pathlib
 import stat
 import typing
 
@@ -101,10 +101,11 @@ class RecipeCommandHistoryWidget(QtWidgets.QListWidget):
             return
         item = self.selectedItems()[0]
         parameters = item.data(0x0100)
-        with open(filename, "wt", encoding="utf-8") as shell_script:
+        filename_path = pathlib.Path(filename)
+        with filename_path.open("wt", encoding="utf-8") as shell_script:
             shell_script.write("#!/usr/bin/env bash\n")
             shell_script.write(f"{parameters.bash_expression.getvalue()}\n")
-        os.chmod(filename, os.stat(filename).st_mode | stat.S_IEXEC)
+        filename_path.chmod(filename_path.stat().st_mode | stat.S_IEXEC)
 
     def _export_zsh(self) -> None:
         filename, _ = QtWidgets.QFileDialog.getSaveFileName(
@@ -117,10 +118,11 @@ class RecipeCommandHistoryWidget(QtWidgets.QListWidget):
             return
         item = self.selectedItems()[0]
         parameters = item.data(0x0100)
-        with open(filename, "wt", encoding="utf-8") as shell_script:
+        filename_path = pathlib.Path(filename)
+        with filename_path.open("wt", encoding="utf-8") as shell_script:
             shell_script.write("#!/usr/bin/env zsh\n")
             shell_script.write(f"{parameters.zsh_expression.getvalue()}\n")
-        os.chmod(filename, os.stat(filename).st_mode | stat.S_IEXEC)
+        filename_path.chmod(filename_path.stat().st_mode | stat.S_IEXEC)
 
     def _export_cmd(self) -> None:
         filename, _ = QtWidgets.QFileDialog.getSaveFileName(
@@ -133,9 +135,10 @@ class RecipeCommandHistoryWidget(QtWidgets.QListWidget):
             return
         item = self.selectedItems()[0]
         parameters = item.data(0x0100)
-        with open(filename, "wt", encoding="utf-8") as shell_script:
+        filename_path = pathlib.Path(filename)
+        with filename_path.open("wt", encoding="utf-8") as shell_script:
             shell_script.write(f"{parameters.cmd_expression.getvalue()}\n")
-        os.chmod(filename, os.stat(filename).st_mode | stat.S_IEXEC)
+        filename_path.chmod(filename_path.stat().st_mode | stat.S_IEXEC)
 
     def _copy_bash_to_clipboard(self) -> None:
         item = self.selectedItems()[0]

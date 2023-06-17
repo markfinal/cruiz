@@ -5,6 +5,7 @@ Application settings utilities
 """
 
 import json
+import pathlib
 import typing
 
 from qtpy import QtCore, QtGui, QtWidgets
@@ -1200,7 +1201,8 @@ class PreferencesDialog(QtWidgets.QDialog):
         )
         if not prefix_path:
             return
-        with open(prefix_path, "rt", encoding="utf-8") as preset_json_file:
+        prefix_path_path = pathlib.Path(prefix_path)
+        with prefix_path_path.open("rt", encoding="utf-8") as preset_json_file:
             presets = json.load(preset_json_file)
         if "cruiz_presets" not in presets:
             QtWidgets.QMessageBox.critical(
@@ -1223,7 +1225,8 @@ class PreferencesDialog(QtWidgets.QDialog):
         with LocalCacheSettingsReader() as settings:
             presets.update(settings.presets())  # type: ignore
         if presets:
-            with open(prefix_path, "wt", encoding="utf-8") as preset_json_file:
+            prefix_path_path = pathlib.Path(prefix_path)
+            with prefix_path_path.open("wt", encoding="utf-8") as preset_json_file:
                 json.dump({"cruiz_presets": presets}, preset_json_file, indent=4)
 
     def _clean_preferences(self) -> None:

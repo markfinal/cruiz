@@ -7,7 +7,7 @@ Plain old data classes
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-import os
+import pathlib
 import typing
 
 
@@ -80,14 +80,14 @@ class ConanHook:
     Plain old data class representing a Conan hook
     """
 
-    path: str
+    path: pathlib.Path
     enabled: bool
 
-    def has_path(self, path: str) -> bool:
+    def has_path(self, path: pathlib.Path) -> bool:
         """
         Does the hook contain the specified path?
         """
-        return self.path in (path, os.path.splitext(path)[0])
+        return self.path in (path, path.stem)
 
     @classmethod
     def from_string(cls, string: str) -> ConanHook:
@@ -102,7 +102,7 @@ class ConanHook:
         assert len(args) == 2
         path_arg = args[0].strip().split("=")
         enabled_arg = args[1].strip().split("=")
-        path = path_arg[1][1:-1]
+        path = pathlib.Path(path_arg[1][1:-1])
         enabled = _strtobool(enabled_arg[1])
         return cls(path, enabled)
 

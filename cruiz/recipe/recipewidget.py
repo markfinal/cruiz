@@ -463,7 +463,8 @@ class RecipeWidget(QtWidgets.QMainWindow):
         with RecipeSettingsReader.from_recipe(self.recipe) as settings_recipe:
             profile = settings_recipe.profile.resolve()
         profile_meta = self.recipe.context.get_profile_meta(profile)
-        if os.path.isabs(profile):
+        profile_path = pathlib.Path(profile)
+        if profile_path.is_absolute():
             with NamedLocalCacheSettingsReader(
                 self.recipe.context.cache_name
             ) as settings_localcache:
@@ -487,7 +488,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
             # version is either in the attributes, or for version agnostic recipes,
             # check the recipe object
             "version": recipe_attributes["version"] or self.recipe.version,
-            "profile": f"{profile_prefix}{os.path.basename(profile)}",
+            "profile": f"{profile_prefix}{profile_path.name}",
             "build_type": profile_meta["settings"]["build_type"],
             "build_type_lc": profile_meta["settings"]["build_type"].lower(),
         }
@@ -1012,7 +1013,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
             QtGui.QDesktopServices.openUrl(url)
 
     def _open_recipe_folder(self) -> None:
-        reveal_on_filesystem(str(self.recipe.folder))
+        reveal_on_filesystem(self.recipe.folder)
 
     def _copy_recipe_folder_to_clipboard(self) -> None:
         QtWidgets.QApplication.clipboard().setText(str(self.recipe.folder))
@@ -1216,14 +1217,14 @@ class RecipeWidget(QtWidgets.QMainWindow):
         menu.addAction(what_uses_this_action)
         menu.exec_(self._ui.dependenciesPackageList.mapToGlobal(position))
 
-    def _get_package_directory_of_current_dependency(self) -> str:
+    def _get_package_directory_of_current_dependency(self) -> pathlib.Path:
         index = self._ui.dependenciesPackageList.currentIndex()
         node = index.data(QtCore.Qt.UserRole)
         return self.recipe.context.get_package_directory(node)
 
     def _open_package_directory(self) -> None:
         directory = self._get_package_directory_of_current_dependency()
-        if os.path.isdir(directory):
+        if directory.is_dir():
             cruiz.revealonfilesystem.reveal_on_filesystem(directory)
         else:
             QtWidgets.QMessageBox.critical(
@@ -1234,7 +1235,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
 
     def _copy_package_directory(self) -> None:
         directory = self._get_package_directory_of_current_dependency()
-        QtWidgets.QApplication.clipboard().setText(directory)
+        QtWidgets.QApplication.clipboard().setText(os.fspath(directory))
 
     def _on_what_uses_this(self) -> None:
         index = self._ui.dependenciesPackageList.currentIndex()

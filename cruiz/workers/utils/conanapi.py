@@ -41,10 +41,10 @@ def instance(
     stderr = QueuedStreamSix(queue, Stderr)
     newoutputter = output.ConanOutput(stream=stdout, stream_err=stderr, color=True)
     if isinstance(params, CommandParameters):
-        home_dir = params.added_environment.get(
-            "CONAN_USER_HOME", get_conan_user_home()
+        home_dir = pathlib.Path(
+            params.added_environment.get("CONAN_USER_HOME", get_conan_user_home())
         )
-        local_cache_dir = os.path.join(home_dir, ".conan")
+        local_cache_dir = home_dir / ".conan"
         cache = conan_api.ClientCache(local_cache_dir, stdout)
         print_commands_to_output = cache.config.print_commands_to_output
         if params.cwd:
@@ -56,10 +56,10 @@ def instance(
                 params.cwd.mkdir(parents=True, exist_ok=True)
             os.chdir(params.cwd)
     elif isinstance(params, CommonParameters):
-        home_dir = params.added_environment.get(
-            "CONAN_USER_HOME", get_conan_user_home()
+        home_dir = pathlib.Path(
+            params.added_environment.get("CONAN_USER_HOME", get_conan_user_home())
         )
-        local_cache_dir = os.path.join(home_dir, ".conan")
+        local_cache_dir = home_dir / ".conan"
         cache = conan_api.ClientCache(local_cache_dir, stdout)
         print_commands_to_output = False
 
@@ -102,8 +102,8 @@ def _create_old_conan_api(out: typing.Any, run: typing.Any) -> typing.Any:
 
     user_io = UserIO(out=out)
 
-    user_home = get_conan_user_home()
-    base_folder = os.path.join(user_home, ".conan")
+    user_home = pathlib.Path(get_conan_user_home())
+    base_folder = user_home / ".conan"
 
     cache = ClientCache(base_folder, out)
     # Migration system
@@ -111,7 +111,7 @@ def _create_old_conan_api(out: typing.Any, run: typing.Any) -> typing.Any:
     migrator.migrate()
 
     if base_folder:
-        sys.path.append(os.path.join(base_folder, "python"))
+        sys.path.append(os.fspath(base_folder / "python"))
 
     config = cache.config
     # Adjust CONAN_LOGGING_LEVEL with the env readed

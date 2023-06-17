@@ -20,10 +20,11 @@ def get_version() -> str:
         return __version__
     except ImportError:
         import os
+        import pathlib
         import subprocess
         import sys
 
-        def _describe(cwd: str) -> str:
+        def _describe(cwd: pathlib.Path) -> str:
             if (
                 "GITHUB_REF_TYPE" in os.environ
                 and os.environ["GITHUB_REF_TYPE"] == "tag"
@@ -39,9 +40,11 @@ def get_version() -> str:
                 )
 
         try:
-            root_dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+            file_path = pathlib.Path(__file__)
+            root_dir = file_path.parent.parent.absolute()
         except NameError:
-            root_dir = os.path.dirname(sys.argv[0])
+            executable_path = pathlib.Path(sys.argv[0])
+            root_dir = executable_path.parent
         try:
             ref_description = _describe(root_dir)
         except (FileNotFoundError, subprocess.CalledProcessError):
