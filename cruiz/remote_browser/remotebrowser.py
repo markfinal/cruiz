@@ -7,16 +7,9 @@ Remote browser
 import logging
 import typing
 
-from qtpy import QtCore, QtGui, QtWidgets, PYSIDE2
+from qtpy import QtCore, QtGui, QtWidgets
 
-if PYSIDE2:
-    from cruiz.pyside2.remote_browser import Ui_remotebrowser
-
-    QAction = QtWidgets.QAction
-else:
-    from cruiz.pyside6.remote_browser import Ui_remotebrowser
-
-    QAction = QtGui.QAction
+from cruiz.pyside6.remote_browser import Ui_remotebrowser
 
 from cruiz.commands.context import ConanContext
 from cruiz.commands.logdetails import LogDetails
@@ -85,7 +78,7 @@ class RemoteBrowserDock(QtWidgets.QDockWidget):
     def _log_context_menu(self, position: QtCore.QPoint) -> None:
         menu = self.sender().createStandardContextMenu(position)
         menu.addSeparator()
-        clear_action = QAction("Clear", self)
+        clear_action = QtGui.QAction("Clear", self)
         clear_action.triggered.connect(self._clear_log)
         menu.addAction(clear_action)
         menu.exec_(self.sender().viewport().mapToGlobal(position))

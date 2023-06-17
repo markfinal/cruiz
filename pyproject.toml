@@ -2,6 +2,5 @@
 requires = [
     "setuptools",
     "wheel",
-    "PySide2>=5.15.2.1,<6; platform_machine=='x86_64'",
     "PySide6>=6.4,<6.5"
 ]

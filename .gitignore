@@ -5,8 +5,6 @@ cruiz.egg-info
 build
 dist
 .mypy_cache
-cruiz/pyside2/*
-!cruiz/pyside2/__init__.py
 cruiz/pyside6/*
 !cruiz/pyside6/__init__.py
 .tox

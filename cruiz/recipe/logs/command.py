@@ -45,21 +45,21 @@ class RecipeCommandHistoryWidget(QtWidgets.QListWidget):
         super().__init__(parent)
         self.customContextMenuRequested.connect(self._show_context_menu)
         self.itemSelectionChanged.connect(self._selection_changed)
-        self._export_bash_action = QAction("Export to file...", self)
+        self._export_bash_action = QtGui.QAction("Export to file...", self)
         self._export_bash_action.triggered.connect(self._export_bash)
-        self._export_zsh_action = QAction("Export to file...", self)
+        self._export_zsh_action = QtGui.QAction("Export to file...", self)
         self._export_zsh_action.triggered.connect(self._export_zsh)
-        self._export_cmd_action = QAction("Export to file...", self)
+        self._export_cmd_action = QtGui.QAction("Export to file...", self)
         self._export_cmd_action.triggered.connect(self._export_cmd)
-        self._copy_bash_to_clipboard_action = QAction("Copy to clipboard", self)
+        self._copy_bash_to_clipboard_action = QtGui.QAction("Copy to clipboard", self)
         self._copy_bash_to_clipboard_action.triggered.connect(
             self._copy_bash_to_clipboard
         )
-        self._copy_zsh_to_clipboard_action = QAction("Copy to clipboard", self)
+        self._copy_zsh_to_clipboard_action = QtGui.QAction("Copy to clipboard", self)
         self._copy_zsh_to_clipboard_action.triggered.connect(
             self._copy_zsh_to_clipboard
         )
-        self._copy_cmd_to_clipboard_action = QAction("Copy to clipboard", self)
+        self._copy_cmd_to_clipboard_action = QtGui.QAction("Copy to clipboard", self)
         self._copy_cmd_to_clipboard_action.triggered.connect(
             self._copy_cmd_to_clipboard
         )

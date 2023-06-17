@@ -11,16 +11,9 @@ import platform
 import subprocess
 import typing
 
-from qtpy import PYSIDE2
-
-if PYSIDE2:
-    SUBDIR = "pyside2"
-    RCC = "pyside2-rcc"
-    UIC = "pyside2-uic"
-else:
-    SUBDIR = "pyside6"
-    RCC = "pyside6-rcc"
-    UIC = "pyside6-uic"
+SUBDIR = "pyside6"
+RCC = "pyside6-rcc"
+UIC = "pyside6-uic"
 
 
 logger = logging.getLogger(__name__)

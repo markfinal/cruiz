@@ -7,14 +7,11 @@ Dialog to show cruiz information
 import sys
 import typing
 
-from qtpy import QtCore, QtGui, QtWidgets, PYSIDE2
+from qtpy import QtCore, QtGui, QtWidgets
 
 from cruiz.version import get_version
 
-if PYSIDE2:
-    from cruiz.pyside2.about_dialog import Ui_AboutCruiz
-else:
-    from cruiz.pyside6.about_dialog import Ui_AboutCruiz
+from cruiz.pyside6.about_dialog import Ui_AboutCruiz
 
 
 class AboutDialog(QtWidgets.QDialog):

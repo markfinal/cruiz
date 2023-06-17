@@ -6,7 +6,7 @@ Build features toolbar
 
 import typing
 
-from qtpy import QtCore, QtGui, QtWidgets, PYSIDE2
+from qtpy import QtCore, QtGui, QtWidgets
 
 from cruiz.constants import CompilerCacheTypes
 
@@ -19,22 +19,13 @@ from cruiz.settings.managers.compilercachepreferences import CompilerCacheSettin
 
 from cruiz.widgets.util import BlockSignals
 
-if PYSIDE2:
-    from cruiz.pyside2.recipe_cmake_features_frame import Ui_cmakeFeaturesFrame
-    from cruiz.pyside2.recipe_compilercache_features_frame import (
-        Ui_compilerCacheFrame,
-    )
-    from cruiz.pyside2.recipe_compiler_cache_configuration_dialog import (
-        Ui_CompilerCacheConfigurationDialog,
-    )
-else:
-    from cruiz.pyside6.recipe_cmake_features_frame import Ui_cmakeFeaturesFrame
-    from cruiz.pyside6.recipe_compilercache_features_frame import (
-        Ui_compilerCacheFrame,
-    )
-    from cruiz.pyside6.recipe_compiler_cache_configuration_dialog import (
-        Ui_CompilerCacheConfigurationDialog,
-    )
+from cruiz.pyside6.recipe_cmake_features_frame import Ui_cmakeFeaturesFrame
+from cruiz.pyside6.recipe_compilercache_features_frame import (
+    Ui_compilerCacheFrame,
+)
+from cruiz.pyside6.recipe_compiler_cache_configuration_dialog import (
+    Ui_CompilerCacheConfigurationDialog,
+)
 
 
 class _CMakeFeaturesFrame(QtWidgets.QFrame):

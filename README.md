@@ -48,21 +48,6 @@ If you have cloned this repository, you will need:
 
 Step 3 will need to be re-run when the Python dependencies, or the resource files used, change.
 
-## PySide versions
-PySide2 and PySide6 have been tested. PySide6 is the default, when running `cruiz`. PySide2 is only available on Intel x86_64 platforms.
-
-On Linux, PySide 6 from PyPI requires modern libstdc++. If you see a launch error indicating `CXXABI_1.3.9` then your distribution is likely too old.
-
-You can alter the default PySide versiont to use, in a number of ways:
-
-1. Use a different entry point
-
-    - `cruiz-pyside2` or `python -m cruiz-pyside2`
-
-2. Use an environment variable
-
-    - `QT_API=pyside2 cruiz`
-
 ## Linting
 Install linting dependencies with `pip install -r requirements_dev.txt`.
 

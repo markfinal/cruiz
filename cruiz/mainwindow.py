@@ -111,14 +111,14 @@ class MainWindow(QtWidgets.QMainWindow):
             self._remote_browser_dock,
         )
 
-        open_recipe_action = QAction("Open recipe...", self)
+        open_recipe_action = QtGui.QAction("Open recipe...", self)
         open_recipe_action.setShortcut(QtGui.QKeySequence("Ctrl+O"))
         open_recipe_action.triggered.connect(self._open_recipe)
 
         self._recent_recipe_menu = QtWidgets.QMenu("Recent recipes", self)
 
-        exit_action = QAction("&Quit", self)
-        exit_action.setMenuRole(QAction.QuitRole)
+        exit_action = QtGui.QAction("&Quit", self)
+        exit_action.setMenuRole(QtGui.QAction.QuitRole)
         exit_action.setShortcut(QtGui.QKeySequence("Ctrl+Q"))
         exit_action.setStatusTip("Quit application")
         exit_action.triggered.connect(
@@ -128,7 +128,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # need a clone of the exit action without the menu role to
         # appear on the systrayicon
-        systray_exit_icon = QAction("&Quit", self)
+        systray_exit_icon = QtGui.QAction("&Quit", self)
         systray_exit_icon.setShortcut(QtGui.QKeySequence("Ctrl+Q"))
         systray_exit_icon.setStatusTip("Quit application")
         systray_exit_icon.triggered.connect(
@@ -147,11 +147,11 @@ class MainWindow(QtWidgets.QMainWindow):
         file_menu.addAction(exit_action)
 
         edit_menu = menubar.addMenu("&Edit")
-        edit_preferences_action = QAction("Preferences...", self)
-        edit_preferences_action.setMenuRole(QAction.PreferencesRole)
+        edit_preferences_action = QtGui.QAction("Preferences...", self)
+        edit_preferences_action.setMenuRole(QtGui.QAction.PreferencesRole)
         edit_preferences_action.triggered.connect(self._edit_preferences_new)
         edit_menu.addAction(edit_preferences_action)
-        manage_local_caches_action = QAction("Manage local caches...", self)
+        manage_local_caches_action = QtGui.QAction("Manage local caches...", self)
         manage_local_caches_action.triggered.connect(self._manage_local_caches)
         edit_menu.addAction(manage_local_caches_action)
 
@@ -159,15 +159,15 @@ class MainWindow(QtWidgets.QMainWindow):
         view_menu.addAction(self._remote_browser_dock.toggleViewAction())
 
         help_menu = menubar.addMenu("&Help")
-        about_cruiz_action = QAction("About cruiz...", self)
-        about_cruiz_action.setMenuRole(QAction.AboutRole)
+        about_cruiz_action = QtGui.QAction("About cruiz...", self)
+        about_cruiz_action.setMenuRole(QtGui.QAction.AboutRole)
         about_cruiz_action.triggered.connect(self._about_cruiz)
         help_menu.addAction(about_cruiz_action)
-        about_qt_action = QAction("About Qt...", self)
-        about_qt_action.setMenuRole(QAction.AboutQtRole)
+        about_qt_action = QtGui.QAction("About Qt...", self)
+        about_qt_action.setMenuRole(QtGui.QAction.AboutQtRole)
         about_qt_action.triggered.connect(QtWidgets.QApplication.aboutQt)
         help_menu.addAction(about_qt_action)
-        icon_license_action = QAction("Icon licenses...", self)
+        icon_license_action = QtGui.QAction("Icon licenses...", self)
         icon_license_action.triggered.connect(self._icon_license)
         help_menu.addAction(icon_license_action)
 
@@ -251,7 +251,7 @@ class MainWindow(QtWidgets.QMainWindow):
         cruiz.globals.CRUIZ_MAINWINDOW = self
 
     def _on_warning_label_menu(self, position: QtCore.QPoint) -> None:
-        action = QAction("Dismiss", self)
+        action = QtGui.QAction("Dismiss", self)
         action.triggered.connect(self._on_warning_label_dismiss)
         menu = QtWidgets.QMenu(self)
         menu.addAction(action)
@@ -343,7 +343,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 if "version" in attributes
                 else str(recipe_path)
             )
-            recent_recipe_action = QAction(label, self)
+            recent_recipe_action = QtGui.QAction(label, self)
             recent_recipe_action.triggered.connect(
                 partial(self.load_recipe, recipe_path, uuid)
             )

@@ -6,7 +6,7 @@ Widget debugging
 
 import logging
 
-from qtpy import QtCore, QtWidgets, PYSIDE2
+from qtpy import QtCore, QtWidgets
 
 
 def _widget_window_flags_to_string(widget: QtWidgets.QWidget) -> str:
@@ -96,9 +96,6 @@ def _widget_attributes_to_string(widget: QtWidgets.QWidget) -> str:
         text += ":WA_AcceptDrops"
     if widget.testAttribute(QtCore.Qt.WA_AlwaysShowToolTips):
         text += ":WA_AlwaysShowToolTips"
-    if PYSIDE2:
-        if widget.testAttribute(QtCore.Qt.WA_ContentsPropagated):
-            text += ":WA_ContentsPropagated"
     if widget.testAttribute(QtCore.Qt.WA_CustomWhatsThis):
         text += ":WA_CustomWhatsThis"
     if widget.testAttribute(QtCore.Qt.WA_DeleteOnClose):
@@ -111,9 +108,6 @@ def _widget_attributes_to_string(widget: QtWidgets.QWidget) -> str:
         text += ":WA_ForceDisabled"
     if widget.testAttribute(QtCore.Qt.WA_ForceUpdatesDisabled):
         text += ":WA_ForceUpdatesDisabled"
-    if PYSIDE2:
-        if widget.testAttribute(QtCore.Qt.WA_GroupLeader):
-            text += ":WA_GroupLeader"
     if widget.testAttribute(QtCore.Qt.WA_Hover):
         text += ":WA_Hover"
     if widget.testAttribute(QtCore.Qt.WA_InputMethodEnabled):
@@ -126,9 +120,6 @@ def _widget_attributes_to_string(widget: QtWidgets.QWidget) -> str:
         text += ":WA_LayoutOnEntireRect"
     if widget.testAttribute(QtCore.Qt.WA_LayoutUsesWidgetRect):
         text += ":WA_LayoutUsesWidgetRect"
-    if PYSIDE2:
-        if widget.testAttribute(QtCore.Qt.WA_MacNoClickThrough):
-            text += ":WA_MacNoClickThrough"
     if widget.testAttribute(QtCore.Qt.WA_MacOpaqueSizeGrip):
         text += ":WA_MacOpaqueSizeGrip"
     if widget.testAttribute(QtCore.Qt.WA_MacShowFocusRect):
@@ -139,11 +130,6 @@ def _widget_attributes_to_string(widget: QtWidgets.QWidget) -> str:
         text += ":WA_MacSmallSize"
     if widget.testAttribute(QtCore.Qt.WA_MacMiniSize):
         text += ":WA_MacMiniSize"
-    if PYSIDE2:
-        if widget.testAttribute(QtCore.Qt.WA_MacVariableSize):
-            text += ":WA_MacVariableSize"
-        if widget.testAttribute(QtCore.Qt.WA_MacBrushedMetal):
-            text += ":WA_MacBrushedMetal"
     if widget.testAttribute(QtCore.Qt.WA_Mapped):
         text += ":WA_Mapped"
     if widget.testAttribute(QtCore.Qt.WA_MouseNoMask):
@@ -152,11 +138,6 @@ def _widget_attributes_to_string(widget: QtWidgets.QWidget) -> str:
         text += ":WA_MouseTracking"
     if widget.testAttribute(QtCore.Qt.WA_Moved):
         text += ":WA_Moved"
-    if PYSIDE2:
-        if widget.testAttribute(QtCore.Qt.WA_MSWindowsUseDirect3D):
-            text += ":WA_MSWindowsUseDirect3D"
-        if widget.testAttribute(QtCore.Qt.WA_NoBackground):
-            text += ":WA_NoBackground"
     if widget.testAttribute(QtCore.Qt.WA_NoChildEventsForParent):
         text += ":WA_NoChildEventsForParent"
     if widget.testAttribute(QtCore.Qt.WA_NoChildEventsFromChildren):
@@ -253,9 +234,6 @@ def _widget_attributes_to_string(widget: QtWidgets.QWidget) -> str:
         text += ":WA_X11NetWmWindowTypeCombo"
     if widget.testAttribute(QtCore.Qt.WA_X11NetWmWindowTypeDND):
         text += ":WA_X11NetWmWindowTypeDND"
-    if PYSIDE2:
-        if widget.testAttribute(QtCore.Qt.WA_MacFrameworkScaled):
-            text += ":WA_MacFrameworkScaled"
     if widget.testAttribute(QtCore.Qt.WA_AcceptTouchEvents):
         text += ":WA_AcceptTouchEvents"
     if widget.testAttribute(QtCore.Qt.WA_TouchPadAcceptSingleTouchEvents):

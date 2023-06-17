@@ -7,7 +7,7 @@ Dialog for adding a new remote.
 from functools import partial
 import typing
 
-from qtpy import QtCore, QtGui, QtWidgets, PYSIDE2
+from qtpy import QtCore, QtGui, QtWidgets
 
 import validators
 
@@ -15,14 +15,7 @@ from cruiz.interop.pod import ConanRemote
 
 from cruiz.settings.managers.recentconanremotes import RecentConanRemotesSettingsReader
 
-if PYSIDE2:
-    from cruiz.pyside2.local_cache_add_remote import Ui_AddRemoteDialog
-
-    QAction = QtWidgets.QAction
-else:
-    from cruiz.pyside6.local_cache_add_remote import Ui_AddRemoteDialog
-
-    QAction = QtGui.QAction
+from cruiz.pyside6.local_cache_add_remote import Ui_AddRemoteDialog
 
 
 class AddRemoteDialog(QtWidgets.QDialog):
@@ -40,7 +33,7 @@ class AddRemoteDialog(QtWidgets.QDialog):
             recent_remote_urls = settings.urls.resolve()
         if recent_remote_urls:
             for remote in recent_remote_urls:
-                remote_action = QAction(remote, self)
+                remote_action = QtGui.QAction(remote, self)
                 remote_action.triggered.connect(partial(self._set_remote_url, remote))
                 recent_remotes_menu.addAction(remote_action)
         else:

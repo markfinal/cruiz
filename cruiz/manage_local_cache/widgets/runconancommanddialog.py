@@ -6,15 +6,12 @@ Dialog for running a Conan command in a local cache.
 
 import typing
 
-from qtpy import QtCore, QtWidgets, PYSIDE2
+from qtpy import QtCore, QtWidgets
 
 from cruiz.commands.context import ConanContext, LogDetails
 from cruiz.interop.commandparameters import CommandParameters
 
-if PYSIDE2:
-    from cruiz.pyside2.local_cache_run_command_dialog import Ui_RunConanCommandDialog
-else:
-    from cruiz.pyside6.local_cache_run_command_dialog import Ui_RunConanCommandDialog
+from cruiz.pyside6.local_cache_run_command_dialog import Ui_RunConanCommandDialog
 
 import cruiz.workers.arbitrary
 

@@ -8,17 +8,7 @@ import os
 import typing
 
 import graphviz
-from qtpy import QtCore, QtGui, QtSvg, QtWidgets, PYSIDE2
-
-if PYSIDE2:
-    QGraphicsSvgItem = QtSvg.QGraphicsSvgItem
-    QAction = QtWidgets.QAction
-else:
-    # module not present in qtpy at the time of writing
-    from PySide6 import QtSvgWidgets
-
-    QGraphicsSvgItem = QtSvgWidgets.QGraphicsSvgItem
-    QAction = QtGui.QAction
+from qtpy import QtCore, QtGui, QtSvg, QtWidgets, QtSvgWidgets
 
 from cruiz.settings.managers.graphvizpreferences import GraphVizSettingsReader
 from cruiz.environ import EnvironSaver
@@ -106,7 +96,7 @@ class _SVGDialog(QtWidgets.QDialog):
         self.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
         self.customContextMenuRequested.connect(self._context_menu)
         self._renderer = renderer
-        item = QGraphicsSvgItem()
+        item = QtSvgWidgets.QGraphicsSvgItem()
         item.setSharedRenderer(renderer)
         self._scene = QtWidgets.QGraphicsScene()
         self._scene.addItem(item)
@@ -125,7 +115,7 @@ class _SVGDialog(QtWidgets.QDialog):
 
     def _context_menu(self, position: QtCore.QPoint) -> None:
         menu = QtWidgets.QMenu(self)
-        save_action = QAction("Save...", self)
+        save_action = QtGui.QAction("Save...", self)
         save_action.triggered.connect(self._on_save)
         menu.addAction(save_action)
         menu.exec_(self.mapToGlobal(position))
@@ -155,13 +145,13 @@ class SVGScene(QtWidgets.QGraphicsScene):
     def __init__(self, renderer: QtSvg.QSvgRenderer) -> None:
         super().__init__()
         self._renderer = renderer
-        item = QGraphicsSvgItem()
+        item = QtSvgWidgets.QGraphicsSvgItem()
         item.setSharedRenderer(renderer)
         self.addItem(item)
 
     def mouseDoubleClickEvent(self, event: QtWidgets.QGraphicsSceneMouseEvent) -> None:
         item = self.itemAt(event.scenePos(), QtGui.QTransform())
-        if item and isinstance(item, QGraphicsSvgItem):
+        if item and isinstance(item, QtSvgWidgets.QGraphicsSvgItem):
             _SVGDialog(self._renderer).exec_()
             event.setAccepted(True)
         return super().mouseDoubleClickEvent(event)

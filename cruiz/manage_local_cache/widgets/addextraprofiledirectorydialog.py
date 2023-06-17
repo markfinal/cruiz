@@ -6,23 +6,14 @@ Dialog for adding extra profile directories
 
 import typing
 
-from qtpy import QtCore, QtGui, QtWidgets, PYSIDE2
+from qtpy import QtCore, QtGui, QtWidgets
 
 from cruiz.interop.pod import ExtraProfileDirectory
 from cruiz.widgets.util import search_for_dir_options
 
-if PYSIDE2:
-    from cruiz.pyside2.local_cache_add_profile_directory import (
-        Ui_AddExtraProfileDirectoryDialog,
-    )
-
-    QAction = QtWidgets.QAction
-else:
-    from cruiz.pyside6.local_cache_add_profile_directory import (
-        Ui_AddExtraProfileDirectoryDialog,
-    )
-
-    QAction = QtGui.QAction
+from cruiz.pyside6.local_cache_add_profile_directory import (
+    Ui_AddExtraProfileDirectoryDialog,
+)
 
 
 class AddExtraProfileDirectoryDialog(QtWidgets.QDialog):
@@ -40,7 +31,7 @@ class AddExtraProfileDirectoryDialog(QtWidgets.QDialog):
         self._ui.buttonBox.rejected.connect(self.reject)
         self._ui.name.textChanged.connect(self._updated)
         self._ui.directory.textChanged.connect(self._updated)
-        browse_for_profile_dir_action = QAction(
+        browse_for_profile_dir_action = QtGui.QAction(
             self.style().standardIcon(QtWidgets.QStyle.SP_DirIcon), "", self
         )
         browse_for_profile_dir_action.triggered.connect(self._browse_for_profile_dir)

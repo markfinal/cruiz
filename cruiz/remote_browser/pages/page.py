@@ -6,12 +6,7 @@ Remote browser page
 
 import typing
 
-from qtpy import QtCore, QtGui, QtWidgets, PYSIDE2
-
-if PYSIDE2:
-    QAction = QtWidgets.QAction
-else:
-    QAction = QtGui.QAction
+from qtpy import QtCore, QtGui, QtWidgets
 
 from cruiz.commands.context import ConanContext
 from cruiz.commands.logdetails import LogDetails
@@ -48,14 +43,14 @@ class Page(QtWidgets.QWidget):
 
     def _on_pkgref_menu(self, position: QtCore.QPoint) -> None:
         menu = QtWidgets.QMenu(self)
-        copy_action = QAction("Copy to clipboard", self)
+        copy_action = QtGui.QAction("Copy to clipboard", self)
         copy_action.triggered.connect(self._on_copy_pkgref_to_clip)
         menu.addAction(copy_action)
         menu.exec_(self.sender().mapToGlobal(position))
 
     def _on_selected_pkgref_menu(self, position: QtCore.QPoint) -> None:
         menu = QtWidgets.QMenu(self)
-        copy_action = QAction("Copy to clipboard", self)
+        copy_action = QtGui.QAction("Copy to clipboard", self)
         copy_action.triggered.connect(self._on_copy_selected_pkgref_to_clip)
         menu.addAction(copy_action)
         menu.exec_(self.sender().mapToGlobal(position))

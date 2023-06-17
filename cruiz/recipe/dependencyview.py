@@ -6,15 +6,8 @@ Conan dependency view
 
 import typing
 
-from qtpy import QtWidgets, QtSvg, PYSIDE2
-
-if PYSIDE2:
-    QGraphicsSvgItem = QtSvg.QGraphicsSvgItem
-else:
-    # module not present in qtpy at the time of writing
-    from PySide6 import QtSvgWidgets
-
-    QGraphicsSvgItem = QtSvgWidgets.QGraphicsSvgItem
+# TODO: note, change, as QtSvgWidgets wasn't available here previously
+from qtpy import QtWidgets, QtSvg, QtSvgWidgets
 
 from cruiz.interop.dependencygraph import DependencyGraph
 from cruiz.svggraph import DependenciesToDigraph, DigraphToSVG, SVGScene
@@ -48,7 +41,7 @@ class InverseDependencyViewDialog(QtWidgets.QDialog):
         digraph = DependenciesToDigraph(depgraph, "LR", flipped_edges=True)
         svg = DigraphToSVG(digraph)
         self._renderer = QtSvg.QSvgRenderer(svg.svg)
-        item = QGraphicsSvgItem()
+        item = QtSvgWidgets.QGraphicsSvgItem()
         item.setSharedRenderer(self._renderer)
         self._scene = QtWidgets.QGraphicsScene()
         self._scene.addItem(item)

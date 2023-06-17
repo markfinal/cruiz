@@ -6,18 +6,11 @@ Dialog for adding an environment variable
 
 from dataclasses import dataclass
 
-from qtpy import QtCore, QtGui, QtWidgets, PYSIDE2
+from qtpy import QtCore, QtGui, QtWidgets
 
 from cruiz.commands.context import ConanContext
 
-if PYSIDE2:
-    from cruiz.pyside2.local_cache_add_environment import Ui_AddEnvironmentDialog
-
-    QAction = QtWidgets.QAction
-else:
-    from cruiz.pyside6.local_cache_add_environment import Ui_AddEnvironmentDialog
-
-    QAction = QtGui.QAction
+from cruiz.pyside6.local_cache_add_environment import Ui_AddEnvironmentDialog
 
 
 @dataclass
@@ -42,12 +35,12 @@ class AddEnvironmentDialog(QtWidgets.QDialog):
         self._ui.setupUi(self)  # type: ignore[no-untyped-call]
         conan_environment_menu = QtWidgets.QMenu("Conan environment variables", self)
         for key, _ in context.get_conan_config_environment_variables().items():
-            key_action = QAction(key, self)
+            key_action = QtGui.QAction(key, self)
             key_action.triggered.connect(self._set_name)
             conan_environment_menu.addAction(key_action)
         conan_environment_menu.addSeparator()
         # TODO: CONAN_V2_MODE is obsolete
-        conan_v2_mode_action = QAction("CONAN_V2_MODE", self)
+        conan_v2_mode_action = QtGui.QAction("CONAN_V2_MODE", self)
         conan_v2_mode_action.triggered.connect(self._set_name)  # type: ignore
         conan_environment_menu.addAction(conan_v2_mode_action)
         self._ui.name.set_custom_menu(conan_environment_menu)

@@ -7,12 +7,9 @@ Wizard for loading a recipe
 import pathlib
 import typing
 
-from qtpy import QtCore, QtWidgets, PYSIDE2
+from qtpy import QtCore, QtWidgets
 
-if PYSIDE2:
-    from cruiz.pyside2.load_recipe_wizard import Ui_LoadRecipeWizard
-else:
-    from cruiz.pyside6.load_recipe_wizard import Ui_LoadRecipeWizard
+from cruiz.pyside6.load_recipe_wizard import Ui_LoadRecipeWizard
 
 from cruiz.exceptions import RecipeDoesNotExistError, RecipeAlreadyOpenError
 from cruiz.settings.managers.recipe import RecipeSettings, RecipeSettingsReader

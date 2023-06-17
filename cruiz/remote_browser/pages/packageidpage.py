@@ -6,12 +6,7 @@ Remote browser page
 
 import typing
 
-from qtpy import QtCore, QtGui, QtWidgets, PYSIDE2
-
-if PYSIDE2:
-    QAction = QtWidgets.QAction
-else:
-    QAction = QtGui.QAction
+from qtpy import QtCore, QtGui, QtWidgets
 
 from cruiz.interop.packageidparameters import PackageIdParameters
 from cruiz.widgets.util import BlockSignals
@@ -363,7 +358,7 @@ class PackageIdPage(Page):
         offset = 1
         assert self._model._settings
         for i, s in enumerate(self._model._settings):
-            action = QAction(s, self)
+            action = QtGui.QAction(s, self)
             action.setCheckable(True)
             action.setData(i + offset)
             action.setChecked(not self._ui.package_ids.isColumnHidden(i + offset))
@@ -373,7 +368,7 @@ class PackageIdPage(Page):
         offset = 1 + len(self._model._settings)
         assert self._model._options
         for i, o in enumerate(self._model._options):
-            action = QAction(o, self)
+            action = QtGui.QAction(o, self)
             action.setData(i + offset)
             action.setCheckable(True)
             action.setChecked(not self._ui.package_ids.isColumnHidden(i + offset))
@@ -381,7 +376,7 @@ class PackageIdPage(Page):
             menu.addAction(action)
         menu.addSeparator()
         offset = 1 + len(self._model._settings) + len(self._model._options)
-        action = QAction("Requires", self)
+        action = QtGui.QAction("Requires", self)
         action.setData(offset)
         action.setCheckable(True)
         action.setChecked(not self._ui.package_ids.isColumnHidden(offset))
@@ -432,7 +427,7 @@ class PackageIdPage(Page):
         if not self.sender().selectionModel().selectedRows():
             return
         menu = QtWidgets.QMenu(self)
-        remove_action = QAction("Remove", self)
+        remove_action = QtGui.QAction("Remove", self)
         remove_action.triggered.connect(self._on_pid_filter_remove)
         menu.addAction(remove_action)
         menu.exec_(self.sender().mapToGlobal(position))

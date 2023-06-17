@@ -13,23 +13,13 @@ import tarfile
 import tempfile
 import typing
 
-from qtpy import QtCore, QtGui, QtWidgets, PYSIDE2
+from qtpy import QtCore, QtGui, QtWidgets
 
-if PYSIDE2:
-    from qtpy import QtWebEngineWidgets
-
-    QAction = QtWidgets.QAction
-else:
-    from qtpy import QtWebEngineCore
-
-    QAction = QtGui.QAction
+from qtpy import QtWebEngineCore
 
 from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
 
-if PYSIDE2:
-    from cruiz.pyside2.remote_browser_fileview import Ui_remote_browser_fileview
-else:
-    from cruiz.pyside6.remote_browser_fileview import Ui_remote_browser_fileview
+from cruiz.pyside6.remote_browser_fileview import Ui_remote_browser_fileview
 
 from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
 
@@ -205,15 +195,9 @@ class _FileViewer(QtWidgets.QDialog):
         super().__init__(parent)
         self._ui = Ui_remote_browser_fileview()
         self._ui.setupUi(self)  # type: ignore[no-untyped-call]
-        if PYSIDE2:
-            self._ui.fileview.page().settings().setAttribute(
-                QtWebEngineWidgets.QWebEngineSettings.LocalContentCanAccessRemoteUrls,
-                True,
-            )
-        else:
-            self._ui.fileview.page().settings().setAttribute(
-                QtWebEngineCore.QWebEngineSettings.LocalContentCanAccessRemoteUrls, True
-            )
+        self._ui.fileview.page().settings().setAttribute(
+            QtWebEngineCore.QWebEngineSettings.LocalContentCanAccessRemoteUrls, True
+        )
         if container:
             html_path = _FileViewer._write_html(path, root / container)
             self.setWindowTitle(f"{path} in {container}")
@@ -380,7 +364,7 @@ class PackageBinaryPage(Page):
         if node.link_target:
             return
         menu = QtWidgets.QMenu(self)
-        save_action = QAction("Save ...", self)
+        save_action = QtGui.QAction("Save ...", self)
         save_action.triggered.connect(self._on_file_save)
         menu.addAction(save_action)
         menu.exec_(self.sender().mapToGlobal(position))

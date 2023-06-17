@@ -11,7 +11,7 @@ import pathlib
 import platform
 import sys
 
-from qtpy import QtCore, QtWidgets, PYSIDE2
+from qtpy import QtCore, QtWidgets
 
 from cruiz.resourcegeneration import generate_resources
 
@@ -27,10 +27,7 @@ logger = logging.getLogger(__name__)
 # resource generation be invoked before resources and MainWindow are imported
 generate_resources()
 
-if PYSIDE2:
-    import cruiz.pyside2.resources  # noqa: F401
-else:
-    import cruiz.pyside6.resources  # noqa: F401
+import cruiz.pyside6.resources  # noqa: F401, E402
 
 from cruiz.application import Application  # noqa: E402
 from cruiz.mainwindow import MainWindow  # noqa: E402

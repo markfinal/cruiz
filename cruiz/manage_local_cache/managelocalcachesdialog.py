@@ -11,7 +11,7 @@ import shutil
 import stat
 import typing
 
-from qtpy import QtCore, QtGui, QtWidgets, PYSIDE2
+from qtpy import QtCore, QtGui, QtWidgets
 from cruiz.commands.logdetails import LogDetails
 
 from cruiz.interop.pod import ConanHook
@@ -33,14 +33,7 @@ from cruiz.commands.context import ConanContext, ConanConfigBoolean
 from cruiz.revealonfilesystem import reveal_on_filesystem
 from cruiz.constants import DEFAULT_CACHE_NAME
 
-if PYSIDE2:
-    from cruiz.pyside2.local_cache_manage import Ui_ManageLocalCaches
-
-    QAction = QtWidgets.QAction
-else:
-    from cruiz.pyside6.local_cache_manage import Ui_ManageLocalCaches
-
-    QAction = QtGui.QAction
+from cruiz.pyside6.local_cache_manage import Ui_ManageLocalCaches
 
 from .widgets import (
     NewLocalCacheWizard,
@@ -89,14 +82,14 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
         # locations
         dir_icon = self.style().standardIcon(QtWidgets.QStyle.SP_DirIcon)
         self._ui.conan_user_home.setReadOnly(True)
-        open_user_home_action = QAction(dir_icon, "", self)
+        open_user_home_action = QtGui.QAction(dir_icon, "", self)
         open_user_home_action.triggered.connect(self._open_conan_user_home)
         self._ui.conan_user_home.addAction(
             open_user_home_action,
             QtWidgets.QLineEdit.TrailingPosition,
         )
         self._ui.conan_user_home_short.setReadOnly(True)
-        open_short_user_home_action = QAction(dir_icon, "", self)
+        open_short_user_home_action = QtGui.QAction(dir_icon, "", self)
         open_short_user_home_action.triggered.connect(self._open_conan_user_home_short)
         self._ui.conan_user_home_short.addAction(
             open_short_user_home_action,
@@ -782,7 +775,7 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
     def _log_context_menu(self, position: QtCore.QPoint) -> None:
         menu = self.sender().createStandardContextMenu(position)
         menu.addSeparator()
-        clear_action = QAction("Clear", self)
+        clear_action = QtGui.QAction("Clear", self)
         clear_action.triggered.connect(self._clear_log)
         menu.addAction(clear_action)
         menu.exec_(self.sender().viewport().mapToGlobal(position))
