@@ -23,5 +23,6 @@ class LineEditWithCustomContextMenu(QtWidgets.QLineEdit):
         menu = self.createStandardContextMenu()
         if self._custom_menu:
             menu.addSeparator()
+            self._custom_menu.setParent(menu)
             menu.addMenu(self._custom_menu)
         menu.exec_(event.globalPos())
