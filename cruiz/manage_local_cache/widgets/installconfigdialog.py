@@ -7,19 +7,12 @@ Dialog for installing a new Conan config
 from functools import partial
 import typing
 
-from qtpy import QtCore, QtGui, QtWidgets, PYSIDE2
+from qtpy import QtCore, QtGui, QtWidgets
 
 from cruiz.commands.context import ConanContext
 from cruiz.interop.commandparameters import CommandParameters
 
-if PYSIDE2:
-    from cruiz.pyside2.local_cache_install_config import Ui_InstallConfigDialog
-
-    QAction = QtWidgets.QAction
-else:
-    from cruiz.pyside6.local_cache_install_config import Ui_InstallConfigDialog
-
-    QAction = QtGui.QAction
+from cruiz.pyside6.local_cache_install_config import Ui_InstallConfigDialog
 
 from cruiz.settings.managers.recentconanconfigs import (
     RecentConanConfigSettingsReader,
@@ -45,7 +38,7 @@ class InstallConfigDialog(QtWidgets.QDialog):
             config_paths = settings.paths.resolve()
         if config_paths:
             for path in config_paths:
-                path_action = QAction(path, self)
+                path_action = QtGui.QAction(path, self)
                 path_action.triggered.connect(partial(self._set_url, path))
                 recent_config_paths_menu.addAction(path_action)
         else:

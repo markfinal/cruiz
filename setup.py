@@ -45,13 +45,11 @@ def _compile_qrc(paths_written: typing.List[str]) -> None:
         return dst_file
 
     paths_written.append(_compile_pyside_resources(6))
-    paths_written.append(_compile_pyside_resources(2))
 
 
 def _compile_uis(paths_written: typing.List[str]) -> None:
     ui_variants = {
         "pyside6": "pyside6-uic",
-        "pyside2": "pyside2-uic",
     }
     for ui_subdir, uic_tool in ui_variants.items():
         ui_dir = f"cruiz/{ui_subdir}"
@@ -114,9 +112,7 @@ with open(requirements_path) as requirements_file:
     requires = requirements_file.readlines()
 
 
-readme_path = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)), "README.md"
-)
+readme_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "README.md")
 
 
 with open(readme_path) as readme_file:
@@ -132,7 +128,7 @@ setup(
     version=get_version(),
     description="Conan recipe user interface",
     long_description=readme,
-    long_description_content_type='text/markdown',
+    long_description_content_type="text/markdown",
     author="Mark Final",
     author_email="markfinal@hotmail.com",
     url="https://github.com/markfinal/cruiz",
@@ -141,7 +137,6 @@ setup(
     entry_points={
         "gui_scripts": [
             "cruiz = cruiz.__main__:main",
-            "cruiz-pyside2 = cruiz.__main_pyside2__:main",
         ],
     },
     classifiers=[
@@ -156,7 +151,7 @@ setup(
     ],
     python_requires=">=3.7, <3.11",
     project_urls={
-        'Documentation': 'https://cruiz.readthedocs.io/en/latest/',
-        'GitHub': 'https://github.com/markfinal/cruiz',
+        "Documentation": "https://cruiz.readthedocs.io/en/latest/",
+        "GitHub": "https://github.com/markfinal/cruiz",
     },
 )

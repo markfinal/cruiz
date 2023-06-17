@@ -7,7 +7,7 @@ Wizard for creating new Conan local caches
 import platform
 import typing
 
-from qtpy import QtGui, QtWidgets, PYSIDE2
+from qtpy import QtGui, QtWidgets
 
 from cruiz.commands.context import ConanContext
 from cruiz.interop.commandparameters import CommandParameters
@@ -19,14 +19,7 @@ from cruiz.constants import DEFAULT_CACHE_NAME
 
 import cruiz.workers
 
-if PYSIDE2:
-    from cruiz.pyside2.local_cache_new_wizard import Ui_NewLocalCacheWizard
-
-    QAction = QtWidgets.QAction
-else:
-    from cruiz.pyside6.local_cache_new_wizard import Ui_NewLocalCacheWizard
-
-    QAction = QtGui.QAction
+from cruiz.pyside6.local_cache_new_wizard import Ui_NewLocalCacheWizard
 
 
 class NewLocalCacheWizard(QtWidgets.QWizard):
@@ -46,13 +39,13 @@ class NewLocalCacheWizard(QtWidgets.QWizard):
             self._ui.locationsPage.completeChanged
         )
         dir_icon: QtGui.QIcon = self.style().standardIcon(QtWidgets.QStyle.SP_DirIcon)
-        browse_home_dir_action = QAction(dir_icon, "", self)
+        browse_home_dir_action = QtGui.QAction(dir_icon, "", self)
         browse_home_dir_action.triggered.connect(self._browse_for_home_dir)
         self._ui.userHome.addAction(
             browse_home_dir_action,
             QtWidgets.QLineEdit.TrailingPosition,
         )
-        browse_short_home_dir_action = QAction(dir_icon, "", self)
+        browse_short_home_dir_action = QtGui.QAction(dir_icon, "", self)
         browse_short_home_dir_action.triggered.connect(self._browse_for_short_home_dir)
         self._ui.userHomeShort.addAction(
             browse_short_home_dir_action,

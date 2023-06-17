@@ -7,14 +7,10 @@ Recipe behaviour toolbar
 import os
 import pathlib
 
-from qtpy import QtCore, QtWidgets, PYSIDE2
+from qtpy import QtCore, QtWidgets
 
-if PYSIDE2:
-    from cruiz.pyside2.recipe_profile_frame import Ui_profileFrame
-    from cruiz.pyside2.recipe_cpucores_frame import Ui_cpuCoresFrame
-else:
-    from cruiz.pyside6.recipe_profile_frame import Ui_profileFrame
-    from cruiz.pyside6.recipe_cpucores_frame import Ui_cpuCoresFrame
+from cruiz.pyside6.recipe_profile_frame import Ui_profileFrame
+from cruiz.pyside6.recipe_cpucores_frame import Ui_cpuCoresFrame
 
 from cruiz.widgets.util import BlockSignals
 

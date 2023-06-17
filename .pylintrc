@@ -3,11 +3,11 @@
 # A comma-separated list of package or module names from where C extensions may
 # be loaded. Extensions are loading into the active Python interpreter and may
 # run arbitrary code.
-extension-pkg-whitelist=PySide2.QtCore,PySide2.QtWidgets,PySide2.QtGui,PySide2.QtSvg,PySide2.QtWebEngineWidgets
+extension-pkg-whitelist=PySide6.QtCore,PySide6.QtWidgets,PySide6.QtGui,PySide6.QtSvg,PySide6.QtWebEngineWidget
 
 # Add files or directories to the blacklist. They should be base names, not
 # paths.
-ignore=CVS,resources.py,ui
+ignore=CVS,resources.py,pyside6
 
 # Add files or directories matching the regex patterns to the blacklist. The
 # regex matches against base names, not paths.

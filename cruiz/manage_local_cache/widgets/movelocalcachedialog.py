@@ -9,7 +9,7 @@ import platform
 import shutil
 import typing
 
-from qtpy import QtCore, QtGui, QtWidgets, PYSIDE2
+from qtpy import QtCore, QtGui, QtWidgets
 
 from cruiz.commands.context import ConanContext
 
@@ -19,14 +19,7 @@ from cruiz.settings.managers.namedlocalcache import (
     NamedLocalCacheSettingsWriter,
 )
 
-if PYSIDE2:
-    from cruiz.pyside2.local_cache_move import Ui_LocalCacheMove
-
-    QAction = QtWidgets.QAction
-else:
-    from cruiz.pyside6.local_cache_move import Ui_LocalCacheMove
-
-    QAction = QtGui.QAction
+from cruiz.pyside6.local_cache_move import Ui_LocalCacheMove
 
 from cruiz.widgets.util import search_for_dir_options
 
@@ -47,7 +40,7 @@ class MoveLocalCacheDialog(QtWidgets.QDialog):
             self._ui.currentUserHomeShort.setText(settings.short_home_dir.resolve())
         self._ui.buttonBox.accepted.connect(self.accept)
         self._ui.buttonBox.rejected.connect(self.reject)
-        home_dir_browse_action = QAction(
+        home_dir_browse_action = QtGui.QAction(
             self.style().standardIcon(QtWidgets.QStyle.SP_DirIcon), "", self
         )
         home_dir_browse_action.triggered.connect(self._home_dir_browse)

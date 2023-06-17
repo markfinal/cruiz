@@ -47,7 +47,7 @@ class Application(QtWidgets.QApplication):
         with GeneralSettingsReader() as settings:
             use_dark_mode = settings.use_dark_mode.resolve()
         self.setStyleSheet(
-            qdarkstyle.load_stylesheet_pyside2() if use_dark_mode else ""
+            qdarkstyle.load_stylesheet_pyside6() if use_dark_mode else ""
         )
         with FontSettingsReader(FontUsage.UI) as settings:
             font_details = (settings.name.resolve(), settings.size.resolve())

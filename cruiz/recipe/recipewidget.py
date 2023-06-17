@@ -10,17 +10,10 @@ import pathlib
 import re
 import typing
 
-from qtpy import QtCore, QtGui, QtWidgets, PYSIDE2, PYSIDE6
+from qtpy import QtCore, QtGui, QtWidgets
 import git
 
-if PYSIDE2:
-    from cruiz.pyside2.recipe_window import Ui_RecipeWindow
-
-    QAction = QtWidgets.QAction
-else:
-    from cruiz.pyside6.recipe_window import Ui_RecipeWindow
-
-    QAction = QtGui.QAction
+from cruiz.pyside6.recipe_window import Ui_RecipeWindow
 
 from cruiz.commands.context import ConanContext
 from cruiz.interop.commandparameters import CommandParameters
@@ -51,11 +44,6 @@ from .dependencyview import InverseDependencyViewDialog
 
 
 logger = logging.getLogger(__name__)
-
-if PYSIDE6:
-    QShortcut = QtGui.QShortcut
-else:
-    QShortcut = QtWidgets.QShortcut
 
 
 # copied from distutils.url.strtobool and modified
@@ -107,7 +95,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         self._disable_delete_on_default_output_tab()
         self._ui.pane_tabs.tabCloseRequested.connect(self._on_tab_close_request)
 
-        self._find_shortcut = QShortcut(QtGui.QKeySequence("Ctrl+F"), self)
+        self._find_shortcut = QtGui.QShortcut(QtGui.QKeySequence("Ctrl+F"), self)
         self._find_shortcut.setContext(QtCore.Qt.WidgetWithChildrenShortcut)
         self._find_shortcut.activated.connect(self._open_find_dialog)
         with GeneralSettingsReader() as settings:
@@ -151,7 +139,9 @@ class RecipeWidget(QtWidgets.QMainWindow):
             self._local_workflow_update_common_subdir
         )
         trash_icon = self.style().standardIcon(QtWidgets.QStyle.SP_TrashIcon)
-        self._local_workflow_common_subdir_trash_action = QAction(trash_icon, "", self)
+        self._local_workflow_common_subdir_trash_action = QtGui.QAction(
+            trash_icon, "", self
+        )
         self._local_workflow_common_subdir_trash_action.setToolTip("Delete folder")
         self._local_workflow_common_subdir_trash_action.triggered.connect(
             self._local_workflow_on_delete_common_subdir
@@ -164,7 +154,9 @@ class RecipeWidget(QtWidgets.QMainWindow):
         self._ui.localWorkflowInstallFolder.editingFinished.connect(
             self._local_workflow_update_install_folder
         )
-        self._local_workflow_install_folder_trash_action = QAction(trash_icon, "", self)
+        self._local_workflow_install_folder_trash_action = QtGui.QAction(
+            trash_icon, "", self
+        )
         self._local_workflow_install_folder_trash_action.setToolTip("Delete folder")
         self._local_workflow_install_folder_trash_action.triggered.connect(
             self._local_workflow_on_delete_install_folder
@@ -177,7 +169,9 @@ class RecipeWidget(QtWidgets.QMainWindow):
         self._ui.localWorkflowImportsFolder.editingFinished.connect(
             self._local_workflow_update_imports_folder
         )
-        self._local_workflow_imports_folder_trash_action = QAction(trash_icon, "", self)
+        self._local_workflow_imports_folder_trash_action = QtGui.QAction(
+            trash_icon, "", self
+        )
         self._local_workflow_imports_folder_trash_action.setToolTip("Delete folder")
         self._local_workflow_imports_folder_trash_action.triggered.connect(
             self._local_workflow_on_delete_imports_folder
@@ -190,7 +184,9 @@ class RecipeWidget(QtWidgets.QMainWindow):
         self._ui.localWorkflowSourceFolder.editingFinished.connect(
             self._local_workflow_update_source_folder
         )
-        self._local_workflow_source_folder_trash_action = QAction(trash_icon, "", self)
+        self._local_workflow_source_folder_trash_action = QtGui.QAction(
+            trash_icon, "", self
+        )
         self._local_workflow_source_folder_trash_action.setToolTip("Delete folder")
         self._local_workflow_source_folder_trash_action.triggered.connect(
             self._local_workflow_on_delete_source_folder
@@ -203,7 +199,9 @@ class RecipeWidget(QtWidgets.QMainWindow):
         self._ui.localWorkflowBuildFolder.editingFinished.connect(
             self._local_workflow_update_build_folder
         )
-        self._local_workflow_build_folder_trash_action = QAction(trash_icon, "", self)
+        self._local_workflow_build_folder_trash_action = QtGui.QAction(
+            trash_icon, "", self
+        )
         self._local_workflow_build_folder_trash_action.setToolTip("Delete folder")
         self._local_workflow_build_folder_trash_action.triggered.connect(
             self._local_workflow_on_delete_build_folder
@@ -216,7 +214,9 @@ class RecipeWidget(QtWidgets.QMainWindow):
         self._ui.localWorkflowPackageFolder.editingFinished.connect(
             self._local_workflow_update_package_folder
         )
-        self._local_workflow_package_folder_trash_action = QAction(trash_icon, "", self)
+        self._local_workflow_package_folder_trash_action = QtGui.QAction(
+            trash_icon, "", self
+        )
         self._local_workflow_package_folder_trash_action.setToolTip("Delete folder")
         self._local_workflow_package_folder_trash_action.triggered.connect(
             self._local_workflow_on_delete_package_folder
@@ -229,7 +229,9 @@ class RecipeWidget(QtWidgets.QMainWindow):
         self._ui.localWorkflowTestFolder.editingFinished.connect(
             self._local_workflow_update_test_folder
         )
-        self._local_workflow_test_folder_trash_action = QAction(trash_icon, "", self)
+        self._local_workflow_test_folder_trash_action = QtGui.QAction(
+            trash_icon, "", self
+        )
         self._local_workflow_test_folder_trash_action.setToolTip("Delete folder")
         self._local_workflow_test_folder_trash_action.triggered.connect(
             self._local_workflow_on_delete_test_folder
@@ -577,7 +579,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
 
     def _on_git_context_menu(self, position: QtCore.QPoint) -> None:
         menu = QtWidgets.QMenu(self)
-        fetch_action = QAction("Fetch", self)
+        fetch_action = QtGui.QAction("Fetch", self)
         fetch_action.triggered.connect(self._fetch_git_repository)
         menu.addAction(fetch_action)
         menu.exec_(self.sender().mapToGlobal(position))
@@ -1132,25 +1134,25 @@ class RecipeWidget(QtWidgets.QMainWindow):
     def _pane_context_menu(self, position: QtCore.QPoint) -> None:
         menu = self.sender().createStandardContextMenu(position)
         menu.addSeparator()
-        find_action = QAction("Find...", self)
+        find_action = QtGui.QAction("Find...", self)
         find_action.setShortcut(self._find_shortcut.key())
         find_action.setShortcutVisibleInContextMenu(True)
         find_action.setData(self.sender())
         find_action.triggered.connect(self._open_find_dialog)
         menu.addAction(find_action)
         menu.addSeparator()
-        clear_action = QAction("Clear", self)
+        clear_action = QtGui.QAction("Clear", self)
         clear_action.triggered.connect(self.sender().clear)
         menu.addAction(clear_action)
         menu.addSeparator()
-        pin_action = QAction("Pin to tab", self)
+        pin_action = QtGui.QAction("Pin to tab", self)
         pin_action.triggered.connect(self._pin_current_output)
         pin_action.setEnabled(self._ui.pane_tabs.count() == 1)
         menu.addAction(pin_action)
         menu.exec_(self.sender().viewport().mapToGlobal(position))
 
     def _open_find_dialog(self) -> None:
-        if isinstance(self.sender(), QShortcut):
+        if isinstance(self.sender(), QtGui.QShortcut):
             pane = QtWidgets.QApplication.focusWidget()
         else:
             pane = self.sender().data()
@@ -1192,13 +1194,15 @@ class RecipeWidget(QtWidgets.QMainWindow):
 
     def _dependency_list_context_menu(self, position: QtCore.QPoint) -> None:
         menu = QtWidgets.QMenu(self)
-        open_package_dir_action = QAction("Open package directory", self)
+        open_package_dir_action = QtGui.QAction("Open package directory", self)
         open_package_dir_action.triggered.connect(self._open_package_directory)
         menu.addAction(open_package_dir_action)
-        copy_package_dir_action = QAction("Copy package directory to clipboard", self)
+        copy_package_dir_action = QtGui.QAction(
+            "Copy package directory to clipboard", self
+        )
         copy_package_dir_action.triggered.connect(self._copy_package_directory)
         menu.addAction(copy_package_dir_action)
-        what_uses_this_action = QAction("What uses this?...", self)
+        what_uses_this_action = QtGui.QAction("What uses this?...", self)
         what_uses_this_action.triggered.connect(self._on_what_uses_this)
         menu.addAction(what_uses_this_action)
         menu.exec_(self._ui.dependenciesPackageList.mapToGlobal(position))
@@ -1232,7 +1236,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
     def _dependents_log_context_menu(self, position: QtCore.QPoint) -> None:
         menu = self.sender().createStandardContextMenu(position)
         menu.addSeparator()
-        clear_action = QAction("Clear", self)
+        clear_action = QtGui.QAction("Clear", self)
         clear_action.triggered.connect(self._clear_dependents_log)
         menu.addAction(clear_action)
         menu.exec_(self.sender().viewport().mapToGlobal(position))
@@ -1324,7 +1328,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         self._ui.behaviourToolbar.refresh_content()
 
     def _on_configure_packageid_context_menu(self, position: QtCore.QPoint) -> None:
-        action = QAction("Copy to clipboard", self)
+        action = QtGui.QAction("Copy to clipboard", self)
         action.triggered.connect(self._on_configure_package_id_copy)
         menu = QtWidgets.QMenu(self)
         menu.addAction(action)

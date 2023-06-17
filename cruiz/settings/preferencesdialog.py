@@ -7,18 +7,11 @@ Application settings utilities
 import json
 import typing
 
-from qtpy import QtCore, QtGui, QtWidgets, PYSIDE2
+from qtpy import QtCore, QtGui, QtWidgets
 
 from cruiz.settings.managers.namedlocalcache import NamedLocalCacheSettingsReader
 
-if PYSIDE2:
-    from cruiz.pyside2.preferences import Ui_PreferencesDialog
-
-    QAction = QtWidgets.QAction
-else:
-    from cruiz.pyside6.preferences import Ui_PreferencesDialog
-
-    QAction = QtGui.QAction
+from cruiz.pyside6.preferences import Ui_PreferencesDialog
 
 from cruiz.settings.managers.generalpreferences import (
     GeneralSettings,
@@ -234,7 +227,7 @@ class PreferencesDialog(QtWidgets.QDialog):
             self._general_compactlook
         )
         dir_icon = self.style().standardIcon(QtWidgets.QStyle.SP_DirIcon)
-        open_recipedir_action = QAction(dir_icon, "", self)
+        open_recipedir_action = QtGui.QAction(dir_icon, "", self)
         open_recipedir_action.triggered.connect(self._general_open_recipedir)
         self._ui.prefs_general_default_recipe_dir.addAction(
             open_recipedir_action,
@@ -247,7 +240,7 @@ class PreferencesDialog(QtWidgets.QDialog):
         self._ui.prefs_general_found_text_background_colour.clicked.connect(
             self._general_foundtextbgroundcolour
         )
-        open_recipe_in_editor_action = QAction(dir_icon, "", self)
+        open_recipe_in_editor_action = QtGui.QAction(dir_icon, "", self)
         open_recipe_in_editor_action.triggered.connect(self._general_open_recipe_editor)
         self._ui.prefs_general_recipe_editor.addAction(
             open_recipe_in_editor_action,
@@ -299,7 +292,7 @@ class PreferencesDialog(QtWidgets.QDialog):
         self._ui.prefs_graphviz_bin_directory.textChanged.connect(
             self._graphviz_bin_directory_changed
         )
-        open_graphviz_bindir_action = QAction(
+        open_graphviz_bindir_action = QtGui.QAction(
             self.style().standardIcon(QtWidgets.QStyle.SP_DirIcon), "", self
         )
         open_graphviz_bindir_action.triggered.connect(self._graphviz_open_bindir)
@@ -315,7 +308,7 @@ class PreferencesDialog(QtWidgets.QDialog):
             self._cmake_bin_directory_changed
         )
         dir_icon = self.style().standardIcon(QtWidgets.QStyle.SP_DirIcon)
-        open_cmake_bindir_action = QAction(dir_icon, "", self)
+        open_cmake_bindir_action = QtGui.QAction(dir_icon, "", self)
         open_cmake_bindir_action.triggered.connect(self._cmake_open_bindir)
         self._ui.prefs_cmake_cmake_bin_directory.addAction(
             open_cmake_bindir_action,
@@ -324,7 +317,7 @@ class PreferencesDialog(QtWidgets.QDialog):
         self._ui.prefs_cmake_ninja_bin_directory.textChanged.connect(
             self._ninja_bin_directory_changed
         )
-        open_ninja_bindir_action = QAction(dir_icon, "", self)
+        open_ninja_bindir_action = QtGui.QAction(dir_icon, "", self)
         open_ninja_bindir_action.triggered.connect(self._ninja_open_bindir)
         self._ui.prefs_cmake_ninja_bin_directory.addAction(
             open_ninja_bindir_action,
@@ -340,7 +333,7 @@ class PreferencesDialog(QtWidgets.QDialog):
             self._compilercache_ccache_bin_directory_changed
         )
         dir_icon = self.style().standardIcon(QtWidgets.QStyle.SP_DirIcon)
-        open_ccache_bindir_action = QAction(dir_icon, "", self)
+        open_ccache_bindir_action = QtGui.QAction(dir_icon, "", self)
         open_ccache_bindir_action.triggered.connect(
             self._compilercache_open_ccache_bindir
         )
@@ -351,7 +344,7 @@ class PreferencesDialog(QtWidgets.QDialog):
         self._ui.prefs_compilercache_sccache_location.textChanged.connect(
             self._compilercache_sccache_bin_directory_changed
         )
-        open_scache_bindir_action = QAction(dir_icon, "", self)
+        open_scache_bindir_action = QtGui.QAction(dir_icon, "", self)
         open_scache_bindir_action.triggered.connect(
             self._compilercache_open_sccache_bindir
         )
@@ -362,7 +355,7 @@ class PreferencesDialog(QtWidgets.QDialog):
         self._ui.prefs_compilercache_buildcache_location.textChanged.connect(
             self._compilercache_buildcache_bin_directory_changed
         )
-        open_buildcache_bindir_action = QAction(dir_icon, "", self)
+        open_buildcache_bindir_action = QtGui.QAction(dir_icon, "", self)
         open_buildcache_bindir_action.triggered.connect(
             self._compilercache_open_buildcache_bindir
         )
@@ -1087,7 +1080,7 @@ class PreferencesDialog(QtWidgets.QDialog):
             for name in cache_names:
                 if name == uuid_local_cache:
                     continue
-                action = QAction(name, self)
+                action = QtGui.QAction(name, self)
                 action.setData(uuid)
                 action.triggered.connect(self._recipes_change_cache)
                 menu.addAction(action)

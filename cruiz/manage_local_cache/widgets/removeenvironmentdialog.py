@@ -4,12 +4,9 @@
 Dialog for removing an environment variable
 """
 
-from qtpy import QtCore, QtWidgets, PYSIDE2
+from qtpy import QtCore, QtWidgets
 
-if PYSIDE2:
-    from cruiz.pyside2.local_cache_remove_environment import Ui_RemoveEnvironmentDialog
-else:
-    from cruiz.pyside6.local_cache_remove_environment import Ui_RemoveEnvironmentDialog
+from cruiz.pyside6.local_cache_remove_environment import Ui_RemoveEnvironmentDialog
 
 
 class RemoveEnvironmentDialog(QtWidgets.QDialog):
