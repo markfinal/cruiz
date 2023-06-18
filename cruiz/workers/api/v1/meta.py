@@ -14,8 +14,9 @@ import typing
 
 from cruiz.interop.commandparameters import CommandParameters
 from cruiz.interop.pod import ConanRemote, ConanHook
-from cruiz.workers.utils import worker
 from cruiz.interop.message import Message, Success, Failure
+
+from . import worker
 
 
 # pylint: disable=protected-access, import-outside-toplevel

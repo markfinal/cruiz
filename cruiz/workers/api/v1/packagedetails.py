@@ -9,9 +9,9 @@ from __future__ import annotations
 import multiprocessing
 
 from cruiz.interop.packageidparameters import PackageIdParameters
-
-from cruiz.workers.utils import worker
 from cruiz.interop.message import Message, Success
+
+from . import worker
 
 
 def invoke(queue: multiprocessing.Queue[Message], params: PackageIdParameters) -> None:

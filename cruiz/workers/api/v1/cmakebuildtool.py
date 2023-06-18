@@ -10,8 +10,8 @@ import multiprocessing
 import subprocess
 
 from cruiz.interop.commandparameters import CommandParameters
-from cruiz.workers.utils import worker
 from cruiz.interop.message import Message, Success, Stdout, Stderr
+from cruiz.workers.utils.worker import Worker
 
 
 def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> None:
@@ -49,7 +49,7 @@ def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> 
         build_cmd.append(
             f"-j{params.added_environment['CONAN_CPU_COUNT']}"
         )  # suitable for both Make and Ninja
-    with worker.Worker(queue, params), subprocess.Popen(
+    with Worker(queue, params), subprocess.Popen(
         build_cmd,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
