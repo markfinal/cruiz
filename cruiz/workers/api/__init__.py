@@ -30,4 +30,11 @@ if globals.CONAN_MAJOR_VERSION == 1:
         testpackage,
     )
 else:
-    pass
+    from .v2 import (  # type: ignore[no-redef] # noqa: E402
+        meta,
+        packagebinary,
+        packagedetails,
+        packagerevisions,
+        reciperevisions,
+        remotesearch,
+    )
