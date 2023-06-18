@@ -16,6 +16,18 @@ from qtpy import QtCore, QtWidgets
 from cruiz.resourcegeneration import generate_resources
 
 
+CONAN_SPEC = importlib.util.find_spec("conans")
+if CONAN_SPEC is None:
+    QtWidgets.QApplication()
+    QtWidgets.QMessageBox.critical(
+        None,  # type: ignore
+        "Conan unavailable",
+        "Unable to locate the conan Python package in the current environment.\n"
+        "Use pip install conan[==version].",
+    )
+    sys.exit(-1)
+
+
 logging.basicConfig(
     level=os.getenv("LOGLEVEL", "WARNING"),
     filename=os.getenv("LOGFILE", None),
@@ -34,17 +46,6 @@ from cruiz.mainwindow import MainWindow  # noqa: E402
 from cruiz.settings.updatesettings import (  # noqa: E402
     update_settings_to_current_version,
 )
-
-CONAN_SPEC = importlib.util.find_spec("conans")
-if CONAN_SPEC is None:
-    QtWidgets.QApplication()
-    QtWidgets.QMessageBox.critical(
-        None,  # type: ignore
-        "Conan unavailable",
-        "Unable to locate the conan Python package in the current environment.\n"
-        "Use pip install conan[==version].",
-    )
-    sys.exit(-1)
 
 
 def _are_resources_out_of_date() -> bool:
