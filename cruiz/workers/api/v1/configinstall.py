@@ -10,8 +10,9 @@ from io import StringIO
 import multiprocessing
 
 from cruiz.interop.commandparameters import CommandParameters
-from cruiz.workers.utils import worker
 from cruiz.interop.message import Message, Success, Stdout
+
+from . import worker
 
 
 def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> None:

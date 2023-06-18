@@ -10,15 +10,15 @@ import multiprocessing
 from pathlib import Path
 
 from cruiz.interop.commandparameters import CommandParameters
-from cruiz.workers.utils import worker
 from cruiz.interop.message import Message, Success, Stdout
+from cruiz.workers.utils.worker import Worker
 
 
 def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> None:
     """
     Delete CMakeCache.txt
     """
-    with worker.Worker(queue, params):
+    with Worker(queue, params):
         assert params.cwd
         cmakecache_file = params.cwd
         if params.build_folder:

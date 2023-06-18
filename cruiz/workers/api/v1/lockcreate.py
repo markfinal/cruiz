@@ -11,10 +11,11 @@ import multiprocessing
 from cruiz.interop.commandparameters import CommandParameters
 from cruiz.interop.packagenode import PackageNode
 from cruiz.interop.dependencygraph import DependencyGraph
-
-from cruiz.workers.utils import worker
-from cruiz.workers.utils.formatoptions import format_options
 from cruiz.interop.message import Message, Success
+
+from cruiz.workers.utils.formatoptions import format_options
+
+from . import worker
 
 
 def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> None:
