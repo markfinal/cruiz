@@ -13,7 +13,6 @@ from qtpy import QtCore, QtWidgets
 
 from cruiz.exceptions import RecipeInspectionError
 
-import cruiz.interop.dependencygraph
 from cruiz.interop.packagenode import PackageNode
 from cruiz.interop.pod import ConanRemote, ConanHook
 from cruiz.interop.commandparameters import CommandParameters
