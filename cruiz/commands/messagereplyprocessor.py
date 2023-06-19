@@ -17,7 +17,15 @@ from qtpy import QtCore
 from cruiz.dumpobjecttypes import dump_object_types
 
 import cruiz.workers.api as workers_api
-import cruiz.workers.utils.message
+from cruiz.interop.message import (
+    Message,
+    End,
+    Stdout,
+    Stderr,
+    Success,
+    Failure,
+    ConanLogMessage,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +48,7 @@ class MessageReplyProcessor(QtCore.QObject):
 
     def __init__(
         self,
-        queue: multiprocessing.Queue[cruiz.workers.utils.message.Message],
+        queue: multiprocessing.Queue[Message],
     ):
         logger.debug("+=%d", id(self))
         super().__init__()
@@ -90,17 +98,17 @@ class MessageReplyProcessor(QtCore.QObject):
                 entry = self._queue.get()
                 if not self.__check_for_conan_leakage(entry):
                     break
-                if isinstance(entry, cruiz.workers.utils.message.End):
+                if isinstance(entry, End):
                     break
-                if isinstance(entry, cruiz.workers.utils.message.Stdout):
+                if isinstance(entry, Stdout):
                     self.stdout_message.emit(entry.message())
-                elif isinstance(entry, cruiz.workers.utils.message.Stderr):
+                elif isinstance(entry, Stderr):
                     self.stderr_message.emit(entry.message())
-                elif isinstance(entry, cruiz.workers.utils.message.ConanLogMessage):
+                elif isinstance(entry, ConanLogMessage):
                     self.conan_log_message.emit(entry.message())
-                elif isinstance(entry, cruiz.workers.utils.message.Success):
+                elif isinstance(entry, Success):
                     self.completed.emit(entry.payload(), None)
-                elif isinstance(entry, cruiz.workers.utils.message.Failure):
+                elif isinstance(entry, Failure):
                     # TODO: temporary, at least always record the exception
                     # in the error log
                     self.stderr_message.emit(str(entry.exception()))

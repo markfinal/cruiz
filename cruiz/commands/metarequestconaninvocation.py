@@ -15,7 +15,13 @@ import urllib.parse
 from qtpy import QtCore
 
 from cruiz.interop.commandparameters import CommandParameters
-import cruiz.workers.utils.message
+from cruiz.interop.message import (
+    Success,
+    Failure,
+    Stdout,
+    Stderr,
+    ConanLogMessage,
+)
 import cruiz.workers.api as workers_api
 from cruiz.dumpobjecttypes import dump_object_types
 
@@ -116,36 +122,36 @@ class MetaRequestConanInvocation(QtCore.QObject):
         # the requested task is done when there is a success or a failure
         self._request_queue.join()
         response: typing.Union[
-            cruiz.workers.utils.message.Success,
-            cruiz.workers.utils.message.Failure,
+            Success,
+            Failure,
             None,
         ] = None
         while True:
             MetaRequestConanInvocation.__check_for_conan_leakage(None)
             reply = self._reply_queue.get()
             MetaRequestConanInvocation.__check_for_conan_leakage(reply)
-            if isinstance(reply, cruiz.workers.utils.message.Stdout):
+            if isinstance(reply, Stdout):
                 logger.debug("* Got stdout message: '%s", reply.message())
                 self._log_details.stdout(reply.message())
-            elif isinstance(reply, cruiz.workers.utils.message.Stderr):
+            elif isinstance(reply, Stderr):
                 logger.debug("* Got stderr message: '%s", reply.message())
                 self._log_details.stderr(reply.message())
-            elif isinstance(reply, cruiz.workers.utils.message.ConanLogMessage):
+            elif isinstance(reply, ConanLogMessage):
                 logger.debug("* Got Conan log message: '%s", reply.message())
                 self._log_details.conan_log(reply.message())
-            elif isinstance(reply, cruiz.workers.utils.message.Success):
+            elif isinstance(reply, Success):
                 logger.debug("* Requested %s got reply '%s'", meta_request, reply)
                 response = reply
                 break
-            elif isinstance(reply, cruiz.workers.utils.message.Failure):
+            elif isinstance(reply, Failure):
                 logger.debug("* Got failure message: '%s'", str(reply.exception()))
                 response = reply
                 break
         assert self._reply_queue.empty()
         self.active = False
         if response is not None:
-            if isinstance(reply, cruiz.workers.utils.message.Success):
+            if isinstance(reply, Success):
                 return (response.payload(), None)  # type: ignore
-            if isinstance(reply, cruiz.workers.utils.message.Failure):
+            if isinstance(reply, Failure):
                 return (None, response.exception())  # type: ignore
         raise RuntimeError("No success message")

@@ -12,7 +12,7 @@ import typing
 
 import conans.util.log
 
-import cruiz.workers.utils.message
+from cruiz.interop.message import Message, ConanLogMessage
 
 
 class _Singleton(type):
@@ -41,13 +41,11 @@ class QtLogger(logging.Handler, metaclass=_Singleton):
             "%(levelname)-6s:%(filename)-15s[%(lineno)d]: %(message)s [%(asctime)s]"
         )
         self.setFormatter(formatter)
-        self._queue: typing.Optional[
-            multiprocessing.Queue[cruiz.workers.utils.message.Message]
-        ] = None
+        self._queue: typing.Optional[multiprocessing.Queue[Message]] = None
 
     def set_queue(
         self,
-        queue: multiprocessing.Queue[cruiz.workers.utils.message.Message],
+        queue: multiprocessing.Queue[Message],
     ) -> None:
         """
         Set the multiprocessing queue to send messages with.
@@ -56,6 +54,4 @@ class QtLogger(logging.Handler, metaclass=_Singleton):
 
     def emit(self, record: typing.Any) -> None:
         assert self._queue
-        self._queue.put(
-            cruiz.workers.utils.message.ConanLogMessage(self.format(record))
-        )
+        self._queue.put(ConanLogMessage(self.format(record)))

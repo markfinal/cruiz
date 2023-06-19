@@ -11,7 +11,7 @@ import multiprocessing
 from cruiz.interop.reciperevisionsparameters import RecipeRevisionsParameters
 
 from cruiz.workers.utils import worker
-from cruiz.workers.utils.message import Message, Success
+from cruiz.interop.message import Message, Success
 
 
 def invoke(

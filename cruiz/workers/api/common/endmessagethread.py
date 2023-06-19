@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import multiprocessing
 
-from cruiz.workers.utils.message import Message, End
+from cruiz.interop.message import Message, End
 
 
 def invoke(queue: multiprocessing.Queue[Message]) -> None:

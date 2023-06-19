@@ -20,12 +20,12 @@ _do_monkey_patching()
 from conans.client import conan_api, output, runner  # noqa: E402
 from conans.paths import get_conan_user_home  # noqa: E402
 
-from .stream import QueuedStreamSix  # noqa: E402
-from .message import Message, Stdout, Stderr  # noqa: E402
-
 import cruiz.workers.utils.qtlogger  # noqa: E402
 from cruiz.interop.commandparameters import CommandParameters  # noqa: E402
 from cruiz.interop.commonparameters import CommonParameters  # noqa: E402
+from cruiz.interop.message import Message, Stdout, Stderr  # noqa: E402
+
+from .stream import QueuedStreamSix  # noqa: E402
 
 
 def instance(

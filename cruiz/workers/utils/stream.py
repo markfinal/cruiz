@@ -12,7 +12,7 @@ import typing
 
 from .colorarma_conversion import convert_from_colorama_to_html
 
-from cruiz.workers.utils.message import Message
+from cruiz.interop.message import Message
 
 
 if False:
