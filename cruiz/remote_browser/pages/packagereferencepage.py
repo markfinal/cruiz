@@ -8,6 +8,8 @@ import typing
 
 from qtpy import QtCore, QtGui
 
+import cruiz.globals
+
 from cruiz.commands.context import ConanConfigBoolean
 
 from cruiz.interop.searchrecipesparameters import SearchRecipesParameters
@@ -137,10 +139,14 @@ class PackageReferencePage(Page):
                 blocked_widget.addItem(remote.name)
             blocked_widget.setCurrentIndex(-1)
         self._ui.remote.setCurrentIndex(0)
-        self._revs_enabled = self._context.get_boolean_config(
-            ConanConfigBoolean.REVISIONS, False
-        )
-        self._ui.revisions.setChecked(self._revs_enabled)
+        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+            self._revs_enabled = self._context.get_boolean_config(
+                ConanConfigBoolean.REVISIONS, False
+            )
+            self._ui.revisions.setChecked(self._revs_enabled)
+        else:
+            self._revs_enabled = True
+            self._ui.revisions.hide()
 
     def _on_remote_change(self, text: str) -> None:
         # pylint: disable=unused-argument
