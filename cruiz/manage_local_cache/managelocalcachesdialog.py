@@ -14,6 +14,9 @@ import stat
 import typing
 
 from qtpy import QtCore, QtGui, QtWidgets
+
+import cruiz.globals
+
 from cruiz.commands.logdetails import LogDetails
 
 from cruiz.interop.pod import ConanHook
@@ -120,7 +123,10 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
         self._ui.configPrintRunCommands.toggled.connect(
             self._config_toggle_printruncommands
         )
-        self._ui.configRevisions.toggled.connect(self._config_toggle_revisions)
+        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+            self._ui.configRevisions.toggled.connect(self._config_toggle_revisions)
+        else:
+            self._ui.configRevisions.hide()
         # environments
         # - adding
         self._ui.envTableButtons.button(QtWidgets.QDialogButtonBox.Open).setText("+")
@@ -307,12 +313,15 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
                 )
                 else QtCore.Qt.Unchecked
             )
-        with BlockSignals(self._ui.configRevisions) as blocked_widget:
-            blocked_widget.setCheckState(
-                QtCore.Qt.Checked
-                if self._context.get_boolean_config(ConanConfigBoolean.REVISIONS, False)
-                else QtCore.Qt.Unchecked
-            )
+        if self._ui.configRevisions.isVisible():
+            with BlockSignals(self._ui.configRevisions) as blocked_widget:
+                blocked_widget.setCheckState(
+                    QtCore.Qt.Checked
+                    if self._context.get_boolean_config(
+                        ConanConfigBoolean.REVISIONS, False
+                    )
+                    else QtCore.Qt.Unchecked
+                )
 
     def _update_cache_environment(
         self, env_added: typing.Dict[str, str], env_removed: typing.List[str]
