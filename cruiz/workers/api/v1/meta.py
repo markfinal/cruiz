@@ -14,7 +14,8 @@ import typing
 
 from cruiz.interop.commandparameters import CommandParameters
 from cruiz.interop.pod import ConanRemote, ConanHook
-from cruiz.workers.utils import worker, message
+from cruiz.workers.utils import worker
+from cruiz.interop.message import Message, Success, Failure
 
 
 # pylint: disable=protected-access, import-outside-toplevel
@@ -325,7 +326,7 @@ def _create_default_profile(api: typing.Any) -> None:
 # pylint: disable=too-many-statements
 def invoke(
     request_queue: multiprocessing.JoinableQueue[str],
-    reply_queue: multiprocessing.Queue[message.Message],
+    reply_queue: multiprocessing.Queue[Message],
     params: CommandParameters,
 ) -> None:
     # pylint: disable=too-many-branches
@@ -432,14 +433,14 @@ def invoke(
                 elif request == "create_default_profile":
                     _create_default_profile(api)  # type: ignore[assignment]
                     result = None
-                reply_queue.put(message.Success(result))
+                reply_queue.put(Success(result))
                 request_queue.task_done()
                 # ensure that the result doesn't accidentally appear in
                 # subsequent loop iterations
                 del result
             # pylint: disable=broad-except
             except Exception as exception:
-                reply_queue.put(message.Failure(Exception(str(exception))))
+                reply_queue.put(Failure(Exception(str(exception))))
                 request_queue.task_done()
     request_queue.join()
     request_queue.close()

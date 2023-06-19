@@ -22,9 +22,9 @@ from cruiz.interop.reciperevisionsparameters import RecipeRevisionsParameters
 from cruiz.interop.packagerevisionsparameters import PackageRevisionsParameters
 from cruiz.interop.packageidparameters import PackageIdParameters
 from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
+from cruiz.interop.message import Message, Failure, Stdout
 
 from .env import set_env, clear_conan_env
-from .message import Message, Failure, Stdout
 from .text2html import text_to_html
 
 

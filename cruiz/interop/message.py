@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-Conan worker message
+Conan interop message
 """
 
 import typing

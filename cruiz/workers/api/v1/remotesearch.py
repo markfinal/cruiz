@@ -12,7 +12,7 @@ import re
 from cruiz.interop.searchrecipesparameters import SearchRecipesParameters
 
 from cruiz.workers.utils import worker
-from cruiz.workers.utils.message import Message, Success
+from cruiz.interop.message import Message, Success
 
 
 def invoke(

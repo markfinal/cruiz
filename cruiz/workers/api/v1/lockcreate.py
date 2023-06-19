@@ -14,7 +14,7 @@ from cruiz.interop.dependencygraph import DependencyGraph
 
 from cruiz.workers.utils import worker
 from cruiz.workers.utils.formatoptions import format_options
-from cruiz.workers.utils.message import Message, Success
+from cruiz.interop.message import Message, Success
 
 
 def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> None:
