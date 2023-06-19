@@ -102,7 +102,9 @@ class PackageReferencePage(Page):
 
         self._ui.pkgref_cancel.clicked.connect(self.on_cancel)
 
+    def showEvent(self, event: QtGui.QShowEvent) -> None:
         self.refresh_local_cache_names()
+        super().showEvent(event)
 
     def refresh_local_cache_names(self) -> None:
         """
