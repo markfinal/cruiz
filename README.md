@@ -15,7 +15,7 @@ See the documentation at [Read The Docs](https://cruiz.readthedocs.io/).
 - Intel x86_64 platforms:
   - Windows 10+
   - Linux (CentOS 7.5+/Ubuntu 18+)
-  - macOS (10.13+)
+  - macOS (11.0+)
 - Apple Silicon platforms:
   - macOS (11.0+)
 - Python 3.7-3.11
