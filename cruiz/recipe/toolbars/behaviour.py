@@ -9,6 +9,8 @@ import pathlib
 
 from qtpy import QtCore, QtWidgets
 
+import cruiz.globals
+
 from cruiz.pyside6.recipe_profile_frame import Ui_profileFrame
 from cruiz.pyside6.recipe_cpucores_frame import Ui_cpuCoresFrame
 
@@ -47,13 +49,18 @@ class _ProfileFrame(QtWidgets.QFrame):
         profile_dirs = "\n  ".join(
             [str(os.path.normcase(p)) for p in self._recipe.context.all_profile_dirs()]
         )
-        parameterised_profile_dirs = profile_dirs.replace(home_dir, "<CONAN_USER_HOME>")
+        local_cache_envvar = (
+            "<CONAN_USER_HOME>"
+            if cruiz.globals.CONAN_MAJOR_VERSION == 1
+            else "<CONAN_HOME>"
+        )
+        parameterised_profile_dirs = profile_dirs.replace(home_dir, local_cache_envvar)
         tooltip = (
             "Profiles listed here are from the following directories:\n\n"
             f"{profile_dirs}\n\n"
             "which can be read as this parameterisation\n\n"
             f"{parameterised_profile_dirs}\n\n"
-            "where <CONAN_USER_HOME> is the base directory "
+            f"where {local_cache_envvar} is the base directory "
             "for this recipe's associated local cache, called "
             f"'{cache_name}'"
         )
