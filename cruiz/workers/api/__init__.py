@@ -2,6 +2,8 @@
 
 import cruiz.globals as globals
 
+from .common import endmessagethread
+
 if globals.CONAN_MAJOR_VERSION == 1:
     from .v1 import (  # noqa: E402
         arbitrary,
@@ -10,7 +12,6 @@ if globals.CONAN_MAJOR_VERSION == 1:
         configinstall,
         create,
         deletecmakecache,
-        endmessagethread,
         exportpackage,
         imports,
         install,
