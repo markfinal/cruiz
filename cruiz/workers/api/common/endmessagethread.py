@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
 """
-Child process commands
+Send a message to indicate it's the end of data, and close down
+this side of the message queue.
 """
 
 from __future__ import annotations
