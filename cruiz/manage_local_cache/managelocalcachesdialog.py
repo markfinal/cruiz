@@ -345,6 +345,11 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
         self._ui.hooksTable.setRowCount(0)
         hooks = self._context.get_hooks_list()
         self._ui.hooksTable.setRowCount(len(hooks))
+        if cruiz.globals.CONAN_MAJOR_VERSION > 1:
+            # in Conan 2, hooks are enabled when they are are present in the cache
+            self._ui.hooksTable.setColumnHidden(
+                ManageLocalCachesDialog._HooksTableColumnIndex.ENABLED, True
+            )
         for i, hook in enumerate(hooks):
             enabled_item = QtWidgets.QTableWidgetItem()
             enabled_item.setFlags(

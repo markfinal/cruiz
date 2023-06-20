@@ -10,13 +10,14 @@ One long-lived meta process runs continually to service these.
 from __future__ import annotations
 
 import multiprocessing
+import os
 import pathlib
 import urllib.parse
 import typing
 
 from cruiz.interop.commandparameters import CommandParameters
 from cruiz.interop.message import Message, Failure, Success
-from cruiz.interop.pod import ConanRemote
+from cruiz.interop.pod import ConanRemote, ConanHook
 
 from . import worker
 
@@ -37,6 +38,28 @@ def _interop_profiles_dir(api: typing.Any) -> pathlib.Path:
 
     app = ConanApp(api.cache_folder)
     return pathlib.Path(app.cache.profiles_path)
+
+
+def _interop_get_hooks(api: typing.Any) -> typing.List[ConanHook]:
+    from conan.internal.conan_app import ConanApp
+
+    app = ConanApp(api.cache_folder)
+
+    hooks_dir = app.cache.hooks_path
+
+    hook_files: typing.List[ConanHook] = []
+    for root, dirs, files in os.walk(hooks_dir):
+        if ".git" in dirs:
+            # ignore .git folders
+            dirs.remove(".git")
+        for file in files:
+            if file.endswith(".py"):
+                full_path = pathlib.Path(root) / file
+                stored_path = full_path.relative_to(hooks_dir)
+                # in Conan 2, hooks are activated by having them in the folder
+                hook_files.append(ConanHook(stored_path, enabled=True))
+
+    return hook_files
 
 
 def invoke(
@@ -66,6 +89,8 @@ def invoke(
                     result = _interop_get_config(api, request_params["config"][0])
                 elif request == "profiles_dir":
                     result = _interop_profiles_dir(api)
+                elif request == "get_hooks":
+                    result = _interop_get_hooks(api)
                 else:
                     raise RuntimeError(
                         f"Unhandled request '{request}', '{request_params}'"
