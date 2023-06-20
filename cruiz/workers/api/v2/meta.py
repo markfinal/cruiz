@@ -10,6 +10,7 @@ One long-lived meta process runs continually to service these.
 from __future__ import annotations
 
 import multiprocessing
+import pathlib
 import urllib.parse
 import typing
 
@@ -29,6 +30,13 @@ def _interop_remote_list(api: typing.Any) -> typing.List[ConanRemote]:
 
 def _interop_get_config(api: typing.Any, key: str) -> typing.Optional[str]:
     return api.config.get(key)
+
+
+def _interop_profiles_dir(api: typing.Any) -> pathlib.Path:
+    from conan.internal.conan_app import ConanApp
+
+    app = ConanApp(api.cache_folder)
+    return pathlib.Path(app.cache.profiles_path)
 
 
 def invoke(
@@ -56,6 +64,8 @@ def invoke(
                     result = _interop_remote_list(api)
                 elif request == "get_config":
                     result = _interop_get_config(api, request_params["config"][0])
+                elif request == "profiles_dir":
+                    result = _interop_profiles_dir(api)
                 else:
                     raise RuntimeError(
                         f"Unhandled request '{request}', '{request_params}'"
