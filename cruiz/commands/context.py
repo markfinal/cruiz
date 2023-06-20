@@ -459,6 +459,7 @@ class ConanContext(QtCore.QObject):
         Return a list of all profiles in this context.
         """
         profile_paths: typing.List[typing.Tuple[pathlib.Path, str]] = []
+        # TODO: Conan2 candidate: api.profiles.list() for the local-cache based profiles
         profiles_dir = QtCore.QDir(str(self.profiles_dir()))
         for profile in profiles_dir.entryList(  # type: ignore
             filters=QtCore.QDir.Files
@@ -467,7 +468,7 @@ class ConanContext(QtCore.QObject):
             path = pathlib.Path(profiles_dir.filePath(profile))
             text = path.read_text()
             profile_paths.append((pathlib.Path(path.name), text))
-        assert profile_paths
+        # in Conan 2, there can be no profiles at this point
         with NamedLocalCacheSettingsReader(self.cache_name) as settings:
             extra_profile_dirs = settings.extra_profile_directories.resolve()
         for _, extra_profile_dir in extra_profile_dirs.items():
