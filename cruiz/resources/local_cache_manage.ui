@@ -90,7 +90,7 @@
               <bool>false</bool>
              </property>
              <property name="text">
-              <string>CONAN_USER_HOME_SHORT</string>
+              <string>Cache short home</string>
              </property>
             </widget>
            </item>
@@ -100,7 +100,7 @@
               <bool>false</bool>
              </property>
              <property name="text">
-              <string>CONAN_USER_HOME</string>
+              <string>Cache home</string>
              </property>
             </widget>
            </item>
