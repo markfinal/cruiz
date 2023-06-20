@@ -120,12 +120,13 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
         ).setEnabled(False)
         self._ui.profilesTable.itemSelectionChanged.connect(self._profiles_selection)
         # config
-        self._ui.configPrintRunCommands.toggled.connect(
-            self._config_toggle_printruncommands
-        )
         if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+            self._ui.configPrintRunCommands.toggled.connect(
+                self._config_toggle_printruncommands
+            )
             self._ui.configRevisions.toggled.connect(self._config_toggle_revisions)
         else:
+            self._ui.configPrintRunCommands.hide()
             self._ui.configRevisions.hide()
         # environments
         # - adding
@@ -305,14 +306,15 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
             item.setData(QtCore.Qt.ToolTipRole, profile_text)  # type: ignore[arg-type]
 
     def _update_cache_config(self) -> None:
-        with BlockSignals(self._ui.configPrintRunCommands) as blocked_widget:
-            blocked_widget.setCheckState(
-                QtCore.Qt.Checked
-                if self._context.get_boolean_config(
-                    ConanConfigBoolean.PRINT_RUN_COMMANDS, False
+        if self._ui.configPrintRunCommands.isVisible():
+            with BlockSignals(self._ui.configPrintRunCommands) as blocked_widget:
+                blocked_widget.setCheckState(
+                    QtCore.Qt.Checked
+                    if self._context.get_boolean_config(
+                        ConanConfigBoolean.PRINT_RUN_COMMANDS, False
+                    )
+                    else QtCore.Qt.Unchecked
                 )
-                else QtCore.Qt.Unchecked
-            )
         if self._ui.configRevisions.isVisible():
             with BlockSignals(self._ui.configRevisions) as blocked_widget:
                 blocked_widget.setCheckState(
