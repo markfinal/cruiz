@@ -8,6 +8,8 @@ import typing
 
 from qtpy import QtCore, QtWidgets
 
+import cruiz.globals
+
 from cruiz.commands.context import ConanContext, LogDetails
 from cruiz.interop.commandparameters import CommandParameters
 
@@ -48,10 +50,14 @@ class RunConanCommandDialog(QtWidgets.QDialog):
         self._context.run_any_command(params, self._on_run_complete)
 
     def _on_run_complete(self, payload: typing.Any, exception: typing.Any) -> None:
-        # payload is always None
         self._ui.arguments.setEnabled(True)
         self._ui.run.setEnabled(True)
-        if exception:
-            self._log_details.stderr("<font color='red'>Failed</font><br>")
+        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+            # payload is always None
+            pass
         else:
-            self._log_details.stdout("<font color='green'>Succeeded</font><br>")
+            self._log_details.stdout(payload)
+            if exception:
+                self._log_details.stderr("<font color='red'>Failed</font><br>")
+            else:
+                self._log_details.stdout("<font color='green'>Succeeded</font><br>")

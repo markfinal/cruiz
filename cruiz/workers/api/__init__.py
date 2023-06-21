@@ -31,6 +31,7 @@ if globals.CONAN_MAJOR_VERSION == 1:
     )
 else:
     from .v2 import (  # type: ignore[no-redef] # noqa: E402
+        arbitrary,
         meta,
         packagebinary,
         packagedetails,
