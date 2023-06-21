@@ -107,7 +107,7 @@ cruiz manages the local caches it is made aware of.</string>
   <widget class="NewLocalCacheLocationPage" name="locationsPage">
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <widget class="QLabel" name="label_5">
+     <widget class="QLabel" name="userHomeExplanation">
       <property name="text">
        <string>Each local cache exists in a .conan folder in the specified directory.</string>
       </property>
@@ -124,7 +124,7 @@ cruiz manages the local caches it is made aware of.</string>
       <item row="0" column="0">
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>CONAN_USER_HOME</string>
+         <string>Cache home</string>
         </property>
        </widget>
       </item>
@@ -153,7 +153,7 @@ On Windows, a path to where 'short' package paths are stored is also required.</
       <item row="0" column="0">
        <widget class="QLabel" name="userHomeShortLabel">
         <property name="text">
-         <string>CONAN_USER_HOME_SHORT</string>
+         <string>Cache short home</string>
         </property>
        </widget>
       </item>

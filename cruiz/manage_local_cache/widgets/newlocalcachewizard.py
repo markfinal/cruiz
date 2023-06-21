@@ -9,6 +9,8 @@ import typing
 
 from qtpy import QtGui, QtWidgets
 
+import cruiz.globals
+
 from cruiz.commands.context import ConanContext
 from cruiz.interop.commandparameters import CommandParameters
 from cruiz.commands.logdetails import LogDetails
@@ -62,9 +64,18 @@ class NewLocalCacheWizard(QtWidgets.QWizard):
         self._ui.createProgress.setMinimum(0)
         self._ui.createProgress.setMaximum(1)
         self._ui.createProgress.setValue(0)
-        if platform.system() == "Windows":
-            pass
+        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+            if platform.system() == "Windows":
+                pass
+            else:
+                self._ui.userHomeShortExplanation.hide()
+                self._ui.userHomeShortLabel.hide()
+                self._ui.userHomeShort.hide()
         else:
+            # Conan2 behaviour is different - there is no implicit .conan2 folder
+            self._ui.userHomeExplanation.setText(
+                "Each local cache resides entirely in the specified directory."
+            )
             self._ui.userHomeShortExplanation.hide()
             self._ui.userHomeShortLabel.hide()
             self._ui.userHomeShort.hide()
