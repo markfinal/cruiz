@@ -620,11 +620,17 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
         if result == QtWidgets.QMessageBox.StandardButton.No:
             return
         with NamedLocalCacheSettingsReader(cache_name) as settings:
-            home_dir = pathlib.Path(settings.home_dir.resolve())
-            short_home_dir = pathlib.Path(settings.short_home_dir.resolve())
+            home_dir_raw = settings.home_dir.resolve()
+            short_home_dir_raw = settings.short_home_dir.resolve()
 
-        assert home_dir  # because it's non-default
-        conan_home_dir = home_dir / ".conan"
+        assert home_dir_raw  # because it's non-default
+        home_dir = pathlib.Path(home_dir_raw)
+        short_home_dir = (
+            pathlib.Path(short_home_dir_raw) if short_home_dir_raw else None
+        )
+        conan_home_dir = home_dir
+        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+            conan_home_dir /= ".conan"
         # since this is destructive, check again
         result = QtWidgets.QMessageBox.question(
             self,
