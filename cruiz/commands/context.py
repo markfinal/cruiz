@@ -114,13 +114,13 @@ class ConanContext(QtCore.QObject):
             # don't double close this
             pass
 
-    def change_cache(self, cache_name: str) -> None:
+    def change_cache(self, cache_name: str, force: bool = False) -> None:
         """
         Change the local cache used by this context.
         """
         # don't even try to check for a name no-op if the cache has already been closed
         if hasattr(self, "_meta_invocation"):
-            if cache_name == self.cache_name:
+            if cache_name == self.cache_name and not force:
                 return
             assert not self.is_busy
             self.close()

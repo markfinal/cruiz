@@ -357,7 +357,8 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
                 )
 
     def _update_cache_details(self, cache_name: str) -> None:
-        self._context.change_cache(cache_name)
+        force_change = self._context.cache_name == cache_name
+        self._context.change_cache(cache_name, force=force_change)
         with NamedLocalCacheSettingsReader(cache_name) as settings:
             home_dir = settings.home_dir.resolve()
             short_home_dir = settings.short_home_dir.resolve()
