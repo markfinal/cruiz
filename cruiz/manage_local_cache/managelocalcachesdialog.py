@@ -182,9 +182,13 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
         self._ui.operations_installConfigButton.clicked.connect(
             self._operations_install_config
         )
-        self._ui.operations_removeLocksButton.clicked.connect(
-            self._operations_remove_locks
-        )
+        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+            self._ui.operations_removeLocksButton.clicked.connect(
+                self._operations_remove_locks
+            )
+        else:
+            # does not appear to be an equivalent operation in Conan 2
+            self._ui.operations_removeLocksButton.hide()
         self._ui.operations_removeAllPackagesButton.clicked.connect(
             self._operations_remove_all_packages
         )
