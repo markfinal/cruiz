@@ -11,6 +11,8 @@ import typing
 
 from qtpy import QtCore, QtGui, QtWidgets
 
+import cruiz.globals
+
 from cruiz.commands.context import ConanContext
 
 from cruiz.settings.managers.namedlocalcache import (
@@ -51,8 +53,13 @@ class MoveLocalCacheDialog(QtWidgets.QDialog):
         self._ui.newUserHome.textChanged.connect(self._new_path_changed)
         self._ui.newUserHomeShort.textChanged.connect(self._new_path_changed)
         self._ui.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).setEnabled(False)
-        if platform.system() == "Windows":
-            pass
+        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+            if platform.system() == "Windows":
+                pass
+            else:
+                self._ui.userHomeShortLabel.hide()
+                self._ui.currentUserHomeShort.hide()
+                self._ui.newUserHomeShort.hide()
         else:
             self._ui.userHomeShortLabel.hide()
             self._ui.currentUserHomeShort.hide()
@@ -94,7 +101,7 @@ class MoveLocalCacheDialog(QtWidgets.QDialog):
             )
             return
         qdir = QtCore.QDir(new_home_dir)
-        if qdir.exists():
+        if cruiz.globals.CONAN_MAJOR_VERSION == 1 and qdir.exists():
             QtWidgets.QMessageBox.critical(
                 self,
                 "Conan local cache home directory",
@@ -157,9 +164,12 @@ class MoveLocalCacheDialog(QtWidgets.QDialog):
         NamedLocalCacheSettingsWriter(self._context.cache_name).sync(settings)
         # pylint: disable=broad-except
         try:
-            # move <old>/.conan to <new>/.conan
-            old_conan_dir = pathlib.Path(old_home_dir) / ".conan"
-            new_conan_dir = pathlib.Path(new_home_dir) / ".conan"
+            old_conan_dir = pathlib.Path(old_home_dir)
+            new_conan_dir = pathlib.Path(new_home_dir)
+            if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+                # move <old>/.conan to <new>/.conan
+                old_conan_dir /= ".conan"
+                new_conan_dir /= ".conan"
             shutil.move(str(old_conan_dir), str(new_conan_dir))
         except Exception as exception:
             QtWidgets.QMessageBox.critical(
@@ -192,6 +202,7 @@ class MoveLocalCacheDialog(QtWidgets.QDialog):
                         settings
                     )
                     return
-        qdir = QtCore.QDir(old_home_dir)
-        if qdir.isEmpty():
-            qdir.removeRecursively()
+        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+            qdir = QtCore.QDir(old_home_dir)
+            if qdir.isEmpty():
+                qdir.removeRecursively()
