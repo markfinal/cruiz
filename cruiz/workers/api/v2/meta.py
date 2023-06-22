@@ -29,6 +29,21 @@ def _interop_remote_list(api: typing.Any) -> typing.List[ConanRemote]:
     return interop_list
 
 
+def _interop_remotes_sync(api: typing.Any, remotes: typing.List[str]) -> None:
+    from conans.client.cache.remote_registry import Remote
+
+    for remote in _interop_remote_list(api):
+        api.remotes.remove(remote.name)
+    for remote_str in remotes:
+        remote = ConanRemote.from_string(remote_str)
+        conan_remote = Remote(remote.name, remote.url)
+        api.remotes.add(conan_remote)
+        if remote.enabled:
+            api.remotes.enable(remote.name)
+        else:
+            api.remotes.disable(remote.name)
+
+
 def _interop_get_config(api: typing.Any, key: str) -> typing.Optional[str]:
     return api.config.get(key)
 
@@ -85,6 +100,9 @@ def invoke(
                 result: typing.Any = None
                 if request == "remotes_list":
                     result = _interop_remote_list(api)
+                elif request == "remotes_sync":
+                    _interop_remotes_sync(api, request_params["remotes"])
+                    result = None
                 elif request == "get_config":
                     result = _interop_get_config(api, request_params["config"][0])
                 elif request == "profiles_dir":
