@@ -4,6 +4,7 @@
 Dialog for managing local caches
 """
 
+import dataclasses
 from enum import IntEnum
 import os
 import pathlib
@@ -490,30 +491,35 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
 
     def _remote_enabled(self, name: str, state: QtCore.Qt.CheckState) -> None:
         remotes = self._context.get_remotes_list()
-        try:
-            remote = next(item for item in remotes if item.name == name)
-            if remote.enabled == bool(state):
-                self._modifications["Remotes"]["Toggled"].remove(name)
-                if not self._modifications["Remotes"]["Toggled"]:
-                    del self._modifications["Remotes"]["Toggled"]
-                if not self._modifications["Remotes"]:
-                    del self._modifications["Remotes"]
-            else:
-                if "Remotes" not in self._modifications:
-                    self._modifications["Remotes"] = {}
-                if "Toggled" not in self._modifications["Remotes"]:
-                    self._modifications["Remotes"]["Toggled"] = []
-                self._modifications["Remotes"]["Toggled"].append(name)
-        except StopIteration:
-            assert "Remotes" in self._modifications
-            assert "Add" in self._modifications["Remotes"]
-            remote = next(
-                item
-                for item in self._modifications["Remotes"]["Add"]
-                if item.name == name
+        added_remotes = self._modifications.get("Remotes", {}).get("Add", [])
+        remote_iterator = (
+            item for item in remotes + added_remotes if item.name == name
+        )
+        remote = next(remote_iterator, None)
+        assert remote is not None
+
+        if name in self._modifications.get("Remotes", {}).get("Toggled", []):
+            self._modifications["Remotes"]["Toggled"].remove(name)
+            if not self._modifications["Remotes"]["Toggled"]:
+                del self._modifications["Remotes"]["Toggled"]
+            if not self._modifications["Remotes"]:
+                del self._modifications["Remotes"]
+        else:
+            if "Remotes" not in self._modifications:
+                self._modifications["Remotes"] = {}
+            if "Toggled" not in self._modifications:
+                self._modifications["Remotes"]["Toggled"] = []
+            self._modifications["Remotes"]["Toggled"].append(name)
+
+        if remote in added_remotes:
+            self._modifications["Remotes"]["Add"].remove(remote)
+            self._modifications["Remotes"]["Add"].append(
+                dataclasses.replace(remote, enabled=state == QtCore.Qt.Checked)
             )
-            # this was simply to check that the modifications contained the remote
-            # toggled since the table holds the truth, not the modifications
+
+        # check that the remote was uniquely named
+        remote = next(remote_iterator, None)
+        assert remote is None
         self._modified.emit()
 
     def _hooks_item_changed(self, item: QtWidgets.QTableWidgetItem) -> None:
