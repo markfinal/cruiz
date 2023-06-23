@@ -9,6 +9,9 @@ import os
 import typing
 
 from qtpy import QtCore, QtGui, QtWidgets
+
+import cruiz.globals
+
 from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
 
 from cruiz.settings.managers.recipe import RecipeSettings, RecipeSettingsReader
@@ -42,31 +45,48 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         self._idle_group.setEnabled(True)
         self._cancel_command_group = QtGui.QActionGroup(self)
         self._cancel_command_group.setEnabled(False)
-        self._add_toolbutton(
-            [recipe_ui.actionCreateCommand, recipe_ui.actionCreateUpdateCommand]
-        )
-        self.addSeparator()
-        self._add_toolbutton(
-            [recipe_ui.actionInstallCommand, recipe_ui.actionInstallUpdateCommand]
-        )
-        self._add_toolbutton([recipe_ui.actionImportsCommand])
-        self._add_toolbutton([recipe_ui.actionSourceCommand])
-        self._add_toolbutton([recipe_ui.actionBuildCommand])
-        self._add_toolbutton([recipe_ui.actionPackageCommand])
-        self._add_toolbutton([recipe_ui.actionExportPackageCommand])
-        self._add_toolbutton([recipe_ui.actionTestCommand])
-        self.addSeparator()
-        self._add_toolbutton([recipe_ui.actionCancelCommand], for_cancel_group=True)
-        self.addSeparator()
-        self._add_toolbutton([recipe_ui.actionRemovePackageCommand])
-        self.addSeparator()
-        self._add_toolbutton(
-            [
-                recipe_ui.actionCMakeBuildToolCommand,
-                recipe_ui.actionCMakeBuildToolVerboseCommand,
-                recipe_ui.actionCMakeRemoveCacheCommand,
-            ]
-        )
+        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+            self._add_toolbutton(
+                [recipe_ui.actionCreateCommand, recipe_ui.actionCreateUpdateCommand]
+            )
+            self.addSeparator()
+            self._add_toolbutton(
+                [recipe_ui.actionInstallCommand, recipe_ui.actionInstallUpdateCommand]
+            )
+            self._add_toolbutton([recipe_ui.actionImportsCommand])
+            self._add_toolbutton([recipe_ui.actionSourceCommand])
+            self._add_toolbutton([recipe_ui.actionBuildCommand])
+            self._add_toolbutton([recipe_ui.actionPackageCommand])
+            self._add_toolbutton([recipe_ui.actionExportPackageCommand])
+            self._add_toolbutton([recipe_ui.actionTestCommand])
+            self.addSeparator()
+            self._add_toolbutton([recipe_ui.actionCancelCommand], for_cancel_group=True)
+            self.addSeparator()
+            self._add_toolbutton([recipe_ui.actionRemovePackageCommand])
+            self.addSeparator()
+            self._add_toolbutton(
+                [
+                    recipe_ui.actionCMakeBuildToolCommand,
+                    recipe_ui.actionCMakeBuildToolVerboseCommand,
+                    recipe_ui.actionCMakeRemoveCacheCommand,
+                ]
+            )
+        else:
+            recipe_ui.actionCreateCommand.setEnabled(False)
+            recipe_ui.actionCreateUpdateCommand.setEnabled(False)
+            recipe_ui.actionInstallCommand.setEnabled(False)
+            recipe_ui.actionInstallUpdateCommand.setEnabled(False)
+            recipe_ui.actionImportsCommand.setEnabled(False)
+            recipe_ui.actionSourceCommand.setEnabled(False)
+            recipe_ui.actionBuildCommand.setEnabled(False)
+            recipe_ui.actionPackageCommand.setEnabled(False)
+            recipe_ui.actionExportPackageCommand.setEnabled(False)
+            recipe_ui.actionTestCommand.setEnabled(False)
+            recipe_ui.actionCancelCommand.setEnabled(False)
+            recipe_ui.actionRemovePackageCommand.setEnabled(False)
+            recipe_ui.actionCMakeBuildToolCommand.setEnabled(False)
+            recipe_ui.actionCMakeBuildToolVerboseCommand.setEnabled(False)
+            recipe_ui.actionCMakeRemoveCacheCommand.setEnabled(False)
 
     @property
     def _recipe_widget(self) -> QtCore.QObject:
@@ -101,24 +121,27 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
 
         # shortcuts themselves are set elsewhere, as they can be dynamic
         # through the lifetime of the application
-        recipe_ui = self.parent()._ui
-        _configure(recipe_ui.actionCreateCommand, self._conan_create)
-        _configure(recipe_ui.actionCreateUpdateCommand, self._conan_create_update)
-        _configure(recipe_ui.actionInstallCommand, self._conan_install)
-        _configure(recipe_ui.actionInstallUpdateCommand, self._conan_install_update)
-        _configure(recipe_ui.actionImportsCommand, self._conan_imports)
-        _configure(recipe_ui.actionSourceCommand, self._conan_source)
-        _configure(recipe_ui.actionBuildCommand, self._conan_build)
-        _configure(recipe_ui.actionPackageCommand, self._conan_package)
-        _configure(recipe_ui.actionExportPackageCommand, self._conan_export_package)
-        _configure(recipe_ui.actionTestCommand, self._conan_test)
-        _configure(recipe_ui.actionRemovePackageCommand, self._conan_remove)
-        _configure(recipe_ui.actionCancelCommand, self._cancel_command)
-        _configure(recipe_ui.actionCMakeBuildToolCommand, self._cmake_build)
-        _configure(
-            recipe_ui.actionCMakeBuildToolVerboseCommand, self._cmake_build_verbose
-        )
-        _configure(recipe_ui.actionCMakeRemoveCacheCommand, self._cmake_remove_cache)
+        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+            recipe_ui = self.parent()._ui
+            _configure(recipe_ui.actionCreateCommand, self._conan_create)
+            _configure(recipe_ui.actionCreateUpdateCommand, self._conan_create_update)
+            _configure(recipe_ui.actionInstallCommand, self._conan_install)
+            _configure(recipe_ui.actionInstallUpdateCommand, self._conan_install_update)
+            _configure(recipe_ui.actionImportsCommand, self._conan_imports)
+            _configure(recipe_ui.actionSourceCommand, self._conan_source)
+            _configure(recipe_ui.actionBuildCommand, self._conan_build)
+            _configure(recipe_ui.actionPackageCommand, self._conan_package)
+            _configure(recipe_ui.actionExportPackageCommand, self._conan_export_package)
+            _configure(recipe_ui.actionTestCommand, self._conan_test)
+            _configure(recipe_ui.actionRemovePackageCommand, self._conan_remove)
+            _configure(recipe_ui.actionCancelCommand, self._cancel_command)
+            _configure(recipe_ui.actionCMakeBuildToolCommand, self._cmake_build)
+            _configure(
+                recipe_ui.actionCMakeBuildToolVerboseCommand, self._cmake_build_verbose
+            )
+            _configure(
+                recipe_ui.actionCMakeRemoveCacheCommand, self._cmake_remove_cache
+            )
 
     def disable_all_actions(self) -> None:
         """
@@ -133,6 +156,8 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         """
         Refresh all command action shortcuts and tooltips
         """
+        if cruiz.globals.CONAN_MAJOR_VERSION > 1:
+            return
         with ShortcutSettingsReader() as settings:
             conan_create = settings.conan_create.resolve()
             conan_create_updates = settings.conan_create_updates.resolve()
