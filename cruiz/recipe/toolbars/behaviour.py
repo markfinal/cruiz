@@ -83,17 +83,20 @@ class _ProfileFrame(QtWidgets.QFrame):
             if index >= 0:
                 blocked_widget.setCurrentIndex(index)
             else:
-                # this means that the profile in settings cannot be found in the
-                # local cache profiles
-                blocked_widget.setCurrentIndex(0)
-                # sync this choice back to the settings
-                updated_profile_settings = RecipeSettings()
-                updated_profile_settings.profile = str(
-                    profile_list[0][0]
-                )  # type: ignore
-                RecipeSettingsWriter().from_recipe(recipe).sync(
-                    updated_profile_settings
-                )
+                if profile_list:
+                    # this means that the profile in settings cannot be found in the
+                    # local cache profiles
+                    blocked_widget.setCurrentIndex(0)
+                    # sync that the first profile in the list is now current
+                    updated_profile_settings = RecipeSettings()
+                    updated_profile_settings.profile = str(
+                        profile_list[0][0]
+                    )  # type: ignore
+                    RecipeSettingsWriter().from_recipe(recipe).sync(
+                        updated_profile_settings
+                    )
+                else:
+                    blocked_widget.setCurrentIndex(-1)
         self._refresh_tooltip()
 
     def _changed_profile(self, text: str) -> None:
