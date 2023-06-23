@@ -77,6 +77,14 @@ def _interop_get_hooks(api: typing.Any) -> typing.List[ConanHook]:
     return hook_files
 
 
+def _interop_inspect_recipe(
+    api: typing.Any, recipe_path: str
+) -> typing.Dict[str, typing.Any]:
+    conanfile = api.local.inspect(recipe_path, None, None)
+    result = conanfile.serialize()
+    return result
+
+
 def invoke(
     request_queue: multiprocessing.JoinableQueue[str],
     reply_queue: multiprocessing.Queue[Message],
@@ -109,6 +117,8 @@ def invoke(
                     result = _interop_profiles_dir(api)
                 elif request == "get_hooks":
                     result = _interop_get_hooks(api)
+                elif request == "inspect_recipe":
+                    result = _interop_inspect_recipe(api, request_params["path"][0])
                 else:
                     raise RuntimeError(
                         f"Unhandled request '{request}', '{request_params}'"
