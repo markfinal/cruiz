@@ -384,7 +384,13 @@ class RecipeWidget(QtWidgets.QMainWindow):
     def _get_options_from_recipe(
         self, attrs: typing.Dict[str, str]
     ) -> typing.List[typing.Tuple[str, typing.List[typing.Any], typing.Any]]:
-        options = attrs.get("options")
+        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+            # this lists the possible values for the option
+            options = attrs.get("options")
+        else:
+            # don't use the 'options' key, as that has been assigned the value
+            # options_definitions is where the possible values are
+            options = attrs.get("options_definitions")
         if not options:
             return []
         default_options = attrs["default_options"]
@@ -401,7 +407,14 @@ class RecipeWidget(QtWidgets.QMainWindow):
         assert isinstance(options, dict)
         for key, value in options.items():
             if default_options:
-                default_value = default_options[key]
+                if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+                    default_value = default_options[key]
+                else:
+                    # when the recipe is serialised,
+                    # default_options come through as typed (e.g. bool)
+                    # while option_definitions are all strings, so in order to compare
+                    # let's do everything as strings
+                    default_value = str(default_options[key])
                 if isinstance(value, list) and default_value not in value:
                     if isinstance(value[0], bool):
                         default_value = _strtobool(default_value)
