@@ -312,6 +312,16 @@ def _get_config_envvars(api: typing.Any) -> typing.Dict[str, str]:
         return api._cache.config.env_vars
 
 
+def _create_default_profile(api: typing.Any) -> None:
+    try:
+        # Conan 1.18+
+        api.create_app()
+        api.app.cache.reset_default_profile()
+    except AttributeError:
+        api.invalidate_caches()
+        api.create_profile("default", detect=True, force=True)
+
+
 # pylint: disable=too-many-statements
 def invoke(
     request_queue: multiprocessing.JoinableQueue[str],
@@ -419,6 +429,9 @@ def invoke(
                     result = None
                 elif request == "get_config_envvars":
                     result = _get_config_envvars(api)  # type: ignore[assignment]
+                elif request == "create_default_profile":
+                    _create_default_profile(api)  # type: ignore[assignment]
+                    result = None
                 reply_queue.put(message.Success(result))
                 request_queue.task_done()
                 # ensure that the result doesn't accidentally appear in

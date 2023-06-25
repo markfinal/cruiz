@@ -97,6 +97,8 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
             open_short_user_home_action,
             QtWidgets.QLineEdit.TrailingPosition,
         )
+        # profiles
+        self._ui.profilesCreateDefault.clicked.connect(self._profiles_create_default)
         # extra profiles
         self._ui.profilesTableButtons.button(QtWidgets.QDialogButtonBox.Open).setText(
             "+"
@@ -630,6 +632,9 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
 
     def _operations_run_command(self) -> None:
         RunConanCommandDialog(self._context.cache_name, self).exec_()
+
+    def _profiles_create_default(self) -> None:
+        self._context.create_default_profile()
 
     def _profiles_add(self) -> None:
         dialog = AddExtraProfileDirectoryDialog(self)
