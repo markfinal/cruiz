@@ -8,6 +8,8 @@ from io import StringIO
 import pathlib
 import typing
 
+import cruiz.globals
+
 from cruiz.constants import BuildFeatureConstants
 
 from .commonparameters import CommonParameters
@@ -54,21 +56,11 @@ class CommandParameters(CommonParameters):
         self._named_args: typing.Dict[str, str] = {}
         self._time_commands: typing.Optional[bool] = None
 
-    def __str__(self) -> str:
-        components = ["conan"]
-        components.append(self.verb)
-        if self._install_folder:
-            components.extend(["-if", str(self._install_folder)])
-        if self._imports_folder:
-            components.extend(["-imf", str(self._imports_folder)])
-        if self._source_folder:
-            components.extend(["-sf", str(self._source_folder)])
-        if self._build_folder:
-            components.extend(["-bf", str(self._build_folder)])
-        if self._package_folder:
-            components.extend(["-pf", str(self._package_folder)])
-        if self._test_folder:
-            components.extend(["-tbf", str(self._test_folder)])
+    def to_args(self) -> typing.List[str]:
+        """
+        Get the argument list corresponding to these command parameters.
+        """
+        components = [self.verb]
         if self._profile:
             components.extend(
                 [
@@ -76,22 +68,61 @@ class CommandParameters(CommonParameters):
                     self._profile,
                 ]
             )
-        for key, value in self._options.items():
-            components.extend(
-                [
-                    "-o",
-                    f"{key}={value}",
-                ]
-            )
-        if self._force:
-            components.append("-f")
         if self._args:
+            # e.g. things like update
             components.extend(self._args)
-        # no named args
-        if self._recipe_path:
-            components.append(str(self._recipe_path))
-        if self._package_reference:
-            components.append(self._package_reference)
+        if cruiz.globals.CONAN_MAJOR_VERSION == 2:
+            for key, value in self._options.items():
+                key_split = key.split(":")
+                name = key_split[0]
+                option_name = key_split[1]
+                components.extend(
+                    [
+                        "-o",
+                        f"{name}/*:{option_name}={value}",
+                    ]
+                )
+            if self._name:
+                components.extend(["--name", self._name])
+            if self._version:
+                components.extend(["--version", self._version])
+            if self._user:
+                components.extend(["--user", self._user])
+            if self._channel:
+                components.extend(["--channel", self._channel])
+            if self._recipe_path:
+                components.append(str(self._recipe_path))
+        elif cruiz.globals.CONAN_MAJOR_VERSION == 1:
+            if self._install_folder:
+                components.extend(["-if", str(self._install_folder)])
+            if self._imports_folder:
+                components.extend(["-imf", str(self._imports_folder)])
+            if self._source_folder:
+                components.extend(["-sf", str(self._source_folder)])
+            if self._build_folder:
+                components.extend(["-bf", str(self._build_folder)])
+            if self._package_folder:
+                components.extend(["-pf", str(self._package_folder)])
+            if self._test_folder:
+                components.extend(["-tbf", str(self._test_folder)])
+            for key, value in self._options.items():
+                components.extend(
+                    [
+                        "-o",
+                        f"{key}={value}",
+                    ]
+                )
+            if self._force:
+                components.append("-f")
+            # no named args
+            if self._recipe_path:
+                components.append(str(self._recipe_path))
+            if self._package_reference:
+                components.append(self._package_reference)
+        return components
+
+    def __str__(self) -> str:
+        components = ["conan"] + self.to_args()
         command = " ".join(components)
         return command
 
