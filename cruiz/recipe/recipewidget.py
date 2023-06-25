@@ -1047,8 +1047,6 @@ class RecipeWidget(QtWidgets.QMainWindow):
     def _generate_dependency_graph(
         self, recipe_attributes: typing.Dict[str, str]
     ) -> None:
-        if cruiz.globals.CONAN_MAJOR_VERSION > 1:
-            return
         # reset views
         self._ui.configurePackageId.setText("Calculating...")
         # https://stackoverflow.com/questions/46630185/qt-remove-model-from-view
