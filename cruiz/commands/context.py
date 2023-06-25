@@ -694,6 +694,20 @@ class ConanContext(QtCore.QObject):
         """
         return bool(self._invocations) or self._meta_invocation.active
 
+    def create_default_profile(self) -> None:
+        """
+        Create the default profile in the local cache by detecting the environment.
+        This will overwrite any existing default profile.
+        """
+        _, exception = self._meta_invocation.request_data("create_default_profile")
+        if exception:
+            if self.parent():
+                self.parent().record_exception(exception)
+            else:
+                raise Exception(
+                    "Creating the default profile for the local cache failed"
+                ) from exception
+
 
 @contextmanager
 def managed_conan_context(

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>561</width>
-    <height>639</height>
+    <height>643</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -162,11 +162,22 @@
                <number>2</number>
               </property>
               <item>
-               <widget class="QListWidget" name="profilesList">
-                <property name="sizeAdjustPolicy">
-                 <enum>QAbstractScrollArea::AdjustToContents</enum>
-                </property>
-               </widget>
+               <layout class="QHBoxLayout" name="horizontalLayout_7">
+                <item>
+                 <widget class="QListWidget" name="profilesList">
+                  <property name="sizeAdjustPolicy">
+                   <enum>QAbstractScrollArea::AdjustToContents</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="profilesCreateDefault">
+                  <property name="text">
+                   <string>Create Default</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </item>
              </layout>
             </widget>
