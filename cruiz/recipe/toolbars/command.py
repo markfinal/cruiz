@@ -45,11 +45,11 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         self._idle_group.setEnabled(True)
         self._cancel_command_group = QtGui.QActionGroup(self)
         self._cancel_command_group.setEnabled(False)
+        self._add_toolbutton(
+            [recipe_ui.actionCreateCommand, recipe_ui.actionCreateUpdateCommand]
+        )
+        self.addSeparator()
         if cruiz.globals.CONAN_MAJOR_VERSION == 1:
-            self._add_toolbutton(
-                [recipe_ui.actionCreateCommand, recipe_ui.actionCreateUpdateCommand]
-            )
-            self.addSeparator()
             self._add_toolbutton(
                 [recipe_ui.actionInstallCommand, recipe_ui.actionInstallUpdateCommand]
             )
@@ -72,8 +72,6 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
                 ]
             )
         else:
-            recipe_ui.actionCreateCommand.setEnabled(False)
-            recipe_ui.actionCreateUpdateCommand.setEnabled(False)
             recipe_ui.actionInstallCommand.setEnabled(False)
             recipe_ui.actionInstallUpdateCommand.setEnabled(False)
             recipe_ui.actionImportsCommand.setEnabled(False)
@@ -121,10 +119,10 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
 
         # shortcuts themselves are set elsewhere, as they can be dynamic
         # through the lifetime of the application
+        recipe_ui = self.parent()._ui
+        _configure(recipe_ui.actionCreateCommand, self._conan_create)
+        _configure(recipe_ui.actionCreateUpdateCommand, self._conan_create_update)
         if cruiz.globals.CONAN_MAJOR_VERSION == 1:
-            recipe_ui = self.parent()._ui
-            _configure(recipe_ui.actionCreateCommand, self._conan_create)
-            _configure(recipe_ui.actionCreateUpdateCommand, self._conan_create_update)
             _configure(recipe_ui.actionInstallCommand, self._conan_install)
             _configure(recipe_ui.actionInstallUpdateCommand, self._conan_install_update)
             _configure(recipe_ui.actionImportsCommand, self._conan_imports)
@@ -156,24 +154,23 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         """
         Refresh all command action shortcuts and tooltips
         """
-        if cruiz.globals.CONAN_MAJOR_VERSION > 1:
-            return
         with ShortcutSettingsReader() as settings:
             conan_create = settings.conan_create.resolve()
             conan_create_updates = settings.conan_create_updates.resolve()
-            conan_imports = settings.conan_imports.resolve()
-            conan_install = settings.conan_install.resolve()
-            conan_install_updates = settings.conan_install_updates.resolve()
-            conan_source = settings.conan_source.resolve()
-            conan_build = settings.conan_build.resolve()
-            conan_package = settings.conan_package.resolve()
-            conan_exportpkg = settings.conan_export_package.resolve()
-            conan_test = settings.conan_test_package.resolve()
-            conan_remove = settings.conan_remove_package.resolve()
-            cancel = settings.cancel.resolve()
-            cmake_build_tool = settings.cmake_build_tool.resolve()
-            cmake_build_tool_verbose = settings.cmake_build_tool_verbose.resolve()
-            remove_cmakecache = settings.delete_cmake_cache.resolve()
+            if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+                conan_imports = settings.conan_imports.resolve()
+                conan_install = settings.conan_install.resolve()
+                conan_install_updates = settings.conan_install_updates.resolve()
+                conan_source = settings.conan_source.resolve()
+                conan_build = settings.conan_build.resolve()
+                conan_package = settings.conan_package.resolve()
+                conan_exportpkg = settings.conan_export_package.resolve()
+                conan_test = settings.conan_test_package.resolve()
+                conan_remove = settings.conan_remove_package.resolve()
+                cancel = settings.cancel.resolve()
+                cmake_build_tool = settings.cmake_build_tool.resolve()
+                cmake_build_tool_verbose = settings.cmake_build_tool_verbose.resolve()
+                remove_cmakecache = settings.delete_cmake_cache.resolve()
 
         def _configure(
             action: QtGui.QAction, shortcut: str, params: CommandParameters
@@ -192,65 +189,70 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             conan_create_updates,
             self._make_conan_create_params(recipe_attributes, ["-u"]),
         )
-        _configure(
-            recipe_ui.actionInstallCommand,
-            conan_install,
-            self._make_conan_install_params(recipe_attributes, None),
-        )
-        _configure(
-            recipe_ui.actionInstallUpdateCommand,
-            conan_install_updates,
-            self._make_conan_install_params(recipe_attributes, ["-u"]),
-        )
-        _configure(
-            recipe_ui.actionImportsCommand,
-            conan_imports,
-            self._make_conan_imports_params(recipe_attributes),
-        )
-        _configure(
-            recipe_ui.actionSourceCommand,
-            conan_source,
-            self._make_conan_source_params(recipe_attributes),
-        )
-        _configure(
-            recipe_ui.actionBuildCommand,
-            conan_build,
-            self._make_conan_build_params(recipe_attributes),
-        )
-        _configure(
-            recipe_ui.actionPackageCommand,
-            conan_package,
-            self._make_conan_package_params(recipe_attributes),
-        )
-        _configure(
-            recipe_ui.actionExportPackageCommand,
-            conan_exportpkg,
-            self._make_conan_export_package_params(recipe_attributes),
-        )
-        _configure(
-            recipe_ui.actionTestCommand,
-            conan_test,
-            self._make_conan_test_package_params(recipe_attributes),
-        )
-        _configure(
-            recipe_ui.actionRemovePackageCommand,
-            conan_remove,
-            self._make_conan_remove_package_params(recipe_attributes),
-        )
-        recipe_ui.actionCancelCommand.setShortcut(QtGui.QKeySequence(cancel))
-        recipe_ui.actionCancelCommand.setToolTip("Cancel the currently running command")
-        recipe_ui.actionCMakeBuildToolCommand.setShortcut(
-            QtGui.QKeySequence(cmake_build_tool)
-        )
-        recipe_ui.actionCMakeBuildToolCommand.setToolTip("CMake build")
-        recipe_ui.actionCMakeBuildToolVerboseCommand.setShortcut(
-            QtGui.QKeySequence(cmake_build_tool_verbose)
-        )
-        recipe_ui.actionCMakeBuildToolVerboseCommand.setToolTip("CMake verbose build")
-        recipe_ui.actionCMakeRemoveCacheCommand.setShortcut(
-            QtGui.QKeySequence(remove_cmakecache)
-        )
-        recipe_ui.actionCMakeRemoveCacheCommand.setToolTip("Remove CMake cache")
+        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+            _configure(
+                recipe_ui.actionInstallCommand,
+                conan_install,
+                self._make_conan_install_params(recipe_attributes, None),
+            )
+            _configure(
+                recipe_ui.actionInstallUpdateCommand,
+                conan_install_updates,
+                self._make_conan_install_params(recipe_attributes, ["-u"]),
+            )
+            _configure(
+                recipe_ui.actionImportsCommand,
+                conan_imports,
+                self._make_conan_imports_params(recipe_attributes),
+            )
+            _configure(
+                recipe_ui.actionSourceCommand,
+                conan_source,
+                self._make_conan_source_params(recipe_attributes),
+            )
+            _configure(
+                recipe_ui.actionBuildCommand,
+                conan_build,
+                self._make_conan_build_params(recipe_attributes),
+            )
+            _configure(
+                recipe_ui.actionPackageCommand,
+                conan_package,
+                self._make_conan_package_params(recipe_attributes),
+            )
+            _configure(
+                recipe_ui.actionExportPackageCommand,
+                conan_exportpkg,
+                self._make_conan_export_package_params(recipe_attributes),
+            )
+            _configure(
+                recipe_ui.actionTestCommand,
+                conan_test,
+                self._make_conan_test_package_params(recipe_attributes),
+            )
+            _configure(
+                recipe_ui.actionRemovePackageCommand,
+                conan_remove,
+                self._make_conan_remove_package_params(recipe_attributes),
+            )
+            recipe_ui.actionCancelCommand.setShortcut(QtGui.QKeySequence(cancel))
+            recipe_ui.actionCancelCommand.setToolTip(
+                "Cancel the currently running command"
+            )
+            recipe_ui.actionCMakeBuildToolCommand.setShortcut(
+                QtGui.QKeySequence(cmake_build_tool)
+            )
+            recipe_ui.actionCMakeBuildToolCommand.setToolTip("CMake build")
+            recipe_ui.actionCMakeBuildToolVerboseCommand.setShortcut(
+                QtGui.QKeySequence(cmake_build_tool_verbose)
+            )
+            recipe_ui.actionCMakeBuildToolVerboseCommand.setToolTip(
+                "CMake verbose build"
+            )
+            recipe_ui.actionCMakeRemoveCacheCommand.setShortcut(
+                QtGui.QKeySequence(remove_cmakecache)
+            )
+            recipe_ui.actionCMakeRemoveCacheCommand.setToolTip("Remove CMake cache")
 
     def _command_started(self) -> None:
         self._idle_group.setEnabled(False)
