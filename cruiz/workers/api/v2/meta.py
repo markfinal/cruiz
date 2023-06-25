@@ -92,6 +92,15 @@ def _interop_create_default_profile(api: typing.Any) -> None:
     save(profile_pathname, api.profiles.detect().dumps())
 
 
+def _interop_get_conandata(
+    api: typing.Any, recipe_path: str
+) -> typing.Dict[str, typing.Any]:
+    from conan.internal.conan_app import ConanApp
+
+    app = ConanApp(api.cache_folder)
+    return app.loader._load_data(recipe_path)
+
+
 def invoke(
     request_queue: multiprocessing.JoinableQueue[str],
     reply_queue: multiprocessing.Queue[Message],
@@ -129,6 +138,8 @@ def invoke(
                 elif request == "create_default_profile":
                     _interop_create_default_profile(api)
                     result = None
+                elif request == "get_conandata":
+                    result = _interop_get_conandata(api, request_params["path"][0])
                 else:
                     raise RuntimeError(
                         f"Unhandled request '{request}', '{request_params}'"
