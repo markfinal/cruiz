@@ -85,6 +85,13 @@ def _interop_inspect_recipe(
     return result
 
 
+def _interop_create_default_profile(api: typing.Any) -> None:
+    from conans.util.files import save
+
+    profile_pathname = api.profiles.get_path("default", os.getcwd(), exists=False)
+    save(profile_pathname, api.profiles.detect().dumps())
+
+
 def invoke(
     request_queue: multiprocessing.JoinableQueue[str],
     reply_queue: multiprocessing.Queue[Message],
@@ -119,6 +126,9 @@ def invoke(
                     result = _interop_get_hooks(api)
                 elif request == "inspect_recipe":
                     result = _interop_inspect_recipe(api, request_params["path"][0])
+                elif request == "create_default_profile":
+                    _interop_create_default_profile(api)
+                    result = None
                 else:
                     raise RuntimeError(
                         f"Unhandled request '{request}', '{request_params}'"
