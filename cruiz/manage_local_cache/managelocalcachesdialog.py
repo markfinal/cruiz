@@ -635,6 +635,10 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
 
     def _profiles_create_default(self) -> None:
         self._context.create_default_profile()
+        # reload all profiles into the UI
+        with NamedLocalCacheSettingsReader(self._context.cache_name) as settings:
+            extra_profile_dirs = settings.extra_profile_directories.resolve()
+        self._update_cache_profiles(extra_profile_dirs)
 
     def _profiles_add(self) -> None:
         dialog = AddExtraProfileDirectoryDialog(self)
