@@ -43,4 +43,5 @@ else:
         reciperevisions,
         remotesearch,
         removeallpackages,
+        source,
     )

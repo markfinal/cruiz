@@ -59,8 +59,8 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             self._add_toolbutton([recipe_ui.actionImportsCommand])
         else:
             recipe_ui.actionImportsCommand.setVisible(False)
+        self._add_toolbutton([recipe_ui.actionSourceCommand])
         if IS_CONAN_V1:
-            self._add_toolbutton([recipe_ui.actionSourceCommand])
             self._add_toolbutton([recipe_ui.actionBuildCommand])
             self._add_toolbutton([recipe_ui.actionPackageCommand])
             self._add_toolbutton([recipe_ui.actionExportPackageCommand])
@@ -78,7 +78,6 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
                 ]
             )
         else:
-            recipe_ui.actionSourceCommand.setEnabled(False)
             recipe_ui.actionBuildCommand.setEnabled(False)
             recipe_ui.actionPackageCommand.setEnabled(False)
             recipe_ui.actionExportPackageCommand.setEnabled(False)
@@ -129,8 +128,8 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         _configure(recipe_ui.actionInstallUpdateCommand, self._conan_install_update)
         if IS_CONAN_V1:
             _configure(recipe_ui.actionImportsCommand, self._conan_imports)
+        _configure(recipe_ui.actionSourceCommand, self._conan_source)
         if IS_CONAN_V1:
-            _configure(recipe_ui.actionSourceCommand, self._conan_source)
             _configure(recipe_ui.actionBuildCommand, self._conan_build)
             _configure(recipe_ui.actionPackageCommand, self._conan_package)
             _configure(recipe_ui.actionExportPackageCommand, self._conan_export_package)
@@ -165,8 +164,8 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             conan_install_updates = settings.conan_install_updates.resolve()
             if IS_CONAN_V1:
                 conan_imports = settings.conan_imports.resolve()
+            conan_source = settings.conan_source.resolve()
             if IS_CONAN_V1:
-                conan_source = settings.conan_source.resolve()
                 conan_build = settings.conan_build.resolve()
                 conan_package = settings.conan_package.resolve()
                 conan_exportpkg = settings.conan_export_package.resolve()
@@ -210,12 +209,12 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
                 conan_imports,
                 self._make_conan_imports_params(recipe_attributes),
             )
+        _configure(
+            recipe_ui.actionSourceCommand,
+            conan_source,
+            self._make_conan_source_params(recipe_attributes),
+        )
         if IS_CONAN_V1:
-            _configure(
-                recipe_ui.actionSourceCommand,
-                conan_source,
-                self._make_conan_source_params(recipe_attributes),
-            )
             _configure(
                 recipe_ui.actionBuildCommand,
                 conan_build,
@@ -490,6 +489,11 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
     def _make_conan_source_params(
         self, recipe_attributes: typing.Dict[str, typing.Optional[str]]
     ) -> CommandParameters:
+        named_args = {}
+        if IS_CONAN_V1:
+            pass
+        else:
+            named_args["with_pkgref"] = True
         return self._make_common_params(
             "source",
             workers_api.source.invoke,
@@ -497,6 +501,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             with_cwd=True,
             with_install_folder=True,
             with_source_folder=True,
+            **named_args,
         )
 
     def _make_conan_build_params(
