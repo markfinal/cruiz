@@ -28,6 +28,9 @@ from cruiz.environ import EnvironSaver
 from cruiz.exceptions import RecipeInspectionError
 
 
+IS_CONAN_V1 = cruiz.globals.CONAN_MAJOR_VERSION == 1
+
+
 class RecipeCommandToolbar(QtWidgets.QToolBar):
     """
     QToolBar representing the recipe commands
@@ -52,8 +55,11 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         self._add_toolbutton(
             [recipe_ui.actionInstallCommand, recipe_ui.actionInstallUpdateCommand]
         )
-        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+        if IS_CONAN_V1:
             self._add_toolbutton([recipe_ui.actionImportsCommand])
+        else:
+            recipe_ui.actionImportsCommand.setVisible(False)
+        if IS_CONAN_V1:
             self._add_toolbutton([recipe_ui.actionSourceCommand])
             self._add_toolbutton([recipe_ui.actionBuildCommand])
             self._add_toolbutton([recipe_ui.actionPackageCommand])
@@ -72,7 +78,6 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
                 ]
             )
         else:
-            recipe_ui.actionImportsCommand.setEnabled(False)
             recipe_ui.actionSourceCommand.setEnabled(False)
             recipe_ui.actionBuildCommand.setEnabled(False)
             recipe_ui.actionPackageCommand.setEnabled(False)
@@ -122,8 +127,9 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         _configure(recipe_ui.actionCreateUpdateCommand, self._conan_create_update)
         _configure(recipe_ui.actionInstallCommand, self._conan_install)
         _configure(recipe_ui.actionInstallUpdateCommand, self._conan_install_update)
-        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+        if IS_CONAN_V1:
             _configure(recipe_ui.actionImportsCommand, self._conan_imports)
+        if IS_CONAN_V1:
             _configure(recipe_ui.actionSourceCommand, self._conan_source)
             _configure(recipe_ui.actionBuildCommand, self._conan_build)
             _configure(recipe_ui.actionPackageCommand, self._conan_package)
@@ -157,8 +163,9 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             conan_create_updates = settings.conan_create_updates.resolve()
             conan_install = settings.conan_install.resolve()
             conan_install_updates = settings.conan_install_updates.resolve()
-            if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+            if IS_CONAN_V1:
                 conan_imports = settings.conan_imports.resolve()
+            if IS_CONAN_V1:
                 conan_source = settings.conan_source.resolve()
                 conan_build = settings.conan_build.resolve()
                 conan_package = settings.conan_package.resolve()
@@ -197,12 +204,13 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             conan_install_updates,
             self._make_conan_install_params(recipe_attributes, ["-u"]),
         )
-        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+        if IS_CONAN_V1:
             _configure(
                 recipe_ui.actionImportsCommand,
                 conan_imports,
                 self._make_conan_imports_params(recipe_attributes),
             )
+        if IS_CONAN_V1:
             _configure(
                 recipe_ui.actionSourceCommand,
                 conan_source,
