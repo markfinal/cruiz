@@ -49,10 +49,10 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             [recipe_ui.actionCreateCommand, recipe_ui.actionCreateUpdateCommand]
         )
         self.addSeparator()
+        self._add_toolbutton(
+            [recipe_ui.actionInstallCommand, recipe_ui.actionInstallUpdateCommand]
+        )
         if cruiz.globals.CONAN_MAJOR_VERSION == 1:
-            self._add_toolbutton(
-                [recipe_ui.actionInstallCommand, recipe_ui.actionInstallUpdateCommand]
-            )
             self._add_toolbutton([recipe_ui.actionImportsCommand])
             self._add_toolbutton([recipe_ui.actionSourceCommand])
             self._add_toolbutton([recipe_ui.actionBuildCommand])
@@ -72,8 +72,6 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
                 ]
             )
         else:
-            recipe_ui.actionInstallCommand.setEnabled(False)
-            recipe_ui.actionInstallUpdateCommand.setEnabled(False)
             recipe_ui.actionImportsCommand.setEnabled(False)
             recipe_ui.actionSourceCommand.setEnabled(False)
             recipe_ui.actionBuildCommand.setEnabled(False)
@@ -122,9 +120,9 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         recipe_ui = self.parent()._ui
         _configure(recipe_ui.actionCreateCommand, self._conan_create)
         _configure(recipe_ui.actionCreateUpdateCommand, self._conan_create_update)
+        _configure(recipe_ui.actionInstallCommand, self._conan_install)
+        _configure(recipe_ui.actionInstallUpdateCommand, self._conan_install_update)
         if cruiz.globals.CONAN_MAJOR_VERSION == 1:
-            _configure(recipe_ui.actionInstallCommand, self._conan_install)
-            _configure(recipe_ui.actionInstallUpdateCommand, self._conan_install_update)
             _configure(recipe_ui.actionImportsCommand, self._conan_imports)
             _configure(recipe_ui.actionSourceCommand, self._conan_source)
             _configure(recipe_ui.actionBuildCommand, self._conan_build)
@@ -157,10 +155,10 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         with ShortcutSettingsReader() as settings:
             conan_create = settings.conan_create.resolve()
             conan_create_updates = settings.conan_create_updates.resolve()
+            conan_install = settings.conan_install.resolve()
+            conan_install_updates = settings.conan_install_updates.resolve()
             if cruiz.globals.CONAN_MAJOR_VERSION == 1:
                 conan_imports = settings.conan_imports.resolve()
-                conan_install = settings.conan_install.resolve()
-                conan_install_updates = settings.conan_install_updates.resolve()
                 conan_source = settings.conan_source.resolve()
                 conan_build = settings.conan_build.resolve()
                 conan_package = settings.conan_package.resolve()
@@ -189,17 +187,17 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             conan_create_updates,
             self._make_conan_create_params(recipe_attributes, ["-u"]),
         )
+        _configure(
+            recipe_ui.actionInstallCommand,
+            conan_install,
+            self._make_conan_install_params(recipe_attributes, None),
+        )
+        _configure(
+            recipe_ui.actionInstallUpdateCommand,
+            conan_install_updates,
+            self._make_conan_install_params(recipe_attributes, ["-u"]),
+        )
         if cruiz.globals.CONAN_MAJOR_VERSION == 1:
-            _configure(
-                recipe_ui.actionInstallCommand,
-                conan_install,
-                self._make_conan_install_params(recipe_attributes, None),
-            )
-            _configure(
-                recipe_ui.actionInstallUpdateCommand,
-                conan_install_updates,
-                self._make_conan_install_params(recipe_attributes, ["-u"]),
-            )
             _configure(
                 recipe_ui.actionImportsCommand,
                 conan_imports,

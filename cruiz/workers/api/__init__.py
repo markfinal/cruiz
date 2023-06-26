@@ -34,6 +34,7 @@ else:
         arbitrary,
         configinstall,
         create,
+        install,
         lockcreate,
         meta,
         packagebinary,
