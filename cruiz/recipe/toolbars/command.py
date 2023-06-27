@@ -63,6 +63,9 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         self._add_toolbutton([recipe_ui.actionBuildCommand])
         if IS_CONAN_V1:
             self._add_toolbutton([recipe_ui.actionPackageCommand])
+        else:
+            recipe_ui.actionPackageCommand.setVisible(False)
+        if IS_CONAN_V1:
             self._add_toolbutton([recipe_ui.actionExportPackageCommand])
             self._add_toolbutton([recipe_ui.actionTestCommand])
             self.addSeparator()
@@ -78,7 +81,6 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
                 ]
             )
         else:
-            recipe_ui.actionPackageCommand.setEnabled(False)
             recipe_ui.actionExportPackageCommand.setEnabled(False)
             recipe_ui.actionTestCommand.setEnabled(False)
             recipe_ui.actionCancelCommand.setEnabled(False)
@@ -131,6 +133,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         _configure(recipe_ui.actionBuildCommand, self._conan_build)
         if IS_CONAN_V1:
             _configure(recipe_ui.actionPackageCommand, self._conan_package)
+        if IS_CONAN_V1:
             _configure(recipe_ui.actionExportPackageCommand, self._conan_export_package)
             _configure(recipe_ui.actionTestCommand, self._conan_test)
             _configure(recipe_ui.actionRemovePackageCommand, self._conan_remove)
@@ -167,6 +170,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             conan_build = settings.conan_build.resolve()
             if IS_CONAN_V1:
                 conan_package = settings.conan_package.resolve()
+            if IS_CONAN_V1:
                 conan_exportpkg = settings.conan_export_package.resolve()
                 conan_test = settings.conan_test_package.resolve()
                 conan_remove = settings.conan_remove_package.resolve()
@@ -224,6 +228,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
                 conan_package,
                 self._make_conan_package_params(recipe_attributes),
             )
+        if IS_CONAN_V1:
             _configure(
                 recipe_ui.actionExportPackageCommand,
                 conan_exportpkg,
