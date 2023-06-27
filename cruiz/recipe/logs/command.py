@@ -8,14 +8,9 @@ import pathlib
 import stat
 import typing
 
-from qtpy import QtCore, QtGui, QtWidgets, PYSIDE6
+from qtpy import QtCore, QtGui, QtWidgets
 
 from cruiz.interop.commandparameters import CommandParameters
-
-if PYSIDE6:
-    QAction = QtGui.QAction
-else:
-    QAction = QtWidgets.QAction
 
 
 class CommandListWidgetItem(QtWidgets.QListWidgetItem):
