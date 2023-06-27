@@ -15,7 +15,7 @@ import subprocess
 import time
 import typing
 
-from qtpy import QtCore, QtGui, QtWidgets, PYSIDE6
+from qtpy import QtCore, QtGui, QtWidgets
 import psutil
 
 from cruiz.exceptions import (
@@ -58,11 +58,6 @@ import cruiz.config
 import cruiz.globals
 
 logger = logging.getLogger(__name__)
-
-if PYSIDE6:
-    QAction = QtGui.QAction
-else:
-    QAction = QtWidgets.QAction
 
 
 class MainWindow(QtWidgets.QMainWindow):

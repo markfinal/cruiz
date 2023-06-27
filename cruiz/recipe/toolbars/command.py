@@ -8,7 +8,7 @@ from io import StringIO
 import os
 import typing
 
-from qtpy import QtCore, QtGui, QtWidgets, PYSIDE6
+from qtpy import QtCore, QtGui, QtWidgets
 from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
 
 from cruiz.settings.managers.recipe import RecipeSettings, RecipeSettingsReader
@@ -24,13 +24,6 @@ from cruiz.environ import EnvironSaver
 
 from cruiz.exceptions import RecipeInspectionError
 
-if PYSIDE6:
-    QAction = QtGui.QAction
-    QActionGroup = QtGui.QActionGroup
-else:
-    QAction = QtWidgets.QAction
-    QActionGroup = QtWidgets.QActionGroup
-
 
 class RecipeCommandToolbar(QtWidgets.QToolBar):
     """
@@ -45,9 +38,9 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         recipe_ui = parent._ui
         self.command_started.connect(self._command_started)
         self.command_ended.connect(self._command_ended)
-        self._idle_group = QActionGroup(self)
+        self._idle_group = QtGui.QActionGroup(self)
         self._idle_group.setEnabled(True)
-        self._cancel_command_group = QActionGroup(self)
+        self._cancel_command_group = QtGui.QActionGroup(self)
         self._cancel_command_group.setEnabled(False)
         self._add_toolbutton(
             [recipe_ui.actionCreateCommand, recipe_ui.actionCreateUpdateCommand]
@@ -80,7 +73,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         return self.parent()
 
     def _add_toolbutton(
-        self, actions: typing.List[QAction], for_cancel_group: bool = False
+        self, actions: typing.List[QtGui.QAction], for_cancel_group: bool = False
     ) -> None:
         assert actions
         button = QtWidgets.QToolButton()
@@ -100,7 +93,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         """
 
         def _configure(
-            action: QAction, trigger_slot: typing.Callable[[], None]
+            action: QtGui.QAction, trigger_slot: typing.Callable[[], None]
         ) -> None:
             action.setShortcutVisibleInContextMenu(True)
             action.setShortcutContext(QtCore.Qt.WindowShortcut)
@@ -158,7 +151,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             remove_cmakecache = settings.delete_cmake_cache.resolve()
 
         def _configure(
-            action: QAction, shortcut: str, params: CommandParameters
+            action: QtGui.QAction, shortcut: str, params: CommandParameters
         ) -> None:
             action.setShortcut(QtGui.QKeySequence(shortcut))
             action.setToolTip(self._generate_command_tooltip(params))
