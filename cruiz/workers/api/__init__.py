@@ -35,6 +35,7 @@ else:
         build,
         configinstall,
         create,
+        exportpackage,
         install,
         lockcreate,
         meta,
