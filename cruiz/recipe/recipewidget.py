@@ -272,6 +272,8 @@ class RecipeWidget(QtWidgets.QMainWindow):
         )
         # tabify the docks on the bottom side
         self.tabifyDockWidget(self._ui.conanLogDock, self._ui.conanCommandsDock)
+        if cruiz.globals.CONAN_MAJOR_VERSION > 1:
+            self._ui.conanLogDock.hide()
 
         # dependency dock
         self._ui.dependentsTabs.setTabVisible(1, False)  # tree disabled
