@@ -177,7 +177,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>432</width>
+        <width>639</width>
         <height>233</height>
        </rect>
       </property>
@@ -303,8 +303,8 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>343</width>
-        <height>172</height>
+        <width>654</width>
+        <height>232</height>
        </rect>
       </property>
       <attribute name="label">
@@ -413,8 +413,8 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>297</width>
-        <height>203</height>
+        <width>654</width>
+        <height>232</height>
        </rect>
       </property>
       <attribute name="label">
@@ -496,8 +496,8 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>305</width>
-        <height>79</height>
+        <width>654</width>
+        <height>232</height>
        </rect>
       </property>
       <attribute name="label">
@@ -544,8 +544,8 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>175</width>
-        <height>86</height>
+        <width>654</width>
+        <height>232</height>
        </rect>
       </property>
       <attribute name="label">
@@ -605,7 +605,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>405</width>
+        <width>639</width>
         <height>384</height>
        </rect>
       </property>
@@ -755,7 +755,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>0</y>
+        <y>-287</y>
         <width>639</width>
         <height>519</height>
        </rect>
@@ -831,7 +831,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
         </widget>
        </item>
        <item row="12" column="0">
-        <widget class="QLabel" name="label_26">
+        <widget class="QLabel" name="prefs_shortcuts_cmakebuildtool_label">
          <property name="text">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;img src=&quot;:/cmakebuildtool.svg&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt; CMake Build Tool&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
@@ -855,7 +855,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
         </widget>
        </item>
        <item row="13" column="0">
-        <widget class="QLabel" name="label_27">
+        <widget class="QLabel" name="prefs_shortcuts_cmakebuildtoolverbose_label">
          <property name="text">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;img src=&quot;:/cmakebuildtoolverbose.svg&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt; CMake Build Tool (verbose)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
@@ -881,21 +881,21 @@ However, help stop loading recipes if they have mixed versions of dependent pack
         <widget class="ShortcutLineEdit" name="prefs_shortcuts_cancel_edit"/>
        </item>
        <item row="7" column="0">
-        <widget class="QLabel" name="label_21">
+        <widget class="QLabel" name="prefs_shortcuts_package_label">
          <property name="text">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;img src=&quot;:/package.svg&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt; conan package&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="QLabel" name="label_3">
+        <widget class="QLabel" name="prefs_shortcuts_imports_label">
          <property name="text">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;img src=&quot;:/imports.svg&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt; conan imports&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
        <item row="14" column="0">
-        <widget class="QLabel" name="label_28">
+        <widget class="QLabel" name="prefs_shortcuts_deletecmakecache_label">
          <property name="text">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;img src=&quot;:/removecmakecache.svg&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt; Delete CMakeCache&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
@@ -943,8 +943,8 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>98</width>
-        <height>105</height>
+        <width>654</width>
+        <height>232</height>
        </rect>
       </property>
       <attribute name="label">
@@ -999,8 +999,8 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>98</width>
-        <height>105</height>
+        <width>654</width>
+        <height>232</height>
        </rect>
       </property>
       <attribute name="label">
@@ -1046,8 +1046,8 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>98</width>
-        <height>105</height>
+        <width>654</width>
+        <height>232</height>
        </rect>
       </property>
       <attribute name="label">
