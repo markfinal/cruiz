@@ -44,10 +44,11 @@ def get_conan_env(
     with GeneralSettingsReader() as settings:
         use_dark_mode = settings.use_dark_mode.resolve()
     env["CONAN_COLOR_DARK"] = "0" if use_dark_mode else "1"
-    with ConanSettingsReader() as settings:
-        log_level = settings.log_level.resolve()
-    env["CONAN_LOGGING_LEVEL"] = log_level
-    env["CONAN_NON_INTERACTIVE"] = "1"
+    if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+        with ConanSettingsReader() as settings:
+            log_level = settings.log_level.resolve()
+            env["CONAN_LOGGING_LEVEL"] = log_level
+        env["CONAN_NON_INTERACTIVE"] = "1"
     # custom environment variables - this is where cruiz behaviour might vary
     # from Conan on the command line
     env.update(added_environment)
