@@ -322,6 +322,9 @@ class RecipeWidget(QtWidgets.QMainWindow):
             self._generate_dependency_graph_from_profile_change
         )
 
+        if cruiz.globals.CONAN_MAJOR_VERSION > 1:
+            self._ui.buildFeaturesToolbar.hide()
+
         # associate with local caches
         self.log_details = LogDetails(
             self._ui.outputPane,
