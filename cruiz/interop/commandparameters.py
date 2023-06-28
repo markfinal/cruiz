@@ -56,6 +56,7 @@ class CommandParameters(CommonParameters):
         self._named_args: typing.Dict[str, str] = {}
         self._time_commands: typing.Optional[bool] = None
         self._v2_omit_test_folder: typing.Optional[bool] = None
+        self._v2_needs_reference: typing.Optional[bool] = None
 
     def to_args(self) -> typing.List[str]:
         """
@@ -83,18 +84,21 @@ class CommandParameters(CommonParameters):
                         f"{name}/*:{option_name}={value}",
                     ]
                 )
-            if self._name:
-                components.extend(["--name", self._name])
-            if self._version:
-                components.extend(["--version", self._version])
-            if self._user:
-                components.extend(["--user", self._user])
-            if self._channel:
-                components.extend(["--channel", self._channel])
+            if not self._v2_needs_reference:
+                if self._name:
+                    components.extend(["--name", self._name])
+                if self._version:
+                    components.extend(["--version", self._version])
+                if self._user:
+                    components.extend(["--user", self._user])
+                if self._channel:
+                    components.extend(["--channel", self._channel])
             if self.v2_omit_test_folder:
                 components.extend(["-tf", ""])
             if self._recipe_path:
                 components.append(str(self._recipe_path))
+            if self._v2_needs_reference and self._package_reference:
+                components.append(self._package_reference)
         elif cruiz.globals.CONAN_MAJOR_VERSION == 1:
             if self._install_folder:
                 components.extend(["-if", str(self._install_folder)])
@@ -481,3 +485,15 @@ class CommandParameters(CommonParameters):
     @v2_omit_test_folder.setter
     def v2_omit_test_folder(self, value: typing.Optional[bool]) -> None:
         self._v2_omit_test_folder = value
+
+    @property
+    def v2_need_reference(self) -> typing.Optional[bool]:
+        """
+        Whether a package reference is actually needed.
+        Conan v2+
+        """
+        return self._v2_needs_reference
+
+    @v2_need_reference.setter
+    def v2_need_reference(self, value: typing.Optional[bool]) -> None:
+        self._v2_needs_reference = value

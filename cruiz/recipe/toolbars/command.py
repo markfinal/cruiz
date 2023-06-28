@@ -66,8 +66,8 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         else:
             recipe_ui.actionPackageCommand.setVisible(False)
         self._add_toolbutton([recipe_ui.actionExportPackageCommand])
+        self._add_toolbutton([recipe_ui.actionTestCommand])
         if IS_CONAN_V1:
-            self._add_toolbutton([recipe_ui.actionTestCommand])
             self.addSeparator()
             self._add_toolbutton([recipe_ui.actionCancelCommand], for_cancel_group=True)
             self.addSeparator()
@@ -81,7 +81,6 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
                 ]
             )
         else:
-            recipe_ui.actionTestCommand.setEnabled(False)
             recipe_ui.actionCancelCommand.setEnabled(False)
             recipe_ui.actionRemovePackageCommand.setEnabled(False)
             recipe_ui.actionCMakeBuildToolCommand.setEnabled(False)
@@ -133,8 +132,8 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         if IS_CONAN_V1:
             _configure(recipe_ui.actionPackageCommand, self._conan_package)
         _configure(recipe_ui.actionExportPackageCommand, self._conan_export_package)
+        _configure(recipe_ui.actionTestCommand, self._conan_test)
         if IS_CONAN_V1:
-            _configure(recipe_ui.actionTestCommand, self._conan_test)
             _configure(recipe_ui.actionRemovePackageCommand, self._conan_remove)
             _configure(recipe_ui.actionCancelCommand, self._cancel_command)
             _configure(recipe_ui.actionCMakeBuildToolCommand, self._cmake_build)
@@ -170,8 +169,8 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             if IS_CONAN_V1:
                 conan_package = settings.conan_package.resolve()
             conan_exportpkg = settings.conan_export_package.resolve()
+            conan_test = settings.conan_test_package.resolve()
             if IS_CONAN_V1:
-                conan_test = settings.conan_test_package.resolve()
                 conan_remove = settings.conan_remove_package.resolve()
                 cancel = settings.cancel.resolve()
                 cmake_build_tool = settings.cmake_build_tool.resolve()
@@ -232,12 +231,12 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             conan_exportpkg,
             self._make_conan_export_package_params(recipe_attributes),
         )
+        _configure(
+            recipe_ui.actionTestCommand,
+            conan_test,
+            self._make_conan_test_package_params(recipe_attributes),
+        )
         if IS_CONAN_V1:
-            _configure(
-                recipe_ui.actionTestCommand,
-                conan_test,
-                self._make_conan_test_package_params(recipe_attributes),
-            )
             _configure(
                 recipe_ui.actionRemovePackageCommand,
                 conan_remove,
@@ -365,6 +364,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         with_exclusive_package_folder: bool = False,
         with_options: bool = False,
         v2_omit_test_folder: bool = False,
+        v2_need_reference: bool = False,
     ) -> CommandParameters:
         recipe_widget = self._recipe_widget
         recipe = recipe_widget.recipe
@@ -380,6 +380,8 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             params.make_package_reference()  # only needed for the exported string
         if with_force:
             params.force = True
+        if cruiz.globals.CONAN_MAJOR_VERSION > 1:
+            params.v2_need_reference = v2_need_reference
         self._append_general_prefs(params)
         with RecipeSettingsReader.from_recipe(recipe) as settings:
             num_cores = settings.num_cpu_cores
@@ -576,6 +578,11 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
     def _make_conan_test_package_params(
         self, recipe_attributes: typing.Dict[str, typing.Optional[str]]
     ) -> CommandParameters:
+        named_args = {}
+        if IS_CONAN_V1:
+            pass
+        else:
+            named_args["v2_need_reference"] = True
         params = self._make_common_params(
             "test",
             workers_api.testpackage.invoke,
@@ -587,6 +594,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             with_explicit_name=True,
             with_pkgref=True,
             with_options=True,
+            **named_args,
         )
         recipe_widget = self._recipe_widget
         recipe = recipe_widget.recipe

@@ -46,4 +46,5 @@ else:
         remotesearch,
         removeallpackages,
         source,
+        testpackage,
     )
