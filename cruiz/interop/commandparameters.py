@@ -55,6 +55,7 @@ class CommandParameters(CommonParameters):
         self._args: typing.List[str] = []
         self._named_args: typing.Dict[str, str] = {}
         self._time_commands: typing.Optional[bool] = None
+        self._v2_omit_test_folder: typing.Optional[bool] = None
 
     def to_args(self) -> typing.List[str]:
         """
@@ -90,6 +91,8 @@ class CommandParameters(CommonParameters):
                 components.extend(["--user", self._user])
             if self._channel:
                 components.extend(["--channel", self._channel])
+            if self.v2_omit_test_folder:
+                components.extend(["-tf", ""])
             if self._recipe_path:
                 components.append(str(self._recipe_path))
         elif cruiz.globals.CONAN_MAJOR_VERSION == 1:
@@ -122,7 +125,17 @@ class CommandParameters(CommonParameters):
         return components
 
     def __str__(self) -> str:
-        components = ["conan"] + self.to_args()
+        components = ["conan"]
+        for comp in self.to_args():
+            if comp:
+                if "*" in comp:
+                    # dealing with options of the form <name>*:<opt>=<value>
+                    components.append(f'"{comp}"')
+                else:
+                    components.append(comp)
+            else:
+                # dealing with empty strings
+                components.append('""')
         command = " ".join(components)
         return command
 
@@ -456,3 +469,15 @@ class CommandParameters(CommonParameters):
         Set an optional build feature
         """
         self.added_environment[str(feature)] = value
+
+    @property
+    def v2_omit_test_folder(self) -> typing.Optional[bool]:
+        """
+        Whether to omit to the test folder parameter
+        Conan v2+
+        """
+        return self._v2_omit_test_folder
+
+    @v2_omit_test_folder.setter
+    def v2_omit_test_folder(self, value: typing.Optional[bool]) -> None:
+        self._v2_omit_test_folder = value

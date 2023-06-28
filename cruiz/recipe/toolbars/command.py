@@ -65,8 +65,8 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             self._add_toolbutton([recipe_ui.actionPackageCommand])
         else:
             recipe_ui.actionPackageCommand.setVisible(False)
+        self._add_toolbutton([recipe_ui.actionExportPackageCommand])
         if IS_CONAN_V1:
-            self._add_toolbutton([recipe_ui.actionExportPackageCommand])
             self._add_toolbutton([recipe_ui.actionTestCommand])
             self.addSeparator()
             self._add_toolbutton([recipe_ui.actionCancelCommand], for_cancel_group=True)
@@ -81,7 +81,6 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
                 ]
             )
         else:
-            recipe_ui.actionExportPackageCommand.setEnabled(False)
             recipe_ui.actionTestCommand.setEnabled(False)
             recipe_ui.actionCancelCommand.setEnabled(False)
             recipe_ui.actionRemovePackageCommand.setEnabled(False)
@@ -133,8 +132,8 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         _configure(recipe_ui.actionBuildCommand, self._conan_build)
         if IS_CONAN_V1:
             _configure(recipe_ui.actionPackageCommand, self._conan_package)
+        _configure(recipe_ui.actionExportPackageCommand, self._conan_export_package)
         if IS_CONAN_V1:
-            _configure(recipe_ui.actionExportPackageCommand, self._conan_export_package)
             _configure(recipe_ui.actionTestCommand, self._conan_test)
             _configure(recipe_ui.actionRemovePackageCommand, self._conan_remove)
             _configure(recipe_ui.actionCancelCommand, self._cancel_command)
@@ -170,8 +169,8 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             conan_build = settings.conan_build.resolve()
             if IS_CONAN_V1:
                 conan_package = settings.conan_package.resolve()
+            conan_exportpkg = settings.conan_export_package.resolve()
             if IS_CONAN_V1:
-                conan_exportpkg = settings.conan_export_package.resolve()
                 conan_test = settings.conan_test_package.resolve()
                 conan_remove = settings.conan_remove_package.resolve()
                 cancel = settings.cancel.resolve()
@@ -228,12 +227,12 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
                 conan_package,
                 self._make_conan_package_params(recipe_attributes),
             )
+        _configure(
+            recipe_ui.actionExportPackageCommand,
+            conan_exportpkg,
+            self._make_conan_export_package_params(recipe_attributes),
+        )
         if IS_CONAN_V1:
-            _configure(
-                recipe_ui.actionExportPackageCommand,
-                conan_exportpkg,
-                self._make_conan_export_package_params(recipe_attributes),
-            )
             _configure(
                 recipe_ui.actionTestCommand,
                 conan_test,
@@ -365,6 +364,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         with_force: bool = False,
         with_exclusive_package_folder: bool = False,
         with_options: bool = False,
+        v2_omit_test_folder: bool = False,
     ) -> CommandParameters:
         recipe_widget = self._recipe_widget
         recipe = recipe_widget.recipe
@@ -440,6 +440,10 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             if with_test_build_folder:
                 test_folder = settings.local_workflow_test_folder.resolve()
                 params.test_build_folder = recipe_widget.resolve_expression(test_folder)
+            if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+                pass
+            else:
+                params.v2_omit_test_folder = v2_omit_test_folder
         return params
 
     def _make_conan_create_params(
@@ -547,6 +551,11 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
     def _make_conan_export_package_params(
         self, recipe_attributes: typing.Dict[str, typing.Optional[str]]
     ) -> CommandParameters:
+        named_args = {}
+        if IS_CONAN_V1:
+            named_args["with_force"] = True
+        else:
+            named_args["v2_omit_test_folder"] = True
         return self._make_common_params(
             "export-pkg",
             workers_api.exportpackage.invoke,
@@ -560,8 +569,8 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             with_package_folder=True,
             with_exclusive_package_folder=True,
             with_explicit_name=True,
-            with_force=True,
             with_options=True,
+            **named_args,
         )
 
     def _make_conan_test_package_params(
