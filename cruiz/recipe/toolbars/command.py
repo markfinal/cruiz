@@ -380,11 +380,12 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             params.v2_need_reference = v2_need_reference
         self._append_general_prefs(params)
         with RecipeSettingsReader.from_recipe(recipe) as settings:
-            num_cores = settings.num_cpu_cores
-            if num_cores.value is not None:
-                params.added_environment.update(
-                    {"CONAN_CPU_COUNT": str(num_cores.value)}
-                )
+            if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+                num_cores = settings.num_cpu_cores
+                if num_cores.value is not None:
+                    params.added_environment.update(
+                        {"CONAN_CPU_COUNT": str(num_cores.value)}
+                    )
             if with_options:
                 for key, value in settings.options.resolve().items():
                     assert recipe_attributes["name"]

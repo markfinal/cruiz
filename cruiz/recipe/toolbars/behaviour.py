@@ -149,6 +149,7 @@ class _CPUCoresFrame(QtWidgets.QFrame):
 class RecipeBehaviourToolbar(QtWidgets.QToolBar):
     """
     QToolBar representing tne behaviour of a recipe, profile and cpu cores
+    CPU cores not available in Conan 2 at this time
     """
 
     profile_changed = QtCore.Signal(str)
@@ -156,10 +157,11 @@ class RecipeBehaviourToolbar(QtWidgets.QToolBar):
     def __init__(self, parent: QtWidgets.QWidget) -> None:
         super().__init__(parent)
         self._profile = _ProfileFrame(self)
-        self._cpu_cores = _CPUCoresFrame(self)
         self.addWidget(self._profile)
-        self.addSeparator()
-        self.addWidget(self._cpu_cores)
+        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+            self._cpu_cores = _CPUCoresFrame(self)
+            self.addSeparator()
+            self.addWidget(self._cpu_cores)
 
     @property
     def _recipe(self) -> Recipe:
@@ -173,4 +175,5 @@ class RecipeBehaviourToolbar(QtWidgets.QToolBar):
         """
         recipe = self._recipe
         self._profile.refresh_content(recipe)
-        self._cpu_cores.refresh_content(recipe)
+        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+            self._cpu_cores.refresh_content(recipe)
