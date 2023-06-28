@@ -67,10 +67,10 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             recipe_ui.actionPackageCommand.setVisible(False)
         self._add_toolbutton([recipe_ui.actionExportPackageCommand])
         self._add_toolbutton([recipe_ui.actionTestCommand])
+        self.addSeparator()
+        self._add_toolbutton([recipe_ui.actionCancelCommand], for_cancel_group=True)
+        self.addSeparator()
         if IS_CONAN_V1:
-            self.addSeparator()
-            self._add_toolbutton([recipe_ui.actionCancelCommand], for_cancel_group=True)
-            self.addSeparator()
             self._add_toolbutton([recipe_ui.actionRemovePackageCommand])
             self.addSeparator()
             self._add_toolbutton(
@@ -81,7 +81,6 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
                 ]
             )
         else:
-            recipe_ui.actionCancelCommand.setEnabled(False)
             recipe_ui.actionRemovePackageCommand.setEnabled(False)
             recipe_ui.actionCMakeBuildToolCommand.setEnabled(False)
             recipe_ui.actionCMakeBuildToolVerboseCommand.setEnabled(False)
@@ -133,9 +132,9 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             _configure(recipe_ui.actionPackageCommand, self._conan_package)
         _configure(recipe_ui.actionExportPackageCommand, self._conan_export_package)
         _configure(recipe_ui.actionTestCommand, self._conan_test)
+        _configure(recipe_ui.actionCancelCommand, self._cancel_command)
         if IS_CONAN_V1:
             _configure(recipe_ui.actionRemovePackageCommand, self._conan_remove)
-            _configure(recipe_ui.actionCancelCommand, self._cancel_command)
             _configure(recipe_ui.actionCMakeBuildToolCommand, self._cmake_build)
             _configure(
                 recipe_ui.actionCMakeBuildToolVerboseCommand, self._cmake_build_verbose
@@ -170,9 +169,9 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
                 conan_package = settings.conan_package.resolve()
             conan_exportpkg = settings.conan_export_package.resolve()
             conan_test = settings.conan_test_package.resolve()
+            cancel = settings.cancel.resolve()
             if IS_CONAN_V1:
                 conan_remove = settings.conan_remove_package.resolve()
-                cancel = settings.cancel.resolve()
                 cmake_build_tool = settings.cmake_build_tool.resolve()
                 cmake_build_tool_verbose = settings.cmake_build_tool_verbose.resolve()
                 remove_cmakecache = settings.delete_cmake_cache.resolve()
@@ -236,15 +235,13 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             conan_test,
             self._make_conan_test_package_params(recipe_attributes),
         )
+        recipe_ui.actionCancelCommand.setShortcut(QtGui.QKeySequence(cancel))
+        recipe_ui.actionCancelCommand.setToolTip("Cancel the currently running command")
         if IS_CONAN_V1:
             _configure(
                 recipe_ui.actionRemovePackageCommand,
                 conan_remove,
                 self._make_conan_remove_package_params(recipe_attributes),
-            )
-            recipe_ui.actionCancelCommand.setShortcut(QtGui.QKeySequence(cancel))
-            recipe_ui.actionCancelCommand.setToolTip(
-                "Cancel the currently running command"
             )
             recipe_ui.actionCMakeBuildToolCommand.setShortcut(
                 QtGui.QKeySequence(cmake_build_tool)
