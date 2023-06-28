@@ -360,7 +360,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         fudge_source_folder: bool = False,
         with_build_folder: bool = False,
         with_package_folder: bool = False,
-        with_test_folder: bool = False,
+        with_test_build_folder: bool = False,
         with_explicit_name: bool = False,
         with_force: bool = False,
         with_exclusive_package_folder: bool = False,
@@ -437,9 +437,9 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             if with_package_folder:
                 package_folder = settings.local_workflow_package_folder.resolve()
                 params.package_folder = recipe_widget.resolve_expression(package_folder)
-            if with_test_folder:
+            if with_test_build_folder:
                 test_folder = settings.local_workflow_test_folder.resolve()
-                params.test_folder = recipe_widget.resolve_expression(test_folder)
+                params.test_build_folder = recipe_widget.resolve_expression(test_folder)
         return params
 
     def _make_conan_create_params(
@@ -574,7 +574,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             with_recipe_path=False,
             with_cwd=True,
             with_profile=True,
-            with_test_folder=True,
+            with_test_build_folder=True,
             with_explicit_name=True,
             with_pkgref=True,
             with_options=True,
