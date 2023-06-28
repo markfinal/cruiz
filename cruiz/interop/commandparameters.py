@@ -95,6 +95,9 @@ class CommandParameters(CommonParameters):
                     components.extend(["--channel", self._channel])
             if self.v2_omit_test_folder:
                 components.extend(["-tf", ""])
+            if self._force:
+                components.append("-c")
+            # no named args
             if self._recipe_path:
                 components.append(str(self._recipe_path))
             if self._v2_needs_reference and self._package_reference:

@@ -45,6 +45,7 @@ else:
         reciperevisions,
         remotesearch,
         removeallpackages,
+        removepackage,
         source,
         testpackage,
     )
