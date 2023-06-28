@@ -30,8 +30,8 @@ def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> 
         }
         if params.options:
             args["options"] = format_options(params.options)
-        if params.test_folder:
-            args["test_build_folder"] = str(params.test_folder)
+        if params.test_build_folder:
+            args["test_build_folder"] = str(params.test_build_folder)
 
         result = api.test(
             params.recipe_path,

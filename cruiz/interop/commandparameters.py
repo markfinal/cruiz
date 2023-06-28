@@ -42,7 +42,7 @@ class CommandParameters(CommonParameters):
         self._source_folder: typing.Optional[pathlib.PurePosixPath] = None
         self._build_folder: typing.Optional[pathlib.PurePosixPath] = None
         self._package_folder: typing.Optional[pathlib.PurePosixPath] = None
-        self._test_folder: typing.Optional[pathlib.PurePosixPath] = None
+        self._test_build_folder: typing.Optional[pathlib.PurePosixPath] = None
         self._name: typing.Optional[str] = None
         self._version: typing.Optional[
             str
@@ -103,8 +103,8 @@ class CommandParameters(CommonParameters):
                 components.extend(["-bf", str(self._build_folder)])
             if self._package_folder:
                 components.extend(["-pf", str(self._package_folder)])
-            if self._test_folder:
-                components.extend(["-tbf", str(self._test_folder)])
+            if self._test_build_folder:
+                components.extend(["-tbf", str(self._test_build_folder)])
             for key, value in self._options.items():
                 components.extend(
                     [
@@ -313,17 +313,17 @@ class CommandParameters(CommonParameters):
         self._package_folder = value
 
     @property
-    def test_folder(self) -> typing.Optional[pathlib.PurePosixPath]:
+    def test_build_folder(self) -> typing.Optional[pathlib.PurePosixPath]:
         """
         Get the test build folder to use in the command against this recipe.
         -tbf/--test-build-folder switch
         May be None to omit
         """
-        return self._test_folder
+        return self._test_build_folder
 
-    @test_folder.setter
-    def test_folder(self, value: typing.Optional[pathlib.PurePosixPath]) -> None:
-        self._test_folder = value
+    @test_build_folder.setter
+    def test_build_folder(self, value: typing.Optional[pathlib.PurePosixPath]) -> None:
+        self._test_build_folder = value
 
     @property
     def name(self) -> typing.Optional[str]:
