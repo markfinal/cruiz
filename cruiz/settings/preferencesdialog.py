@@ -10,6 +10,8 @@ import typing
 
 from qtpy import QtCore, QtGui, QtWidgets
 
+import cruiz.globals
+
 from cruiz.settings.managers.namedlocalcache import NamedLocalCacheSettingsReader
 
 from cruiz.pyside6.preferences import Ui_PreferencesDialog
@@ -370,9 +372,13 @@ class PreferencesDialog(QtWidgets.QDialog):
         self._ui.prefs_shortcuts_create_edit.textChanged.connect(
             self._shortcuts_change_create
         )
-        self._ui.prefs_shortcuts_imports_edit.textChanged.connect(
-            self._shortcuts_change_imports
-        )
+        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+            self._ui.prefs_shortcuts_imports_edit.textChanged.connect(
+                self._shortcuts_change_imports
+            )
+        else:
+            self._ui.prefs_shortcuts_imports_label.hide()
+            self._ui.prefs_shortcuts_imports_edit.hide()
         self._ui.prefs_shortcuts_install_edit.textChanged.connect(
             self._shortcuts_change_install
         )
@@ -385,9 +391,13 @@ class PreferencesDialog(QtWidgets.QDialog):
         self._ui.prefs_shortcuts_build_edit.textChanged.connect(
             self._shortcuts_change_build
         )
-        self._ui.prefs_shortcuts_package_edit.textChanged.connect(
-            self._shortcuts_change_package
-        )
+        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+            self._ui.prefs_shortcuts_package_edit.textChanged.connect(
+                self._shortcuts_change_package
+            )
+        else:
+            self._ui.prefs_shortcuts_package_label.hide()
+            self._ui.prefs_shortcuts_package_edit.hide()
         self._ui.prefs_shortcuts_exportpackage_edit.textChanged.connect(
             self._shortcuts_change_exportpkg
         )
@@ -400,15 +410,23 @@ class PreferencesDialog(QtWidgets.QDialog):
         self._ui.prefs_shortcuts_cancel_edit.textChanged.connect(
             self._shortcuts_change_cancel
         )
-        self._ui.prefs_shortcuts_cmakebuildtool_edit.textChanged.connect(
-            self._shortcuts_change_cmakebuildtool
-        )
-        self._ui.prefs_shortcuts_cmakebuildtoolverbose_edit.textChanged.connect(
-            self._shortcuts_change_cmakebuildtoolverbose
-        )
-        self._ui.prefs_shortcuts_deletecmakecache_edit.textChanged.connect(
-            self._shortcuts_change_deletecmakecache
-        )
+        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+            self._ui.prefs_shortcuts_cmakebuildtool_edit.textChanged.connect(
+                self._shortcuts_change_cmakebuildtool
+            )
+            self._ui.prefs_shortcuts_cmakebuildtoolverbose_edit.textChanged.connect(
+                self._shortcuts_change_cmakebuildtoolverbose
+            )
+            self._ui.prefs_shortcuts_deletecmakecache_edit.textChanged.connect(
+                self._shortcuts_change_deletecmakecache
+            )
+        else:
+            self._ui.prefs_shortcuts_cmakebuildtool_label.hide()
+            self._ui.prefs_shortcuts_cmakebuildtool_edit.hide()
+            self._ui.prefs_shortcuts_cmakebuildtoolverbose_label.hide()
+            self._ui.prefs_shortcuts_cmakebuildtoolverbose_edit.hide()
+            self._ui.prefs_shortcuts_deletecmakecache_label.hide()
+            self._ui.prefs_shortcuts_deletecmakecache_edit.hide()
 
     def _setup_recipes_toolbox(self) -> None:
         self._prefs_recipes_model = RecipesModel()
