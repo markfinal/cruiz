@@ -19,11 +19,16 @@ See the documentation at [Read The Docs](https://cruiz.readthedocs.io/).
 - Apple Silicon platforms:
   - macOS (11.0+)
 - Python 3.7-3.11
-- Conan 1.17.1+, but not 2.x (these are the versions tested)
+- Conan 1.x (from 1.17.1 onwards) and 2.x (from 2.0.7 onwards)
 
 All other Python dependencies are installed when the package is installed.
 
 In order to use the dependency graph visualisation, an additional installation of GraphViz is required from https://graphviz.org/download/. Assign the installed location to the preferences.
+
+## Conan versions
+Cruiz does _not_ depend directly on the Conan package in its UI. Instead, it uses child processes to run Conan APIs, which _are_ dependent on the Conan version installed.
+
+Cruiz does _not_ support multiple Conan versions simultaneously in the same process. Instead, the UI dynamically changes by detecting the Conan version installed at startup. You will therefore see a slightly different UI depending on which Conan you have. Note the Conan version detected is shown on the status bar in the bottom right corner of the UI.
 
 ## Getting started
 If you have cloned this repository, you will need:
