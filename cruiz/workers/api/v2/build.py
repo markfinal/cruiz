@@ -27,6 +27,6 @@ def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> 
         imported_module = importlib.import_module("conan.cli.commands.build")
         # strip the 'verb' from the front of the argument list
         args = params.to_args()[1:]
-        imported_module.build.run(api, imported_module.build._parser, args)
+        imported_module.build.run(api, args)
 
         queue.put(Success(None))
