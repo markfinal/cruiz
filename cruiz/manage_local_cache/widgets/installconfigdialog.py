@@ -33,17 +33,17 @@ class InstallConfigDialog(QtWidgets.QDialog):
         self._ui = Ui_InstallConfigDialog()
         self._ui.setupUi(self)  # type: ignore[no-untyped-call]
         self._context = context
-        recent_config_paths_menu = QtWidgets.QMenu("Recent config paths", self)
+        recent_config_paths_actions: typing.List[QtGui.QAction] = []
         with RecentConanConfigSettingsReader() as settings:
             config_paths = settings.paths.resolve()
         if config_paths:
             for path in config_paths:
                 path_action = QtGui.QAction(path, self)
                 path_action.triggered.connect(partial(self._set_url, path))
-                recent_config_paths_menu.addAction(path_action)
-        else:
-            recent_config_paths_menu.setEnabled(False)
-        self._ui.pathOrUrl.set_custom_menu(recent_config_paths_menu)
+                recent_config_paths_actions.append(path_action)
+        self._ui.pathOrUrl.add_submenu_actions(
+            "Recent config paths", recent_config_paths_actions
+        )
         self._ui.pathOrUrl.textChanged.connect(self._path_updated)
         self._ui.installButton.setEnabled(False)
         self._ui.installButton.clicked.connect(self._install)

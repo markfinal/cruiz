@@ -5,6 +5,7 @@ Dialog for adding an environment variable
 """
 
 from dataclasses import dataclass
+import typing
 
 from qtpy import QtCore, QtGui, QtWidgets
 
@@ -33,17 +34,18 @@ class AddEnvironmentDialog(QtWidgets.QDialog):
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose, True)
         self._ui = Ui_AddEnvironmentDialog()
         self._ui.setupUi(self)  # type: ignore[no-untyped-call]
-        conan_environment_menu = QtWidgets.QMenu("Conan environment variables", self)
+        conan_environment_actions: typing.List[QtGui.QAction] = []
         for key, _ in context.get_conan_config_environment_variables().items():
             key_action = QtGui.QAction(key, self)
             key_action.triggered.connect(self._set_name)
-            conan_environment_menu.addAction(key_action)
-        conan_environment_menu.addSeparator()
+            conan_environment_actions.append(key_action)
         # TODO: CONAN_V2_MODE is obsolete
         conan_v2_mode_action = QtGui.QAction("CONAN_V2_MODE", self)
         conan_v2_mode_action.triggered.connect(self._set_name)  # type: ignore
-        conan_environment_menu.addAction(conan_v2_mode_action)
-        self._ui.name.set_custom_menu(conan_environment_menu)
+        conan_environment_actions.append(conan_v2_mode_action)
+        self._ui.name.add_submenu_actions(
+            "Conan environment variables", conan_environment_actions
+        )
         self._ui.name.textChanged.connect(self._updated)
         self._ui.value.textChanged.connect(self._updated)
         self._ui.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).setEnabled(False)
