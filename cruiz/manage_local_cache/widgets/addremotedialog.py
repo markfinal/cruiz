@@ -28,17 +28,15 @@ class AddRemoteDialog(QtWidgets.QDialog):
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose, True)
         self._ui = Ui_AddRemoteDialog()
         self._ui.setupUi(self)  # type: ignore[no-untyped-call]
-        recent_remotes_menu = QtWidgets.QMenu("Recent remotes", self)
+        recent_remotes_actions: typing.List[QtGui.QAction] = []
         with RecentConanRemotesSettingsReader() as settings:
             recent_remote_urls = settings.urls.resolve()
         if recent_remote_urls:
             for remote in recent_remote_urls:
                 remote_action = QtGui.QAction(remote, self)
                 remote_action.triggered.connect(partial(self._set_remote_url, remote))
-                recent_remotes_menu.addAction(remote_action)
-        else:
-            recent_remotes_menu.setEnabled(False)
-        self._ui.url.set_custom_menu(recent_remotes_menu)
+                recent_remotes_actions.append(remote_action)
+        self._ui.url.add_submenu_actions("Recent remotes", recent_remotes_actions)
         self._ui.url.textChanged.connect(self._updated)
         self._ui.name.textChanged.connect(self._updated)
         self._ui.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).clicked.connect(
