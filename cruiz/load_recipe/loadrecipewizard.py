@@ -67,7 +67,12 @@ class LoadRecipeWizard(QtWidgets.QWizard):
             log_details.logging.connect(self._on_error_loading)
             with managed_conan_context(DEFAULT_CACHE_NAME, log_details) as context:
                 self.recipe_attributes = context.inspect_recipe(self._path)
-                self.conandata = context.get_conandata(self._path)
+                try:
+                    self.conandata = context.get_conandata(self._path)
+                except ValueError:
+                    log_details.stderr(
+                        "Unable to obtain version numbers from conandata.yml"
+                    )
 
     def _on_error_loading(self) -> None:
         self.ui.intro_message.show()
