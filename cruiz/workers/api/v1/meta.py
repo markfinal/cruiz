@@ -306,12 +306,12 @@ def _has_config_option(api: typing.Any, key: str, value: str) -> bool:
         return api._cache.config.has_option(key, value)
 
 
-def _get_config_envvars(api: typing.Any) -> typing.Dict[str, str]:
+def _get_config_envvars(api: typing.Any) -> typing.List[str]:
     try:
         # conan 1.18+
-        return api.app.cache.config.env_vars
+        return list(api.app.cache.config.env_vars.keys())
     except AttributeError:
-        return api._cache.config.env_vars
+        return list(api._cache.config.env_vars.keys())
 
 
 def _create_default_profile(api: typing.Any) -> None:

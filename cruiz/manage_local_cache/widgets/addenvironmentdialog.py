@@ -9,6 +9,8 @@ import typing
 
 from qtpy import QtCore, QtGui, QtWidgets
 
+import cruiz.globals
+
 from cruiz.commands.context import ConanContext
 
 from cruiz.pyside6.local_cache_add_environment import Ui_AddEnvironmentDialog
@@ -35,14 +37,15 @@ class AddEnvironmentDialog(QtWidgets.QDialog):
         self._ui = Ui_AddEnvironmentDialog()
         self._ui.setupUi(self)  # type: ignore[no-untyped-call]
         conan_environment_actions: typing.List[QtGui.QAction] = []
-        for key, _ in context.get_conan_config_environment_variables().items():
+        for key in context.get_conan_config_environment_variables():
             key_action = QtGui.QAction(key, self)
             key_action.triggered.connect(self._set_name)
             conan_environment_actions.append(key_action)
-        # TODO: CONAN_V2_MODE is obsolete
-        conan_v2_mode_action = QtGui.QAction("CONAN_V2_MODE", self)
-        conan_v2_mode_action.triggered.connect(self._set_name)  # type: ignore
-        conan_environment_actions.append(conan_v2_mode_action)
+        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+            # TODO: CONAN_V2_MODE is obsolete
+            conan_v2_mode_action = QtGui.QAction("CONAN_V2_MODE", self)
+            conan_v2_mode_action.triggered.connect(self._set_name)  # type: ignore
+            conan_environment_actions.append(conan_v2_mode_action)
         self._ui.name.add_submenu_actions(
             "Conan environment variables", conan_environment_actions
         )

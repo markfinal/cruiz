@@ -101,6 +101,19 @@ def _interop_get_conandata(
     return app.loader._load_data(recipe_path)
 
 
+def _interop_get_config_envvars(api: typing.Any) -> typing.List[str]:
+    # no variable present listing the all in Conan 2
+    # so use https://docs.conan.io/2/reference/environment.html
+    envvar_list = [
+        "CONAN_HOME",
+        "CONAN_DEFAULT_PROFILE",
+        "CONAN_LOGIN_USERNAME",
+        "CONAN_PASSWORD",
+        "CONAN_COLOR_DARK",
+    ]
+    return envvar_list
+
+
 def invoke(
     request_queue: multiprocessing.JoinableQueue[str],
     reply_queue: multiprocessing.Queue[Message],
@@ -140,6 +153,8 @@ def invoke(
                     result = None
                 elif request == "get_conandata":
                     result = _interop_get_conandata(api, request_params["path"][0])
+                elif request == "get_config_envvars":
+                    result = _interop_get_config_envvars(api)
                 else:
                     raise RuntimeError(
                         f"Unhandled request '{request}', '{request_params}'"
