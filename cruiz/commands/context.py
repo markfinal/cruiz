@@ -602,7 +602,7 @@ class ConanContext(QtCore.QObject):
             if self.parent():
                 self.parent().record_exception(exception)
             else:
-                raise Exception(
+                raise ValueError(
                     "Failed to get conandata YAML dict for recipe"
                 ) from exception
         return conandata
