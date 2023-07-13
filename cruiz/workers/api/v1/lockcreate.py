@@ -104,6 +104,9 @@ def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> 
             except AttributeError:
                 build_folder = None
 
+            if node.conanfile.info.invalid:
+                raise ValueError(node.conanfile.info.invalid)
+
             if node.recipe in (RECIPE_CONSUMER, RECIPE_VIRTUAL):
                 new_node = PackageNode(
                     node.name,

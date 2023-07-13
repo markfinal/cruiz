@@ -94,6 +94,9 @@ def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> 
                 # in Conan 2, there are no short paths
                 short_paths = False
 
+                if node.conanfile.info.invalid:
+                    raise ValueError(node.conanfile.info.invalid)
+
                 if node.recipe in (RECIPE_CONSUMER, RECIPE_VIRTUAL):
                     new_node = PackageNode(
                         node.name,
