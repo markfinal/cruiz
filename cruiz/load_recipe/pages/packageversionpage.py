@@ -34,38 +34,8 @@ class LoadRecipePackageVersionPage(QtWidgets.QWizardPage):
 
         self._ui.version.currentTextChanged.connect(self._on_version_changed)
 
-        self._uuid_versions = {}
-        if self.wizard().recipe_attributes["version"] is None:
-            # get versions from conandata.yml
-            versions = self._get_versions_from_conandata(self.wizard().conandata)
-            if versions:
-                # get the versions from uuids with the same paths
-                for uuid in self.wizard().matching_uuids:
-                    with RecipeSettingsReader.from_uuid(uuid) as settings:
-                        attributes = settings.attribute_overrides.resolve()
-                    if "version" in attributes:
-                        self._uuid_versions[attributes["version"]] = uuid
-
-                with BlockSignals(self._ui.version) as blocked_widget:
-                    blocked_widget.clear()
-                    model = blocked_widget.model()
-                    for i, version in enumerate(versions):
-                        if version in self._uuid_versions:
-                            blocked_widget.addItem(QtGui.QIcon(":/cruiz.png"), version)
-                            if cruiz.globals.get_main_window().is_recipe_active(
-                                self._uuid_versions[version]
-                            ):
-                                item = model.item(i)
-                                item.setFlags(item.flags() & ~QtGui.Qt.ItemIsEnabled)
-                        else:
-                            blocked_widget.addItem(version)
-                    blocked_widget.setCurrentIndex(-1)
-        else:
-            with BlockSignals(self._ui.version) as blocked_widget:
-                blocked_widget.clear()
-                blocked_widget.addItem(self.wizard().recipe_attributes["version"])
-            # combobox disabled to ensure it's clear that there's no choice
-            self._ui.version.setEnabled(False)
+        self._uuid_versions: typing.Dict[str, str] = {}
+        self._resolve_ui_to_possible_versions()
         super().initializePage()
 
     def cleanupPage(self) -> None:
@@ -80,19 +50,57 @@ class LoadRecipePackageVersionPage(QtWidgets.QWizardPage):
             self.wizard().uuid = None
         self.completeChanged.emit()
 
+    def _resolve_ui_to_possible_versions(self) -> None:
+        self._ui.version.setEditable(False)
+        version_in_recipe = self.wizard().recipe_attributes.get("version")
+        if version_in_recipe is None:
+            # get versions from conandata.yml
+            conandata = self.wizard().conandata
+            if conandata:
+                versions = self._get_versions_from_conandata(conandata)
+                if versions:
+                    # get the versions from uuids with the same paths
+                    for uuid in self.wizard().matching_uuids:
+                        with RecipeSettingsReader.from_uuid(uuid) as settings:
+                            attributes = settings.attribute_overrides.resolve()
+                        if "version" in attributes:
+                            self._uuid_versions[attributes["version"]] = uuid
+
+                    with BlockSignals(self._ui.version) as blocked_widget:
+                        blocked_widget.clear()
+                        model = blocked_widget.model()
+                        for i, version in enumerate(versions):
+                            if version in self._uuid_versions:
+                                blocked_widget.addItem(
+                                    QtGui.QIcon(":/cruiz.png"), version
+                                )
+                                if cruiz.globals.get_main_window().is_recipe_active(
+                                    self._uuid_versions[version]
+                                ):
+                                    item = model.item(i)
+                                    item.setFlags(
+                                        item.flags() & ~QtGui.Qt.ItemIsEnabled
+                                    )
+                            else:
+                                blocked_widget.addItem(version)
+                        blocked_widget.setCurrentIndex(-1)
+            else:
+                # if the conandata.yml is not available, manually specify a version
+                self._ui.version.setEditable(True)
+                self._ui.version.lineEdit().setPlaceholderText(
+                    "Package version to use, e.g. 1.2.3"
+                )
+        else:
+            with BlockSignals(self._ui.version) as blocked_widget:
+                blocked_widget.clear()
+                blocked_widget.addItem(version_in_recipe)
+            # combobox disabled to ensure it's clear that there's no choice
+            self._ui.version.setEnabled(False)
+
     def _get_versions_from_conandata(
         self, conandata: typing.Dict[str, typing.Dict[str, str]]
     ) -> typing.Optional[typing.List[str]]:
-        if not conandata:
-            QtWidgets.QMessageBox.information(
-                self,
-                "No conandata.yaml file beside recipe",
-                "Unable to read the conandata.yml beside the recipe. "
-                "Does the file exist?\n"
-                "The package version number can be manually specified, "
-                "or the conanfile.yml can be added next to the recipe.",
-            )
-            return None
+        assert conandata
         with ConanSettingsReader() as settings:
             path_segments = settings.conandata_version_yaml_pathsegment.resolve()
         if path_segments is None:
