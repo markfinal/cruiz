@@ -258,7 +258,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
             self._local_workflow_expression_editor
         )
         extra_option_list_regex = QtCore.QRegularExpression(
-            # of the form <pkg>:<option>=<value,[<repeat>]
+            # of the form <pkg>:<option>=<value>[,<repeat>]
             r"^$|^([^:=,\s]+:[^=,\s]+=[^,\s]+)(\s*,\s*[^:=,\s]+:[^=,\s]+=[^,\s]+)*$"
         )
         extra_option_list_validator = QtGui.QRegularExpressionValidator(
