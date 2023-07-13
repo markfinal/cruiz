@@ -652,9 +652,9 @@ class ConanContext(QtCore.QObject):
         """
         return self.cache_name == DEFAULT_CACHE_NAME
 
-    def get_conan_config_environment_variables(self) -> typing.Dict[str, str]:
+    def get_conan_config_environment_variables(self) -> typing.List[str]:
         """
-        Get a dictionary of all Conan environment variables.
+        Get a list of all Conan environment variables names.
         This doesn't get all of them, but at least some.
         """
         envvars, exception = self._meta_invocation.request_data("get_config_envvars")
