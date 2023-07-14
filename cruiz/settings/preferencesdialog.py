@@ -226,9 +226,6 @@ class PreferencesDialog(QtWidgets.QDialog):
         self._ui.prefs_general_enable_wallclock.stateChanged.connect(
             self._general_wallclock
         )
-        self._ui.prefs_general_enable_darkmode.stateChanged.connect(
-            self._general_darkmode
-        )
         self._ui.prefs_general_enable_compact.stateChanged.connect(
             self._general_compactlook
         )
@@ -525,8 +522,6 @@ class PreferencesDialog(QtWidgets.QDialog):
                 self._ui.prefs_general_enable_wallclock
             ) as blocked_widget:
                 blocked_widget.setChecked(settings.enable_command_timing.resolve())
-            with BlockSignals(self._ui.prefs_general_enable_darkmode) as blocked_widget:
-                blocked_widget.setChecked(settings.use_dark_mode.resolve())
             with BlockSignals(self._ui.prefs_general_enable_compact) as blocked_widget:
                 blocked_widget.setChecked(settings.use_compact_look.resolve())
             with BlockSignals(
@@ -571,12 +566,6 @@ class PreferencesDialog(QtWidgets.QDialog):
 
     def _general_wallclock(self, state: int) -> None:
         self._prefs_general.enable_command_timing = (
-            QtCore.Qt.CheckState(state) == QtCore.Qt.Checked
-        )
-        self.modified.emit()
-
-    def _general_darkmode(self, state: int) -> None:
-        self._prefs_general.use_dark_mode = (
             QtCore.Qt.CheckState(state) == QtCore.Qt.Checked
         )
         self.modified.emit()

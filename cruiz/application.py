@@ -8,13 +8,10 @@ from __future__ import annotations
 
 import typing
 
-import qdarkstyle
-
 from qtpy import QtCore, QtGui, QtWidgets
 
 from cruiz.settings.ensuredefaultlocalcache import ensure_default_local_cache
 from cruiz.settings.managers.fontpreferences import FontSettingsReader, FontUsage
-from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
 
 
 class Application(QtWidgets.QApplication):
@@ -44,11 +41,6 @@ class Application(QtWidgets.QApplication):
         """
         Slot executed when preferences have reported an update.
         """
-        with GeneralSettingsReader() as settings:
-            use_dark_mode = settings.use_dark_mode.resolve()
-        self.setStyleSheet(
-            qdarkstyle.load_stylesheet_pyside6() if use_dark_mode else ""
-        )
         with FontSettingsReader(FontUsage.UI) as settings:
             font_details = (settings.name.resolve(), settings.size.resolve())
         if font_details[0]:
