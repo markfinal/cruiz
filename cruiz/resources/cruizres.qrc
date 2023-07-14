@@ -10,6 +10,17 @@
     <file alias="testpackage.svg">003-chemistry.svg</file>
     <file alias="removepackage.svg">001-rubbish.svg</file>
   </qresource>
+  <qresource prefix="/icons/Dark">
+    <file alias="create.svg">inverted/010-draw.svg</file>
+    <file alias="imports.svg">inverted/009-import.svg</file>
+    <file alias="install.svg">inverted/008-cloud-computing.svg</file>
+    <file alias="source.svg">inverted/007-book.svg</file>
+    <file alias="build.svg">inverted/006-toolbox.svg</file>
+    <file alias="package.svg">inverted/005-box.svg</file>
+    <file alias="exportpackage.svg">inverted/004-share.svg</file>
+    <file alias="testpackage.svg">inverted/003-chemistry.svg</file>
+    <file alias="removepackage.svg">inverted/001-rubbish.svg</file>
+  </qresource>
   <qresource>
     <file alias="cmakebuildtool.svg">Cmake.svg</file>
     <file alias="cmakebuildtoolverbose.svg">Cmake.svg</file>
