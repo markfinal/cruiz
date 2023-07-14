@@ -126,6 +126,7 @@ def main() -> int:
     QtWidgets.QApplication.setAttribute(
         QtCore.Qt.AA_UseHighDpiPixmaps, True
     )  # use highdpi icons
+    QtWidgets.QApplication.setStyle("fusion")
 
     app = Application(sys.argv)
     window = MainWindow()
