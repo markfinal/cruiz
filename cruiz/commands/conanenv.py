@@ -41,9 +41,9 @@ def get_conan_env(
         if home_dir:
             env["CONAN_HOME"] = home_dir
         # short home no longer needed
-    with GeneralSettingsReader() as settings:
-        use_dark_mode = settings.use_dark_mode.resolve()
-    env["CONAN_COLOR_DARK"] = "0" if use_dark_mode else "1"
+    # with GeneralSettingsReader() as settings:
+    #    use_dark_mode = settings.use_dark_mode.resolve()
+    env["CONAN_COLOR_DARK"] = "0" if cruiz.globals.is_dark_theme() else "1"
     if cruiz.globals.CONAN_MAJOR_VERSION == 1:
         with ConanSettingsReader() as settings:
             log_level = settings.log_level.resolve()

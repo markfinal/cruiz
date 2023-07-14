@@ -358,6 +358,8 @@ class RecipeWidget(QtWidgets.QMainWindow):
         self._create_statusbar()
         self._load_local_workflow_dock()
 
+        cruiz.globals.get_main_window().theme_changed.connect(self._on_theme_change)
+
     def post_init(self) -> None:
         """
         Post initialisation commands that need to be performed once the
@@ -1398,3 +1400,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
 
     def _on_configure_package_id_copy(self) -> None:
         QtWidgets.QApplication.clipboard().setText(self._ui.configurePackageId.text())
+
+    def _on_theme_change(self) -> None:
+        attributes = self.get_recipe_attributes()
+        self._ui.commandToolbar.refresh_action_shortcuts_and_tooltips(attributes)

@@ -17,6 +17,8 @@ from qtpy import QtCore, QtGui, QtWidgets
 
 from qtpy import QtWebEngineCore
 
+import cruiz.globals
+
 from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
 
 from cruiz.pyside6.remote_browser_fileview import Ui_remote_browser_fileview
@@ -232,7 +234,7 @@ class _FileViewer(QtWidgets.QDialog):
             url_start = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0"
             html_file.write("<html>")
             html_file.write("<head>")
-            if use_dark_mode:
+            if cruiz.globals.is_dark_theme():
                 html_file.write(
                     f'<link rel="stylesheet" href="{url_start}/styles/dark.min.css">'
                 )
