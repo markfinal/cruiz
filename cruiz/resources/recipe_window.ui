@@ -861,136 +861,76 @@
    </widget>
   </widget>
   <action name="actionCreateCommand">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/create.svg</normaloff>:/create.svg</iconset>
-   </property>
    <property name="text">
     <string>Create package in local cache</string>
    </property>
   </action>
   <action name="actionCreateUpdateCommand">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/create.svg</normaloff>:/create.svg</iconset>
-   </property>
    <property name="text">
     <string>Create package in local cache with latest dependencies</string>
    </property>
   </action>
   <action name="actionImportsCommand">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/imports.svg</normaloff>:/imports.svg</iconset>
-   </property>
    <property name="text">
     <string>Import files from dependents</string>
    </property>
   </action>
   <action name="actionInstallCommand">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/install.svg</normaloff>:/install.svg</iconset>
-   </property>
    <property name="text">
     <string>Download dependencies and configure</string>
    </property>
   </action>
   <action name="actionInstallUpdateCommand">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/install.svg</normaloff>:/install.svg</iconset>
-   </property>
    <property name="text">
     <string>Download latest dependencies and configure</string>
    </property>
   </action>
   <action name="actionSourceCommand">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/source.svg</normaloff>:/source.svg</iconset>
-   </property>
    <property name="text">
     <string>Get source code</string>
    </property>
   </action>
   <action name="actionBuildCommand">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/build.svg</normaloff>:/build.svg</iconset>
-   </property>
    <property name="text">
     <string>Build source</string>
    </property>
   </action>
   <action name="actionPackageCommand">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/package.svg</normaloff>:/package.svg</iconset>
-   </property>
    <property name="text">
     <string>Make local package</string>
    </property>
   </action>
   <action name="actionExportPackageCommand">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/exportpackage.svg</normaloff>:/exportpackage.svg</iconset>
-   </property>
    <property name="text">
     <string>Export package to local cache</string>
    </property>
   </action>
   <action name="actionTestCommand">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/testpackage.svg</normaloff>:/testpackage.svg</iconset>
-   </property>
    <property name="text">
     <string>Test package in local cache</string>
    </property>
   </action>
   <action name="actionCancelCommand">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/cancel.svg</normaloff>:/cancel.svg</iconset>
-   </property>
    <property name="text">
     <string>Cancel running command</string>
    </property>
   </action>
   <action name="actionRemovePackageCommand">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/removepackage.svg</normaloff>:/removepackage.svg</iconset>
-   </property>
    <property name="text">
     <string>Remove package from local cache</string>
    </property>
   </action>
   <action name="actionCMakeBuildToolCommand">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/cmakebuildtool.svg</normaloff>:/cmakebuildtool.svg</iconset>
-   </property>
    <property name="text">
     <string>Run CMake build tool</string>
    </property>
   </action>
   <action name="actionCMakeBuildToolVerboseCommand">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/cmakebuildtoolverbose.svg</normaloff>:/cmakebuildtoolverbose.svg</iconset>
-   </property>
    <property name="text">
     <string>Run CMake build tool (verbose)</string>
    </property>
   </action>
   <action name="actionCMakeRemoveCacheCommand">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/removecmakecache.svg</normaloff>:/removecmakecache.svg</iconset>
-   </property>
    <property name="text">
     <string>Delete CMake cache</string>
    </property>
