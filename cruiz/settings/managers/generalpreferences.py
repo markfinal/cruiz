@@ -45,7 +45,6 @@ class GeneralSettings(ComparableCommonSettings):
             "enable_command_timing": SettingMeta(
                 "EnableCommandTimings", BoolSetting, False, ScalarValue
             ),
-            "use_dark_mode": SettingMeta("DarkMode", BoolSetting, False, ScalarValue),
             "use_compact_look": SettingMeta(
                 "UseCompactLook", BoolSetting, False, ScalarValue
             ),
@@ -114,17 +113,6 @@ class GeneralSettings(ComparableCommonSettings):
 
     @enable_command_timing.setter
     def enable_command_timing(self, value: bool) -> None:
-        self._set_value_via_meta(value)
-
-    @property
-    def use_dark_mode(self) -> BoolSetting:
-        """
-        Get whether dark mode is enabled
-        """
-        return self._get_value_via_meta()
-
-    @use_dark_mode.setter
-    def use_dark_mode(self, value: bool) -> None:
         self._set_value_via_meta(value)
 
     @property

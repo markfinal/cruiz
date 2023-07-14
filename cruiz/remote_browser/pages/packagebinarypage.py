@@ -23,8 +23,6 @@ from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
 
 from cruiz.pyside6.remote_browser_fileview import Ui_remote_browser_fileview
 
-from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
-
 from .page import Page
 
 
@@ -228,8 +226,6 @@ class _FileViewer(QtWidgets.QDialog):
                 contents = data_file.readlines()
             html_path = pathlib.Path(path.with_suffix(".html"))
         html_path.parent.mkdir(parents=True, exist_ok=True)
-        with GeneralSettingsReader() as settings:
-            use_dark_mode = settings.use_dark_mode.resolve()
         with html_path.open("wt", encoding="utf-8") as html_file:
             url_start = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0"
             html_file.write("<html>")
