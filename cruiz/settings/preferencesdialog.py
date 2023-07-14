@@ -1274,21 +1274,25 @@ class PreferencesDialog(QtWidgets.QDialog):
     def _refresh_shortcut_icons(self) -> None:
         def _set_pixmap(label: QtWidgets.QLabel, name: str) -> None:
             size = 32
-            label.setPixmap(QtGui.QPixmap(name).scaled(size, size))
+            if name.startswith(":/"):
+                icon = QtGui.QIcon(name)
+            else:
+                icon = QtGui.QIcon(f":/icons/{cruiz.globals.get_theme()}/{name}")
+            label.setPixmap(icon.pixmap(size, size))
 
-        _set_pixmap(self._ui.shortcut_conan_create, ":/create.svg")
-        _set_pixmap(self._ui.shortcut_conan_create_update, ":/create.svg")
-        _set_pixmap(self._ui.shortcut_conan_install, ":/install.svg")
-        _set_pixmap(self._ui.shortcut_conan_install_update, ":/install.svg")
-        _set_pixmap(self._ui.shortcut_conan_source, ":/source.svg")
-        _set_pixmap(self._ui.shortcut_conan_build, ":/build.svg")
-        _set_pixmap(self._ui.shortcut_conan_export_package, ":/exportpackage.svg")
-        _set_pixmap(self._ui.shortcut_conan_test, ":/testpackage.svg")
-        _set_pixmap(self._ui.shortcut_conan_remove, ":/removepackage.svg")
+        _set_pixmap(self._ui.shortcut_conan_create, "create.svg")
+        _set_pixmap(self._ui.shortcut_conan_create_update, "create.svg")
+        _set_pixmap(self._ui.shortcut_conan_install, "install.svg")
+        _set_pixmap(self._ui.shortcut_conan_install_update, "install.svg")
+        _set_pixmap(self._ui.shortcut_conan_source, "source.svg")
+        _set_pixmap(self._ui.shortcut_conan_build, "build.svg")
+        _set_pixmap(self._ui.shortcut_conan_export_package, "exportpackage.svg")
+        _set_pixmap(self._ui.shortcut_conan_test, "testpackage.svg")
+        _set_pixmap(self._ui.shortcut_conan_remove, "removepackage.svg")
         _set_pixmap(self._ui.shortcut_cancel_command, ":/cancel.svg")
         if cruiz.globals.CONAN_MAJOR_VERSION == 1:
-            _set_pixmap(self._ui.shortcut_conan_imports, ":/imports.svg")
-            _set_pixmap(self._ui.shortcut_conan_package, ":/package.svg")
+            _set_pixmap(self._ui.shortcut_conan_imports, "imports.svg")
+            _set_pixmap(self._ui.shortcut_conan_package, "package.svg")
             _set_pixmap(self._ui.shortcut_cmake_build_tool, ":/cmakebuildtool.svg")
             _set_pixmap(
                 self._ui.shortcut_cmake_verbose_build_tool,

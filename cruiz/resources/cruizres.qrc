@@ -1,5 +1,5 @@
 <!DOCTYPE RCC><RCC version="1.0">
-  <qresource>
+  <qresource prefix="/icons/Light">
     <file alias="create.svg">010-draw.svg</file>
     <file alias="imports.svg">009-import.svg</file>
     <file alias="install.svg">008-cloud-computing.svg</file>
@@ -8,11 +8,13 @@
     <file alias="package.svg">005-box.svg</file>
     <file alias="exportpackage.svg">004-share.svg</file>
     <file alias="testpackage.svg">003-chemistry.svg</file>
-    <file alias="cancel.svg">002-null.svg</file>
     <file alias="removepackage.svg">001-rubbish.svg</file>
+  </qresource>
+  <qresource>
     <file alias="cmakebuildtool.svg">Cmake.svg</file>
     <file alias="cmakebuildtoolverbose.svg">Cmake.svg</file>
     <file alias="removecmakecache.svg">Cmake.svg</file>
+    <file alias="cancel.svg">002-null.svg</file>
     <file alias="cruiz.png">cruise.png</file>
     <file alias="buildable.svg">012-hammer.svg</file>
     <file alias="binaries.svg">014-code.svg</file>

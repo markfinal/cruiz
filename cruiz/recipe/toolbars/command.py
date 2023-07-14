@@ -183,76 +183,80 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         ) -> None:
             action.setShortcut(QtGui.QKeySequence(shortcut))
             action.setToolTip(self._generate_command_tooltip(params))
-            action.setIcon(QtGui.QIcon(icon_path))
+            if icon_path.startswith(":/"):
+                icon = QtGui.QIcon(icon_path)
+            else:
+                icon = QtGui.QIcon(f":/icons/{cruiz.globals.get_theme()}/{icon_path}")
+            action.setIcon(icon)
 
         recipe_ui = self.parent()._ui
         _configure_conan_action(
             recipe_ui.actionCreateCommand,
             conan_create,
             self._make_conan_create_params(recipe_attributes, None),
-            ":/create.svg",
+            "create.svg",
         )
         _configure_conan_action(
             recipe_ui.actionCreateUpdateCommand,
             conan_create_updates,
             self._make_conan_create_params(recipe_attributes, ["-u"]),
-            ":/create.svg",
+            "create.svg",
         )
         _configure_conan_action(
             recipe_ui.actionInstallCommand,
             conan_install,
             self._make_conan_install_params(recipe_attributes, None),
-            ":/install.svg",
+            "install.svg",
         )
         _configure_conan_action(
             recipe_ui.actionInstallUpdateCommand,
             conan_install_updates,
             self._make_conan_install_params(recipe_attributes, ["-u"]),
-            ":/install.svg",
+            "install.svg",
         )
         if IS_CONAN_V1:
             _configure_conan_action(
                 recipe_ui.actionImportsCommand,
                 conan_imports,
                 self._make_conan_imports_params(recipe_attributes),
-                ":/imports.svg",
+                "imports.svg",
             )
         _configure_conan_action(
             recipe_ui.actionSourceCommand,
             conan_source,
             self._make_conan_source_params(recipe_attributes),
-            ":/source.svg",
+            "source.svg",
         )
         _configure_conan_action(
             recipe_ui.actionBuildCommand,
             conan_build,
             self._make_conan_build_params(recipe_attributes),
-            ":/build.svg",
+            "build.svg",
         )
         if IS_CONAN_V1:
             _configure_conan_action(
                 recipe_ui.actionPackageCommand,
                 conan_package,
                 self._make_conan_package_params(recipe_attributes),
-                ":/package.svg",
+                "package.svg",
             )
         _configure_conan_action(
             recipe_ui.actionExportPackageCommand,
             conan_exportpkg,
             self._make_conan_export_package_params(recipe_attributes),
-            ":/exportpackage.svg",
+            "exportpackage.svg",
         )
         _configure_conan_action(
             recipe_ui.actionTestCommand,
             conan_test,
             self._make_conan_test_package_params(recipe_attributes),
-            ":/testpackage.svg",
+            "testpackage.svg",
         )
         _configure_conan_action(
             recipe_ui.actionRemovePackageCommand,
             conan_remove,
             self._make_conan_remove_package_params(recipe_attributes),
-            ":/removepackage.svg",
+            "removepackage.svg",
         )
 
         def _configure_non_conan_action(
@@ -260,7 +264,11 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         ) -> None:
             action.setShortcut(QtGui.QKeySequence(shortcut))
             action.setToolTip(tooltip)
-            action.setIcon(QtGui.QIcon(icon_path))
+            if icon_path.startswith(":/"):
+                icon = QtGui.QIcon(icon_path)
+            else:
+                icon = QtGui.QIcon(f":/icons/{cruiz.globals.get_theme()}/{icon_path}")
+            action.setIcon(icon)
 
         _configure_non_conan_action(
             recipe_ui.actionCancelCommand,
