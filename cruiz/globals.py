@@ -12,6 +12,8 @@ CRUIZ_MAINWINDOW: typing.Optional[cruiz.MainWindow] = None  # type: ignore # noq
 
 CONAN_MAJOR_VERSION: int = 0
 
+CRUIZ_THEME: typing.Optional[str] = None
+
 
 def get_main_window() -> cruiz.MainWindow:  # type: ignore # noqa: F821
     """
@@ -19,6 +21,22 @@ def get_main_window() -> cruiz.MainWindow:  # type: ignore # noqa: F821
     """
     assert CRUIZ_MAINWINDOW
     return CRUIZ_MAINWINDOW
+
+
+def get_theme() -> str:
+    """
+    Get the name of the current theme
+    """
+    assert CRUIZ_THEME
+    return CRUIZ_THEME
+
+
+def is_dark_theme() -> bool:
+    """
+    Is the current theme the dark theme?
+    """
+    assert CRUIZ_THEME
+    return CRUIZ_THEME == "Dark"
 
 
 def __capture_conan_version() -> None:

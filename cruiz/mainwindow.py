@@ -71,6 +71,7 @@ class MainWindow(QtWidgets.QMainWindow):
     remote_added_to_cache = QtCore.Signal(str)
     preferences_updated = QtCore.Signal()
     local_cache_changed = QtCore.Signal(str)
+    theme_changed = QtCore.Signal(str)
 
     def __del__(self) -> None:
         logger.debug("-=%d", id(self))
@@ -81,6 +82,13 @@ class MainWindow(QtWidgets.QMainWindow):
         log_created_widget(self, logger)
 
         assert not cruiz.globals.CRUIZ_MAINWINDOW
+
+        qApp.styleHints().colorSchemeChanged.connect(  # type: ignore # noqa: F821
+            self._on_platform_theme_changed
+        )
+        self._on_platform_theme_changed(
+            qApp.styleHints().colorScheme()  # type: ignore # noqa: F821
+        )
 
         self._systray = None
         if QtWidgets.QSystemTrayIcon.isSystemTrayAvailable():
@@ -683,3 +691,11 @@ Remove from the recent list?",
             subwindow.widget().recipe.uuid == uuid
             for subwindow in mdi_area.subWindowList()
         )
+
+    def _on_platform_theme_changed(
+        self, color_scheme: QtCore.Qt.ColorScheme  # type: ignore[name-defined]
+    ) -> None:
+        if color_scheme == QtCore.Qt.ColorScheme.Unknown:
+            color_scheme = QtCore.Qt.ColorScheme.Light
+        cruiz.globals.CRUIZ_THEME = color_scheme.name
+        self.theme_changed.emit(color_scheme.name)

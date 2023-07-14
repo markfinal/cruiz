@@ -113,6 +113,9 @@ class PreferencesDialog(QtWidgets.QDialog):
         self.preferences_updated.connect(
             qApp.on_preferences_updated  # type: ignore  # noqa: F821
         )
+        cruiz.globals.get_main_window().theme_changed.connect(
+            self._refresh_shortcut_icons
+        )
         # -- toolbox
         self._ui.prefs_toolbox.currentChanged.connect(self._current_load_defaults)
         self._import_prefs = QtWidgets.QPushButton("Import...")
