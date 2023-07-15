@@ -537,7 +537,9 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
         if remote in added_remotes:
             self._modifications["Remotes"]["Add"].remove(remote)
             self._modifications["Remotes"]["Add"].append(
-                dataclasses.replace(remote, enabled=state == QtCore.Qt.Checked)
+                dataclasses.replace(
+                    remote, enabled=QtCore.Qt.CheckState(state) == QtCore.Qt.Checked
+                )
             )
 
         # check that the remote was uniquely named
