@@ -15,7 +15,7 @@ class ShortcutLineEdit(QtWidgets.QLineEdit):
     def keyPressEvent(self, event: QtGui.QKeyEvent) -> None:
         assert event.type() == QtCore.QEvent.KeyPress
         key = event.key()
-        if key in (  # type: ignore[comparison-overlap]
+        if key in (
             QtCore.Qt.Key_unknown,
             QtCore.Qt.Key_Control,
             QtCore.Qt.Key_Shift,
@@ -23,18 +23,18 @@ class ShortcutLineEdit(QtWidgets.QLineEdit):
             QtCore.Qt.Key_Meta,
         ):
             return
-        if key == QtCore.Qt.Key_Backspace:  # type: ignore[comparison-overlap]
+        if key == QtCore.Qt.Key_Backspace:
             super().keyPressEvent(event)
             return
         modifiers = event.modifiers()
         if modifiers & QtCore.Qt.ControlModifier:
-            key += QtCore.Qt.CTRL  # type: ignore[operator]
+            key += QtCore.Qt.CTRL
         if modifiers & QtCore.Qt.ShiftModifier:
-            key += QtCore.Qt.SHIFT  # type: ignore[operator]
+            key += QtCore.Qt.SHIFT
         if modifiers & QtCore.Qt.AltModifier:
-            key += QtCore.Qt.ALT  # type: ignore[operator]
+            key += QtCore.Qt.ALT
         if modifiers & QtCore.Qt.MetaModifier:
-            key += QtCore.Qt.META  # type: ignore[operator]
+            key += QtCore.Qt.META
         sequence = QtGui.QKeySequence(key)
         self.setText(sequence.toString(QtGui.QKeySequence.PortableText))
         event.accept()

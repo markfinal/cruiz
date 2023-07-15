@@ -90,9 +90,9 @@ class _PackageIdModel(QtCore.QAbstractTableModel):
             return 0
         num_cols = 1  # the package id
         if self._settings:
-            num_cols += len(self._settings)  # type: ignore[arg-type]
+            num_cols += len(self._settings)
         if self._options:
-            num_cols += len(self._options)  # type: ignore[arg-type]
+            num_cols += len(self._options)
         if "requires" in self._pids[0]:
             num_cols += 1
         return num_cols

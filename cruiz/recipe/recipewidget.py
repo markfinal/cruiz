@@ -90,7 +90,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
             )
         except NameError:
             self._git_repository = None
-        except git.exc.InvalidGitRepositoryError:  # type: ignore
+        except git.exc.InvalidGitRepositoryError:
             self._git_repository = None
         self._ui.paneSplitter.setStretchFactor(0, 4)
         self._ui.paneSplitter.setStretchFactor(1, 1)
@@ -1093,7 +1093,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
             params.profile = settings.profile.resolve()
             for key, value in settings.options.resolve().items():
                 # TODO: is this the most efficient algorithm?
-                params.add_option(params.name, key, value)  # type: ignore
+                params.add_option(params.name, key, value)
             attributes = settings.attribute_overrides.resolve()
             if "extra_config_options" in attributes:
                 for keyvalue in attributes["extra_config_options"].split(","):

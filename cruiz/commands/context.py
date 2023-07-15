@@ -461,9 +461,7 @@ class ConanContext(QtCore.QObject):
         profile_paths: typing.List[typing.Tuple[pathlib.Path, str]] = []
         # TODO: Conan2 candidate: api.profiles.list() for the local-cache based profiles
         profiles_dir = QtCore.QDir(str(self.profiles_dir()))
-        for profile in profiles_dir.entryList(  # type: ignore
-            filters=QtCore.QDir.Files
-        ):
+        for profile in profiles_dir.entryList(filters=QtCore.QDir.Files):
             # local cache profiles are listed relative
             path = pathlib.Path(profiles_dir.filePath(profile))
             text = path.read_text()
@@ -473,9 +471,7 @@ class ConanContext(QtCore.QObject):
             extra_profile_dirs = settings.extra_profile_directories.resolve()
         for _, extra_profile_dir in extra_profile_dirs.items():
             profiles_dir = QtCore.QDir(extra_profile_dir)
-            for profile in profiles_dir.entryList(  # type: ignore
-                filters=QtCore.QDir.Files
-            ):
+            for profile in profiles_dir.entryList(filters=QtCore.QDir.Files):
                 # extra profiles are listed absolute
                 path = pathlib.Path(profiles_dir.filePath(profile))
                 text = path.read_text()

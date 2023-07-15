@@ -307,7 +307,7 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
         ):
             self._ui.profilesList.addItem(str(profile_path))
             item = self._ui.profilesList.item(i)
-            item.setData(QtCore.Qt.ToolTipRole, profile_text)  # type: ignore[arg-type]
+            item.setData(QtCore.Qt.ToolTipRole, profile_text)
 
     def _update_cache_config(self) -> None:
         if self._ui.configPrintRunCommands.isVisible():

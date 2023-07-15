@@ -44,7 +44,7 @@ class AddEnvironmentDialog(QtWidgets.QDialog):
         if cruiz.globals.CONAN_MAJOR_VERSION == 1:
             # TODO: CONAN_V2_MODE is obsolete
             conan_v2_mode_action = QtGui.QAction("CONAN_V2_MODE", self)
-            conan_v2_mode_action.triggered.connect(self._set_name)  # type: ignore
+            conan_v2_mode_action.triggered.connect(self._set_name)
             conan_environment_actions.append(conan_v2_mode_action)
         self._ui.name.add_submenu_actions(
             "Conan environment variables", conan_environment_actions
