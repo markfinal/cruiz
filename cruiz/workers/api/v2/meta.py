@@ -114,6 +114,22 @@ def _interop_get_config_envvars(api: typing.Any) -> typing.List[str]:
     return envvar_list
 
 
+def _interop_profile_meta(
+    api: typing.Any, profile: str
+) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
+    from conans.client.cache.cache import ClientCache
+    from conans.client.profile_loader import ProfileLoader
+
+    cache = ClientCache(api.cache_folder)
+    loader = ProfileLoader(cache)
+    # TODO: using internal method
+    profile = loader._load_profile(profile, os.getcwd())
+    details: typing.Dict[str, typing.Dict[str, typing.Any]] = {"settings": {}}
+    for key, value in profile.settings.items():
+        details["settings"][key] = value
+    return details
+
+
 def invoke(
     request_queue: multiprocessing.JoinableQueue[str],
     reply_queue: multiprocessing.Queue[Message],
@@ -155,6 +171,8 @@ def invoke(
                     result = _interop_get_conandata(api, request_params["path"][0])
                 elif request == "get_config_envvars":
                     result = _interop_get_config_envvars(api)
+                elif request == "profile_meta":
+                    result = _interop_profile_meta(api, request_params["name"][0])
                 else:
                     raise RuntimeError(
                         f"Meta command request not implemented: '{request}' "
