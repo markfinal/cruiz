@@ -103,7 +103,7 @@ class LoadRecipePackageVersionPage(QtWidgets.QWizardPage):
         assert conandata
         with ConanSettingsReader() as settings:
             path_segments = settings.conandata_version_yaml_pathsegment.resolve()
-        if path_segments is None:
+        if not path_segments:
             QtWidgets.QMessageBox.information(
                 self,
                 "Cannot identify recipe version numbers from conandata.yml file",

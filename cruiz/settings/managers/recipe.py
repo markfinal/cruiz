@@ -60,7 +60,7 @@ class RecipeSettings(ComparableCommonSettings):
         self._recipe: typing.Optional[Recipe] = None
 
         if self._recipe:
-            default_profile = self._recipe.context.default_profile_filename()
+            default_profile = self._recipe.context.default_profile_filename()  # type: ignore[unreachable]  # noqa: E501
         else:
             try:
                 context = self.settings_reader.recipe.context  # type: ignore

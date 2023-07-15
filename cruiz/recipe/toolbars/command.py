@@ -427,9 +427,8 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
                 params.source_folder = recipe_widget.resolve_expression(source_folder)
             if fudge_source_folder:
                 source_folder = settings.local_workflow_source_folder.resolve()
-                if (
-                    source_folder is None
-                    and not recipe_widget.cwd_is_relative_to_recipe(workflow_cwd)
+                if not source_folder and not recipe_widget.cwd_is_relative_to_recipe(
+                    workflow_cwd
                 ):
                     # fudge due to the default source_folder changing between
                     # 'conan source' and 'conan build'

@@ -60,7 +60,7 @@ class Worker:
         if isinstance(self._params, (CommandParameters, CommonParameters)):
             set_env(self._params.added_environment, self._params.removed_environment)
         else:
-            with contextlib.suppress(TypeError):
+            with contextlib.suppress(TypeError):  # type: ignore[unreachable]
                 # can happen for other types of *Parameters classes
                 if "env" in self._params:
                     set_env(self._params["env"], [])

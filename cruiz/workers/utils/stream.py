@@ -15,66 +15,6 @@ from .colorarma_conversion import convert_from_colorama_to_html
 from cruiz.interop.message import Message
 
 
-if False:
-    import io
-
-    # Conan 1.30.0+ changed the assumptions on the base-class of streams used in their
-    # runner output to be based from six, so this Python 3 implementation is no longer
-    # valid it may come back in future Conan versions that are Python 3 only
-    class QueuedStreamPy3(io.RawIOBase):
-        """
-        A stream class that uses multiprocessing.Queue to send messages
-        """
-
-        def __init__(self, queue: multiprocessing.Queue[Message], message_type):
-            super().__init__()
-            self._queue = queue
-            self._message_type = message_type
-
-        # configure the IOBase
-        def seekable(self):
-            """
-            Stream is not seekable
-            """
-            return False
-
-        def writeable(self):
-            """
-            Stream is writeable
-            """
-            # pylint: disable=no-self-use
-            return True
-
-        def readable(self):
-            """
-            Stream is not readable
-            """
-            return False
-
-        def isatty(self):
-            """
-            Stream is not interactive
-            """
-            # TODO: could this be True, which asks the queue for info?
-            return False
-
-        # implement functions of interest
-        def write(self, message):
-            """
-            Write a message.
-            """
-            lines = message.split("\n")
-            for line in lines:
-                if not line:
-                    continue
-                self._queue.put(self._message_type(convert_from_colorama_to_html(line)))
-
-        def flush(self):
-            """
-            Flush the stream.
-            """
-
-
 class QueuedStreamSix(six.StringIO):
     """
     A stream class that uses multiprocessing.Queue to send messages.
