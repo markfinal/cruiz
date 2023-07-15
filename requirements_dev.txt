@@ -6,3 +6,4 @@ flake8-bugbear
 flake8-simplify
 flake8-use-pathlib
 mypy
+PySide6-stubs @ git+https://github.com/python-qt-tools/PySide6-stubs@1e2a21993ce7f2b55828ac250c96973551f8174f

@@ -85,9 +85,7 @@ class ConanInvocation(QtCore.QObject):
         self._last_command_running = False
 
     def _critical_failure(self, message: str) -> None:
-        QtWidgets.QMessageBox.critical(
-            None, "System failure", message  # type: ignore[call-overload]
-        )
+        QtWidgets.QMessageBox.critical(None, "System failure", message)
         sys.exit(1)
 
     def invoke(
