@@ -20,7 +20,7 @@ CONAN_SPEC = importlib.util.find_spec("conans")
 if CONAN_SPEC is None:
     QtWidgets.QApplication()
     QtWidgets.QMessageBox.critical(
-        None,  # type: ignore
+        None,
         "Conan unavailable",
         "Unable to locate the conan Python package in the current environment.\n"
         "Use pip install conan[==version].",
@@ -75,7 +75,7 @@ def _are_resources_out_of_date() -> bool:
 if _are_resources_out_of_date():
     QtWidgets.QApplication()
     QtWidgets.QMessageBox.critical(
-        None,  # type: ignore
+        None,
         "Resources",
         "Resources are out of date.\n" "Please build with python3 setup.py build",
     )

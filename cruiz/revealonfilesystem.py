@@ -43,7 +43,7 @@ def _use_xdg_open(file_info: QtCore.QFileInfo) -> None:
     xdg_open_path = QtCore.QStandardPaths.findExecutable("xdg-open")
     if not xdg_open_path:
         QtWidgets.QMessageBox.critical(
-            None,  # type: ignore
+            None,
             "Cannot reveal path",
             "Unable to find the path to xdg-open",
         )
@@ -58,7 +58,7 @@ def reveal_on_filesystem(path: pathlib.Path) -> None:
     """
     if not path.exists():
         QtWidgets.QMessageBox.critical(
-            None, "Cannot reveal path", f"Path '{path}' does not exist"  # type: ignore
+            None, "Cannot reveal path", f"Path '{path}' does not exist"
         )
         return
     file_info = QtCore.QFileInfo(path)
@@ -81,7 +81,7 @@ def open_terminal_at(path: str) -> None:
     file_info = QtCore.QFileInfo(path)
     if not file_info.exists():
         QtWidgets.QMessageBox.critical(
-            None,  # type: ignore
+            None,
             "Cannot open terminal at path",
             f"Path '{path}' does not exist",
         )
@@ -109,7 +109,7 @@ def open_terminal_at(path: str) -> None:
             )
         else:
             QtWidgets.QMessageBox.critical(
-                None,  # type: ignore
+                None,
                 "Cannot open terminal at path",
                 "Unable to detect window manager",
             )
