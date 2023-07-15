@@ -545,11 +545,6 @@ class PreferencesDialog(QtWidgets.QDialog):
                     settings.new_recipe_loading_behaviour.resolve()
                 )
 
-    def _general_change_boolean(self, property_name: str, state: int) -> None:
-        enabled = state == QtCore.Qt.Checked
-        setattr(self._prefs_general, property_name, enabled)
-        self.modified.emit()
-
     def _general_clearplanes(self, state: int) -> None:
         self._prefs_general.clear_panes = state == QtCore.Qt.Checked  # type: ignore
         self.modified.emit()
