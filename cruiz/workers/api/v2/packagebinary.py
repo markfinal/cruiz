@@ -31,10 +31,16 @@ def invoke(
         remote = api.remotes.get(params.remote_name)
         pref = PkgReference.loads(params.reference)
         app = ConanApp(api.cache_folder)
+        metadata = None
 
         # TODO: using non-public method
         zipped_files = app.remote_manager._call_remote(
-            remote, "get_package", pref, params.where
+            remote,
+            "get_package",
+            pref,
+            params.where,
+            metadata=metadata,
+            only_metadata=False,
         )
 
         queue.put(Success(zipped_files))
