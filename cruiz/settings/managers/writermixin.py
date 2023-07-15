@@ -31,14 +31,14 @@ class _WriterMixin:
         # get current values from settings and fallbacks
         current_values = {}
         assert hasattr(self, "_reader_for_writer")
-        with self._reader_for_writer as settings:  # type: ignore
+        with self._reader_for_writer as settings:
             for key in keys_to_set:
                 entry = getattr(changes, key)
                 current_values[entry.key] = getattr(settings, entry.property_name)
         # delete those values changes to the fallbacks
         # set others
         with BaseSettings.Group(
-            self._reader_for_writer.group  # type: ignore
+            self._reader_for_writer.group
         ) as settings:  # TODO: should probably re-use the settings instance
             for key in keys_to_set:
                 entry = getattr(changes, key)

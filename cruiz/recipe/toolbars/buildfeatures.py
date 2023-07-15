@@ -51,16 +51,16 @@ class _CMakeFeaturesFrame(QtWidgets.QFrame):
             blocked_widget.setChecked(verbose)
 
     def _toggle_cmake_find_debug_mode(self, state: int) -> None:
-        is_checked = state == QtCore.Qt.Checked  # type: ignore[comparison-overlap]
+        is_checked = state == QtCore.Qt.Checked
         settings = RecipeSettings()
-        settings.cmake_find_debug = is_checked  # type: ignore
+        settings.cmake_find_debug = is_checked
         assert self._uuid
         RecipeSettingsWriter.from_uuid(self._uuid).sync(settings)
 
     def _toggle_cmake_verbose(self, state: int) -> None:
-        is_checked = state == QtCore.Qt.Checked  # type: ignore[comparison-overlap]
+        is_checked = state == QtCore.Qt.Checked
         settings = RecipeSettings()
-        settings.cmake_verbose = is_checked  # type: ignore
+        settings.cmake_verbose = is_checked
         assert self._uuid
         RecipeSettingsWriter.from_uuid(self._uuid).sync(settings)
 
@@ -196,7 +196,7 @@ class _CompilerCacheFeaturesFrame(QtWidgets.QFrame):
         return default_compiler_cache
 
     def _toggle_use_cache(self, state: int) -> None:
-        is_checked = state == QtCore.Qt.Checked  # type: ignore[comparison-overlap]
+        is_checked = state == QtCore.Qt.Checked
         settings = RecipeSettings()
         cache_name = self._ui.chooseCache.currentText() if is_checked else None
         settings.compiler_cache = cache_name  # type: ignore[assignment]

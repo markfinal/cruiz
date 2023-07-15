@@ -546,7 +546,7 @@ class PreferencesDialog(QtWidgets.QDialog):
                 )
 
     def _general_change_boolean(self, property_name: str, state: int) -> None:
-        enabled = state == QtCore.Qt.Checked  # type: ignore[comparison-overlap]
+        enabled = state == QtCore.Qt.Checked
         setattr(self._prefs_general, property_name, enabled)
         self.modified.emit()
 
@@ -560,14 +560,14 @@ class PreferencesDialog(QtWidgets.QDialog):
         self._requires_restart()
 
     def _general_usebatching(self, state: int) -> None:
-        enabled = state == QtCore.Qt.Checked  # type: ignore[comparison-overlap]
-        self._prefs_general.use_stdout_batching = enabled  # type: ignore
+        enabled = state == QtCore.Qt.Checked
+        self._prefs_general.use_stdout_batching = enabled
         self.modified.emit()
         self._requires_restart()
 
     def _general_wallclock(self, state: int) -> None:
-        enabled = state == QtCore.Qt.Checked  # type: ignore[comparison-overlap]
-        self._prefs_general.enable_command_timing = enabled  # type: ignore
+        enabled = state == QtCore.Qt.Checked
+        self._prefs_general.enable_command_timing = enabled
         self.modified.emit()
 
     def _general_darkmode(self, state: int) -> None:
@@ -575,8 +575,8 @@ class PreferencesDialog(QtWidgets.QDialog):
         self.modified.emit()
 
     def _general_compactlook(self, state: int) -> None:
-        enabled = state == QtCore.Qt.Checked  # type: ignore[comparison-overlap]
-        self._prefs_general.use_compact_look = enabled  # type: ignore
+        enabled = state == QtCore.Qt.Checked
+        self._prefs_general.use_compact_look = enabled
         self.modified.emit()
 
     def _general_open_recipedir(self) -> None:
@@ -633,8 +633,8 @@ class PreferencesDialog(QtWidgets.QDialog):
         self.modified.emit()
 
     def _general_newrecipeload(self, state: int) -> None:
-        enabled = state == QtCore.Qt.Checked  # type: ignore[comparison-overlap]
-        self._prefs_general.new_recipe_loading_behaviour = enabled  # type: ignore
+        enabled = state == QtCore.Qt.Checked
+        self._prefs_general.new_recipe_loading_behaviour = enabled
         self.modified.emit()
 
     # -- font --

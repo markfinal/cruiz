@@ -184,7 +184,7 @@ class _PackageBinaryModel(QtCore.QAbstractItemModel):
         default_flags = super().flags(index)
         node = index.internalPointer()
         if node.link_target:
-            return default_flags & ~QtCore.Qt.ItemIsEnabled  # type: ignore[operator]
+            return default_flags & ~QtCore.Qt.ItemIsEnabled
         return default_flags
 
 

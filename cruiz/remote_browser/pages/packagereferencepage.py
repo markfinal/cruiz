@@ -58,7 +58,7 @@ class _PackageReferenceModel(QtCore.QAbstractListModel):
     def flags(self, index):  # type: ignore
         default_flags = super().flags(index)
         if "->" in self._list[index.row()]:
-            return default_flags & ~QtCore.Qt.ItemIsEnabled  # type: ignore[operator]
+            return default_flags & ~QtCore.Qt.ItemIsEnabled
         return default_flags
 
 

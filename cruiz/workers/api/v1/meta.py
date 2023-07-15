@@ -432,7 +432,7 @@ def invoke(
                 elif request == "get_config_envvars":
                     result = _get_config_envvars(api)  # type: ignore[assignment]
                 elif request == "create_default_profile":
-                    _create_default_profile(api)  # type: ignore[assignment]
+                    _create_default_profile(api)
                     result = None
                 reply_queue.put(Success(result))
                 request_queue.task_done()
