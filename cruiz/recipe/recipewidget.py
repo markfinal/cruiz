@@ -399,15 +399,17 @@ class RecipeWidget(QtWidgets.QMainWindow):
         )
 
     def _get_options_from_recipe(
-        self, attrs: typing.Dict[str, str]
-    ) -> typing.List[typing.Tuple[str, typing.List[typing.Any], typing.Any]]:
-        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
-            # this lists the possible values for the option
-            options = attrs.get("options")
-        else:
-            # don't use the 'options' key, as that has been assigned the value
-            # options_definitions is where the possible values are
-            options = attrs.get("options_definitions")
+        self, attrs: typing.Dict[str, typing.Any]
+    ) -> typing.List[
+        typing.Tuple[str, typing.Union[str, typing.List[typing.Any]], typing.Any]
+    ]:
+        # this lists the possible values for the option
+        # in Conan 2, don't use the 'options' key, as that has been assigned the value
+        options: typing.Optional[typing.Dict[str, typing.Any]] = (
+            attrs.get("options")
+            if cruiz.globals.CONAN_MAJOR_VERSION == 1
+            else attrs.get("options_definitions")
+        )
         if not options:
             return []
         default_options = attrs["default_options"]
@@ -420,7 +422,9 @@ class RecipeWidget(QtWidgets.QMainWindow):
         assert isinstance(
             default_options, dict
         ), "Expected default_options to be a dict"
-        values: typing.List[typing.Tuple[str, typing.List[typing.Any], typing.Any]] = []
+        values: typing.List[
+            typing.Tuple[str, typing.Union[str, typing.List[typing.Any]], typing.Any]
+        ] = []
         assert isinstance(options, dict)
         for key, value in options.items():
             if default_options:
@@ -439,15 +443,15 @@ class RecipeWidget(QtWidgets.QMainWindow):
                             f"Cannot find default value '{default_value}' in possible "
                             f"values {value}"
                         )
-                    elif (isinstance(value, str) and value == "ANY") or (
-                        isinstance(value, list) and "ANY" in value
-                    ):
-                        pass
-                    else:
-                        raise TypeError(
-                            f"Don't know how to convert '{default_value}' to type "
-                            f"'{type(value[0])}'"
-                        )
+                elif (isinstance(value, str) and value == "ANY") or (
+                    isinstance(value, list) and "ANY" in value
+                ):
+                    pass
+                else:
+                    raise TypeError(
+                        f"Don't know how to convert '{default_value}' to type "
+                        f"'{type(value[0])}'"
+                    )
                 values.append((key, value, default_value))
             else:
                 values.append((key, value, None))

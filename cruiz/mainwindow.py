@@ -324,7 +324,7 @@ class MainWindow(QtWidgets.QMainWindow):
         for uuid in uuids:
             with RecipeSettingsReader.from_uuid(uuid) as settings:
                 path = settings.path.resolve()
-                if path is None:
+                if not path:
                     has_recipe_settings_issue = True
                     continue
                 recipe_path = pathlib.Path(path)
