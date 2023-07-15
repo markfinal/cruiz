@@ -546,32 +546,41 @@ class PreferencesDialog(QtWidgets.QDialog):
                 )
 
     def _general_clearplanes(self, state: int) -> None:
-        self._prefs_general.clear_panes = state == QtCore.Qt.Checked  # type: ignore
+        self._prefs_general.clear_panes = (
+            QtCore.Qt.CheckState(state) == QtCore.Qt.Checked
+        )
         self.modified.emit()
 
     def _general_combinepanes(self, state: int) -> None:
-        self._prefs_general.combine_panes = state == QtCore.Qt.Checked  # type: ignore
+        self._prefs_general.combine_panes = (
+            QtCore.Qt.CheckState(state) == QtCore.Qt.Checked
+        )
         self.modified.emit()
         self._requires_restart()
 
     def _general_usebatching(self, state: int) -> None:
-        enabled = state == QtCore.Qt.Checked
-        self._prefs_general.use_stdout_batching = enabled
+        self._prefs_general.use_stdout_batching = (
+            QtCore.Qt.CheckState(state) == QtCore.Qt.Checked
+        )
         self.modified.emit()
         self._requires_restart()
 
     def _general_wallclock(self, state: int) -> None:
-        enabled = state == QtCore.Qt.Checked
-        self._prefs_general.enable_command_timing = enabled
+        self._prefs_general.enable_command_timing = (
+            QtCore.Qt.CheckState(state) == QtCore.Qt.Checked
+        )
         self.modified.emit()
 
     def _general_darkmode(self, state: int) -> None:
-        self._prefs_general.use_dark_mode = state == QtCore.Qt.Checked  # type: ignore
+        self._prefs_general.use_dark_mode = (
+            QtCore.Qt.CheckState(state) == QtCore.Qt.Checked
+        )
         self.modified.emit()
 
     def _general_compactlook(self, state: int) -> None:
-        enabled = state == QtCore.Qt.Checked
-        self._prefs_general.use_compact_look = enabled
+        self._prefs_general.use_compact_look = (
+            QtCore.Qt.CheckState(state) == QtCore.Qt.Checked
+        )
         self.modified.emit()
 
     def _general_open_recipedir(self) -> None:
@@ -628,8 +637,9 @@ class PreferencesDialog(QtWidgets.QDialog):
         self.modified.emit()
 
     def _general_newrecipeload(self, state: int) -> None:
-        enabled = state == QtCore.Qt.Checked
-        self._prefs_general.new_recipe_loading_behaviour = enabled
+        self._prefs_general.new_recipe_loading_behaviour = (
+            QtCore.Qt.CheckState(state) == QtCore.Qt.Checked
+        )
         self.modified.emit()
 
     # -- font --
