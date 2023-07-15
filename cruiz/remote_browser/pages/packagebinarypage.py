@@ -227,7 +227,7 @@ class _FileViewer(QtWidgets.QDialog):
             html_path = pathlib.Path(path.with_suffix(".html"))
         html_path.parent.mkdir(parents=True, exist_ok=True)
         with html_path.open("wt", encoding="utf-8") as html_file:
-            url_start = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0"
+            url_start = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0"
             html_file.write("<html>")
             html_file.write("<head>")
             if cruiz.globals.is_dark_theme():
