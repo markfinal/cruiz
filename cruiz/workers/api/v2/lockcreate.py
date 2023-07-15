@@ -41,17 +41,17 @@ def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> 
                 version = params.version
                 user = params.user
                 channel = params.channel
-                build = None
+                build: None = None
                 update = True
-                build_require = None
-                profile_build = None
-                profile_host = None
-                settings_build = None
+                build_require: None = None
+                profile_build: None = None
+                profile_host: None = None
+                settings_build: None = None
                 options_build = format_options_v2(params.options)
-                conf_build = None
-                settings_host = None
+                conf_build: None = None
+                settings_host: None = None
                 options_host = format_options_v2(params.options)
-                conf_host = None
+                conf_host: None = None
 
             args = FakeCLIArguments()
 
