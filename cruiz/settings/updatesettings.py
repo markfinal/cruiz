@@ -16,7 +16,7 @@ from qtpy import QtCore
 from .managers.basesettings import BaseSettings
 
 
-CURRENT_SETTINGS_VERSION = 8
+CURRENT_SETTINGS_VERSION = 9
 
 
 class SettingsGroup:
@@ -82,6 +82,14 @@ class SettingsWriteArray:
         self, exc_type: typing.Any, value: typing.Any, exc_traceback: typing.Any
     ) -> None:
         self._settings.endArray()
+
+
+def _patch_settings_from_v8(settings: QtCore.QSettings) -> None:
+    """
+    Remove
+      - DarkMode
+    """
+    settings.remove("DarkMode")
 
 
 def _patch_settings_from_v7(settings: QtCore.QSettings) -> None:
