@@ -436,8 +436,8 @@ class RecipeWidget(QtWidgets.QMainWindow):
                     # while option_definitions are all strings, so in order to compare
                     # let's do everything as strings
                     default_value = str(default_options[key])
-                if isinstance(value, list) and default_value not in value:
-                    if isinstance(value[0], bool):
+                if isinstance(value, list):
+                    if default_value not in value and isinstance(value[0], bool):
                         default_value = _strtobool(default_value)
                         assert default_value in value, (
                             f"Cannot find default value '{default_value}' in possible "
