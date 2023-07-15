@@ -157,7 +157,8 @@ def invoke(
                     result = _interop_get_config_envvars(api)
                 else:
                     raise RuntimeError(
-                        f"Unhandled request '{request}', '{request_params}'"
+                        f"Meta command request not implemented: '{request}' "
+                        f"with params '{request_params}'"
                     )
                 reply_queue.put(Success(result))
                 request_queue.task_done()
