@@ -13,8 +13,6 @@ import sys
 
 from qtpy import QtCore, QtWidgets
 
-from cruiz.resourcegeneration import generate_resources
-
 
 CONAN_SPEC = importlib.util.find_spec("conans")
 if CONAN_SPEC is None:
@@ -35,9 +33,6 @@ logging.basicConfig(
 
 
 logger = logging.getLogger(__name__)
-
-# resource generation be invoked before resources and MainWindow are imported
-generate_resources()
 
 import cruiz.pyside6.resources  # noqa: F401, E402
 
