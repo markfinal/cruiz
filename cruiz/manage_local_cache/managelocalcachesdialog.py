@@ -310,7 +310,7 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
             item.setData(QtCore.Qt.ToolTipRole, profile_text)
 
     def _update_cache_config(self) -> None:
-        if self._ui.configPrintRunCommands.isVisible():
+        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
             with BlockSignals(self._ui.configPrintRunCommands) as blocked_widget:
                 blocked_widget.setCheckState(
                     QtCore.Qt.Checked
@@ -319,7 +319,6 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
                     )
                     else QtCore.Qt.Unchecked
                 )
-        if self._ui.configRevisions.isVisible():
             with BlockSignals(self._ui.configRevisions) as blocked_widget:
                 blocked_widget.setCheckState(
                     QtCore.Qt.Checked
