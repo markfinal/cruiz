@@ -142,7 +142,13 @@ class ConanContext(QtCore.QObject):
             # TODO: prefer adding to a model?
             assert isinstance(parameters, CommandParameters)
             item = CommandListWidgetItem(parameters)
-            self.command_history_widget.addItem(item)
+            # don't duplicate the most recent command
+            history_count = self.command_history_widget.count()
+            if history_count == 0 or (
+                item.text()
+                != self.command_history_widget.item(history_count - 1).text()
+            ):
+                self.command_history_widget.addItem(item)
 
     def _completed_invocation(self, success: typing.Any, exception: typing.Any) -> None:
         # pylint: disable=unused-argument
