@@ -65,7 +65,7 @@ cruiz uses [tox](https://tox.wiki/en/latest/) to automate linting. Use `tox -e l
 Python 3.10+ is highly recommended to run the linting steps.
 
 ## Making Python packages
-`python setup.py sdist` for a source distribution.
+`python setup.py sdist` for a source distribution. Note that `pip` installing from a source distribution, or from an archive of the source tree, is not currently supported.
 
 `pip wheel --no-deps .` for a wheel.
 
