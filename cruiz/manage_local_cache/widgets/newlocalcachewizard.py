@@ -61,6 +61,7 @@ class NewLocalCacheWizard(QtWidgets.QWizard):
         self._ui.queryConfigInstall.setChecked(bool(new_config_url))
         self._ui.queryConfigInstall.setEnabled(bool(new_config_url))
         self._ui.createCache.clicked.connect(self._create_cache)
+        self._ui.createCache.clicked.connect(self._disable_create_cache)
         self._ui.createProgress.setMinimum(0)
         self._ui.createProgress.setMaximum(1)
         self._ui.createProgress.setValue(0)
@@ -160,6 +161,9 @@ class NewLocalCacheWizard(QtWidgets.QWizard):
         self._ui.createProgress.setMaximum(1)
         self._ui.createPage.created = True
         self._ui.createPage.completeChanged.emit()
+
+    def _disable_create_cache(self) -> None:
+        self._ui.createCache.setDisabled(True)
 
     def _perform_new_cache_config_install_complete(
         self, result: typing.Any, exception: typing.Any
