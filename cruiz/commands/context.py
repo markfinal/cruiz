@@ -242,10 +242,7 @@ class ConanContext(QtCore.QObject):
             "editable_add", {"ref": ref, "path": str(target_symlink)}
         )
         if exception:
-            if self.parent():
-                self.parent().record_exception(exception)
-            else:
-                raise Exception("Editable add failed") from exception
+            raise Exception("Editable add failed") from exception
         if continuation:
             continuation(result, exception)
 
@@ -261,10 +258,7 @@ class ConanContext(QtCore.QObject):
             "editable_remove", {"ref": ref}
         )
         if exception:
-            if self.parent():
-                self.parent().record_exception(exception)
-            else:
-                raise Exception("Editable remove failed") from exception
+            raise Exception("Editable remove failed") from exception
         if continuation:
             continuation(result, exception)
 
@@ -311,10 +305,7 @@ class ConanContext(QtCore.QObject):
             "remotes_sync", {"remotes": remotes}
         )
         if exception:
-            if self.parent():
-                self.parent().record_exception(exception)
-            else:
-                raise Exception("Sync remotes failed") from exception
+            raise Exception("Sync remotes failed") from exception
 
     def get_remotes_list(self) -> typing.List[ConanRemote]:
         """
@@ -322,12 +313,8 @@ class ConanContext(QtCore.QObject):
         """
         remotes_list, exception = self._meta_invocation.request_data("remotes_list")
         if exception:
-            if self.parent():
-                self.parent().record_exception(exception)
-            else:
-                raise Exception("Get remote list failed") from exception
-        else:
-            assert isinstance(remotes_list, list)
+            raise Exception("Get remote list failed") from exception
+        assert isinstance(remotes_list, list)
         return remotes_list
 
     def get_profile_meta(
@@ -340,12 +327,8 @@ class ConanContext(QtCore.QObject):
             "profile_meta", {"name": profile_name}
         )
         if exception:
-            if self.parent():
-                self.parent().record_exception(exception)
-            else:
-                raise Exception("Get profile meta failed") from exception
-        else:
-            assert isinstance(result, dict)
+            raise Exception("Get profile meta failed") from exception
+        assert isinstance(result, dict)
         return result
 
     def get_package_details(
@@ -378,12 +361,8 @@ class ConanContext(QtCore.QObject):
             },
         )
         if exception:
-            if self.parent():
-                self.parent().record_exception(exception)
-            else:
-                raise Exception("Get package directory failed") from exception
-        else:
-            assert isinstance(package_dir, pathlib.Path)
+            raise Exception("Get package directory failed") from exception
+        assert isinstance(package_dir, pathlib.Path)
         return package_dir
 
     def cancel(self) -> None:
@@ -403,12 +382,8 @@ class ConanContext(QtCore.QObject):
         """
         version, exception = self._meta_invocation.request_data("version")
         if exception:
-            if self.parent():
-                self.parent().record_exception(exception)
-            else:
-                raise Exception("Get Conan version failed") from exception
-        else:
-            assert isinstance(version, str)
+            raise Exception("Get Conan version failed") from exception
+        assert isinstance(version, str)
         return version
 
     def profiles_dir(self) -> pathlib.Path:
@@ -417,12 +392,8 @@ class ConanContext(QtCore.QObject):
         """
         profiles_dir, exception = self._meta_invocation.request_data("profiles_dir")
         if exception:
-            if self.parent():
-                self.parent().record_exception(exception)
-            else:
-                raise Exception("Get profiles directory failed") from exception
-        else:
-            assert isinstance(profiles_dir, pathlib.Path)
+            raise Exception("Get profiles directory failed") from exception
+        assert isinstance(profiles_dir, pathlib.Path)
         return pathlib.Path(profiles_dir)
 
     def all_profile_dirs(self) -> typing.List[pathlib.Path]:
@@ -444,12 +415,8 @@ class ConanContext(QtCore.QObject):
             "default_profile_path"
         )
         if exception:
-            if self.parent():
-                self.parent().record_exception(exception)
-            else:
-                raise Exception("Get default profile path failed") from exception
-        else:
-            assert isinstance(default_path, str)
+            raise Exception("Get default profile path failed") from exception
+        assert isinstance(default_path, str)
         return default_path
 
     def default_profile_filename(self) -> str:
@@ -502,12 +469,8 @@ class ConanContext(QtCore.QObject):
         """
         editable_dict, exception = self._meta_invocation.request_data("editable_list")
         if exception:
-            if self.parent():
-                self.parent().record_exception(exception)
-            else:
-                raise Exception("Get editables list failed") from exception
-        else:
-            assert isinstance(editable_dict, dict)
+            raise Exception("Get editables list failed") from exception
+        assert isinstance(editable_dict, dict)
         return editable_dict
 
     def inspect_recipe(
@@ -543,12 +506,8 @@ class ConanContext(QtCore.QObject):
         """
         hooks_list, exception = self._meta_invocation.request_data("get_hooks")
         if exception:
-            if self.parent():
-                self.parent().record_exception(exception)
-            else:
-                raise Exception("Get hooks list failed") from exception
-        else:
-            assert isinstance(hooks_list, list)
+            raise Exception("Get hooks list failed") from exception
+        assert isinstance(hooks_list, list)
         return hooks_list
 
     def hooks_sync(self, hook_changes: typing.List[ConanHook]) -> None:
@@ -559,10 +518,7 @@ class ConanContext(QtCore.QObject):
             "hooks_sync", {"hooks": hook_changes}
         )
         if exception:
-            if self.parent():
-                self.parent().record_exception(exception)
-            else:
-                raise Exception("Syncing hooks failed") from exception
+            raise Exception("Syncing hooks failed") from exception
 
     def enable_hook(self, hook: str, enabled: bool) -> None:
         """
@@ -572,10 +528,7 @@ class ConanContext(QtCore.QObject):
             "enable_hook", {"hook": hook, "hook_enabled": enabled}
         )
         if exception:
-            if self.parent():
-                self.parent().record_exception(exception)
-            else:
-                raise Exception("Enable/disable hook failed") from exception
+            raise Exception("Enable/disable hook failed") from exception
 
     def get_cmake_generator(self) -> str:
         """
@@ -585,10 +538,7 @@ class ConanContext(QtCore.QObject):
             "get_cmake_generator", {}
         )
         if exception:
-            if self.parent():
-                self.parent().record_exception(exception)
-            else:
-                raise Exception("Failed to get CMake generator") from exception
+            raise Exception("Failed to get CMake generator") from exception
         return generator
 
     def get_conandata(
@@ -601,12 +551,9 @@ class ConanContext(QtCore.QObject):
             "get_conandata", {"path": recipe_path}
         )
         if exception:
-            if self.parent():
-                self.parent().record_exception(exception)
-            else:
-                raise ValueError(
-                    "Failed to get conandata YAML dict for recipe"
-                ) from exception
+            raise ValueError(
+                "Failed to get conandata YAML dict for recipe"
+            ) from exception
         return conandata
 
     def get_boolean_config(
@@ -621,12 +568,9 @@ class ConanContext(QtCore.QObject):
             "get_config", {"config": config.value}
         )
         if exception:
-            if self.parent():
-                self.parent().record_exception(exception)
-            else:
-                raise Exception(
-                    f"Failed to get local cache config for '{config.value}'"
-                ) from exception
+            raise Exception(
+                f"Failed to get local cache config for '{config.value}'"
+            ) from exception
         if config_value is not None:
             assert isinstance(config_value, str)
             config_value = _strtobool(config_value)
@@ -640,12 +584,9 @@ class ConanContext(QtCore.QObject):
             "set_config", {"config": config.value, "value": str(value)}
         )
         if exception:
-            if self.parent():
-                self.parent().record_exception(exception)
-            else:
-                raise Exception(
-                    f"Failed to set local cache config for '{config.value}'"
-                ) from exception
+            raise Exception(
+                f"Failed to set local cache config for '{config.value}'"
+            ) from exception
 
     @property
     def is_default(self) -> bool:
@@ -661,12 +602,9 @@ class ConanContext(QtCore.QObject):
         """
         envvars, exception = self._meta_invocation.request_data("get_config_envvars")
         if exception:
-            if self.parent():
-                self.parent().record_exception(exception)
-            else:
-                raise Exception(
-                    "Failed to get Conan config environment variables"
-                ) from exception
+            raise Exception(
+                "Failed to get Conan config environment variables"
+            ) from exception
         return envvars
 
     @property
@@ -684,12 +622,9 @@ class ConanContext(QtCore.QObject):
         """
         _, exception = self._meta_invocation.request_data("create_default_profile")
         if exception:
-            if self.parent():
-                self.parent().record_exception(exception)
-            else:
-                raise Exception(
-                    "Creating the default profile for the local cache failed"
-                ) from exception
+            raise Exception(
+                "Creating the default profile for the local cache failed"
+            ) from exception
 
 
 @contextmanager
