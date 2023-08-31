@@ -64,6 +64,12 @@ cruiz uses [tox](https://tox.wiki/en/latest/) to automate linting. Use `tox -e l
 
 Python 3.10+ is highly recommended to run the linting steps.
 
+### VisualStudio Code
+If using VSCode, a settings file for this Git repository is provided. To enable linting and formatting in the IDE though, you need to install the following extensions:
+* https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter
+* https://marketplace.visualstudio.com/items?itemName=ms-python.flake8
+* https://marketplace.visualstudio.com/items?itemName=ms-python.mypy-type-checker
+
 ## Making Python packages
 `python setup.py sdist` for a source distribution. Note that `pip` installing from a source distribution, or from an archive of the source tree, is not currently supported.
 
