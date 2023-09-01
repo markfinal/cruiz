@@ -265,7 +265,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
             extra_option_list_regex, self
         )
         self._ui.configureAdditionalOptions.setValidator(extra_option_list_validator)
-        rgx = QtCore.QRegularExpression(r"(^$|^@([a-zA-Z]+)\/([a-zA-Z]+)$)")
+        rgx = QtCore.QRegularExpression(r"(^$|^@([a-zA-Z_]+)\/([a-zA-Z_]+)$)")
         comValidator = QtGui.QRegularExpressionValidator(rgx, self)
         self._ui.configurePkgRefNamespace.setValidator(comValidator)
         self._ui.configurePkgRefNamespace.editingFinished.connect(
