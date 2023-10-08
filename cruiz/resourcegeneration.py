@@ -7,10 +7,10 @@ Resource generation from PySide
 import logging
 import os
 import pathlib
-import platform
-import subprocess
 import sys
 import typing
+
+import cruiz.runcommands
 
 SUBDIR = "pyside6"
 RCC = "pyside6-rcc"
@@ -30,13 +30,7 @@ def _run_command_if_out_of_date(
             return False
     # compile out of date resources
     logger.debug("Running: '%s'", " ".join(cmd_args))
-    if platform.system() == "Windows":
-        subprocess.check_call(
-            cmd_args,
-            creationflags=subprocess.CREATE_NO_WINDOW,  # type: ignore[attr-defined]
-        )
-    else:
-        subprocess.check_call(cmd_args)
+    cruiz.runcommands.run(cmd_args)
     return True
 
 

@@ -11,6 +11,7 @@ import multiprocessing
 
 from cruiz.interop.commandparameters import CommandParameters
 from cruiz.interop.message import Message, Success
+import cruiz.runcommands
 
 from . import worker
 
@@ -31,10 +32,6 @@ def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> 
         queue.put(Success(result))
     """
     with worker.ConanWorker(queue, params):
-        import subprocess
-
         args = ["conan", params.verb] + params.arguments
-        result = subprocess.run(
-            args, capture_output=True, encoding="utf-8", errors="ignore"
-        )
-        queue.put(Success(result.stdout))
+        output = cruiz.runcommands.run_get_output(args)
+        queue.put(Success(output))

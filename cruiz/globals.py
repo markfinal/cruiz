@@ -44,12 +44,10 @@ def __capture_conan_version() -> None:
     if CONAN_MAJOR_VERSION > 0:
         return
 
-    import subprocess
+    import cruiz.runcommands
 
-    get_conan_version = subprocess.run(
-        ["conan", "--version"], capture_output=True, encoding="utf8", errors="ignore"
-    )
-    version = get_conan_version.stdout.replace("Conan version ", "").strip()
+    get_conan_version = cruiz.runcommands.run_get_output(["conan", "--version"])
+    version = get_conan_version.replace("Conan version ", "").strip()
     if not version:
         raise ValueError("Unable to determine Conan version")
     version_components = version.split(".")

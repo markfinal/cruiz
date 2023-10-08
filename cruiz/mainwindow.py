@@ -56,6 +56,7 @@ from cruiz.load_recipe.loadrecipewizard import LoadRecipeWizard
 import cruiz.config
 
 import cruiz.globals
+import cruiz.runcommands
 
 logger = logging.getLogger(__name__)
 
@@ -279,24 +280,22 @@ class MainWindow(QtWidgets.QMainWindow):
                 continue
         if ssh_agent_pid:
             try:
-                ssh_add_list_capture = subprocess.run(
+                ssh_add_list_capture = cruiz.runcommands.run_get_combined_output(
                     ["ssh-add", "-l"],
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.STDOUT,
                     check=True,
                     timeout=3,
                 )
-                identities = ssh_add_list_capture.stdout.decode("utf-8").splitlines()
+                identities = ssh_add_list_capture.splitlines()
                 tooltip = f"SSH agent PID {ssh_agent_pid}\n" + " ".join(identities)
                 ssh_agent_color = "green"
             except subprocess.CalledProcessError as exc:
-                error_text = exc.output.decode("utf-8").strip()
+                error_text = exc.output.strip()
                 tooltip = (
                     f"SSH agent PID {ssh_agent_pid}\n"
                     f"Cannot determine identities: {error_text}"
                 )
             except subprocess.TimeoutExpired as exc:
-                error_text = exc.output.decode("utf-8").strip() if exc.output else ""
+                error_text = exc.output.strip() if exc.output else ""
                 tooltip = (
                     f"SSH agent PID {ssh_agent_pid}\n"
                     f"Timed out communicating with ssh-agent: {error_text}"
@@ -471,22 +470,6 @@ Remove from the recent list?",
     def _refresh_status_bar(self) -> None:
         # pylint: disable=too-many-branches, too-many-statements
 
-        def run_external_command(
-            args: typing.List[str], remap_stderr: bool = False
-        ) -> bytes:
-            if platform.system() == "Windows":
-                flag = subprocess.CREATE_NO_WINDOW  # type: ignore[attr-defined]
-                output = subprocess.check_output(
-                    args,
-                    stderr=subprocess.STDOUT if remap_stderr else None,
-                    creationflags=flag,
-                )
-            else:
-                output = subprocess.check_output(
-                    args, stderr=subprocess.STDOUT if remap_stderr else None
-                )
-            return output
-
         # TODO: this is truly awful, but give a package manager a chance to delete and
         # rewrite upgrades to packages, otherwise this code might be run when at the
         # time when files don't exist temporarily
@@ -505,11 +488,11 @@ Remove from the recent list?",
             compiler_version_query_args = ["--version"]
         if compiler_path:
             self._status_file_watcher.addPath(compiler_path)
-            out = run_external_command(
-                [compiler_path] + compiler_version_query_args, remap_stderr=True
+            out = cruiz.runcommands.run_get_combined_output(
+                [compiler_path] + compiler_version_query_args
             )
             if out:
-                compiler_version = out.decode("utf-8").splitlines()[0]
+                compiler_version = out.splitlines()[0]
                 self._compiler_label.setText(compiler_version)
             else:
                 self._compiler_label.setText("Compiler detected, but no version")
@@ -529,9 +512,9 @@ Remove from the recent list?",
             cmake_exe_path = QtCore.QStandardPaths.findExecutable("cmake")
             if cmake_exe_path:
                 self._status_file_watcher.addPath(cmake_exe_path)
-                version_output = run_external_command(
+                version_output = cruiz.runcommands.run_get_output(
                     [cmake_exe_path, "--version"]
-                ).decode("utf-8")
+                )
                 version = version_output.splitlines()[0].rsplit(" ", 1)[-1]
                 self._cmake_label.setText(f"CMake v{version}")
                 self._cmake_label.setToolTip(cmake_exe_path)
@@ -550,9 +533,9 @@ Remove from the recent list?",
             ninja_exe_path = QtCore.QStandardPaths.findExecutable("ninja")
             if ninja_exe_path:
                 self._status_file_watcher.addPath(ninja_exe_path)
-                version_output = run_external_command(
+                version_output = cruiz.runcommands.run_get_output(
                     [ninja_exe_path, "--version"]
-                ).decode("utf-8")
+                )
                 version = version_output.splitlines()[0]
                 self._ninja_label.setText(f"Ninja v{version}")
                 self._ninja_label.setToolTip(ninja_exe_path)
@@ -576,9 +559,9 @@ Remove from the recent list?",
             ccache_exe_path = QtCore.QStandardPaths.findExecutable("ccache")
             if ccache_exe_path:
                 self._status_file_watcher.addPath(ccache_exe_path)
-                version_output = run_external_command(
+                version_output = cruiz.runcommands.run_get_output(
                     [ccache_exe_path, "--version"]
-                ).decode("utf-8")
+                )
                 version = version_output.splitlines()[0]
                 self._ccache_label.setText(version)
                 self._ccache_label.setToolTip(ccache_exe_path)
@@ -595,9 +578,9 @@ Remove from the recent list?",
             sccache_exe_path = QtCore.QStandardPaths.findExecutable("sccache")
             if sccache_exe_path:
                 self._status_file_watcher.addPath(sccache_exe_path)
-                version_output = run_external_command(
+                version_output = cruiz.runcommands.run_get_output(
                     [sccache_exe_path, "--version"]
-                ).decode("utf-8")
+                )
                 version = version_output.splitlines()[0]
                 self._sccache_label.setText(version)
                 self._sccache_label.setToolTip(sccache_exe_path)
@@ -615,9 +598,9 @@ Remove from the recent list?",
             if buildcache_exe_path:
                 self._status_file_watcher.addPath(buildcache_exe_path)
                 try:
-                    version_output = run_external_command(
+                    version_output = cruiz.runcommands.run_get_output(
                         [buildcache_exe_path, "--version"]
-                    ).decode("utf-8")
+                    )
                     version = version_output.splitlines()[0]
                     self._buildcache_label.setText(version)
                     self._buildcache_label.setToolTip(buildcache_exe_path)
@@ -633,15 +616,15 @@ Remove from the recent list?",
             try:
                 # can fail the first time, if a migration of settings in the
                 # local cache fails
-                conan_version = run_external_command(
-                    [conan_path, "--version"], remap_stderr=True
+                conan_version = cruiz.runcommands.run_get_combined_output(
+                    [conan_path, "--version"]
                 )
             except subprocess.CalledProcessError:
                 # second time is after the migration, so will work
-                conan_version = run_external_command(
-                    [conan_path, "--version"], remap_stderr=True
+                conan_version = cruiz.runcommands.run_get_combined_output(
+                    [conan_path, "--version"]
                 )
-            version_split = conan_version.decode("utf-8").splitlines()
+            version_split = conan_version.splitlines()
             version_strings = [x for x in version_split if "version" in x]
             assert version_strings
             assert len(version_strings) == 1
