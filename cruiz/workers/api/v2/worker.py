@@ -7,13 +7,13 @@ Utils for worker context managers for Conan v2
 from __future__ import annotations
 
 import multiprocessing
-import subprocess
 import typing
 
 from cruiz.workers.utils.worker import Worker
 from cruiz.workers.utils.stream import QueuedStreamSix
 
 from cruiz.interop.message import Message, Stdout, Stderr
+import cruiz.runcommands
 
 
 def _patch_conan_output_initialiser(queue: multiprocessing.Queue[Message]) -> None:
@@ -39,11 +39,9 @@ def _patch_conan_run(queue: multiprocessing.Queue[Message]) -> None:
         command, stdout=None, stderr=None, cwd=None, shell=True
     ):
         with conans.util.runners.pyinstaller_bundle_env_cleaned():
-            with subprocess.Popen(
+            with cruiz.runcommands.get_popen_for_capture(
                 command,
                 shell=shell,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
                 cwd=cwd,
             ) as process:
                 assert process.stdout

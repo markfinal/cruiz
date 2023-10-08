@@ -12,7 +12,7 @@ from cruiz.version import get_version
 
 def _run_command(args: typing.List[str]) -> None:
     print(f"Running {' '.join(args)}", flush=True)
-    subprocess.check_call(args)
+    subprocess.run(args, check=True)
 
 
 @contextmanager

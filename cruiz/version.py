@@ -15,7 +15,7 @@ def get_version() -> str:
     Otherwise, fallback to accessing Git information.
     """
     try:
-        from .RELEASE_VERSION import __version__  # type: ignore[import]
+        from .RELEASE_VERSION import __version__  # type: ignore[import-not-found]
 
         return __version__
     except ImportError:
@@ -33,11 +33,13 @@ def get_version() -> str:
                 return os.environ["GITHUB_REF_NAME"]
             else:
                 # annotated tags only
-                return (
-                    subprocess.check_output(["git", "describe", "--tags"], cwd=cwd)
-                    .decode("utf-8")
-                    .rstrip()
-                )
+                return subprocess.run(
+                    ["git", "describe", "--tags"],
+                    cwd=cwd,
+                    capture_output=True,
+                    encoding="utf-8",
+                    errors="ignore",
+                ).stdout.rstrip()
 
         try:
             file_path = pathlib.Path(__file__)
