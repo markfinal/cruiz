@@ -21,7 +21,7 @@ def convert_from_colorama_to_html(escaped_string: str) -> str:
     if escaped_string.endswith("\n"):
         # last new line is catered for by the HTML block
         escaped_string = escaped_string.rsplit("\n", 1)[0]
-    expr = "(\\x1b\[(\d)+m)"  # ESC[NUMm - find NUM  # noqa: W605
+    expr = r"(\x1b\[(\d)+m)"  # ESC[NUMm - find NUM
     matches = re.findall(expr, escaped_string)
     non_escaped_string = copy.deepcopy(escaped_string)
     style = None
