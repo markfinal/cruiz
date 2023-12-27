@@ -15,7 +15,7 @@ def get_version() -> str:
     Otherwise, fallback to accessing Git information.
     """
     try:
-        from .RELEASE_VERSION import __version__  # type: ignore[import-not-found]
+        from .RELEASE_VERSION import __version__  # type: ignore[import-untyped]
 
         return __version__
     except ImportError:

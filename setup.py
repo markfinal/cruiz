@@ -1,5 +1,6 @@
 from contextlib import contextmanager
 import os
+import pathlib
 import subprocess
 import typing
 
@@ -7,7 +8,10 @@ from setuptools import setup, find_packages
 import setuptools.command.build_py
 import setuptools.command.sdist
 
-from cruiz.version import get_version
+from src.cruiz.version import get_version
+
+
+PACKAGE_DIR = pathlib.Path("src", "cruiz")
 
 
 def _run_command(args: typing.List[str]) -> None:
@@ -17,29 +21,29 @@ def _run_command(args: typing.List[str]) -> None:
 
 @contextmanager
 def _temp_resource_generation(
-    callback: typing.Callable[[typing.List[str]], None]
+    callback: typing.Callable[[typing.List[pathlib.Path]], None]
 ) -> typing.Generator[None, None, None]:
-    paths_written: typing.List[str] = []
+    paths_written: typing.List[pathlib.Path] = []
     callback(paths_written)
     try:
         yield
     finally:
         for path in paths_written:
-            os.unlink(path)
+            path.unlink()
 
 
-def _compile_qrc(paths_written: typing.List[str]) -> None:
-    def _compile_pyside_resources(ver: int) -> str:
-        if not os.path.isdir(f"cruiz/pyside{ver}"):
-            os.makedirs(f"cruiz/pyside{ver}")
-        dst_file = f"cruiz/pyside{ver}/resources.py"
+def _compile_qrc(paths_written: typing.List[pathlib.Path]) -> None:
+    def _compile_pyside_resources(ver: int) -> pathlib.Path:
+        pyside_dir = PACKAGE_DIR / f"pyside{ver}"
+        pyside_dir.mkdir(exist_ok=True)
+        dst_file = pyside_dir / "resources.py"
         _run_command(
             [
                 f"pyside{ver}-rcc",
                 "--verbose",
                 "-o",
-                dst_file,
-                "cruiz/resources/cruizres.qrc",
+                os.fspath(dst_file),
+                os.fspath(PACKAGE_DIR / "resources" / "cruizres.qrc"),
             ]
         )
         return dst_file
@@ -47,34 +51,33 @@ def _compile_qrc(paths_written: typing.List[str]) -> None:
     paths_written.append(_compile_pyside_resources(6))
 
 
-def _compile_uis(paths_written: typing.List[str]) -> None:
+def _compile_uis(paths_written: typing.List[pathlib.Path]) -> None:
     ui_variants = {
         "pyside6": "pyside6-uic",
     }
     for ui_subdir, uic_tool in ui_variants.items():
-        ui_dir = f"cruiz/{ui_subdir}"
-        if not os.path.isdir(ui_dir):
-            os.makedirs(ui_dir)
+        ui_dir = PACKAGE_DIR / ui_subdir
+        ui_dir.mkdir(exist_ok=True)
         ui_basenames = [
-            os.path.splitext(ui_file)[0]
-            for ui_file in os.listdir("cruiz/resources")
-            if os.path.splitext(ui_file)[1] == ".ui"
+            ui_file.stem
+            for ui_file in (PACKAGE_DIR / "resources").iterdir()
+            if ui_file.suffix == ".ui"
         ]
         for basename in ui_basenames:
-            dst_file = f"{ui_dir}/{basename}.py"
+            dst_file = ui_dir / f"{basename}.py"
             _run_command(
                 [
                     uic_tool,
                     "-o",
-                    dst_file,
-                    f"cruiz/resources/{basename}.ui",
+                    os.fspath(dst_file),
+                    os.fspath(PACKAGE_DIR / "resources" / f"{basename}.ui"),
                 ]
             )
             paths_written.append(dst_file)
 
 
-def _capture_version(paths_written: typing.List[str]) -> None:
-    version_path = "cruiz/RELEASE_VERSION.py"
+def _capture_version(paths_written: typing.List[pathlib.Path]) -> None:
+    version_path = PACKAGE_DIR / "RELEASE_VERSION.py"
     with open(version_path, "wt") as version_file:
         version_file.write(f'__version__ = "{get_version()}"')
     paths_written.append(version_path)
@@ -132,7 +135,8 @@ setup(
     author="Mark Final",
     author_email="markfinal@hotmail.com",
     url="https://github.com/markfinal/cruiz",
-    packages=find_packages(),
+    package_dir={"": "src"},
+    packages=find_packages(where="src"),
     install_requires=requires,
     entry_points={
         "gui_scripts": [
