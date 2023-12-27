@@ -1,12 +1,12 @@
 __pycache__
 .vscode/launch.json
 .DS_Store
-cruiz.egg-info
+src/cruiz.egg-info
 build
 dist
 .mypy_cache
-cruiz/pyside6/*
-!cruiz/pyside6/__init__.py
+src/cruiz/pyside6/*
+!src/cruiz/pyside6/__init__.py
 .tox
-cruiz/RELEASE_VERSION.py
+src/cruiz/RELEASE_VERSION.py
 *.whl
