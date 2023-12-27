@@ -4,6 +4,6 @@ flake8
 flake8-black
 flake8-bugbear
 flake8-simplify
-flake8-use-pathlib
+flake8-use-pathlib; python_version < "3.12"
 mypy
 PySide6-stubs @ git+https://github.com/python-qt-tools/PySide6-stubs@1b8dccccb0c1cb5163b408ab6d4de1d6581755ff
