@@ -46,10 +46,10 @@ def _patch_conan_run(queue: multiprocessing.Queue[Message]) -> None:
             ) as process:
                 assert process.stdout
                 for line in iter(process.stdout.readline, b""):
-                    queue.put(Stdout(line.decode("utf-8")))
+                    queue.put(Stdout(line))
                 assert process.stderr
                 for line in iter(process.stderr.readline, b""):
-                    queue.put(Stderr(line.decode("utf-8")))
+                    queue.put(Stderr(line))
 
             return process.returncode
 
