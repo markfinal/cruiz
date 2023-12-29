@@ -32,7 +32,7 @@ def invoke(
 
         remote = api.remotes.get(params.remote_name)
         pref = PkgReference.loads(params.reference)
-        app = ConanApp(api.cache_folder)
+        app = ConanApp(api.cache_folder, api.config.global_conf)
 
         prevs_and_timestamps: typing.List[typing.Dict[str, str]] = []
         for new_ref in app.remote_manager.get_package_revisions_references(

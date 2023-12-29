@@ -49,16 +49,16 @@ def _interop_get_config(api: typing.Any, key: str) -> typing.Optional[str]:
 
 
 def _interop_profiles_dir(api: typing.Any) -> pathlib.Path:
-    from conan.internal.conan_app import ConanApp
+    from conan.internal.cache.home_paths import HomePaths
 
-    app = ConanApp(api.cache_folder)
-    return pathlib.Path(app.cache.profiles_path)
+    paths = HomePaths(api.cache_folder)
+    return pathlib.Path(paths.profiles_path)
 
 
 def _interop_get_hooks(api: typing.Any) -> typing.List[ConanHook]:
     from conan.internal.conan_app import ConanApp
 
-    app = ConanApp(api.cache_folder)
+    app = ConanApp(api.cache_folder, api.config.global_conf)
 
     hooks_dir = app.cache.hooks_path
 
@@ -97,7 +97,7 @@ def _interop_get_conandata(
 ) -> typing.Dict[str, typing.Any]:
     from conan.internal.conan_app import ConanApp
 
-    app = ConanApp(api.cache_folder)
+    app = ConanApp(api.cache_folder, api.config.global_conf)
     return app.loader._load_data(recipe_path)
 
 
@@ -117,11 +117,9 @@ def _interop_get_config_envvars(api: typing.Any) -> typing.List[str]:
 def _interop_profile_meta(
     api: typing.Any, profile: str
 ) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
-    from conans.client.cache.cache import ClientCache
     from conans.client.profile_loader import ProfileLoader
 
-    cache = ClientCache(api.cache_folder)
-    loader = ProfileLoader(cache)
+    loader = ProfileLoader(api.cache_folder)
     # TODO: using internal method
     profile = loader._load_profile(profile, os.getcwd())
     details: typing.Dict[str, typing.Dict[str, typing.Any]] = {"settings": {}}
