@@ -24,8 +24,8 @@ def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> 
         ref_pattern = ListPattern("*", rrev="*", prev="*")
         select_bundle = api.list.select(ref_pattern)
 
-        for ref, _ in select_bundle.refs():
-            api.remove.recipe(ref)
+        for pkgref in select_bundle.refs().keys():
+            api.remove.recipe(pkgref)
 
         queue.put(Stdout("Removed all packages from the local cache"))
         queue.put(Success(True))
