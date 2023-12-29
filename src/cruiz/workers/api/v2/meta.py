@@ -56,11 +56,10 @@ def _interop_profiles_dir(api: typing.Any) -> pathlib.Path:
 
 
 def _interop_get_hooks(api: typing.Any) -> typing.List[ConanHook]:
-    from conan.internal.conan_app import ConanApp
+    from conan.internal.cache.home_paths import HomePaths
 
-    app = ConanApp(api.cache_folder, api.config.global_conf)
-
-    hooks_dir = app.cache.hooks_path
+    paths = HomePaths(api.cache_folder)
+    hooks_dir = paths.hooks_path
 
     hook_files: typing.List[ConanHook] = []
     for root, dirs, files in os.walk(hooks_dir):
