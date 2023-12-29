@@ -45,10 +45,10 @@ def _patch_conan_run(queue: multiprocessing.Queue[Message]) -> None:
                 cwd=cwd,
             ) as process:
                 assert process.stdout
-                for line in iter(process.stdout.readline, b""):
+                for line in iter(process.stdout.readline, ""):
                     queue.put(Stdout(line))
                 assert process.stderr
-                for line in iter(process.stderr.readline, b""):
+                for line in iter(process.stderr.readline, ""):
                     queue.put(Stderr(line))
 
             return process.returncode
