@@ -266,15 +266,16 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def _configure_ssh_agent_statusbar(self) -> None:
         ssh_agent_pid = None
-        ssh_agent_text = "No SSH agent"
+        ssh_agent_text = "SSH agent"
         ssh_agent_color = "red"
+        ssh_agent_tooltip = "Not found"
         # find the ssh-agent if it is running
         for process in psutil.process_iter():
             try:
                 if "ssh-agent" in process.name():
                     ssh_agent_pid = process.pid
-                    ssh_agent_text = "SSH agent detected"
                     ssh_agent_color = "darkorange"
+                    ssh_agent_tooltip = "Agent detected"
                     break
             except psutil.NoSuchProcess:
                 continue
@@ -286,24 +287,26 @@ class MainWindow(QtWidgets.QMainWindow):
                     timeout=3,
                 )
                 identities = ssh_add_list_capture.splitlines()
-                tooltip = f"SSH agent PID {ssh_agent_pid}\n" + " ".join(identities)
+                ssh_agent_tooltip = f"SSH agent PID {ssh_agent_pid}\n" + " ".join(
+                    identities
+                )
                 ssh_agent_color = "green"
             except subprocess.CalledProcessError as exc:
                 error_text = exc.output.strip()
-                tooltip = (
+                ssh_agent_tooltip = (
                     f"SSH agent PID {ssh_agent_pid}\n"
                     f"Cannot determine identities: {error_text}"
                 )
             except subprocess.TimeoutExpired as exc:
                 error_text = exc.output.strip() if exc.output else ""
-                tooltip = (
+                ssh_agent_tooltip = (
                     f"SSH agent PID {ssh_agent_pid}\n"
                     f"Timed out communicating with ssh-agent: {error_text}"
                 )
                 ssh_agent_color = "red"
-            self._ssh_agent_label.setToolTip(tooltip)
         self._ssh_agent_label.setText(ssh_agent_text)
         self._ssh_agent_label.setStyleSheet(f"QLabel {{color:{ssh_agent_color};}}")
+        self._ssh_agent_label.setToolTip(ssh_agent_tooltip)
 
     def closeEvent(self, event: QtGui.QCloseEvent) -> None:
         self.centralWidget().closeAllSubWindows()
@@ -475,30 +478,54 @@ Remove from the recent list?",
         # time when files don't exist temporarily
         time.sleep(1)
 
-        system = platform.system()
-        compiler_path = None
-        compiler_version_query_args = []
-        if system == "Windows":
-            compiler_path = QtCore.QStandardPaths.findExecutable("cl.exe")
-        elif system == "Linux":
-            compiler_path = QtCore.QStandardPaths.findExecutable("gcc")
-            compiler_version_query_args = ["--version"]
-        elif system == "Darwin":
-            compiler_path = QtCore.QStandardPaths.findExecutable("clang")
-            compiler_version_query_args = ["--version"]
-        if compiler_path:
-            self._status_file_watcher.addPath(compiler_path)
-            out = cruiz.runcommands.run_get_combined_output(
-                [compiler_path] + compiler_version_query_args
-            )
-            if out:
-                compiler_version = out.splitlines()[0]
-                self._compiler_label.setText(compiler_version)
+        def statusbar_tool(
+            tooldesc: str,
+            toolpath: str,
+            tool_get_version: typing.Callable[[str], str],
+            label: QtWidgets.QLabel,
+        ) -> None:
+            label.setText(tooldesc)
+            if toolpath:
+                self._status_file_watcher.addPath(toolpath)
+                out = tool_get_version(toolpath)
+                if out:
+                    version = out.splitlines()[0]
+                else:
+                    version = "No version discovered"
+
+                tooltip = f"Path\t{toolpath}\nVersion\t{version}"
+                label.setToolTip(tooltip)
             else:
-                self._compiler_label.setText("Compiler detected, but no version")
-            self._compiler_label.setToolTip(compiler_path)
-        else:
-            self._compiler_label.setText("No compiler detected")
+                label.setStyleSheet("QLabel {color:red;}")
+                label.setToolTip("Not found")
+
+        system = platform.system()
+        if system == "Windows":
+            compiler_desc = "cl.exe"
+            compiler_version_query = (
+                lambda path: cruiz.runcommands.run_get_combined_output([path])
+            )
+        elif system == "Linux":
+            compiler_desc = "gcc"
+            compiler_version_query = (
+                lambda path: cruiz.runcommands.run_get_combined_output(
+                    [path, "--version"]
+                )
+            )
+        elif system == "Darwin":
+            compiler_desc = "clang"
+            compiler_version_query = (
+                lambda path: cruiz.runcommands.run_get_combined_output(
+                    [path, "--version"]
+                )
+            )
+        compiler_path = QtCore.QStandardPaths.findExecutable(compiler_desc)
+        statusbar_tool(
+            compiler_desc,
+            compiler_path,
+            compiler_version_query,
+            self._compiler_label,
+        )
 
         with EnvironSaver():
             with CMakeSettingsReader() as settings_cmake:
@@ -510,17 +537,14 @@ Remove from the recent list?",
                     + os.environ.get("PATH", "")
                 )
             cmake_exe_path = QtCore.QStandardPaths.findExecutable("cmake")
-            if cmake_exe_path:
-                self._status_file_watcher.addPath(cmake_exe_path)
-                version_output = cruiz.runcommands.run_get_output(
-                    [cmake_exe_path, "--version"]
-                )
-                version = version_output.splitlines()[0].rsplit(" ", 1)[-1]
-                self._cmake_label.setText(f"CMake v{version}")
-                self._cmake_label.setToolTip(cmake_exe_path)
-                self._cmake_label.setVisible(True)
-            else:
-                self._cmake_label.setVisible(False)
+            statusbar_tool(
+                "cmake",
+                cmake_exe_path,
+                lambda path: cruiz.runcommands.run_get_combined_output(
+                    [path, "--version"]
+                ),
+                self._cmake_label,
+            )
 
             with NinjaSettingsReader() as settings_ninja:
                 ninja_dir = settings_ninja.bin_directory.resolve()
@@ -531,17 +555,14 @@ Remove from the recent list?",
                     + os.environ.get("PATH", "")
                 )
             ninja_exe_path = QtCore.QStandardPaths.findExecutable("ninja")
-            if ninja_exe_path:
-                self._status_file_watcher.addPath(ninja_exe_path)
-                version_output = cruiz.runcommands.run_get_output(
-                    [ninja_exe_path, "--version"]
-                )
-                version = version_output.splitlines()[0]
-                self._ninja_label.setText(f"Ninja v{version}")
-                self._ninja_label.setToolTip(ninja_exe_path)
-                self._ninja_label.setVisible(True)
-            else:
-                self._ninja_label.setVisible(False)
+            statusbar_tool(
+                "ninja",
+                ninja_exe_path,
+                lambda path: cruiz.runcommands.run_get_combined_output(
+                    [path, "--version"]
+                ),
+                self._ninja_label,
+            )
 
             with CompilerCacheSettingsReader() as settings_compilercache:
                 ccache_dir = settings_compilercache.ccache_bin_directory.resolve()
@@ -557,17 +578,14 @@ Remove from the recent list?",
                     + os.environ.get("PATH", "")
                 )
             ccache_exe_path = QtCore.QStandardPaths.findExecutable("ccache")
-            if ccache_exe_path:
-                self._status_file_watcher.addPath(ccache_exe_path)
-                version_output = cruiz.runcommands.run_get_output(
-                    [ccache_exe_path, "--version"]
-                )
-                version = version_output.splitlines()[0]
-                self._ccache_label.setText(version)
-                self._ccache_label.setToolTip(ccache_exe_path)
-                self._ccache_label.setVisible(True)
-            else:
-                self._ccache_label.setVisible(False)
+            statusbar_tool(
+                "ccache",
+                ccache_exe_path,
+                lambda path: cruiz.runcommands.run_get_combined_output(
+                    [path, "--version"]
+                ),
+                self._ccache_label,
+            )
 
             if sccache_dir:
                 os.environ["PATH"] = (
@@ -576,17 +594,14 @@ Remove from the recent list?",
                     + os.environ.get("PATH", "")
                 )
             sccache_exe_path = QtCore.QStandardPaths.findExecutable("sccache")
-            if sccache_exe_path:
-                self._status_file_watcher.addPath(sccache_exe_path)
-                version_output = cruiz.runcommands.run_get_output(
-                    [sccache_exe_path, "--version"]
-                )
-                version = version_output.splitlines()[0]
-                self._sccache_label.setText(version)
-                self._sccache_label.setToolTip(sccache_exe_path)
-                self._sccache_label.setVisible(True)
-            else:
-                self._sccache_label.setVisible(False)
+            statusbar_tool(
+                "sccache",
+                sccache_exe_path,
+                lambda path: cruiz.runcommands.run_get_combined_output(
+                    [path, "--version"]
+                ),
+                self._sccache_label,
+            )
 
             if buildcache_dir:
                 os.environ["PATH"] = (
@@ -595,41 +610,30 @@ Remove from the recent list?",
                     + os.environ.get("PATH", "")
                 )
             buildcache_exe_path = QtCore.QStandardPaths.findExecutable("buildcache")
-            if buildcache_exe_path:
-                self._status_file_watcher.addPath(buildcache_exe_path)
-                try:
-                    version_output = cruiz.runcommands.run_get_output(
-                        [buildcache_exe_path, "--version"]
-                    )
-                    version = version_output.splitlines()[0]
-                    self._buildcache_label.setText(version)
-                    self._buildcache_label.setToolTip(buildcache_exe_path)
-                    self._buildcache_label.setVisible(True)
-                except subprocess.CalledProcessError:
-                    self._buildcache_label.setVisible(False)
-            else:
-                self._buildcache_label.setVisible(False)
+            statusbar_tool(
+                "buildcache",
+                buildcache_exe_path,
+                lambda path: cruiz.runcommands.run_get_combined_output(
+                    [path, "--version"]
+                ),
+                self._buildcache_label,
+            )
 
-        conan_path = QtCore.QStandardPaths.findExecutable("conan")
-        if conan_path:
-            self._status_file_watcher.addPath(conan_path)
+        def get_conan_version_output(path: str) -> str:
             try:
                 # can fail the first time, if a migration of settings in the
                 # local cache fails
-                conan_version = cruiz.runcommands.run_get_combined_output(
-                    [conan_path, "--version"]
-                )
+                return cruiz.runcommands.run_get_combined_output([path, "--version"])
             except subprocess.CalledProcessError:
                 # second time is after the migration, so will work
-                conan_version = cruiz.runcommands.run_get_combined_output(
-                    [conan_path, "--version"]
-                )
-            version_split = conan_version.splitlines()
-            version_strings = [x for x in version_split if "version" in x]
-            assert version_strings
-            assert len(version_strings) == 1
-            self._conan_label.setText(version_strings[0])
-            self._conan_label.setToolTip(conan_path)
+                return cruiz.runcommands.run_get_combined_output([path, "--version"])
+
+        statusbar_tool(
+            "conan",
+            QtCore.QStandardPaths.findExecutable("conan"),
+            get_conan_version_output,
+            self._conan_label,
+        )
 
     def _about_cruiz(self) -> None:
         AboutDialog(self).exec_()
