@@ -31,9 +31,9 @@ class CommandParameters(CommonParameters):
     ) -> None:
         super().__init__(worker)
         self.verb = verb
-        self._recipe_path: typing.Optional[
-            pathlib.Path
-        ] = None  # TODO: aliased with the recipe, so should we store it?
+        self._recipe_path: typing.Optional[pathlib.Path] = (
+            None  # TODO: aliased with the recipe, so should we store it?
+        )
         self._cwd: typing.Optional[pathlib.Path] = None
         self._profile: typing.Optional[str] = None
         self._common_subdir: typing.Optional[pathlib.PurePosixPath] = None
@@ -44,9 +44,9 @@ class CommandParameters(CommonParameters):
         self._package_folder: typing.Optional[pathlib.PurePosixPath] = None
         self._test_build_folder: typing.Optional[pathlib.PurePosixPath] = None
         self._name: typing.Optional[str] = None
-        self._version: typing.Optional[
-            str
-        ] = None  # TODO: these are aliased with the recipe, so should we store it?
+        self._version: typing.Optional[str] = (
+            None  # TODO: these are aliased with the recipe, so should we store it?
+        )
         self._user: typing.Optional[str] = None
         self._channel: typing.Optional[str] = None
         self._options: typing.Dict[str, str] = {}

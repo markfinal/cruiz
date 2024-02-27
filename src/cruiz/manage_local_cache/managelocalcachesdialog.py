@@ -640,10 +640,12 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
         result = QtWidgets.QMessageBox.question(
             self,
             "Local cache deletion",
-            f"Please confirm you want to delete the directories {conan_home_dir} and "
-            f"{short_home_dir}?"
-            if short_home_dir
-            else f"Please confirm you want to delete the directory {conan_home_dir}?",
+            (
+                f"Please confirm deletion of the directories {conan_home_dir} "
+                f"and {short_home_dir}?"
+                if short_home_dir
+                else f"Please confirm deletion of the directory {conan_home_dir}?"
+            ),
         )
         if result == QtWidgets.QMessageBox.StandardButton.No:
             return
