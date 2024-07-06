@@ -29,6 +29,8 @@ jobs:
         fetch-depth: 0
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
+      env:
+          PIP_DISABLE_PIP_VERSION_CHECK: 1 # needed for Mac runners which do not officially support 3.8
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
