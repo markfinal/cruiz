@@ -8,10 +8,7 @@ import platform
 import subprocess
 import typing
 
-if platform.system() == "Windows":
-    CREATION_FLAGS = subprocess.CREATE_NO_WINDOW
-else:
-    CREATION_FLAGS = 0
+CREATION_FLAGS = subprocess.CREATE_NO_WINDOW if platform.system() == "Windows" else 0
 
 
 def run(*args: typing.Any, **kwargs: typing.Any) -> subprocess.CompletedProcess:  # type: ignore[type-arg]  # noqa: E501
