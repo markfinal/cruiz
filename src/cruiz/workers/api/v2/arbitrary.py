@@ -10,8 +10,7 @@ from __future__ import annotations
 import multiprocessing
 
 from cruiz.interop.commandparameters import CommandParameters
-from cruiz.interop.message import Message, Success
-import cruiz.runcommands
+from cruiz.interop.message import Message, Success, Failure
 
 from . import worker
 
@@ -20,18 +19,27 @@ def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> 
     """
     Run an arbitrary command
     """
-
-    # TODO: is it possible to rewrite this? see the v1 as a model
-    """
-    with worker.ConanWorker(queue, params) as api:
-        from conan.cli.command import ConanCommand
-
-        command = Command(api)
-        verb_function = getattr(command, params.verb)
-        result = command.run(*params.arguments)
-        queue.put(Success(result))
-    """
     with worker.ConanWorker(queue, params):
-        args = ["conan", params.verb] + params.arguments
-        output = cruiz.runcommands.run_get_output(args)
-        queue.put(Success(output))
+        from conans.conan import run
+        from io import StringIO
+        import sys
+
+        saved_args = sys.argv
+        temp_out = StringIO()
+        temp_err = StringIO()
+        sys.stdout = temp_out
+        sys.stderr = temp_err
+        try:
+            sys.argv = ["conan", params.verb] + params.arguments
+            run()
+        except SystemExit as exc:
+            try:
+                if exc.code != 0:
+                    raise RuntimeError(temp_err.getvalue())
+                queue.put(Success(temp_out.getvalue()))
+            except RuntimeError as exc_inner:
+                queue.put(Failure(exc_inner))
+        finally:
+            sys.stderr = sys.__stderr__
+            sys.stdout = sys.__stdout__
+            sys.argv = saved_args
