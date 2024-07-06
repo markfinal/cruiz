@@ -133,12 +133,21 @@ class PackageReferencePage(Page):
         Called when which local cache has been selected has changed
         """
         self._context.change_cache(text)
+        index_of_first_enabled_remote: typing.Optional[int] = None
         with BlockSignals(self._ui.remote) as blocked_widget:
             blocked_widget.clear()
-            for remote in self._context.get_remotes_list():
+            for index, remote in enumerate(self._context.get_remotes_list()):
                 blocked_widget.addItem(remote.name)
+                item = blocked_widget.model().item(index)
+                if remote.enabled:
+                    item.setFlags(item.flags() | QtCore.Qt.ItemIsEnabled)
+                    if index_of_first_enabled_remote is None:
+                        index_of_first_enabled_remote = index
+                else:
+                    item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
             blocked_widget.setCurrentIndex(-1)
-        self._ui.remote.setCurrentIndex(0)
+        if index_of_first_enabled_remote is not None:
+            self._ui.remote.setCurrentIndex(index_of_first_enabled_remote)
         if cruiz.globals.CONAN_MAJOR_VERSION == 1:
             self._revs_enabled = self._context.get_boolean_config(
                 ConanConfigBoolean.REVISIONS, False
@@ -150,6 +159,7 @@ class PackageReferencePage(Page):
 
     def _on_remote_change(self, text: str) -> None:
         # pylint: disable=unused-argument
+        self._ui.search_pattern.setEnabled(True)
         self._model.clear()
 
     def _pattern_incorrect(self) -> None:
