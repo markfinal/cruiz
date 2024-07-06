@@ -7,6 +7,7 @@ The Qt main window of the application
 from __future__ import annotations
 
 from functools import partial
+import importlib.util
 import logging
 import os
 import pathlib
@@ -619,18 +620,18 @@ Remove from the recent list?",
                 self._buildcache_label,
             )
 
+        def get_conan_location() -> str:
+            spec = importlib.util.find_spec("conan")
+            assert spec is not None
+            assert spec.origin is not None
+            return os.fspath(pathlib.Path(spec.origin).parent)
+
         def get_conan_version_output(path: str) -> str:
-            try:
-                # can fail the first time, if a migration of settings in the
-                # local cache fails
-                return cruiz.runcommands.run_get_combined_output([path, "--version"])
-            except subprocess.CalledProcessError:
-                # second time is after the migration, so will work
-                return cruiz.runcommands.run_get_combined_output([path, "--version"])
+            return cruiz.globals.CONAN_FULL_VERSION
 
         statusbar_tool(
             "conan",
-            QtCore.QStandardPaths.findExecutable("conan"),
+            get_conan_location(),
             get_conan_version_output,
             self._conan_label,
         )
