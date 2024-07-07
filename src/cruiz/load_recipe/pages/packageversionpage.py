@@ -30,7 +30,7 @@ class LoadRecipePackageVersionPage(QtWidgets.QWizardPage):
         return 2
 
     def initializePage(self) -> None:
-        self.registerField("version*", self._ui.version, "currentText")  # type: ignore
+        self.registerField("version*", self._ui.version, "currentText")
 
         self._ui.version.currentTextChanged.connect(self._on_version_changed)
 

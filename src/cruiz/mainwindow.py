@@ -679,9 +679,7 @@ Remove from the recent list?",
             for subwindow in mdi_area.subWindowList()
         )
 
-    def _on_platform_theme_changed(
-        self, color_scheme: QtCore.Qt.ColorScheme  # type: ignore[name-defined]
-    ) -> None:
+    def _on_platform_theme_changed(self, color_scheme: QtCore.Qt.ColorScheme) -> None:
         if color_scheme == QtCore.Qt.ColorScheme.Unknown:
             color_scheme = QtCore.Qt.ColorScheme.Light
         cruiz.globals.CRUIZ_THEME = color_scheme.name

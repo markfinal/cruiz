@@ -40,7 +40,7 @@ def clear_widgets_from_layout(layout: QtWidgets.QLayout) -> None:
     Does not take child layouts into account.
     """
     for i in reversed(range(layout.count())):
-        layout.itemAt(i).widget().setParent(None)  # type: ignore
+        layout.itemAt(i).widget().setParent(None)
 
 
 class BlockSignals:
