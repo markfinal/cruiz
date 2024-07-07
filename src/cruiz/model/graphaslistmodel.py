@@ -17,8 +17,9 @@ class DependenciesListModel(QtGui.QStandardItemModel):
     def __init__(self, graph: DependencyGraph) -> None:
         super().__init__(len(graph.nodes), 1)
         for row, node in enumerate(graph.nodes):
-            item = QtGui.QStandardItem(node.reference)
-            item.setData(node, QtCore.Qt.UserRole)  # type: ignore
+            item = QtGui.QStandardItem()
+            item.setText(node.reference)
+            item.setData(node, QtCore.Qt.UserRole)
             if node == graph.root:
                 font = QtGui.QFont()
                 font.setBold(True)
@@ -50,7 +51,8 @@ class DependenciesTreeModel(QtGui.QStandardItemModel):
         parent_item = self.invisibleRootItem()
         # TODO: revisit this algorithm
         for node in graph.nodes:
-            item = QtGui.QStandardItem(node.reference)
+            item = QtGui.QStandardItem()
+            item.setText(node.reference)
             if node == graph.root:
                 item.setData(
                     QtGui.QColor(QtCore.Qt.red),
