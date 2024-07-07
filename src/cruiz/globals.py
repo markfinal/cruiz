@@ -10,6 +10,7 @@ import typing
 
 CRUIZ_MAINWINDOW: typing.Optional[cruiz.MainWindow] = None  # type: ignore # noqa: F821
 
+CONAN_FULL_VERSION: str = "undetermined"
 CONAN_MAJOR_VERSION: int = 0
 
 CRUIZ_THEME: typing.Optional[str] = None
@@ -44,13 +45,11 @@ def __capture_conan_version() -> None:
     if CONAN_MAJOR_VERSION > 0:
         return
 
-    import cruiz.runcommands
+    import importlib.metadata
 
-    get_conan_version = cruiz.runcommands.run_get_output(["conan", "--version"])
-    version = get_conan_version.replace("Conan version ", "").strip()
-    if not version:
-        raise ValueError("Unable to determine Conan version")
-    version_components = version.split(".")
+    global CONAN_FULL_VERSION
+    CONAN_FULL_VERSION = importlib.metadata.version("conan")
+    version_components = CONAN_FULL_VERSION.split(".")
     CONAN_MAJOR_VERSION = int(version_components[0])
 
 
