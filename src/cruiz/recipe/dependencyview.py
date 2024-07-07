@@ -15,7 +15,7 @@ from cruiz.svggraph import DependenciesToDigraph, DigraphToSVG, SVGScene
 
 class DependencyView(QtWidgets.QGraphicsView):
     def clear(self) -> None:
-        self.setScene(None)  # type: ignore
+        self.setScene(None)
 
     def visualise(self, depgraph: DependencyGraph, rankdir: int) -> None:
         if rankdir == 0:

@@ -1086,7 +1086,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         # reset views
         self._ui.configurePackageId.setText("Calculating...")
         # https://stackoverflow.com/questions/46630185/qt-remove-model-from-view
-        self._ui.dependenciesPackageList.setModel(None)  # type: ignore[arg-type]
+        self._ui.dependenciesPackageList.setModel(None)
         self._ui.dependencyView.clear()
         # calculate lock file
         params = CommandParameters("lock create", workers_api.lockcreate.invoke)

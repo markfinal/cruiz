@@ -27,9 +27,7 @@ class LoadRecipeLocalCachePage(QtWidgets.QWizardPage):
         return 3
 
     def initializePage(self) -> None:
-        self.registerField(
-            "local_cache*", self._ui.local_cache_name, "currentText"  # type: ignore
-        )
+        self.registerField("local_cache*", self._ui.local_cache_name, "currentText")
         self._ui.local_cache_name.currentIndexChanged.connect(
             self._on_local_cache_changed
         )

@@ -29,9 +29,7 @@ class LoadRecipeInitialProfilePage(QtWidgets.QWizardPage):
         return -1
 
     def initializePage(self) -> None:
-        self.registerField(
-            "initial_profile*", self._ui.initial_profile, "currentText"  # type: ignore
-        )
+        self.registerField("initial_profile*", self._ui.initial_profile, "currentText")
         self._ui.initial_profile.currentIndexChanged.connect(
             self._on_initial_profile_changed
         )
