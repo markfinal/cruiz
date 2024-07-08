@@ -587,38 +587,46 @@ class RecipeWidget(QtWidgets.QMainWindow):
 
     def _refresh_statusbar(self) -> None:
         if self._git_repository:
-            head_sha = self._git_repository.head.object.hexsha
             try:
-                branch = self._git_repository.active_branch
-                tracking_branch = branch.tracking_branch()
-                if tracking_branch is None:
-                    tooltip = "Untracked branch"
-            except TypeError:
-                branch = head_sha
-                tracking_branch = None
-                tooltip = "Detached head"
-            message = f"{self._git_repository.working_tree_dir} " f"({branch})"
-            if tracking_branch:
-                commits_behind = self._git_repository.iter_commits(
-                    f"{branch}..{tracking_branch}"
-                )
-                num_commits_behind = sum(1 for _ in commits_behind)
-                tooltip = f"Tracking {tracking_branch}"
-                if num_commits_behind > 0:
-                    message += f" \u2193{num_commits_behind}"
-                    tooltip += f" {num_commits_behind} commits behind"
-                commits_ahead = self._git_repository.iter_commits(
-                    f"{tracking_branch}..{branch}"
-                )
-                num_commits_ahead = sum(1 for _ in commits_ahead)
-                if num_commits_ahead > 0:
-                    message += f" \u2191{num_commits_ahead}"
-                    tooltip += f" {num_commits_ahead} commits ahead"
-                tooltip += f"\ncommit {head_sha}"
+                head_sha = self._git_repository.head.object.hexsha
+                try:
+                    branch = self._git_repository.active_branch
+                    tracking_branch = branch.tracking_branch()
+                    if tracking_branch is None:
+                        tooltip = "Untracked branch"
+                except TypeError:
+                    branch = head_sha
+                    tracking_branch = None
+                    tooltip = "Detached head"
+                message = f"{self._git_repository.working_tree_dir} " f"({branch})"
+                if tracking_branch:
+                    commits_behind = self._git_repository.iter_commits(
+                        f"{branch}..{tracking_branch}"
+                    )
+                    num_commits_behind = sum(1 for _ in commits_behind)
+                    tooltip = f"Tracking {tracking_branch}"
+                    if num_commits_behind > 0:
+                        message += f" \u2193{num_commits_behind}"
+                        tooltip += f" {num_commits_behind} commits behind"
+                    commits_ahead = self._git_repository.iter_commits(
+                        f"{tracking_branch}..{branch}"
+                    )
+                    num_commits_ahead = sum(1 for _ in commits_ahead)
+                    if num_commits_ahead > 0:
+                        message += f" \u2191{num_commits_ahead}"
+                        tooltip += f" {num_commits_ahead} commits ahead"
+                    tooltip += f"\ncommit {head_sha}"
 
-            self._git_workspace_label.setText(message)
-            if tooltip:
-                self._git_workspace_label.setToolTip(tooltip)
+                self._git_workspace_label.setText(message)
+                if tooltip:
+                    self._git_workspace_label.setToolTip(tooltip)
+            except ValueError as exc:
+                logger.exception(exc)
+                url = self._git_repository.remotes[0].url
+                self._git_workspace_label.setText(
+                    f"Unable to resolve details from {url}"
+                )
+                self._git_workspace_label.setToolTip(str(exc))
 
     def _on_git_context_menu(self, position: QtCore.QPoint) -> None:
         menu = QtWidgets.QMenu(self)
@@ -629,9 +637,12 @@ class RecipeWidget(QtWidgets.QMainWindow):
 
     def _fetch_git_repository(self) -> None:
         assert self._git_repository
-        for remote in self._git_repository.remotes:
-            remote.fetch()
-        self._refresh_statusbar()
+        try:
+            for remote in self._git_repository.remotes:
+                remote.fetch()
+            self._refresh_statusbar()
+        except git.exc.GitCommandError as exc:
+            logger.exception(exc)
 
     def on_preferences_update(self) -> None:
         """
