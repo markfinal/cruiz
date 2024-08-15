@@ -410,9 +410,11 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         if with_recipe_path:
             params.recipe_path = recipe.path
         if with_explicit_name:
-            params.name = recipe_attributes["name"]
+            params.name = recipe_attributes.get("name", "unknown-name")
         if with_pkgref:
-            params.version = recipe.version or recipe_attributes["version"]
+            params.version = recipe.version or recipe_attributes.get(
+                "version", "unknown-version"
+            )
             params.user = recipe.user
             params.channel = recipe.channel
             params.make_package_reference()  # only needed for the exported string

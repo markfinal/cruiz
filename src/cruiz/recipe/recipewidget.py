@@ -1191,6 +1191,8 @@ class RecipeWidget(QtWidgets.QMainWindow):
         self._ui.buildFeaturesToolbar.setEnabled(False)
         self._ui.commandToolbar.disable_all_actions()
         self.setWindowTitle(f"Failed to load recipe {self.recipe.path}")
+        # ensure that toolbar icons are loaded, even if the tooltips are wrong
+        self._update_toolbars({})
 
     def _command_started(self) -> None:
         self._busy_icon.setMaximum(0)
