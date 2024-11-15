@@ -620,7 +620,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
                 self._git_workspace_label.setText(message)
                 if tooltip:
                     self._git_workspace_label.setToolTip(tooltip)
-            except ValueError as exc:
+            except (ValueError, git.exc.GitCommandError) as exc:
                 logger.exception(exc)
                 url = self._git_repository.remotes[0].url
                 self._git_workspace_label.setText(
