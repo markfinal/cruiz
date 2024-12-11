@@ -1,5 +1,5 @@
-PySide6>=6.6,<6.7
-qtpy>=2.4.1,<2.5
+PySide6>=6.8,<6.9
+qtpy>=2.4.2,<2.5
 conan<3
 graphviz>=0.19.1,<1
 psutil>=5.9.0,<6
