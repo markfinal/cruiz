@@ -97,13 +97,17 @@ class ConanHook:
         assert string.startswith("ConanHook(")
         assert string.endswith(")")
         string = string.replace("ConanHook(", "")
-        string = string.replace(")", "")
+        string = string.rstrip(")")
         args = string.split(",")
         assert len(args) == 2
-        path_arg = args[0].strip().split("=")
-        enabled_arg = args[1].strip().split("=")
-        path = pathlib.Path(path_arg[1][1:-1])
-        enabled = _strtobool(enabled_arg[1])
+        # two args, path=ClassName('/path/to'), enabled=True|False
+        path_arg = args[0].strip().replace("path=", "")
+        path_start = path_arg.find("(") + 1
+        path_end = path_arg.find(")")
+        path_arg = path_arg[path_start:path_end][1:-1]
+        path = pathlib.Path(path_arg)
+        enabled_arg = args[1].strip().replace("enabled=", "")
+        enabled = _strtobool(enabled_arg)
         return cls(path, enabled)
 
 
