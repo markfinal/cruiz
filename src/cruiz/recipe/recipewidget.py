@@ -257,9 +257,17 @@ class RecipeWidget(QtWidgets.QMainWindow):
         self._ui.localWorkflowExpressionEditor.clicked.connect(
             self._local_workflow_expression_editor
         )
+        empty_regex = r"^$"
+        pkgname_regex = r"[^:=,\s]+"
+        option_name_regex = r"[^=,\s]+"
+        option_value_regex = r"[^,\s]+"
+        qualified_pkg_optionvalue = (
+            f"{pkgname_regex}:{option_name_regex}={option_value_regex}"
+        )
+        comma_separated_regex = r"\s*,\s*"
         extra_option_list_regex = QtCore.QRegularExpression(
             # of the form <pkg>:<option>=<value>[,<repeat>]
-            r"^$|^([^:=,\s]+:[^=,\s]+=[^,\s]+)(\s*,\s*[^:=,\s]+:[^=,\s]+=[^,\s]+)*$"
+            rf"{empty_regex}|^({qualified_pkg_optionvalue})({comma_separated_regex}{qualified_pkg_optionvalue})*$"  # noqa: E501
         )
         extra_option_list_validator = QtGui.QRegularExpressionValidator(
             extra_option_list_regex, self
