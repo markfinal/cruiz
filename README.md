@@ -18,7 +18,7 @@ See the documentation at [Read The Docs](https://cruiz.readthedocs.io/).
   - macOS (11.0+)
 - Apple Silicon platforms:
   - macOS (11.0+)
-- Python 3.8-3.12
+- Python 3.9-3.12
 - Conan 1.x (from 1.17.1 onwards) and 2.x (from 2.0.14 onwards)
 
 All other Python dependencies are installed when the package is installed.
