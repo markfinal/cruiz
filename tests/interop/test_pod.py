@@ -1,5 +1,5 @@
 import pathlib
-import urllib
+import urllib.parse
 
 from cruiz.interop.pod import ConanHook
 
