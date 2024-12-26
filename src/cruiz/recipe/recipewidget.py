@@ -1114,7 +1114,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
             attributes = settings.attribute_overrides.resolve()
             if "extra_config_options" in attributes:
                 for keyvalue in attributes["extra_config_options"].split(","):
-                    option_name, option_value = keyvalue.split("=")
+                    option_name, option_value = keyvalue.split("=", maxsplit=1)
                     params.add_option(None, option_name, option_value)
         self._dependency_generate_context.conancommand(
             params,
