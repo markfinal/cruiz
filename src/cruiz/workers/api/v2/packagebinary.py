@@ -30,7 +30,11 @@ def invoke(
 
         remote = api.remotes.get(params.remote_name)
         pref = PkgReference.loads(params.reference)
-        app = ConanApp(api.cache_folder, api.config.global_conf)
+        try:
+            app = ConanApp(api)
+        except TypeError:
+            # older than v2.1.0
+            app = ConanApp(api.cache_folder, api.config.global_conf)
         metadata = None
 
         # TODO: using non-public method
