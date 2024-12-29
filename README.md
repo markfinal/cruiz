@@ -16,9 +16,10 @@ See the documentation at [Read The Docs](https://cruiz.readthedocs.io/).
   - Windows 10+
   - Linux (CentOS 7.5+/Ubuntu 18+)
   - macOS (11.0+)
-- Apple Silicon platforms:
-  - macOS (11.0+)
-- Python 3.9-3.12
+- ARM platforms:
+  - macOS (11.0+), Apple silicon
+  - additional details found [here](#arm-platforms)
+- Python 3.9-3.13
 - Conan 1.x (from 1.17.1 onwards) and 2.x (from 2.0.14 onwards)
 
 All other Python dependencies are installed when the package is installed.
@@ -74,6 +75,22 @@ If using VSCode, a settings file for this Git repository is provided. To enable 
 `python setup.py sdist` for a source distribution. Note that `pip` installing from a source distribution, or from an archive of the source tree, is not currently supported.
 
 `pip wheel --no-deps .` for a wheel.
+
+## ARM platforms
+Below are details of running `cruiz` on ARM platforms.
+
+### macOS
+No known restrictions are on this platform.
+
+### Windows
+Windows ARM is currently not supported, as there are missing PyPi package wheels, e.g. for PySide 6.
+
+### Ubuntu
+`cruiz` is runnable on Ubuntu 24.04 ARM, after the following steps are executed to satisfy using features of PySide 6:
+* Run `sudo apt install libdouble-conversion3`
+* Run `sudo apt install libminizip1t64`
+* Run `cd /usr/lib/aarch64-linux-gnu && sudo ln -s libwebp.so.7 libwebp.so.6`
+* Run `cd /usr/lib/aarch64-linux-gnu && sudo ln -s libtiff.so.6 libtiff.so.5`
 
 ## Acknowledgements
 Many thanks to [Foundry](https://www.foundry.com/) and its developers for support, inspiration, and testing in making cruiz.
