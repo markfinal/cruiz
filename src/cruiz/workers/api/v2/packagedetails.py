@@ -29,7 +29,11 @@ def invoke(queue: multiprocessing.Queue[Message], params: PackageIdParameters) -
 
         remote = api.remotes.get(params.remote_name)
         ref = RecipeReference.loads(params.reference)
-        app = ConanApp(api.cache_folder, api.config.global_conf)
+        try:
+            app = ConanApp(api)
+        except TypeError:
+            # older than v2.1.0
+            app = ConanApp(api.cache_folder, api.config.global_conf)
 
         # dict of keys of type <class 'conans.model.package_ref.PkgReference'>
         results_dict = app.remote_manager.search_packages(

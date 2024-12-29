@@ -96,7 +96,11 @@ def _interop_get_conandata(
 ) -> typing.Dict[str, typing.Any]:
     from conan.internal.conan_app import ConanApp
 
-    app = ConanApp(api.cache_folder, api.config.global_conf)
+    try:
+        app = ConanApp(api)
+    except TypeError:
+        # older than v2.1.0
+        app = ConanApp(api.cache_folder, api.config.global_conf)
     return app.loader._load_data(recipe_path)
 
 
