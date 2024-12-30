@@ -7,7 +7,6 @@ Resource generation from PySide
 import logging
 import os
 import pathlib
-import sys
 import typing
 
 import cruiz.runcommands
@@ -75,6 +74,3 @@ def generate_resources() -> None:
     logger.debug("Checking for out-of-date resources...")
     _ensure_resource_file_is_up_to_date(current_dir / SUBDIR, resources_dir)
     _ensure_ui_files_are_up_to_date(current_dir / SUBDIR, resources_dir)
-    if "CRUIZ_GENERATE_RESOURCES_ONLY" in os.environ:
-        print("Completed resource generation...exiting")
-        sys.exit(0)

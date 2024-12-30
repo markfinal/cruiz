@@ -11,11 +11,12 @@ after the last annotated tag.
 def get_version() -> str:
     """
     Try to get a fixed version number from the RELEASE_VERSION module (written by
-    binary distributions).
+    source and binary distributions).
     Otherwise, fallback to accessing Git information.
     """
     try:
-        from .RELEASE_VERSION import __version__  # type: ignore[import-untyped]
+        # in an editable install, RELEASE_VERSION does not exist
+        from .RELEASE_VERSION import __version__
 
         return __version__
     except ImportError:
