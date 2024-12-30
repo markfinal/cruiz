@@ -4,7 +4,7 @@ import urllib.parse
 from cruiz.interop.pod import ConanHook
 
 
-def test_pod_hook_invariant_after_serialization():
+def test_pod_hook_invariant_after_serialization() -> None:
     """
     ConanHook objects are passed over multiprocessing via encoded URLs
     which need to be deserialized in the child process.
