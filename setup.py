@@ -159,4 +159,5 @@ setup(
         "Documentation": "https://cruiz.readthedocs.io/en/latest/",
         "GitHub": "https://github.com/markfinal/cruiz",
     },
+    package_data={"cruiz": ["py.typed"]},
 )
