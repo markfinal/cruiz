@@ -4,7 +4,7 @@ import pathlib
 import subprocess
 import typing
 
-from setuptools import setup, find_packages
+from setuptools import setup
 import setuptools.command.build_py
 import setuptools.command.sdist
 
@@ -106,58 +106,10 @@ class _SDistCommand(setuptools.command.sdist.sdist):
             super().run()
 
 
-requirements_path = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)), "requirements.txt"
-)
-
-
-with open(requirements_path) as requirements_file:
-    requires = requirements_file.readlines()
-
-
-readme_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "README.md")
-
-
-with open(readme_path) as readme_file:
-    readme = readme_file.read()
-
-
 setup(
     cmdclass={
         "build_py": _BuildPyCommand,
         "sdist": _SDistCommand,
     },
-    name="cruiz",
     version=get_version(),
-    description="Conan recipe user interface",
-    long_description=readme,
-    long_description_content_type="text/markdown",
-    author="Mark Final",
-    author_email="markfinal@hotmail.com",
-    url="https://github.com/markfinal/cruiz",
-    package_dir={"": "src"},
-    packages=find_packages(where="src"),
-    install_requires=requires,
-    entry_points={
-        "gui_scripts": [
-            "cruiz = cruiz.__main__:main",
-        ],
-    },
-    classifiers=[
-        "Development Status :: 5 - Production/Stable",
-        "Intended Audience :: Developers",
-        "Topic :: Software Development :: Build Tools",
-        "License :: OSI Approved :: Apache Software License",
-        "Programming Language :: Python :: 3.9",
-        "Programming Language :: Python :: 3.10",
-        "Programming Language :: Python :: 3.11",
-        "Programming Language :: Python :: 3.12",
-        "Programming Language :: Python :: 3.13",
-    ],
-    python_requires=">=3.9, <3.14",
-    project_urls={
-        "Documentation": "https://cruiz.readthedocs.io/en/latest/",
-        "GitHub": "https://github.com/markfinal/cruiz",
-    },
-    package_data={"cruiz": ["py.typed"]},
 )

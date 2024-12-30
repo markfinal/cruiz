@@ -1,6 +1,54 @@
 [build-system]
 requires = [
     "setuptools",
-    "wheel",
     "PySide6>=6.8,<6.9"
 ]
+
+[project]
+name = "cruiz"
+description = "Conan recipe user interface"
+authors = [
+    {name = "Mark Final", email = "markfinal@hotmail.com"},
+]
+maintainers = [
+    {name = "Mark Final", email = "markfinal@hotmail.com"},
+]
+requires-python = ">=3.9, <3.14"
+license = {file = "LICENSE"}
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Build Tools",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+dynamic = [
+    "version",
+    "dependencies",
+    "readme"
+]
+
+[project.urls]
+Documentation = "https://cruiz.readthedocs.io"
+Repository = "https://github.com/markfinal/cruiz"
+Issues = "https://github.com/markfinal/cruiz/issues"
+
+[project.gui-scripts]
+cruiz = "cruiz.__main__:main"
+
+[tool.setuptools]
+packages.find.where = ["src"]
+packages.find.include = ["cruiz", "cruiz.*"]
+packages.find.exclude = ["cruiz.resources.*"]
+include-package-data = false
+
+[tool.setuptools.package-data]
+"cruiz" = ["py.typed"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+readme = {file = "README.md", content-type = "text/markdown"}
