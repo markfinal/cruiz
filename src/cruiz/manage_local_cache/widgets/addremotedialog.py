@@ -25,7 +25,7 @@ class AddRemoteDialog(QtWidgets.QDialog):
 
     def __init__(self, parent: QtWidgets.QWidget) -> None:
         super().__init__(parent)
-        self.setAttribute(QtCore.Qt.WA_DeleteOnClose, True)
+        self.setAttribute(QtCore.Qt.WidgetAttribute.WA_DeleteOnClose, True)
         self._ui = Ui_AddRemoteDialog()
         self._ui.setupUi(self)  # type: ignore[no-untyped-call]
         recent_remotes_actions: typing.List[QtGui.QAction] = []
@@ -39,13 +39,15 @@ class AddRemoteDialog(QtWidgets.QDialog):
         self._ui.url.add_submenu_actions("Recent remotes", recent_remotes_actions)
         self._ui.url.textChanged.connect(self._updated)
         self._ui.name.textChanged.connect(self._updated)
-        self._ui.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).clicked.connect(
-            self.accept
-        )
-        self._ui.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).setEnabled(False)
-        self._ui.buttonBox.button(QtWidgets.QDialogButtonBox.Cancel).clicked.connect(
-            self.reject
-        )
+        self._ui.buttonBox.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Ok
+        ).clicked.connect(self.accept)
+        self._ui.buttonBox.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Ok
+        ).setEnabled(False)
+        self._ui.buttonBox.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Cancel
+        ).clicked.connect(self.reject)
         self._new_remote: typing.Optional[ConanRemote] = None
 
     def _set_remote_url(self, url: str) -> None:
@@ -53,7 +55,9 @@ class AddRemoteDialog(QtWidgets.QDialog):
 
     def _updated(self, path: str) -> None:
         # pylint: disable=unused-argument
-        self._ui.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).setEnabled(
+        self._ui.buttonBox.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Ok
+        ).setEnabled(
             bool(
                 self._ui.name.text()
                 and self._ui.url.text()

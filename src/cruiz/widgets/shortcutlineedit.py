@@ -13,28 +13,37 @@ class ShortcutLineEdit(QtWidgets.QLineEdit):
     """
 
     def keyPressEvent(self, event: QtGui.QKeyEvent) -> None:
-        assert event.type() == QtCore.QEvent.KeyPress
+        assert event.type() == QtCore.QEvent.Type.KeyPress
         key = event.key()
         if key in (
-            QtCore.Qt.Key_unknown,
-            QtCore.Qt.Key_Control,
-            QtCore.Qt.Key_Shift,
-            QtCore.Qt.Key_Alt,
-            QtCore.Qt.Key_Meta,
+            QtCore.Qt.Key.Key_unknown,
+            QtCore.Qt.Key.Key_Control,
+            QtCore.Qt.Key.Key_Shift,
+            QtCore.Qt.Key.Key_Alt,
+            QtCore.Qt.Key.Key_Meta,
         ):
             return
-        if key == QtCore.Qt.Key_Backspace:
+        if key == QtCore.Qt.Key.Key_Backspace:
             super().keyPressEvent(event)
             return
         modifiers = event.modifiers()
-        if modifiers & QtCore.Qt.ControlModifier:
-            key += QtCore.Qt.CTRL
-        if modifiers & QtCore.Qt.ShiftModifier:
-            key += QtCore.Qt.SHIFT
-        if modifiers & QtCore.Qt.AltModifier:
-            key += QtCore.Qt.ALT
-        if modifiers & QtCore.Qt.MetaModifier:
-            key += QtCore.Qt.META
-        sequence = QtGui.QKeySequence(key)
-        self.setText(sequence.toString(QtGui.QKeySequence.PortableText))
+        combiner = QtCore.QKeyCombination(QtCore.Qt.Key(key))
+        if modifiers & QtCore.Qt.KeyboardModifier.ControlModifier:
+            combiner = QtCore.QKeyCombination(
+                QtCore.Qt.Modifier.CTRL, QtCore.Qt.Key(key)
+            )
+        if modifiers & QtCore.Qt.KeyboardModifier.ShiftModifier:
+            combiner = QtCore.QKeyCombination(
+                QtCore.Qt.Modifier.SHIFT, QtCore.Qt.Key(key)
+            )
+        if modifiers & QtCore.Qt.KeyboardModifier.AltModifier:
+            combiner = QtCore.QKeyCombination(
+                QtCore.Qt.Modifier.ALT, QtCore.Qt.Key(key)
+            )
+        if modifiers & QtCore.Qt.KeyboardModifier.MetaModifier:
+            combiner = QtCore.QKeyCombination(
+                QtCore.Qt.Modifier.META, QtCore.Qt.Key(key)
+            )
+        sequence = QtGui.QKeySequence(combiner.toCombined())
+        self.setText(sequence.toString(QtGui.QKeySequence.SequenceFormat.PortableText))
         event.accept()

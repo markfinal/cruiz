@@ -24,7 +24,7 @@ class NewLocalCacheNamePage(QtWidgets.QWizardPage):
 
     def isComplete(self) -> bool:
         # pylint: disable=protected-access
-        text = self.wizard()._ui.new_cache_name.text()
+        text = self.wizard()._ui.new_cache_name.text()  # type: ignore[attr-defined]
         return bool(text) and text not in self._cache_names
 
 
@@ -35,7 +35,7 @@ class NewLocalCacheLocationPage(QtWidgets.QWizardPage):
 
     def isComplete(self) -> bool:
         # pylint: disable=protected-access
-        wizard_user_interface = self.wizard()._ui
+        wizard_user_interface = self.wizard()._ui  # type: ignore[attr-defined]
         if platform.system() == "Windows":
             return bool(wizard_user_interface.userHome.text()) and bool(
                 wizard_user_interface.userHomeShort.text()

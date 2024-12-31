@@ -40,7 +40,10 @@ class _PackageRevisionModel(QtCore.QAbstractTableModel):
         return 2
 
     def headerData(self, section, orientation, role):  # type: ignore
-        if role == QtCore.Qt.DisplayRole and orientation == QtCore.Qt.Horizontal:
+        if (
+            role == QtCore.Qt.ItemDataRole.DisplayRole
+            and orientation == QtCore.Qt.Orientation.Horizontal
+        ):
             if section == 0:
                 return "Revision"
             if section == 1:
@@ -48,7 +51,7 @@ class _PackageRevisionModel(QtCore.QAbstractTableModel):
         return None
 
     def data(self, index, role) -> typing.Any:  # type: ignore
-        if role == QtCore.Qt.DisplayRole:
+        if role == QtCore.Qt.ItemDataRole.DisplayRole:
             assert self._prevs
             if index.column() == 0:
                 return self._prevs[index.row()]["revision"]
@@ -71,7 +74,7 @@ class PackageRevisionPage(Page):
         self._model = _PackageRevisionModel()
         self._ui.package_revisions.setModel(self._model)
         self._ui.package_revisions.horizontalHeader().setSectionResizeMode(
-            QtWidgets.QHeaderView.ResizeToContents
+            QtWidgets.QHeaderView.ResizeMode.ResizeToContents
         )
         self._ui.package_revisions.customContextMenuRequested.connect(
             self._on_selected_pkgref_menu
@@ -91,7 +94,7 @@ class PackageRevisionPage(Page):
         """
         selection = self._ui.package_revisions.selectedIndexes()
         assert len(selection) == 2
-        package_rev = self._model.data(selection[0], QtCore.Qt.DisplayRole)
+        package_rev = self._model.data(selection[0], QtCore.Qt.ItemDataRole.DisplayRole)
         return f"{self._previous_pkgref}#{package_rev}"
 
     def _enable_progress(self, enable: bool) -> None:

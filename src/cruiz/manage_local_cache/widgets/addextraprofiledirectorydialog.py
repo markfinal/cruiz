@@ -23,29 +23,33 @@ class AddExtraProfileDirectoryDialog(QtWidgets.QDialog):
 
     def __init__(self, parent: typing.Optional[QtWidgets.QWidget] = None) -> None:
         super().__init__(parent)
-        self.setAttribute(QtCore.Qt.WA_DeleteOnClose, True)
+        self.setAttribute(QtCore.Qt.WidgetAttribute.WA_DeleteOnClose, True)
         self._ui = Ui_AddExtraProfileDirectoryDialog()
         self._ui.setupUi(self)  # type: ignore[no-untyped-call]
-        self._ui.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).setEnabled(False)
+        self._ui.buttonBox.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Ok
+        ).setEnabled(False)
         self._ui.buttonBox.accepted.connect(self.accept)
         self._ui.buttonBox.rejected.connect(self.reject)
         self._ui.name.textChanged.connect(self._updated)
         self._ui.directory.textChanged.connect(self._updated)
         browse_for_profile_dir_action = QtGui.QAction(
-            self.style().standardIcon(QtWidgets.QStyle.SP_DirIcon), "", self
+            self.style().standardIcon(QtWidgets.QStyle.StandardPixmap.SP_DirIcon),
+            "",
+            self,
         )
         browse_for_profile_dir_action.triggered.connect(self._browse_for_profile_dir)
         self._ui.directory.addAction(
             browse_for_profile_dir_action,
-            QtWidgets.QLineEdit.TrailingPosition,
+            QtWidgets.QLineEdit.ActionPosition.TrailingPosition,
         )
         self._extra: typing.Optional[ExtraProfileDirectory] = None
 
     def _updated(self, text: str) -> None:
         # pylint: disable=unused-argument
-        self._ui.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).setEnabled(
-            bool(self._ui.name.text() and self._ui.directory.text())
-        )
+        self._ui.buttonBox.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Ok
+        ).setEnabled(bool(self._ui.name.text() and self._ui.directory.text()))
 
     def accept(self) -> None:
         self._extra = ExtraProfileDirectory(

@@ -62,28 +62,30 @@ class RemotesTable(QtWidgets.QTableWidget):
         row_count = self.rowCount()
         enabled_item = QtWidgets.QTableWidgetItem()
         enabled_item.setFlags(
-            QtCore.Qt.ItemIsEnabled  # type: ignore
-            | QtCore.Qt.ItemIsSelectable
-            | QtCore.Qt.ItemIsDragEnabled
-            | QtCore.Qt.ItemIsDropEnabled
-            | QtCore.Qt.ItemIsUserCheckable
+            QtCore.Qt.ItemFlag.ItemIsEnabled
+            | QtCore.Qt.ItemFlag.ItemIsSelectable
+            | QtCore.Qt.ItemFlag.ItemIsDragEnabled
+            | QtCore.Qt.ItemFlag.ItemIsDropEnabled
+            | QtCore.Qt.ItemFlag.ItemIsUserCheckable
         )
         enabled_item.setCheckState(
-            QtCore.Qt.Checked if remote.enabled else QtCore.Qt.Unchecked
+            QtCore.Qt.CheckState.Checked
+            if remote.enabled
+            else QtCore.Qt.CheckState.Unchecked
         )
         name_item = QtWidgets.QTableWidgetItem(remote.name)
         name_item.setFlags(
-            QtCore.Qt.ItemIsEnabled  # type: ignore
-            | QtCore.Qt.ItemIsSelectable
-            | QtCore.Qt.ItemIsDragEnabled
-            | QtCore.Qt.ItemIsDropEnabled
+            QtCore.Qt.ItemFlag.ItemIsEnabled
+            | QtCore.Qt.ItemFlag.ItemIsSelectable
+            | QtCore.Qt.ItemFlag.ItemIsDragEnabled
+            | QtCore.Qt.ItemFlag.ItemIsDropEnabled
         )
         url_item = QtWidgets.QTableWidgetItem(remote.url)
         url_item.setFlags(
-            QtCore.Qt.ItemIsEnabled  # type: ignore
-            | QtCore.Qt.ItemIsSelectable
-            | QtCore.Qt.ItemIsDragEnabled
-            | QtCore.Qt.ItemIsDropEnabled
+            QtCore.Qt.ItemFlag.ItemIsEnabled
+            | QtCore.Qt.ItemFlag.ItemIsSelectable
+            | QtCore.Qt.ItemFlag.ItemIsDragEnabled
+            | QtCore.Qt.ItemFlag.ItemIsDropEnabled
         )
         with BlockSignals(self):
             self.setRowCount(row_count + 1)
@@ -92,11 +94,16 @@ class RemotesTable(QtWidgets.QTableWidget):
             self.setItem(row_count, RemotesTable._ColumnIndex.URL, url_item)
 
     def _row_to_remote(self, row_index: int) -> ConanRemote:
+        name_item = self.item(row_index, RemotesTable._ColumnIndex.NAME)
+        assert name_item is not None
+        url_item = self.item(row_index, RemotesTable._ColumnIndex.URL)
+        assert url_item is not None
+        enabled_item = self.item(row_index, RemotesTable._ColumnIndex.ENABLED)
+        assert enabled_item is not None
         remote = ConanRemote(
-            self.item(row_index, RemotesTable._ColumnIndex.NAME).text().strip(),
-            self.item(row_index, RemotesTable._ColumnIndex.URL).text().strip(),
-            self.item(row_index, RemotesTable._ColumnIndex.ENABLED).checkState()
-            == QtCore.Qt.Checked,
+            name_item.text().strip(),
+            url_item.text().strip(),
+            enabled_item.checkState() == QtCore.Qt.CheckState.Checked,
         )
         return remote
 
@@ -132,7 +139,9 @@ class RemotesTable(QtWidgets.QTableWidget):
         """
         assert self.rowCount() >= len(remotes)
         for i, remote in enumerate(remotes):
-            table_remote_name = self.item(i, RemotesTable._ColumnIndex.NAME).text()
+            item = self.item(i, RemotesTable._ColumnIndex.NAME)
+            assert item is not None
+            table_remote_name = item.text()
             if table_remote_name != remote.name:
                 return False
         return True

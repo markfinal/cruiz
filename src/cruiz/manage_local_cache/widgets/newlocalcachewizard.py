@@ -40,18 +40,20 @@ class NewLocalCacheWizard(QtWidgets.QWizard):
         self._ui.userHomeShort.textChanged.connect(
             self._ui.locationsPage.completeChanged
         )
-        dir_icon: QtGui.QIcon = self.style().standardIcon(QtWidgets.QStyle.SP_DirIcon)
+        dir_icon: QtGui.QIcon = self.style().standardIcon(
+            QtWidgets.QStyle.StandardPixmap.SP_DirIcon
+        )
         browse_home_dir_action = QtGui.QAction(dir_icon, "", self)
         browse_home_dir_action.triggered.connect(self._browse_for_home_dir)
         self._ui.userHome.addAction(
             browse_home_dir_action,
-            QtWidgets.QLineEdit.TrailingPosition,
+            QtWidgets.QLineEdit.ActionPosition.TrailingPosition,
         )
         browse_short_home_dir_action = QtGui.QAction(dir_icon, "", self)
         browse_short_home_dir_action.triggered.connect(self._browse_for_short_home_dir)
         self._ui.userHomeShort.addAction(
             browse_short_home_dir_action,
-            QtWidgets.QLineEdit.TrailingPosition,
+            QtWidgets.QLineEdit.ActionPosition.TrailingPosition,
         )
         with LocalCacheSettingsReader() as settings:
             new_config_url = settings.new_configuration_install.resolve()
@@ -174,6 +176,8 @@ class NewLocalCacheWizard(QtWidgets.QWizard):
                 self,
                 "New local cache configuration install failure",
                 str(exception),
+                button0=QtWidgets.QMessageBox.StandardButton.Ok,
+                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
             )
 
     @property

@@ -37,7 +37,8 @@ class _ProfileFrame(QtWidgets.QFrame):
     def _recipe(self) -> Recipe:
         toolbar = self.parent()
         recipe_widget = toolbar.parent()
-        recipe = recipe_widget.recipe
+        recipe = recipe_widget.recipe  # type: ignore[attr-defined]
+        assert isinstance(recipe, Recipe)
         return recipe
 
     def _refresh_tooltip(self) -> None:
@@ -75,6 +76,7 @@ class _ProfileFrame(QtWidgets.QFrame):
         with RecipeSettingsReader.from_recipe(recipe) as settings:
             current_profile = settings.profile.resolve()
         with BlockSignals(self._ui.profileCombo) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QComboBox)
             blocked_widget.clear()
             for profile_path, _ in profile_list:
                 blocked_widget.addItem(str(profile_path))
@@ -106,7 +108,7 @@ class _ProfileFrame(QtWidgets.QFrame):
         # note: has to be from recipe, as the profile setter needs
         # the ConanContext to check the default profile name
         RecipeSettingsWriter.from_recipe(recipe).sync(settings)
-        self.parent().profile_changed.emit(text)
+        self.parent().profile_changed.emit(text)  # type: ignore[attr-defined]
 
 
 class _CPUCoresFrame(QtWidgets.QFrame):
@@ -120,7 +122,8 @@ class _CPUCoresFrame(QtWidgets.QFrame):
     def _recipe(self) -> Recipe:
         toolbar = self.parent()
         recipe_widget = toolbar.parent()
-        recipe = recipe_widget.recipe
+        recipe = recipe_widget.recipe  # type: ignore[attr-defined]
+        assert isinstance(recipe, Recipe)
         return recipe
 
     def refresh_content(self, recipe: Recipe) -> None:
@@ -136,6 +139,7 @@ class _CPUCoresFrame(QtWidgets.QFrame):
         elif num_cores.value < num_cores.fallback:
             self._ui.cpuCoresSpin.setStyleSheet("color: red;")
         with BlockSignals(self._ui.cpuCoresSpin) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QSpinBox)
             blocked_widget.setValue(num_cores.resolve())
 
     def _changed_num_cores(self, value: int) -> None:
@@ -166,7 +170,8 @@ class RecipeBehaviourToolbar(QtWidgets.QToolBar):
     @property
     def _recipe(self) -> Recipe:
         recipe_widget = self.parent()
-        recipe = recipe_widget.recipe
+        recipe = recipe_widget.recipe  # type: ignore[attr-defined]
+        assert isinstance(recipe, Recipe)
         return recipe
 
     def refresh_content(self) -> None:

@@ -10,7 +10,8 @@ from qtpy import QtCore, QtWidgets
 
 import cruiz.globals
 
-from cruiz.commands.context import ConanContext, LogDetails
+from cruiz.commands.context import ConanContext
+from cruiz.commands.logdetails import LogDetails
 from cruiz.interop.commandparameters import CommandParameters
 
 from cruiz.pyside6.local_cache_run_command_dialog import Ui_RunConanCommandDialog
@@ -25,7 +26,7 @@ class RunConanCommandDialog(QtWidgets.QDialog):
 
     def __init__(self, context_name: str, parent: QtWidgets.QWidget) -> None:
         super().__init__(parent)
-        self.setAttribute(QtCore.Qt.WA_DeleteOnClose, True)
+        self.setAttribute(QtCore.Qt.WidgetAttribute.WA_DeleteOnClose, True)
         self._ui = Ui_RunConanCommandDialog()
         self._ui.setupUi(self)  # type: ignore[no-untyped-call]
         self._log_details = LogDetails(self._ui.log, self._ui.log, True, False, None)

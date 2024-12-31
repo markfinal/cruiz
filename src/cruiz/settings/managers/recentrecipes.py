@@ -85,7 +85,9 @@ class RecentRecipeSettingsWriter:  # TODO: should this derive from _WriterMixin?
         ) as settings:  # TODO: can this use the reader's QSettings?
             for i, uuid in enumerate(current_list):
                 settings.setArrayIndex(i)
-                settings.setValue("UUID", uuid.toString(QtCore.QUuid.WithoutBraces))
+                settings.setValue(
+                    "UUID", uuid.toString(QtCore.QUuid.StringFormat.WithoutBraces)
+                )
         return uuid_exists
 
 
@@ -110,4 +112,6 @@ class RecentRecipeSettingsDeleter:
             with BaseSettings.WriteArray(self._array) as settings:
                 for i, uuid in enumerate(current_list):
                     settings.setArrayIndex(i)
-                    settings.setValue("UUID", uuid.toString(QtCore.QUuid.WithoutBraces))
+                    settings.setValue(
+                        "UUID", uuid.toString(QtCore.QUuid.StringFormat.WithoutBraces)
+                    )

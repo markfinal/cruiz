@@ -33,7 +33,7 @@ class MoveLocalCacheDialog(QtWidgets.QDialog):
 
     def __init__(self, context: ConanContext, parent: QtWidgets.QWidget) -> None:
         super().__init__(parent)
-        self.setAttribute(QtCore.Qt.WA_DeleteOnClose, True)
+        self.setAttribute(QtCore.Qt.WidgetAttribute.WA_DeleteOnClose, True)
         self._context = context
         self._ui = Ui_LocalCacheMove()
         self._ui.setupUi(self)  # type: ignore[no-untyped-call]
@@ -43,16 +43,20 @@ class MoveLocalCacheDialog(QtWidgets.QDialog):
         self._ui.buttonBox.accepted.connect(self.accept)
         self._ui.buttonBox.rejected.connect(self.reject)
         home_dir_browse_action = QtGui.QAction(
-            self.style().standardIcon(QtWidgets.QStyle.SP_DirIcon), "", self
+            self.style().standardIcon(QtWidgets.QStyle.StandardPixmap.SP_DirIcon),
+            "",
+            self,
         )
         home_dir_browse_action.triggered.connect(self._home_dir_browse)
         self._ui.newUserHome.addAction(
             home_dir_browse_action,
-            QtWidgets.QLineEdit.TrailingPosition,
+            QtWidgets.QLineEdit.ActionPosition.TrailingPosition,
         )
         self._ui.newUserHome.textChanged.connect(self._new_path_changed)
         self._ui.newUserHomeShort.textChanged.connect(self._new_path_changed)
-        self._ui.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).setEnabled(False)
+        self._ui.buttonBox.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Ok
+        ).setEnabled(False)
         if cruiz.globals.CONAN_MAJOR_VERSION == 1:
             if platform.system() == "Windows":
                 pass
@@ -85,7 +89,9 @@ class MoveLocalCacheDialog(QtWidgets.QDialog):
             condition = bool(self._ui.newUserHome.text()) or bool(
                 self._ui.newUserHomeShort.text()
             )
-        self._ui.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).setEnabled(condition)
+        self._ui.buttonBox.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Ok
+        ).setEnabled(condition)
 
     def accept(self) -> None:
         with NamedLocalCacheSettingsReader(self._context.cache_name) as settings:
@@ -98,6 +104,8 @@ class MoveLocalCacheDialog(QtWidgets.QDialog):
                 "Conan local cache home directory",
                 f"The selected home directory '{new_home_dir}' is unchanged. "
                 "Please choose another.",
+                button0=QtWidgets.QMessageBox.StandardButton.Ok,
+                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
             )
             return
         qdir = QtCore.QDir(new_home_dir)
@@ -107,6 +115,8 @@ class MoveLocalCacheDialog(QtWidgets.QDialog):
                 "Conan local cache home directory",
                 f"The selected home directory '{new_home_dir}' already exists. "
                 "Please choose another.",
+                button0=QtWidgets.QMessageBox.StandardButton.Ok,
+                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
             )
             return
         if not qdir.isEmpty():
@@ -115,6 +125,8 @@ class MoveLocalCacheDialog(QtWidgets.QDialog):
                 "Conan local cache home directory",
                 f"The selected home directory '{new_home_dir}' is not empty. "
                 "Please choose another.",
+                button0=QtWidgets.QMessageBox.StandardButton.Ok,
+                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
             )
             return
         if short_home_dir:
@@ -125,6 +137,8 @@ class MoveLocalCacheDialog(QtWidgets.QDialog):
                     "Conan local cache short home directory",
                     f"The selected short home directory '{new_short_home_dir}' "
                     "is unchanged. Please choose another.",
+                    button0=QtWidgets.QMessageBox.StandardButton.Ok,
+                    button1=QtWidgets.QMessageBox.StandardButton.NoButton,
                 )
                 return
             qdir = QtCore.QDir(new_short_home_dir)
@@ -134,6 +148,8 @@ class MoveLocalCacheDialog(QtWidgets.QDialog):
                     "Conan local cache short home directory",
                     f"The selected short home directory '{new_short_home_dir}' already"
                     " exists. Please choose another.",
+                    button0=QtWidgets.QMessageBox.StandardButton.Ok,
+                    button1=QtWidgets.QMessageBox.StandardButton.NoButton,
                 )
                 return
             if not qdir.isEmpty():
@@ -142,6 +158,8 @@ class MoveLocalCacheDialog(QtWidgets.QDialog):
                     "Conan local cache short home directory",
                     f"The selected short home directory '{new_short_home_dir}' is "
                     "not empty. Please choose another.",
+                    button0=QtWidgets.QMessageBox.StandardButton.Ok,
+                    button1=QtWidgets.QMessageBox.StandardButton.NoButton,
                 )
                 return
         else:
@@ -176,6 +194,8 @@ class MoveLocalCacheDialog(QtWidgets.QDialog):
                 self,
                 "Conan move local cache",
                 f"Failed to move the local cache home dir because: {exception}.",
+                button0=QtWidgets.QMessageBox.StandardButton.Ok,
+                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
             )
             # roll back previous steps
             settings.home_dir = old_home_dir  # type: ignore
@@ -193,6 +213,8 @@ class MoveLocalCacheDialog(QtWidgets.QDialog):
                         "Conan move local cache",
                         "Failed to move the local cache short home dir because: "
                         f"{exception}.",
+                        button0=QtWidgets.QMessageBox.StandardButton.Ok,
+                        button1=QtWidgets.QMessageBox.StandardButton.NoButton,
                     )
                     # roll back previous steps
                     shutil.move(new_home_dir, str(old_conan_dir))

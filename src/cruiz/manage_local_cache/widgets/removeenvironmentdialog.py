@@ -17,20 +17,24 @@ class RemoveEnvironmentDialog(QtWidgets.QDialog):
 
     def __init__(self, parent: QtWidgets.QWidget) -> None:
         super().__init__(parent)
-        self.setAttribute(QtCore.Qt.WA_DeleteOnClose, True)
+        self.setAttribute(QtCore.Qt.WidgetAttribute.WA_DeleteOnClose, True)
         self._ui = Ui_RemoveEnvironmentDialog()
         self._ui.setupUi(self)  # type: ignore[no-untyped-call]
         self._ui.name.textChanged.connect(self._updated)
-        self._ui.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).setEnabled(False)
+        self._ui.buttonBox.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Ok
+        ).setEnabled(False)
         self.name: str = ""
 
     def _set_name(self) -> None:
-        self._ui.name.setText(self.sender().text())
+        sender_lineedit = self.sender()
+        assert isinstance(sender_lineedit, QtWidgets.QLineEdit)
+        self._ui.name.setText(sender_lineedit.text())
 
     def _updated(self) -> None:
-        self._ui.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).setEnabled(
-            bool(self._ui.name.text())
-        )
+        self._ui.buttonBox.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Ok
+        ).setEnabled(bool(self._ui.name.text()))
 
     def accept(self) -> None:
         self.name = self._ui.name.text()

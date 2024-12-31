@@ -46,19 +46,25 @@ class _CMakeFeaturesFrame(QtWidgets.QFrame):
             find_debug = settings.cmake_find_debug.resolve()
             verbose = settings.cmake_verbose.resolve()
         with BlockSignals(self._ui.cmakeFindDebug) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QCheckBox)
             blocked_widget.setChecked(find_debug)
         with BlockSignals(self._ui.cmakeVerbose) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QCheckBox)
             blocked_widget.setChecked(verbose)
 
     def _toggle_cmake_find_debug_mode(self, state: int) -> None:
         settings = RecipeSettings()
-        settings.cmake_find_debug = QtCore.Qt.CheckState(state) == QtCore.Qt.Checked
+        settings.cmake_find_debug = (
+            QtCore.Qt.CheckState(state) == QtCore.Qt.CheckState.Checked  # type: ignore[assignment] # noqa: E501
+        )
         assert self._uuid
         RecipeSettingsWriter.from_uuid(self._uuid).sync(settings)
 
     def _toggle_cmake_verbose(self, state: int) -> None:
         settings = RecipeSettings()
-        settings.cmake_verbose = QtCore.Qt.CheckState(state) == QtCore.Qt.Checked
+        settings.cmake_verbose = (
+            QtCore.Qt.CheckState(state) == QtCore.Qt.CheckState.Checked  # type: ignore[assignment] # noqa: E501
+        )
         assert self._uuid
         RecipeSettingsWriter.from_uuid(self._uuid).sync(settings)
 
@@ -103,12 +109,15 @@ class _CompilerCacheConfigurationDialog(QtWidgets.QDialog):
             args = settings.compilercache_autotools_configuration.resolve()
         if CompilerCacheTypes.CCACHE.name in args:
             with BlockSignals(self._ui.ccache_arguments) as blocked_widget:
+                assert isinstance(blocked_widget, QtWidgets.QLineEdit)
                 blocked_widget.setText(args[CompilerCacheTypes.CCACHE.name])
         if CompilerCacheTypes.SCCACHE.name in args:
             with BlockSignals(self._ui.sccache_arguments) as blocked_widget:
+                assert isinstance(blocked_widget, QtWidgets.QLineEdit)
                 blocked_widget.setText(args[CompilerCacheTypes.SCCACHE.name])
         if CompilerCacheTypes.BUILDCACHE.name in args:
             with BlockSignals(self._ui.buildcache_arguments) as blocked_widget:
+                assert isinstance(blocked_widget, QtWidgets.QLineEdit)
                 blocked_widget.setText(args[CompilerCacheTypes.BUILDCACHE.name])
 
     def _any_modifications(self) -> bool:
@@ -133,8 +142,11 @@ class _CompilerCacheConfigurationDialog(QtWidgets.QDialog):
                 self,
                 "Unsaved compiler cache arguments",
                 "Modifications are unsaved. Do you want to discard them?",
+                button0=QtWidgets.QMessageBox.StandardButton.Yes
+                | QtWidgets.QMessageBox.StandardButton.No,
+                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
             )
-            if response == QtWidgets.QMessageBox.No:
+            if response == QtWidgets.QMessageBox.StandardButton.No:
                 return
         super().reject()
 
@@ -175,8 +187,10 @@ class _CompilerCacheFeaturesFrame(QtWidgets.QFrame):
         with RecipeSettingsReader.from_uuid(uuid) as settings:
             compiler_cache = settings.compiler_cache.resolve()
         with BlockSignals(self._ui.useCache) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QCheckBox)
             blocked_widget.setChecked(bool(compiler_cache))
         with BlockSignals(self._ui.chooseCache) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QComboBox)
             blocked_widget.setEnabled(bool(compiler_cache))
             default_compiler_cache = self._identify_default_compiler_cache()
             blocked_widget.setCurrentText(compiler_cache or default_compiler_cache)
@@ -194,7 +208,7 @@ class _CompilerCacheFeaturesFrame(QtWidgets.QFrame):
         return default_compiler_cache
 
     def _toggle_use_cache(self, state: int) -> None:
-        is_checked = QtCore.Qt.CheckState(state) == QtCore.Qt.Checked
+        is_checked = QtCore.Qt.CheckState(state) == QtCore.Qt.CheckState.Checked
         settings = RecipeSettings()
         cache_name = self._ui.chooseCache.currentText() if is_checked else None
         settings.compiler_cache = cache_name  # type: ignore[assignment]

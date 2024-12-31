@@ -33,7 +33,8 @@ from cruiz.settings.managers.recentconanremotes import (
     RecentConanRemotesSettingsWriter,
 )
 from cruiz.widgets.util import BlockSignals
-from cruiz.commands.context import ConanContext, ConanConfigBoolean
+from cruiz.commands.context import ConanContext
+from cruiz.commands.conanconf import ConanConfigBoolean
 
 from cruiz.revealonfilesystem import reveal_on_filesystem
 from cruiz.constants import DEFAULT_CACHE_NAME
@@ -76,47 +77,49 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
         cache_name_to_open: typing.Optional[str],
     ) -> None:
         super().__init__(parent)
-        self.setAttribute(QtCore.Qt.WA_DeleteOnClose, True)
+        self.setAttribute(QtCore.Qt.WidgetAttribute.WA_DeleteOnClose, True)
         self._ui = Ui_ManageLocalCaches()
         self._ui.setupUi(self)  # type: ignore[no-untyped-call]
         self._ui.new_local_cache_button.clicked.connect(self._new_cache)
-        self._ui.buttonBox.button(QtWidgets.QDialogButtonBox.Apply).setEnabled(False)
-        self._ui.buttonBox.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(
-            self._save_modifications
-        )
+        self._ui.buttonBox.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Apply
+        ).setEnabled(False)
+        self._ui.buttonBox.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Apply
+        ).clicked.connect(self._save_modifications)
         # locations
-        dir_icon = self.style().standardIcon(QtWidgets.QStyle.SP_DirIcon)
+        dir_icon = self.style().standardIcon(QtWidgets.QStyle.StandardPixmap.SP_DirIcon)
         self._ui.conan_user_home.setReadOnly(True)
         open_user_home_action = QtGui.QAction(dir_icon, "", self)
         open_user_home_action.triggered.connect(self._open_conan_user_home)
         self._ui.conan_user_home.addAction(
             open_user_home_action,
-            QtWidgets.QLineEdit.TrailingPosition,
+            QtWidgets.QLineEdit.ActionPosition.TrailingPosition,
         )
         self._ui.conan_user_home_short.setReadOnly(True)
         open_short_user_home_action = QtGui.QAction(dir_icon, "", self)
         open_short_user_home_action.triggered.connect(self._open_conan_user_home_short)
         self._ui.conan_user_home_short.addAction(
             open_short_user_home_action,
-            QtWidgets.QLineEdit.TrailingPosition,
+            QtWidgets.QLineEdit.ActionPosition.TrailingPosition,
         )
         # profiles
         self._ui.profilesCreateDefault.clicked.connect(self._profiles_create_default)
         # extra profiles
-        self._ui.profilesTableButtons.button(QtWidgets.QDialogButtonBox.Open).setText(
-            "+"
-        )
         self._ui.profilesTableButtons.button(
-            QtWidgets.QDialogButtonBox.Open
+            QtWidgets.QDialogButtonBox.StandardButton.Open
+        ).setText("+")
+        self._ui.profilesTableButtons.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Open
         ).clicked.connect(self._profiles_add)
-        self._ui.profilesTableButtons.button(QtWidgets.QDialogButtonBox.Close).setText(
-            "-"
-        )
         self._ui.profilesTableButtons.button(
-            QtWidgets.QDialogButtonBox.Close
+            QtWidgets.QDialogButtonBox.StandardButton.Close
+        ).setText("-")
+        self._ui.profilesTableButtons.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Close
         ).clicked.connect(self._profiles_remove)
         self._ui.profilesTableButtons.button(
-            QtWidgets.QDialogButtonBox.Close
+            QtWidgets.QDialogButtonBox.StandardButton.Close
         ).setEnabled(False)
         self._ui.profilesTable.itemSelectionChanged.connect(self._profiles_selection)
         # config
@@ -130,48 +133,56 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
             self._ui.configRevisions.hide()
         # environments
         # - adding
-        self._ui.envTableButtons.button(QtWidgets.QDialogButtonBox.Open).setText("+")
         self._ui.envTableButtons.button(
-            QtWidgets.QDialogButtonBox.Open
+            QtWidgets.QDialogButtonBox.StandardButton.Open
+        ).setText("+")
+        self._ui.envTableButtons.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Open
         ).clicked.connect(self._env_add_plus)
-        self._ui.envTableButtons.button(QtWidgets.QDialogButtonBox.Close).setText("-")
         self._ui.envTableButtons.button(
-            QtWidgets.QDialogButtonBox.Close
+            QtWidgets.QDialogButtonBox.StandardButton.Close
+        ).setText("-")
+        self._ui.envTableButtons.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Close
         ).clicked.connect(self._env_add_minus)
-        self._ui.envTableButtons.button(QtWidgets.QDialogButtonBox.Close).setEnabled(
-            False
-        )
+        self._ui.envTableButtons.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Close
+        ).setEnabled(False)
         self._ui.envTable.itemSelectionChanged.connect(self._env_add_selection)
         self._ui.envTable.model().dataChanged.connect(self._env_add_changed)
         # - removing
-        self._ui.envRemoveButtons.button(QtWidgets.QDialogButtonBox.Open).setText("+")
         self._ui.envRemoveButtons.button(
-            QtWidgets.QDialogButtonBox.Open
+            QtWidgets.QDialogButtonBox.StandardButton.Open
+        ).setText("+")
+        self._ui.envRemoveButtons.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Open
         ).clicked.connect(self._env_remove_plus)
-        self._ui.envRemoveButtons.button(QtWidgets.QDialogButtonBox.Close).setText("-")
         self._ui.envRemoveButtons.button(
-            QtWidgets.QDialogButtonBox.Close
+            QtWidgets.QDialogButtonBox.StandardButton.Close
+        ).setText("-")
+        self._ui.envRemoveButtons.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Close
         ).clicked.connect(self._env_remove_minus)
-        self._ui.envRemoveButtons.button(QtWidgets.QDialogButtonBox.Close).setEnabled(
-            False
-        )
+        self._ui.envRemoveButtons.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Close
+        ).setEnabled(False)
         self._ui.envRemoveList.itemSelectionChanged.connect(self._env_remove_selection)
         self._ui.envRemoveList.model().dataChanged.connect(self._env_remove_changed)
         # remotes
-        self._ui.remotesTableButtons.button(QtWidgets.QDialogButtonBox.Open).setText(
-            "+"
-        )
         self._ui.remotesTableButtons.button(
-            QtWidgets.QDialogButtonBox.Open
+            QtWidgets.QDialogButtonBox.StandardButton.Open
+        ).setText("+")
+        self._ui.remotesTableButtons.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Open
         ).clicked.connect(self._remotes_add)
-        self._ui.remotesTableButtons.button(QtWidgets.QDialogButtonBox.Close).setText(
-            "-"
-        )
         self._ui.remotesTableButtons.button(
-            QtWidgets.QDialogButtonBox.Close
+            QtWidgets.QDialogButtonBox.StandardButton.Close
+        ).setText("-")
+        self._ui.remotesTableButtons.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Close
         ).clicked.connect(self._remotes_remove)
         self._ui.remotesTableButtons.button(
-            QtWidgets.QDialogButtonBox.Close
+            QtWidgets.QDialogButtonBox.StandardButton.Close
         ).setEnabled(False)
         self._ui.remotesTable.itemSelectionChanged.connect(self._remotes_selection)
         self._ui.remotesTable.remotes_reordered.connect(self._remotes_reordered)
@@ -216,9 +227,9 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
         reveal_on_filesystem(pathlib.Path(self._ui.conan_user_home_short.text()))
 
     def _on_modification(self) -> None:
-        self._ui.buttonBox.button(QtWidgets.QDialogButtonBox.Apply).setEnabled(
-            bool(self._modifications)
-        )
+        self._ui.buttonBox.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Apply
+        ).setEnabled(bool(self._modifications))
 
     def accept(self) -> None:
         if self._modifications:
@@ -232,6 +243,9 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
                 self,
                 "Local cache modifications",
                 "Do you want to lose unsaved changes to the local cache?",
+                button0=QtWidgets.QMessageBox.StandardButton.Yes
+                | QtWidgets.QMessageBox.StandardButton.No,
+                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
             )
             == QtWidgets.QMessageBox.StandardButton.No
         ):
@@ -260,7 +274,7 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
 
     def _new_cache(self) -> None:
         dialog = NewLocalCacheWizard(self)
-        if dialog.exec_() == QtWidgets.QDialog.Accepted:
+        if dialog.exec_() == QtWidgets.QDialog.DialogCode.Accepted:
             if dialog.switch_to_new_cache:
                 self._populate_cache_names(dialog.cache_name)
             else:
@@ -280,7 +294,7 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
             self._ui.conan_user_home_short.hide()
         if self._context.is_default:
             home_dir = QtCore.QStandardPaths.writableLocation(
-                QtCore.QStandardPaths.HomeLocation
+                QtCore.QStandardPaths.StandardLocation.HomeLocation
             )
             self._ui.conan_user_home.setText(home_dir)
             if is_windows:
@@ -307,25 +321,27 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
         ):
             self._ui.profilesList.addItem(str(profile_path))
             item = self._ui.profilesList.item(i)
-            item.setData(QtCore.Qt.ToolTipRole, profile_text)
+            item.setData(QtCore.Qt.ItemDataRole.ToolTipRole, profile_text)
 
     def _update_cache_config(self) -> None:
         if cruiz.globals.CONAN_MAJOR_VERSION == 1:
             with BlockSignals(self._ui.configPrintRunCommands) as blocked_widget:
+                assert isinstance(blocked_widget, QtWidgets.QCheckBox)
                 blocked_widget.setCheckState(
-                    QtCore.Qt.Checked
+                    QtCore.Qt.CheckState.Checked
                     if self._context.get_boolean_config(
                         ConanConfigBoolean.PRINT_RUN_COMMANDS, False
                     )
-                    else QtCore.Qt.Unchecked
+                    else QtCore.Qt.CheckState.Unchecked
                 )
             with BlockSignals(self._ui.configRevisions) as blocked_widget:
+                assert isinstance(blocked_widget, QtWidgets.QCheckBox)
                 blocked_widget.setCheckState(
-                    QtCore.Qt.Checked
+                    QtCore.Qt.CheckState.Checked
                     if self._context.get_boolean_config(
                         ConanConfigBoolean.REVISIONS, False
                     )
-                    else QtCore.Qt.Unchecked
+                    else QtCore.Qt.CheckState.Unchecked
                 )
 
     def _update_cache_environment(
@@ -356,18 +372,21 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
         for i, hook in enumerate(hooks):
             enabled_item = QtWidgets.QTableWidgetItem()
             enabled_item.setFlags(
-                QtCore.Qt.ItemIsEnabled  # type: ignore
-                | QtCore.Qt.ItemIsSelectable
-                | QtCore.Qt.ItemIsUserCheckable
+                QtCore.Qt.ItemFlag.ItemIsEnabled
+                | QtCore.Qt.ItemFlag.ItemIsSelectable
+                | QtCore.Qt.ItemFlag.ItemIsUserCheckable
             )
             enabled_item.setCheckState(
-                QtCore.Qt.Checked if hook.enabled else QtCore.Qt.Unchecked
+                QtCore.Qt.CheckState.Checked
+                if hook.enabled
+                else QtCore.Qt.CheckState.Unchecked
             )
             name_item = QtWidgets.QTableWidgetItem(os.fspath(hook.path))
             name_item.setFlags(
-                QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable  # type: ignore
+                QtCore.Qt.ItemFlag.ItemIsEnabled | QtCore.Qt.ItemFlag.ItemIsSelectable
             )
             with BlockSignals(self._ui.hooksTable) as blocked_widget:
+                assert isinstance(blocked_widget, QtWidgets.QTableWidget)
                 blocked_widget.setItem(
                     i,
                     ManageLocalCachesDialog._HooksTableColumnIndex.ENABLED,
@@ -444,13 +463,15 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
         assert not self._modifications
         self._modified.emit()
         # need to refresh if it was Apply
-        if self.sender() == self._ui.buttonBox.button(QtWidgets.QDialogButtonBox.Apply):
+        if self.sender() == self._ui.buttonBox.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Apply
+        ):
             self._update_cache_details(self._context.cache_name)
         self.cache_changed.emit(self._context.cache_name)
 
     def _remotes_add(self) -> None:
         dialog = AddRemoteDialog(self)
-        if dialog.exec_() == QtWidgets.QDialog.Accepted:
+        if dialog.exec_() == QtWidgets.QDialog.DialogCode.Accepted:
             self._ui.remotesTable.add_remote(dialog.new_remote)
             if "Remotes" not in self._modifications:
                 self._modifications["Remotes"] = {}
@@ -496,7 +517,7 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
 
     def _remotes_selection(self) -> None:
         self._ui.remotesTableButtons.button(
-            QtWidgets.QDialogButtonBox.Close
+            QtWidgets.QDialogButtonBox.StandardButton.Close
         ).setEnabled(bool(self._ui.remotesTable.selectedRanges()))
 
     def _remotes_reordered(self) -> None:
@@ -537,7 +558,8 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
             self._modifications["Remotes"]["Add"].remove(remote)
             self._modifications["Remotes"]["Add"].append(
                 dataclasses.replace(
-                    remote, enabled=QtCore.Qt.CheckState(state) == QtCore.Qt.Checked
+                    remote,
+                    enabled=QtCore.Qt.CheckState(state) == QtCore.Qt.CheckState.Checked,
                 )
             )
 
@@ -551,6 +573,7 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
             path_item = self._ui.hooksTable.item(
                 item.row(), ManageLocalCachesDialog._HooksTableColumnIndex.PATH
             )
+            assert path_item is not None
             hook_path = pathlib.Path(path_item.text().strip())
             item_enabled = item.checkState() == QtCore.Qt.CheckState.Checked
             hooks = self._context.get_hooks_list()
@@ -580,7 +603,7 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
     def _operations_install_config(self) -> None:
         if (
             InstallConfigDialog(self._context, self).exec_()
-            == QtWidgets.QDialog.Accepted
+            == QtWidgets.QDialog.DialogCode.Accepted
         ):
             cache_name = self._context.cache_name
             self._update_cache_details(cache_name)
@@ -594,6 +617,9 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
             self,
             "Package deletion",
             "Are you sure you want to delete all packages from this local cache?",
+            button0=QtWidgets.QMessageBox.StandardButton.Yes
+            | QtWidgets.QMessageBox.StandardButton.No,
+            button1=QtWidgets.QMessageBox.StandardButton.NoButton,
         )
         if result == QtWidgets.QMessageBox.StandardButton.Yes:
             RemoveAllPackagesDialog(self._context, self).exec_()
@@ -601,7 +627,7 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
     def _operations_move_cache(self) -> None:
         if (
             MoveLocalCacheDialog(self._context, self).exec_()
-            == QtWidgets.QDialog.Accepted
+            == QtWidgets.QDialog.DialogCode.Accepted
         ):
             self._update_cache_details(self._context.cache_name)
 
@@ -627,6 +653,9 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
             self,
             "Local cache deletion",
             f"Are you sure you want to delete the local cache {cache_name}?",
+            button0=QtWidgets.QMessageBox.StandardButton.Yes
+            | QtWidgets.QMessageBox.StandardButton.No,
+            button1=QtWidgets.QMessageBox.StandardButton.NoButton,
         )
         if result == QtWidgets.QMessageBox.StandardButton.No:
             return
@@ -652,6 +681,9 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
                 if short_home_dir
                 else f"Please confirm deletion of the directory {conan_home_dir}?"
             ),
+            button0=QtWidgets.QMessageBox.StandardButton.Yes
+            | QtWidgets.QMessageBox.StandardButton.No,
+            button1=QtWidgets.QMessageBox.StandardButton.NoButton,
         )
         if result == QtWidgets.QMessageBox.StandardButton.No:
             return
@@ -677,7 +709,7 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
 
     def _profiles_add(self) -> None:
         dialog = AddExtraProfileDirectoryDialog(self)
-        if dialog.exec_() == QtWidgets.QDialog.Accepted:
+        if dialog.exec_() == QtWidgets.QDialog.DialogCode.Accepted:
             extra = dialog.extra
             self._ui.profilesTable.add_key_value_pair(extra.name, extra.directory)
             if "Profiles" not in self._modifications:
@@ -714,7 +746,7 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
 
     def _profiles_selection(self) -> None:
         self._ui.profilesTableButtons.button(
-            QtWidgets.QDialogButtonBox.Close
+            QtWidgets.QDialogButtonBox.StandardButton.Close
         ).setEnabled(bool(self._ui.profilesTable.selectedRanges()))
 
     def _config_toggle(self, checked: bool, config: ConanConfigBoolean) -> None:
@@ -736,7 +768,7 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
 
     def _env_add_plus(self) -> None:
         dialog = AddEnvironmentDialog(self._context, self)
-        if dialog.exec_() == QtWidgets.QDialog.Accepted:
+        if dialog.exec_() == QtWidgets.QDialog.DialogCode.Accepted:
             new_env = dialog.environment_variable
             self._ui.envTable.add_key_value_pair(new_env.key, new_env.value)
             if "Env" not in self._modifications:
@@ -754,9 +786,9 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
         self._modified.emit()
 
     def _env_add_selection(self) -> None:
-        self._ui.envTableButtons.button(QtWidgets.QDialogButtonBox.Close).setEnabled(
-            bool(self._ui.envTable.selectedRanges())
-        )
+        self._ui.envTableButtons.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Close
+        ).setEnabled(bool(self._ui.envTable.selectedRanges()))
 
     def _env_add_changed(
         self,
@@ -778,7 +810,7 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
 
     def _env_remove_plus(self) -> None:
         dialog = RemoveEnvironmentDialog(self)
-        if dialog.exec_() == QtWidgets.QDialog.Accepted:
+        if dialog.exec_() == QtWidgets.QDialog.DialogCode.Accepted:
             new_item = QtWidgets.QListWidgetItem(dialog.name)
             self._ui.envRemoveList.addItem(new_item)
             if "Env" not in self._modifications:
@@ -801,9 +833,9 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
         self._modified.emit()
 
     def _env_remove_selection(self) -> None:
-        self._ui.envRemoveButtons.button(QtWidgets.QDialogButtonBox.Close).setEnabled(
-            bool(self._ui.envRemoveList.selectedItems())
-        )
+        self._ui.envRemoveButtons.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Close
+        ).setEnabled(bool(self._ui.envRemoveList.selectedItems()))
 
     def _env_remove_changed(
         self,
@@ -825,12 +857,14 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
         self._modified.emit()
 
     def _log_context_menu(self, position: QtCore.QPoint) -> None:
-        menu = self.sender().createStandardContextMenu(position)
+        sender_plaintextedit = self.sender()
+        assert isinstance(sender_plaintextedit, QtWidgets.QPlainTextEdit)
+        menu = sender_plaintextedit.createStandardContextMenu(position)
         menu.addSeparator()
         clear_action = QtGui.QAction("Clear", self)
         clear_action.triggered.connect(self._clear_log)
         menu.addAction(clear_action)
-        menu.exec_(self.sender().viewport().mapToGlobal(position))
+        menu.exec_(sender_plaintextedit.viewport().mapToGlobal(position))
 
     def _clear_log(self) -> None:
         self._ui.localCacheLog.clear()

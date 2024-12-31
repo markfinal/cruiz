@@ -98,7 +98,10 @@ class _PackageIdModel(QtCore.QAbstractTableModel):
         return num_cols
 
     def headerData(self, section, orientation, role):  # type: ignore
-        if role == QtCore.Qt.DisplayRole and orientation == QtCore.Qt.Horizontal:
+        if (
+            role == QtCore.Qt.ItemDataRole.DisplayRole
+            and orientation == QtCore.Qt.Orientation.Horizontal
+        ):
             num_settings = len(self._settings) if self._settings else 0
             num_options = len(self._options) if self._options else 0
             if section == 0:
@@ -112,7 +115,7 @@ class _PackageIdModel(QtCore.QAbstractTableModel):
         return None
 
     def data(self, index, role):  # type: ignore
-        if role == QtCore.Qt.DisplayRole:
+        if role == QtCore.Qt.ItemDataRole.DisplayRole:
             num_settings = len(self._settings) if self._settings else 0
             num_options = len(self._options) if self._options else 0
             section = index.column()
@@ -121,7 +124,9 @@ class _PackageIdModel(QtCore.QAbstractTableModel):
                 return self._pids[index.row()]["id"]
             if section >= 1 and section < 1 + num_settings:
                 header = self.headerData(  # type: ignore[no-untyped-call]
-                    section, QtCore.Qt.Horizontal, QtCore.Qt.DisplayRole
+                    section,
+                    QtCore.Qt.Orientation.Horizontal,
+                    QtCore.Qt.ItemDataRole.DisplayRole,
                 )
                 try:
                     return self._pids[index.row()]["settings"][header]
@@ -129,7 +134,9 @@ class _PackageIdModel(QtCore.QAbstractTableModel):
                     return "-"
             if section >= 1 + num_settings and section < 1 + num_settings + num_options:
                 header = self.headerData(  # type: ignore[no-untyped-call]
-                    section, QtCore.Qt.Horizontal, QtCore.Qt.DisplayRole
+                    section,
+                    QtCore.Qt.Orientation.Horizontal,
+                    QtCore.Qt.ItemDataRole.DisplayRole,
                 )
                 try:
                     return self._pids[index.row()]["options"][header]
@@ -167,12 +174,15 @@ class _FilteringModel(QtCore.QAbstractTableModel):
         return 2
 
     def data(self, index, role):  # type: ignore
-        if role == QtCore.Qt.DisplayRole:
+        if role == QtCore.Qt.ItemDataRole.DisplayRole:
             return self._filters[index.row()][index.column() + 1]
         return None
 
     def headerData(self, section, orientation, role):  # type: ignore
-        if role == QtCore.Qt.DisplayRole and orientation == QtCore.Qt.Horizontal:
+        if (
+            role == QtCore.Qt.ItemDataRole.DisplayRole
+            and orientation == QtCore.Qt.Orientation.Horizontal
+        ):
             if section == 0:
                 return "Key"
             return "Value"
@@ -193,7 +203,7 @@ class _PackageIdSortFilterProxyModel(QtCore.QSortFilterProxyModel):
         for column, _, value in self._filtering._filters:
             index = self.sourceModel().index(source_row, column, source_parent)
             if value != self.sourceModel().data(
-                index, QtCore.Qt.DisplayRole  # type: ignore
+                index, QtCore.Qt.ItemDataRole.DisplayRole
             ):
                 return False
         return super().filterAcceptsRow(source_row, source_parent)
@@ -217,7 +227,7 @@ class PackageIdPage(Page):
         )
         self._ui.package_ids.setModel(self._sorting_model)
         self._ui.package_ids.horizontalHeader().setSectionResizeMode(
-            QtWidgets.QHeaderView.ResizeToContents
+            QtWidgets.QHeaderView.ResizeMode.ResizeToContents
         )
         self._ui.package_ids.horizontalHeader().setContextMenuPolicy(
             QtCore.Qt.ContextMenuPolicy.CustomContextMenu
@@ -226,7 +236,7 @@ class PackageIdPage(Page):
             self._on_package_id_header_menu
         )
         self._ui.package_ids.verticalHeader().setSectionResizeMode(
-            QtWidgets.QHeaderView.ResizeToContents
+            QtWidgets.QHeaderView.ResizeMode.ResizeToContents
         )
         self._ui.package_ids.customContextMenuRequested.connect(
             self._on_selected_pkgref_menu
@@ -258,7 +268,7 @@ class PackageIdPage(Page):
             len(selection) > 0
         )  # hard to determine the number, but it's only the first we want
         package_id = self._sorting_model.data(
-            selection[0], QtCore.Qt.DisplayRole  # type: ignore
+            selection[0], QtCore.Qt.ItemDataRole.DisplayRole
         )
         return f"{self._previous_pkgref}:{package_id}"
 
@@ -291,10 +301,13 @@ class PackageIdPage(Page):
         self._ui.pid_add_filter.setEnabled(False)
         # brute force re-add all the settings and options
         with BlockSignals(self._ui.pid_filter_key) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QComboBox)
             blocked_widget.clear()
             blocked_widget.addItem("Package Id")
-            blocked_widget.addItems(self._model._settings)
-            blocked_widget.addItems(self._model._options)
+            if self._model._settings:
+                blocked_widget.addItems(self._model._settings)
+            if self._model._options:
+                blocked_widget.addItems(self._model._options)
             blocked_widget.setCurrentIndex(-1)
         model = self._ui.pid_filter_key.model()
         # disable those with active filters
@@ -302,6 +315,7 @@ class PackageIdPage(Page):
             item = model.item(index)
             item.setEnabled(False)
         with BlockSignals(self._ui.pid_filter_value) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QComboBox)
             blocked_widget.clear()
             blocked_widget.setCurrentIndex(-1)
 
@@ -310,7 +324,9 @@ class PackageIdPage(Page):
             self._open_previous_page()
         else:
             # skip recipe revisions
-            self.parent().setCurrentIndex(self.page_index - 2)
+            parent_stackedwidget = self.parent()
+            assert isinstance(parent_stackedwidget, QtWidgets.QStackedWidget)
+            parent_stackedwidget.setCurrentIndex(self.page_index - 2)
 
     def _on_pid_dclicked(self, index: QtCore.QModelIndex) -> None:
         # pylint: disable=unused-argument
@@ -318,7 +334,9 @@ class PackageIdPage(Page):
             self._open_next_page()
         else:
             # skip package revisions
-            self.parent().setCurrentIndex(self.page_index + 2)
+            parent_stackedwidget = self.parent()
+            assert isinstance(parent_stackedwidget, QtWidgets.QStackedWidget)
+            parent_stackedwidget.setCurrentIndex(self.page_index + 2)
 
     def on_cancel(self) -> None:
         """
@@ -382,33 +400,45 @@ class PackageIdPage(Page):
         action.setChecked(not self._ui.package_ids.isColumnHidden(offset))
         action.toggled.connect(self._on_toggle_hide_column)
         menu.addAction(action)
-        menu.exec_(self.sender().mapToGlobal(position))
+        sender_headerview = self.sender()
+        assert isinstance(sender_headerview, QtWidgets.QHeaderView)
+        menu.exec_(sender_headerview.mapToGlobal(position))
 
     def _on_toggle_hide_column(self, checked: bool) -> None:
         action = self.sender()
+        assert isinstance(action, QtGui.QAction)
         self._ui.package_ids.setColumnHidden(action.data(), not checked)
 
     def _on_pid_filter_changed(self, text: str) -> None:
         self._ui.pid_filter_value.setEnabled(True)
         assert self._model._settings
-        if self.sender().currentIndex() == 0:
+        sender_combobox = self.sender()
+        assert isinstance(sender_combobox, QtWidgets.QComboBox)
+        if sender_combobox.currentIndex() == 0:
             with BlockSignals(self._ui.pid_filter_value) as blocked_widget:
+                assert isinstance(blocked_widget, QtWidgets.QComboBox)
                 blocked_widget.clear()
                 assert self._model._pids
                 for pid in self._model._pids:
-                    blocked_widget.addItem(pid["id"])
+                    id = pid["id"]
+                    assert isinstance(id, str)
+                    blocked_widget.addItem(id)
                 blocked_widget.setCurrentIndex(-1)
-        elif self.sender().currentIndex() < len(self._model._settings) + 1:
+        elif sender_combobox.currentIndex() < len(self._model._settings) + 1:
             with BlockSignals(self._ui.pid_filter_value) as blocked_widget:
+                assert isinstance(blocked_widget, QtWidgets.QComboBox)
                 blocked_widget.clear()
                 assert self._model._settings_values
-                blocked_widget.addItems(self._model._settings_values[text])
+                settings = list(self._model._settings_values[text])
+                blocked_widget.addItems(settings)
                 blocked_widget.setCurrentIndex(-1)
         else:
             with BlockSignals(self._ui.pid_filter_value) as blocked_widget:
+                assert isinstance(blocked_widget, QtWidgets.QComboBox)
                 blocked_widget.clear()
                 assert self._model._options_values
-                blocked_widget.addItems(self._model._options_values[text])
+                options = list(self._model._options_values[text])
+                blocked_widget.addItems(options)
                 blocked_widget.setCurrentIndex(-1)
 
     def _on_pid_filter_value_changed(self, text: str) -> None:
@@ -424,13 +454,15 @@ class PackageIdPage(Page):
         self._populate_settings_options_filter()
 
     def _on_pid_filter_menu(self, position: QtCore.QPoint) -> None:
-        if not self.sender().selectionModel().selectedRows():
+        sender_tableview = self.sender()
+        assert isinstance(sender_tableview, QtWidgets.QTableView)
+        if not sender_tableview.selectionModel().selectedRows():
             return
         menu = QtWidgets.QMenu(self)
         remove_action = QtGui.QAction("Remove", self)
         remove_action.triggered.connect(self._on_pid_filter_remove)
         menu.addAction(remove_action)
-        menu.exec_(self.sender().mapToGlobal(position))
+        menu.exec_(sender_tableview.mapToGlobal(position))
 
     def _on_pid_filter_remove(self) -> None:
         selected_row_index = (

@@ -19,24 +19,24 @@ class DependenciesListModel(QtGui.QStandardItemModel):
         for row, node in enumerate(graph.nodes):
             item = QtGui.QStandardItem()
             item.setText(node.reference)
-            item.setData(node, QtCore.Qt.UserRole)
+            item.setData(node, QtCore.Qt.ItemDataRole.UserRole)
             if node == graph.root:
                 font = QtGui.QFont()
                 font.setBold(True)
                 font.setUnderline(True)
-                item.setData(font, QtCore.Qt.FontRole)  # type: ignore
+                item.setData(font, QtCore.Qt.ItemDataRole.FontRole)
             else:
                 if not node.is_runtime:
                     font = QtGui.QFont()
                     font.setItalic(True)
-                    item.setData(font, QtCore.Qt.FontRole)  # type: ignore
+                    item.setData(font, QtCore.Qt.ItemDataRole.FontRole)
             node_info = f"Conan info:\n{node.info}" if node.info else ""
             item.setData(
                 f"Package reference: {node.reference}\n"
                 f"Package Id: {node.package_id}\n"
                 f"Recipe revision: {node.recipe_revision}\n"
                 f"{node_info}",
-                QtCore.Qt.ToolTipRole,  # type: ignore
+                QtCore.Qt.ItemDataRole.ToolTipRole,
             )
             self.setItem(row, 0, item)
 
@@ -55,19 +55,19 @@ class DependenciesTreeModel(QtGui.QStandardItemModel):
             item.setText(node.reference)
             if node == graph.root:
                 item.setData(
-                    QtGui.QColor(QtCore.Qt.red),
-                    QtCore.Qt.ForegroundRole,  # type: ignore
+                    QtGui.QColor(QtCore.Qt.GlobalColor.red),
+                    QtCore.Qt.ItemDataRole.ForegroundRole,
                 )
             else:
                 if node.is_runtime:
                     item.setData(
-                        QtGui.QColor(QtCore.Qt.black),
-                        QtCore.Qt.ForegroundRole,  # type: ignore
+                        QtGui.QColor(QtCore.Qt.GlobalColor.black),
+                        QtCore.Qt.ItemDataRole.ForegroundRole,
                     )
                 else:
                     item.setData(
-                        QtGui.QColor(QtCore.Qt.gray),
-                        QtCore.Qt.ForegroundRole,  # type: ignore
+                        QtGui.QColor(QtCore.Qt.GlobalColor.gray),
+                        QtCore.Qt.ItemDataRole.ForegroundRole,
                     )
             parent_item.appendRow(item)
             parent_item = item

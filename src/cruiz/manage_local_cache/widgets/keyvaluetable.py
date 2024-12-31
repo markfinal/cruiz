@@ -31,15 +31,16 @@ class KeyValueTable(QtWidgets.QTableWidget):
         row_count = self.rowCount()
         key_item = QtWidgets.QTableWidgetItem(key)
         key_item.setFlags(
-            QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable  # type: ignore
+            QtCore.Qt.ItemFlag.ItemIsEnabled | QtCore.Qt.ItemFlag.ItemIsSelectable
         )
         value_item = QtWidgets.QTableWidgetItem(value)
         value_item.setFlags(
-            QtCore.Qt.ItemIsEnabled  # type: ignore
-            | QtCore.Qt.ItemIsEditable
-            | QtCore.Qt.ItemIsSelectable
+            QtCore.Qt.ItemFlag.ItemIsEnabled
+            | QtCore.Qt.ItemFlag.ItemIsEditable
+            | QtCore.Qt.ItemFlag.ItemIsSelectable
         )
         with BlockSignals(self) as blocked_widget:
+            assert isinstance(blocked_widget, KeyValueTable)
             blocked_widget.setRowCount(row_count + 1)
             with BlockSignals(blocked_widget.model()):
                 blocked_widget.setItem(
@@ -58,6 +59,8 @@ class KeyValueTable(QtWidgets.QTableWidget):
         assert selected_ranges
         row_index = selected_ranges[0].topRow()
         assert row_index == selected_ranges[0].bottomRow()
-        selected_key = self.item(row_index, KeyValueTable.ColumnIndex.KEY).text()
+        item = self.item(row_index, KeyValueTable.ColumnIndex.KEY)
+        assert item is not None
+        selected_key = item.text()
         self.removeRow(row_index)
         return selected_key

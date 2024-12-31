@@ -18,10 +18,12 @@ CONAN_SPEC = importlib.util.find_spec("conans")
 if CONAN_SPEC is None:
     QtWidgets.QApplication()
     QtWidgets.QMessageBox.critical(
-        None,
+        None,  # type: ignore[arg-type]
         "Conan unavailable",
         "Unable to locate the conan Python package in the current environment.\n"
         "Use pip install conan[==version].",
+        button0=QtWidgets.QMessageBox.StandardButton.Ok,
+        button1=QtWidgets.QMessageBox.StandardButton.NoButton,
     )
     sys.exit(-1)
 
@@ -70,9 +72,11 @@ def _are_resources_out_of_date() -> bool:
 if _are_resources_out_of_date():
     QtWidgets.QApplication()
     QtWidgets.QMessageBox.critical(
-        None,
+        None,  # type: ignore[arg-type]
         "Resources",
         "Resources are out of date.\n" "Please build with python3 setup.py build",
+        button0=QtWidgets.QMessageBox.StandardButton.Ok,
+        button1=QtWidgets.QMessageBox.StandardButton.NoButton,
     )
     sys.exit(-1)
 
@@ -121,10 +125,10 @@ def main() -> int:
     QtCore.qInstallMessageHandler(_message_handler)
 
     QtWidgets.QApplication.setAttribute(
-        QtCore.Qt.AA_EnableHighDpiScaling, True
+        QtCore.Qt.ApplicationAttribute.AA_EnableHighDpiScaling, True
     )  # enable highdpi scaling
     QtWidgets.QApplication.setAttribute(
-        QtCore.Qt.AA_UseHighDpiPixmaps, True
+        QtCore.Qt.ApplicationAttribute.AA_UseHighDpiPixmaps, True
     )  # use highdpi icons
     QtWidgets.QApplication.setStyle("fusion")
 

@@ -196,16 +196,17 @@ class PreferencesDialog(QtWidgets.QDialog):
             QtWidgets.QDialogButtonBox.StandardButton.Ok
         ).setEnabled(False)
         self._ui.prefs_buttons.addButton(
-            self._import_prefs, QtWidgets.QDialogButtonBox.ActionRole
+            self._import_prefs, QtWidgets.QDialogButtonBox.ButtonRole.ActionRole
         )
         self._ui.prefs_buttons.addButton(
-            self._export_prefs, QtWidgets.QDialogButtonBox.ActionRole
+            self._export_prefs, QtWidgets.QDialogButtonBox.ButtonRole.ActionRole
         )
         self._ui.prefs_buttons.addButton(
-            self._clean_prefs, QtWidgets.QDialogButtonBox.ActionRole
+            self._clean_prefs, QtWidgets.QDialogButtonBox.ButtonRole.ActionRole
         )
         self._ui.prefs_buttons.addButton(
-            self._restore_default_prefs, QtWidgets.QDialogButtonBox.ActionRole
+            self._restore_default_prefs,
+            QtWidgets.QDialogButtonBox.ButtonRole.ActionRole,
         )
         self._import_prefs.clicked.connect(self._import_presets)
         self._export_prefs.clicked.connect(self._export_presets)
@@ -229,12 +230,12 @@ class PreferencesDialog(QtWidgets.QDialog):
         self._ui.prefs_general_enable_compact.stateChanged.connect(
             self._general_compactlook
         )
-        dir_icon = self.style().standardIcon(QtWidgets.QStyle.SP_DirIcon)
+        dir_icon = self.style().standardIcon(QtWidgets.QStyle.StandardPixmap.SP_DirIcon)
         open_recipedir_action = QtGui.QAction(dir_icon, "", self)
         open_recipedir_action.triggered.connect(self._general_open_recipedir)
         self._ui.prefs_general_default_recipe_dir.addAction(
             open_recipedir_action,
-            QtWidgets.QLineEdit.TrailingPosition,
+            QtWidgets.QLineEdit.ActionPosition.TrailingPosition,
         )
         self._ui.prefs_general_default_recipe_dir.textChanged.connect(
             self._general_recipedir
@@ -247,7 +248,7 @@ class PreferencesDialog(QtWidgets.QDialog):
         open_recipe_in_editor_action.triggered.connect(self._general_open_recipe_editor)
         self._ui.prefs_general_recipe_editor.addAction(
             open_recipe_in_editor_action,
-            QtWidgets.QLineEdit.TrailingPosition,
+            QtWidgets.QLineEdit.ActionPosition.TrailingPosition,
         )
         self._ui.prefs_general_recipe_editor.textChanged.connect(
             self._general_recipe_editor
@@ -296,12 +297,14 @@ class PreferencesDialog(QtWidgets.QDialog):
             self._graphviz_bin_directory_changed
         )
         open_graphviz_bindir_action = QtGui.QAction(
-            self.style().standardIcon(QtWidgets.QStyle.SP_DirIcon), "", self
+            self.style().standardIcon(QtWidgets.QStyle.StandardPixmap.SP_DirIcon),
+            "",
+            self,
         )
         open_graphviz_bindir_action.triggered.connect(self._graphviz_open_bindir)
         self._ui.prefs_graphviz_bin_directory.addAction(
             open_graphviz_bindir_action,
-            QtWidgets.QLineEdit.TrailingPosition,
+            QtWidgets.QLineEdit.ActionPosition.TrailingPosition,
         )
 
     def _setup_cmake_toolbox(self) -> None:
@@ -310,12 +313,12 @@ class PreferencesDialog(QtWidgets.QDialog):
         self._ui.prefs_cmake_cmake_bin_directory.textChanged.connect(
             self._cmake_bin_directory_changed
         )
-        dir_icon = self.style().standardIcon(QtWidgets.QStyle.SP_DirIcon)
+        dir_icon = self.style().standardIcon(QtWidgets.QStyle.StandardPixmap.SP_DirIcon)
         open_cmake_bindir_action = QtGui.QAction(dir_icon, "", self)
         open_cmake_bindir_action.triggered.connect(self._cmake_open_bindir)
         self._ui.prefs_cmake_cmake_bin_directory.addAction(
             open_cmake_bindir_action,
-            QtWidgets.QLineEdit.TrailingPosition,
+            QtWidgets.QLineEdit.ActionPosition.TrailingPosition,
         )
         self._ui.prefs_cmake_ninja_bin_directory.textChanged.connect(
             self._ninja_bin_directory_changed
@@ -324,7 +327,7 @@ class PreferencesDialog(QtWidgets.QDialog):
         open_ninja_bindir_action.triggered.connect(self._ninja_open_bindir)
         self._ui.prefs_cmake_ninja_bin_directory.addAction(
             open_ninja_bindir_action,
-            QtWidgets.QLineEdit.TrailingPosition,
+            QtWidgets.QLineEdit.ActionPosition.TrailingPosition,
         )
 
     def _setup_compilercache_toolbox(self) -> None:
@@ -335,14 +338,14 @@ class PreferencesDialog(QtWidgets.QDialog):
         self._ui.prefs_compilercache_ccache_location.textChanged.connect(
             self._compilercache_ccache_bin_directory_changed
         )
-        dir_icon = self.style().standardIcon(QtWidgets.QStyle.SP_DirIcon)
+        dir_icon = self.style().standardIcon(QtWidgets.QStyle.StandardPixmap.SP_DirIcon)
         open_ccache_bindir_action = QtGui.QAction(dir_icon, "", self)
         open_ccache_bindir_action.triggered.connect(
             self._compilercache_open_ccache_bindir
         )
         self._ui.prefs_compilercache_ccache_location.addAction(
             open_ccache_bindir_action,
-            QtWidgets.QLineEdit.TrailingPosition,
+            QtWidgets.QLineEdit.ActionPosition.TrailingPosition,
         )
         self._ui.prefs_compilercache_sccache_location.textChanged.connect(
             self._compilercache_sccache_bin_directory_changed
@@ -353,7 +356,7 @@ class PreferencesDialog(QtWidgets.QDialog):
         )
         self._ui.prefs_compilercache_sccache_location.addAction(
             open_scache_bindir_action,
-            QtWidgets.QLineEdit.TrailingPosition,
+            QtWidgets.QLineEdit.ActionPosition.TrailingPosition,
         )
         self._ui.prefs_compilercache_buildcache_location.textChanged.connect(
             self._compilercache_buildcache_bin_directory_changed
@@ -364,7 +367,7 @@ class PreferencesDialog(QtWidgets.QDialog):
         )
         self._ui.prefs_compilercache_buildcache_location.addAction(
             open_buildcache_bindir_action,
-            QtWidgets.QLineEdit.TrailingPosition,
+            QtWidgets.QLineEdit.ActionPosition.TrailingPosition,
         )
 
     def _setup_shortcuts_toolbox(self) -> None:
@@ -433,10 +436,10 @@ class PreferencesDialog(QtWidgets.QDialog):
         self._prefs_recipes_model = RecipesModel()
         self._ui.prefs_recipes_table.setModel(self._prefs_recipes_model)
         self._ui.prefs_recipes_table.horizontalHeader().setSectionResizeMode(
-            0, QtWidgets.QHeaderView.ResizeToContents
+            0, QtWidgets.QHeaderView.ResizeMode.ResizeToContents
         )
         self._ui.prefs_recipes_table.horizontalHeader().setSectionResizeMode(
-            1, QtWidgets.QHeaderView.ResizeToContents
+            1, QtWidgets.QHeaderView.ResizeMode.ResizeToContents
         )
         self._ui.prefs_recipes_table.addAction(self._ui.actionForget_recipe)
         self._ui.prefs_recipes_table.customContextMenuRequested.connect(
@@ -493,8 +496,11 @@ class PreferencesDialog(QtWidgets.QDialog):
                 self,
                 "Unsaved preferences",
                 "Modifications are unsaved. Do you want to discard them?",
+                button0=QtWidgets.QMessageBox.StandardButton.Yes
+                | QtWidgets.QMessageBox.StandardButton.No,
+                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
             )
-            if response == QtWidgets.QMessageBox.No:
+            if response == QtWidgets.QMessageBox.StandardButton.No:
                 return
         super().reject()
 
@@ -513,20 +519,26 @@ class PreferencesDialog(QtWidgets.QDialog):
     def _general_load_defaults(self) -> None:
         with GeneralSettingsReader() as settings:
             with BlockSignals(self._ui.prefs_general_clearpanes) as blocked_widget:
+                assert isinstance(blocked_widget, QtWidgets.QCheckBox)
                 blocked_widget.setChecked(settings.clear_panes.resolve())
             with BlockSignals(self._ui.prefs_general_combine_panes) as blocked_widget:
+                assert isinstance(blocked_widget, QtWidgets.QCheckBox)
                 blocked_widget.setChecked(settings.combine_panes.resolve())
             with BlockSignals(self._ui.prefs_general_usebatching) as blocked_widget:
+                assert isinstance(blocked_widget, QtWidgets.QCheckBox)
                 blocked_widget.setChecked(settings.use_stdout_batching.resolve())
             with BlockSignals(
                 self._ui.prefs_general_enable_wallclock
             ) as blocked_widget:
+                assert isinstance(blocked_widget, QtWidgets.QCheckBox)
                 blocked_widget.setChecked(settings.enable_command_timing.resolve())
             with BlockSignals(self._ui.prefs_general_enable_compact) as blocked_widget:
+                assert isinstance(blocked_widget, QtWidgets.QCheckBox)
                 blocked_widget.setChecked(settings.use_compact_look.resolve())
             with BlockSignals(
                 self._ui.prefs_general_default_recipe_dir
             ) as blocked_widget:
+                assert isinstance(blocked_widget, QtWidgets.QLineEdit)
                 blocked_widget.setText(
                     settings.default_recipe_directory.resolve() or ""
                 )
@@ -537,42 +549,44 @@ class PreferencesDialog(QtWidgets.QDialog):
                 colour = settings.found_text_background_colour.resolve()
                 self._update_found_text_background_colour(colour)
             with BlockSignals(self._ui.prefs_general_recipe_editor) as blocked_widget:
+                assert isinstance(blocked_widget, QtWidgets.QLineEdit)
                 blocked_widget.setText(settings.default_recipe_editor.resolve() or "")
             # Note: the following is not part of the new UI
             with BlockSignals(self._ui.prefs_general_new_recipe_load) as blocked_widget:
+                assert isinstance(blocked_widget, QtWidgets.QCheckBox)
                 blocked_widget.setChecked(
                     settings.new_recipe_loading_behaviour.resolve()
                 )
 
     def _general_clearplanes(self, state: int) -> None:
         self._prefs_general.clear_panes = (
-            QtCore.Qt.CheckState(state) == QtCore.Qt.Checked
+            QtCore.Qt.CheckState(state) == QtCore.Qt.CheckState.Checked  # type: ignore[assignment] # noqa: E501
         )
         self.modified.emit()
 
     def _general_combinepanes(self, state: int) -> None:
         self._prefs_general.combine_panes = (
-            QtCore.Qt.CheckState(state) == QtCore.Qt.Checked
+            QtCore.Qt.CheckState(state) == QtCore.Qt.CheckState.Checked  # type: ignore[assignment] # noqa: E501
         )
         self.modified.emit()
         self._requires_restart()
 
     def _general_usebatching(self, state: int) -> None:
         self._prefs_general.use_stdout_batching = (
-            QtCore.Qt.CheckState(state) == QtCore.Qt.Checked
+            QtCore.Qt.CheckState(state) == QtCore.Qt.CheckState.Checked  # type: ignore[assignment] # noqa: E501
         )
         self.modified.emit()
         self._requires_restart()
 
     def _general_wallclock(self, state: int) -> None:
         self._prefs_general.enable_command_timing = (
-            QtCore.Qt.CheckState(state) == QtCore.Qt.Checked
+            QtCore.Qt.CheckState(state) == QtCore.Qt.CheckState.Checked  # type: ignore[assignment] # noqa: E501
         )
         self.modified.emit()
 
     def _general_compactlook(self, state: int) -> None:
         self._prefs_general.use_compact_look = (
-            QtCore.Qt.CheckState(state) == QtCore.Qt.Checked
+            QtCore.Qt.CheckState(state) == QtCore.Qt.CheckState.Checked  # type: ignore[assignment] # noqa: E501
         )
         self.modified.emit()
 
@@ -595,7 +609,7 @@ class PreferencesDialog(QtWidgets.QDialog):
         with GeneralSettingsReader() as settings:
             busy_color = settings.busy_icon_colour.resolve()
         dialog = QtWidgets.QColorDialog(busy_color, self)
-        if dialog.exec_() == QtWidgets.QDialog.Accepted:
+        if dialog.exec_() == QtWidgets.QDialog.DialogCode.Accepted:
             new_color = dialog.currentColor()
             self._update_busy_icon_colour(new_color)
             self._prefs_general.busy_icon_colour = new_color  # type: ignore[assignment]
@@ -605,7 +619,7 @@ class PreferencesDialog(QtWidgets.QDialog):
         with GeneralSettingsReader() as settings:
             color = settings.found_text_background_colour.resolve()
         dialog = QtWidgets.QColorDialog(color, self)
-        if dialog.exec_() == QtWidgets.QDialog.Accepted:
+        if dialog.exec_() == QtWidgets.QDialog.DialogCode.Accepted:
             new_color = dialog.currentColor()
             self._update_found_text_background_colour(new_color)
             self._prefs_general.found_text_background_colour = (
@@ -631,7 +645,7 @@ class PreferencesDialog(QtWidgets.QDialog):
 
     def _general_newrecipeload(self, state: int) -> None:
         self._prefs_general.new_recipe_loading_behaviour = (
-            QtCore.Qt.CheckState(state) == QtCore.Qt.Checked
+            QtCore.Qt.CheckState(state) == QtCore.Qt.CheckState.Checked  # type: ignore[assignment] # noqa: E501
         )
         self.modified.emit()
 
@@ -670,7 +684,9 @@ class PreferencesDialog(QtWidgets.QDialog):
         with FontSettingsReader(FontUsage.OUTPUT) as settings:
             font = PreferencesDialog._font_from_details(
                 (settings.name.resolve(), settings.size.resolve())
-            ) or QtGui.QFontDatabase.systemFont(QtGui.QFontDatabase.FixedFont)
+            ) or QtGui.QFontDatabase.systemFont(
+                QtGui.QFontDatabase.SystemFont.FixedFont
+            )
         self._font_set_output_preview(font)
 
     def _font_change(self, usage: FontUsage, default_font: QtGui.QFont) -> None:
@@ -708,7 +724,7 @@ class PreferencesDialog(QtWidgets.QDialog):
     def _font_change_output(self) -> None:
         self._font_change(
             FontUsage.OUTPUT,
-            QtGui.QFontDatabase.systemFont(QtGui.QFontDatabase.FixedFont),
+            QtGui.QFontDatabase.systemFont(QtGui.QFontDatabase.SystemFont.FixedFont),
         )
 
     def _font_reset(self, usage: FontUsage) -> None:
@@ -724,7 +740,7 @@ class PreferencesDialog(QtWidgets.QDialog):
             self._font_set_ui_preview(qApp.default_font)  # type: ignore # noqa: F821
         elif usage == FontUsage.OUTPUT:
             self._font_set_output_preview(
-                QtGui.QFontDatabase.systemFont(QtGui.QFontDatabase.FixedFont)
+                QtGui.QFontDatabase.systemFont(QtGui.QFontDatabase.SystemFont.FixedFont)
             )
         self.modified.emit()
 
@@ -742,10 +758,12 @@ class PreferencesDialog(QtWidgets.QDialog):
                 settings.conandata_version_yaml_pathsegment.resolve()
             )
         with BlockSignals(self._ui.prefs_conan_log_level) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QComboBox)
             blocked_widget.setCurrentText(log_level)
         with BlockSignals(
             self._ui.prefs_conan_version_list_path_segment
         ) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setText(conandata_version_yaml_pathsegment)
 
     def _conan_change_log_level(self, text: str) -> None:
@@ -765,12 +783,15 @@ class PreferencesDialog(QtWidgets.QDialog):
         with BlockSignals(
             self._ui.prefs_localcache_config_to_install
         ) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setText(install_path)
         with BlockSignals(
             self._ui.prefs_localcache_config_git_branch
         ) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setText(git_branch)
         with BlockSignals(self._ui.prefs_localcache_forget_cache) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QComboBox)
             blocked_widget.clear()
             with AllNamedLocalCacheSettingsReader() as names:
                 blocked_widget.addItems(names)
@@ -804,6 +825,7 @@ class PreferencesDialog(QtWidgets.QDialog):
         with GraphVizSettingsReader() as settings:
             bin_path = settings.bin_directory.resolve()
         with BlockSignals(self._ui.prefs_graphviz_bin_directory) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setText(bin_path)
 
     def _graphviz_bin_directory_changed(self, text: str) -> None:
@@ -826,10 +848,12 @@ class PreferencesDialog(QtWidgets.QDialog):
         with CMakeSettingsReader() as settings:
             cmake_bin_path = settings.bin_directory.resolve()
         with BlockSignals(self._ui.prefs_cmake_cmake_bin_directory) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setText(cmake_bin_path)
         with NinjaSettingsReader() as settings:
             ninja_bin_path = settings.bin_directory.resolve()
         with BlockSignals(self._ui.prefs_cmake_ninja_bin_directory) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setText(ninja_bin_path)
 
     def _cmake_bin_directory_changed(self, text: str) -> None:
@@ -870,18 +894,22 @@ class PreferencesDialog(QtWidgets.QDialog):
             sccache_bin_dir = settings.sccache_bin_directory.resolve()
             buildcache_bin_dir = settings.buildcache_bin_directory.resolve()
         with BlockSignals(self._ui.prefs_compilercache_default) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QComboBox)
             blocked_widget.setCurrentText(compilercache_default)
         with BlockSignals(
             self._ui.prefs_compilercache_ccache_location
         ) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setText(ccache_bin_dir)
         with BlockSignals(
             self._ui.prefs_compilercache_sccache_location
         ) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setText(sccache_bin_dir)
         with BlockSignals(
             self._ui.prefs_compilercache_buildcache_location
         ) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setText(buildcache_bin_dir)
 
     def _compilercache_default_changed(self, text: str) -> None:
@@ -954,60 +982,75 @@ class PreferencesDialog(QtWidgets.QDialog):
             remove_cmakecache = settings.delete_cmake_cache
 
         with BlockSignals(self._ui.prefs_shortcuts_create_edit) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setPlaceholderText(conan_create.fallback)
             blocked_widget.setText(conan_create.value or "")
         with BlockSignals(
             self._ui.prefs_shortcuts_createupdates_edit
         ) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setPlaceholderText(conan_create_updates.fallback)
             blocked_widget.setText(conan_create_updates.value or "")
         with BlockSignals(self._ui.prefs_shortcuts_imports_edit) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setPlaceholderText(conan_imports.fallback)
             blocked_widget.setText(conan_imports.value or "")
         with BlockSignals(self._ui.prefs_shortcuts_install_edit) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setPlaceholderText(conan_install.fallback)
             blocked_widget.setText(conan_install.value or "")
         with BlockSignals(
             self._ui.prefs_shortcuts_installupdates_edit
         ) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setPlaceholderText(conan_install_updates.fallback)
             blocked_widget.setText(conan_install_updates.value or "")
         with BlockSignals(self._ui.prefs_shortcuts_source_edit) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setPlaceholderText(conan_source.fallback)
             blocked_widget.setText(conan_source.value or "")
         with BlockSignals(self._ui.prefs_shortcuts_build_edit) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setPlaceholderText(conan_build.fallback)
             blocked_widget.setText(conan_build.value or "")
         with BlockSignals(self._ui.prefs_shortcuts_package_edit) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setPlaceholderText(conan_package.fallback)
             blocked_widget.setText(conan_package.value or "")
         with BlockSignals(
             self._ui.prefs_shortcuts_exportpackage_edit
         ) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setPlaceholderText(conan_exportpkg.fallback)
             blocked_widget.setText(conan_exportpkg.value or "")
         with BlockSignals(self._ui.prefs_shortcuts_test_edit) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setPlaceholderText(conan_test.fallback)
             blocked_widget.setText(conan_test.value or "")
         with BlockSignals(self._ui.prefs_shortcuts_remove_edit) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setPlaceholderText(conan_remove.fallback)
             blocked_widget.setText(conan_remove.value or "")
         with BlockSignals(self._ui.prefs_shortcuts_cancel_edit) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setPlaceholderText(cancel.fallback)
             blocked_widget.setText(cancel.value or "")
         with BlockSignals(
             self._ui.prefs_shortcuts_cmakebuildtool_edit
         ) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setPlaceholderText(cmake_build_tool.fallback)
             blocked_widget.setText(cmake_build_tool.value or "")
         with BlockSignals(
             self._ui.prefs_shortcuts_cmakebuildtoolverbose_edit
         ) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setPlaceholderText(cmake_build_tool_verbose.fallback)
             blocked_widget.setText(cmake_build_tool_verbose.value or "")
         with BlockSignals(
             self._ui.prefs_shortcuts_deletecmakecache_edit
         ) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setPlaceholderText(remove_cmakecache.fallback)
             blocked_widget.setText(remove_cmakecache.value or "")
 
@@ -1114,21 +1157,26 @@ class PreferencesDialog(QtWidgets.QDialog):
         if not path_itemdata:
             return
         cache_menu_action = self.sender()
+        assert isinstance(cache_menu_action, QtGui.QAction)
         result = QtWidgets.QMessageBox.question(
             self,
             "Change local cache for recipe",
             "Are you sure you want to change the local cache for recipe "
             f"'{path_itemdata[0]}' to '{cache_menu_action.text()}'",
+            button0=QtWidgets.QMessageBox.StandardButton.Yes
+            | QtWidgets.QMessageBox.StandardButton.No,
+            button1=QtWidgets.QMessageBox.StandardButton.NoButton,
         )
         if result == QtWidgets.QMessageBox.StandardButton.No:
             return
         settings = RecipeSettings()
-        settings.local_cache_name = cache_menu_action.text()
+        settings.local_cache_name = cache_menu_action.text()  # type: ignore[assignment]
         RecipeSettingsWriter.from_uuid(cache_menu_action.data()).sync(settings)
         self._recipes_load_defaults()
 
     def _recipes_forget_recipe(self) -> None:
         action = self.sender()
+        assert isinstance(action, QtGui.QAction)
         uuid = action.data()
         with RecipeSettingsReader.from_uuid(uuid) as settings:
             has_editables = settings.editables_count.resolve()
@@ -1139,6 +1187,8 @@ class PreferencesDialog(QtWidgets.QDialog):
                 "Recipe still has editables",
                 f"Recipe {recipe_path} still has editable dependencies. "
                 "Cannot forget until they are removed.",
+                button0=QtWidgets.QMessageBox.StandardButton.Ok,
+                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
             )
             return
         # TODO: this is not ideal, as it's not atomic
@@ -1171,6 +1221,7 @@ class PreferencesDialog(QtWidgets.QDialog):
 
     def _recentconfigs_forget_config(self) -> None:
         action = self.sender()
+        assert isinstance(action, QtGui.QAction)
         path = action.data()
         RecentConanConfigSettingsDeleter().delete(path)
         self._recentconfigs_load_defaults()
@@ -1197,6 +1248,7 @@ class PreferencesDialog(QtWidgets.QDialog):
 
     def _recentremotes_forget_config(self) -> None:
         action = self.sender()
+        assert isinstance(action, QtGui.QAction)
         url = action.data()
         RecentConanRemotesSettingsDeleter().delete(url)
         self._recentremotes_load_defaults()
@@ -1226,6 +1278,8 @@ class PreferencesDialog(QtWidgets.QDialog):
                 "Preference presets",
                 f"{prefix_path} is an invalid preference presets file. "
                 "Aborting import.",
+                button0=QtWidgets.QMessageBox.StandardButton.Ok,
+                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
             )
             return
         LocalCacheSettingsWriter().presets(presets["cruiz_presets"])
@@ -1256,6 +1310,9 @@ class PreferencesDialog(QtWidgets.QDialog):
                 "Performing a factory reset will clear all settings and restart cruiz. "
                 "Do you want to continue?"
             ),
+            button0=QtWidgets.QMessageBox.StandardButton.Yes
+            | QtWidgets.QMessageBox.StandardButton.No,
+            button1=QtWidgets.QMessageBox.StandardButton.NoButton,
         )
         if result == QtWidgets.QMessageBox.StandardButton.Yes:
             factory_reset()

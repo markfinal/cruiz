@@ -135,7 +135,7 @@ class ConanContext(QtCore.QObject):
         instance.completed.connect(self._completed_invocation)
         instance.finished.connect(self._finished_invocation)
         if command_toolbar:
-            instance.finished.connect(command_toolbar.command_ended)
+            instance.finished.connect(command_toolbar.command_ended)  # type: ignore[attr-defined] # noqa: E501
         instance.invoke(parameters, self._log_details, continuation)
         self._invocations.append(instance)
         if self.command_history_widget is not None and enable_history:
@@ -153,7 +153,9 @@ class ConanContext(QtCore.QObject):
     def _completed_invocation(self, success: typing.Any, exception: typing.Any) -> None:
         # pylint: disable=unused-argument
         logger.debug("COMPLETED invocation (%d)", id(self.sender()))
-        self.sender().close()
+        sender_invocation = self.sender()
+        assert isinstance(sender_invocation, ConanInvocation)
+        sender_invocation.close()
 
     def _finished_invocation(self) -> None:
         # can only free the reference to the ConanInvocation once the message processing
@@ -434,7 +436,7 @@ class ConanContext(QtCore.QObject):
         profile_paths: typing.List[typing.Tuple[pathlib.Path, str]] = []
         # TODO: Conan2 candidate: api.profiles.list() for the local-cache based profiles
         profiles_dir = QtCore.QDir(str(self.profiles_dir()))
-        for profile in profiles_dir.entryList(filters=QtCore.QDir.Files):
+        for profile in profiles_dir.entryList(filters=QtCore.QDir.Filter.Files):
             # local cache profiles are listed relative
             path = pathlib.Path(profiles_dir.filePath(profile))
             text = path.read_text()
@@ -444,7 +446,7 @@ class ConanContext(QtCore.QObject):
             extra_profile_dirs = settings.extra_profile_directories.resolve()
         for _, extra_profile_dir in extra_profile_dirs.items():
             profiles_dir = QtCore.QDir(extra_profile_dir)
-            for profile in profiles_dir.entryList(filters=QtCore.QDir.Files):
+            for profile in profiles_dir.entryList(filters=QtCore.QDir.Filter.Files):
                 # extra profiles are listed absolute
                 path = pathlib.Path(profiles_dir.filePath(profile))
                 text = path.read_text()

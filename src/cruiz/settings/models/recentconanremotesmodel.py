@@ -42,12 +42,15 @@ class RecentConanRemotesModel(QtCore.QAbstractListModel):
 
     def headerData(self, section, orientation, role):  # type: ignore
         # pylint: disable=unused-argument
-        if role == QtCore.Qt.DisplayRole and orientation == QtCore.Qt.Horizontal:
+        if (
+            role == QtCore.Qt.ItemDataRole.DisplayRole
+            and orientation == QtCore.Qt.Orientation.Horizontal
+        ):
             return "URL"
         return None
 
     def data(self, index, role):  # type: ignore
-        if role == QtCore.Qt.DisplayRole:
+        if role == QtCore.Qt.ItemDataRole.DisplayRole:
             assert self._urls
             return self._urls[index.row()]
         return None

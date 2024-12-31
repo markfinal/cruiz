@@ -60,7 +60,7 @@ class RecipeSettings(ComparableCommonSettings):
         self._recipe: typing.Optional[Recipe] = None
 
         if self._recipe:
-            default_profile = self._recipe.context.default_profile_filename()  # type: ignore[unreachable]  # noqa: E501
+            default_profile = self._recipe.context.default_profile_filename()
         else:
             try:
                 context = self.settings_reader.recipe.context  # type: ignore
@@ -503,7 +503,7 @@ class RecipeSettingsReader:
     def __init__(self, recipe: typing.Optional[Recipe], uuid: QtCore.QUuid) -> None:
         self.recipe = recipe
         self._uuid = uuid
-        self.group = f"Recipe/{uuid.toString(QtCore.QUuid.WithoutBraces)}"
+        self.group = f"Recipe/{uuid.toString(QtCore.QUuid.StringFormat.WithoutBraces)}"
         self.settings = BaseSettings.make_settings()
 
     def __enter__(self) -> RecipeSettings:
@@ -540,7 +540,7 @@ class RecipeSettingsWriter(_WriterMixin):
         Create an instance using a recipe
         """
         instance = cls()
-        instance._reader_for_writer = RecipeSettingsReader.from_recipe(recipe)
+        instance._reader_for_writer = RecipeSettingsReader.from_recipe(recipe)  # type: ignore[attr-defined] # noqa: E501
         return instance
 
     @classmethod
@@ -549,7 +549,7 @@ class RecipeSettingsWriter(_WriterMixin):
         Create an instance using a UUID
         """
         instance = cls()
-        instance._reader_for_writer = RecipeSettingsReader.from_uuid(uuid)
+        instance._reader_for_writer = RecipeSettingsReader.from_uuid(uuid)  # type: ignore[attr-defined] # noqa: E501
         return instance
 
 
@@ -565,5 +565,5 @@ class RecipeSettingsDeleter:
         """
         Delete the recipe settings from the specified UUID
         """
-        group = f"Recipe/{uuid.toString(QtCore.QUuid.WithoutBraces)}"
+        group = f"Recipe/{uuid.toString(QtCore.QUuid.StringFormat.WithoutBraces)}"
         self._settings.remove(group)

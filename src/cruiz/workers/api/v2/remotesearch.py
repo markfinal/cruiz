@@ -30,6 +30,8 @@ def invoke(
         remote_name = params.remote_name  # type: ignore
         remote = api.remotes.get(remote_name)
         refs: typing.List[typing.Tuple[str, typing.Optional[str]]] = []
+
+        assert hasattr(params, "pattern")
         for ref in api.search.recipes(query=params.pattern, remote=remote):
             # returns a list of conans.model.recipe_ref.RecipeReference
             refs.append((str(ref), None))

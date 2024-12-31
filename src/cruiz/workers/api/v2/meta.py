@@ -56,6 +56,7 @@ def _interop_profiles_dir(api: typing.Any) -> pathlib.Path:
     from conan.internal.cache.home_paths import HomePaths
 
     paths = HomePaths(api.cache_folder)
+    pass
     return pathlib.Path(paths.profiles_path)
 
 
@@ -130,7 +131,7 @@ def _interop_profile_meta(
     # TODO: using internal method
     profile = loader._load_profile(profile, os.getcwd())
     details: typing.Dict[str, typing.Dict[str, typing.Any]] = {"settings": {}}
-    for key, value in profile.settings.items():
+    for key, value in profile.settings.items():  # type: ignore[attr-defined]
         details["settings"][key] = value
     return details
 

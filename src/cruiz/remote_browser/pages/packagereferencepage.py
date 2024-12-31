@@ -6,11 +6,11 @@ Remote browser page
 
 import typing
 
-from qtpy import QtCore, QtGui
+from qtpy import QtCore, QtGui, QtWidgets
 
 import cruiz.globals
 
-from cruiz.commands.context import ConanConfigBoolean
+from cruiz.commands.conanconf import ConanConfigBoolean
 
 from cruiz.interop.searchrecipesparameters import SearchRecipesParameters
 
@@ -51,14 +51,14 @@ class _PackageReferenceModel(QtCore.QAbstractListModel):
         return len(self._list)
 
     def data(self, index, role) -> typing.Any:  # type: ignore
-        if role == QtCore.Qt.DisplayRole:
+        if role == QtCore.Qt.ItemDataRole.DisplayRole:
             return self._list[index.row()]
         return None
 
     def flags(self, index):  # type: ignore
         default_flags = super().flags(index)
         if "->" in self._list[index.row()]:
-            return default_flags & ~QtCore.Qt.ItemIsEnabled
+            return default_flags & ~QtCore.Qt.ItemFlag.ItemIsEnabled
         return default_flags
 
 
@@ -70,8 +70,8 @@ class _PackageSearchValidator(QtGui.QValidator):
     def validate(self, input_to_validate: str, pos: int) -> QtGui.QValidator.State:
         # pylint: disable=unused-argument
         if not input_to_validate:
-            return QtGui.QValidator.Invalid
-        return QtGui.QValidator.Acceptable
+            return QtGui.QValidator.State.Invalid
+        return QtGui.QValidator.State.Acceptable
 
 
 class PackageReferencePage(Page):
@@ -113,6 +113,7 @@ class PackageReferencePage(Page):
         Refresh the UI for current local cache names.
         """
         with BlockSignals(self._ui.local_cache_name) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QComboBox)
             blocked_widget.clear()
             with AllNamedLocalCacheSettingsReader() as cache_names:
                 blocked_widget.addItems(cache_names)
@@ -126,7 +127,7 @@ class PackageReferencePage(Page):
         """
         selection = self._ui.package_references.selectedIndexes()
         assert len(selection) == 1
-        return self._model.data(selection[0], QtCore.Qt.DisplayRole)
+        return self._model.data(selection[0], QtCore.Qt.ItemDataRole.DisplayRole)
 
     def on_local_cache_change(self, text: str) -> None:
         """
@@ -135,16 +136,19 @@ class PackageReferencePage(Page):
         self._context.change_cache(text)
         index_of_first_enabled_remote: typing.Optional[int] = None
         with BlockSignals(self._ui.remote) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QComboBox)
             blocked_widget.clear()
             for index, remote in enumerate(self._context.get_remotes_list()):
                 blocked_widget.addItem(remote.name)
-                item = blocked_widget.model().item(index)
+                model = blocked_widget.model()
+                assert isinstance(model, QtGui.QStandardItemModel)
+                item = model.item(index)
                 if remote.enabled:
-                    item.setFlags(item.flags() | QtCore.Qt.ItemIsEnabled)
+                    item.setFlags(item.flags() | QtCore.Qt.ItemFlag.ItemIsEnabled)
                     if index_of_first_enabled_remote is None:
                         index_of_first_enabled_remote = index
                 else:
-                    item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
+                    item.setFlags(item.flags() & ~QtCore.Qt.ItemFlag.ItemIsEnabled)
             blocked_widget.setCurrentIndex(-1)
         if index_of_first_enabled_remote is not None:
             self._ui.remote.setCurrentIndex(index_of_first_enabled_remote)
@@ -164,6 +168,7 @@ class PackageReferencePage(Page):
 
     def _pattern_incorrect(self) -> None:
         with BlockSignals(self._ui.search_pattern) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setText("")  # clear doesn't actually clear
 
     def _enable_progress(self, enable: bool) -> None:
@@ -207,7 +212,9 @@ class PackageReferencePage(Page):
             self._open_next_page()
         else:
             # skip recipe revisions
-            self.parent().setCurrentIndex(self.page_index + 2)
+            parent_stackedwidget = self.parent()
+            assert isinstance(parent_stackedwidget, QtWidgets.QStackedWidget)
+            parent_stackedwidget.setCurrentIndex(self.page_index + 2)
 
     def on_cancel(self) -> None:
         """

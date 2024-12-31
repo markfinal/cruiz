@@ -101,7 +101,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self._systray.show()
 
         mdi_area = QtWidgets.QMdiArea()
-        mdi_area.setViewMode(QtWidgets.QMdiArea.TabbedView)
+        mdi_area.setViewMode(QtWidgets.QMdiArea.ViewMode.TabbedView)
         mdi_area.setDocumentMode(True)
         mdi_area.setTabsClosable(True)
         mdi_area.setTabsMovable(True)
@@ -112,7 +112,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self._remote_browser_dock.on_local_cache_modified
         )
         self.addDockWidget(
-            QtCore.Qt.RightDockWidgetArea,
+            QtCore.Qt.DockWidgetArea.RightDockWidgetArea,
             self._remote_browser_dock,
         )
 
@@ -121,12 +121,12 @@ class MainWindow(QtWidgets.QMainWindow):
         open_recipe_action.triggered.connect(self._open_recipe)
 
         exit_action = QtGui.QAction("&Quit", self)
-        exit_action.setMenuRole(QtGui.QAction.QuitRole)
+        exit_action.setMenuRole(QtGui.QAction.MenuRole.QuitRole)
         exit_action.setShortcut(QtGui.QKeySequence("Ctrl+Q"))
         exit_action.setStatusTip("Quit application")
         exit_action.triggered.connect(
             qApp.closeAllWindows,  # type: ignore # noqa: F821
-            QtCore.Qt.QueuedConnection,
+            QtCore.Qt.ConnectionType.QueuedConnection,
         )
 
         # need a clone of the exit action without the menu role to
@@ -136,7 +136,7 @@ class MainWindow(QtWidgets.QMainWindow):
         systray_exit_icon.setStatusTip("Quit application")
         systray_exit_icon.triggered.connect(
             qApp.closeAllWindows,  # type: ignore # noqa: F821
-            QtCore.Qt.QueuedConnection,
+            QtCore.Qt.ConnectionType.QueuedConnection,
         )
         if QtWidgets.QSystemTrayIcon.isSystemTrayAvailable():
             self._app_menu.addAction(systray_exit_icon)
@@ -152,7 +152,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         edit_menu = menubar.addMenu("&Edit")
         edit_preferences_action = QtGui.QAction("Preferences...", self)
-        edit_preferences_action.setMenuRole(QtGui.QAction.PreferencesRole)
+        edit_preferences_action.setMenuRole(QtGui.QAction.MenuRole.PreferencesRole)
         edit_preferences_action.triggered.connect(self._edit_preferences_new)
         edit_menu.addAction(edit_preferences_action)
         manage_local_caches_action = QtGui.QAction("Manage local caches...", self)
@@ -164,11 +164,11 @@ class MainWindow(QtWidgets.QMainWindow):
 
         help_menu = menubar.addMenu("&Help")
         about_cruiz_action = QtGui.QAction("About cruiz...", self)
-        about_cruiz_action.setMenuRole(QtGui.QAction.AboutRole)
+        about_cruiz_action.setMenuRole(QtGui.QAction.MenuRole.AboutRole)
         about_cruiz_action.triggered.connect(self._about_cruiz)
         help_menu.addAction(about_cruiz_action)
         about_qt_action = QtGui.QAction("About Qt...", self)
-        about_qt_action.setMenuRole(QtGui.QAction.AboutQtRole)
+        about_qt_action.setMenuRole(QtGui.QAction.MenuRole.AboutQtRole)
         about_qt_action.triggered.connect(QtWidgets.QApplication.aboutQt)
         help_menu.addAction(about_qt_action)
         icon_license_action = QtGui.QAction("Icon licenses...", self)
@@ -177,62 +177,64 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self._ccache_label: QtWidgets.QLabel = QtWidgets.QLabel()
         self._ccache_label.setFrameStyle(
-            QtWidgets.QFrame.Panel | QtWidgets.QFrame.Sunken
+            QtWidgets.QFrame.Shape.Panel | QtWidgets.QFrame.Shadow.Sunken
         )
         self.statusBar().addPermanentWidget(self._ccache_label)
 
         self._sccache_label: QtWidgets.QLabel = QtWidgets.QLabel()
         self._sccache_label.setFrameStyle(
-            QtWidgets.QFrame.Panel | QtWidgets.QFrame.Sunken
+            QtWidgets.QFrame.Shape.Panel | QtWidgets.QFrame.Shadow.Sunken
         )
         self.statusBar().addPermanentWidget(self._sccache_label)
 
         self._buildcache_label: QtWidgets.QLabel = QtWidgets.QLabel()
         self._buildcache_label.setFrameStyle(
-            QtWidgets.QFrame.Panel | QtWidgets.QFrame.Sunken
+            QtWidgets.QFrame.Shape.Panel | QtWidgets.QFrame.Shadow.Sunken
         )
         self.statusBar().addPermanentWidget(self._buildcache_label)
 
         self._ssh_agent_label: QtWidgets.QLabel = QtWidgets.QLabel()
         self._ssh_agent_label.setFrameStyle(
-            QtWidgets.QFrame.Panel | QtWidgets.QFrame.Sunken
+            QtWidgets.QFrame.Shape.Panel | QtWidgets.QFrame.Shadow.Sunken
         )
         self.statusBar().addPermanentWidget(self._ssh_agent_label)
         self._configure_ssh_agent_statusbar()
 
         self._compiler_label: QtWidgets.QLabel = QtWidgets.QLabel()
         self._compiler_label.setFrameStyle(
-            QtWidgets.QFrame.Panel | QtWidgets.QFrame.Sunken
+            QtWidgets.QFrame.Shape.Panel | QtWidgets.QFrame.Shadow.Sunken
         )
         self.statusBar().addPermanentWidget(self._compiler_label)
 
         self._cmake_label: QtWidgets.QLabel = QtWidgets.QLabel()
         self._cmake_label.setFrameStyle(
-            QtWidgets.QFrame.Panel | QtWidgets.QFrame.Sunken
+            QtWidgets.QFrame.Shape.Panel | QtWidgets.QFrame.Shadow.Sunken
         )
         self.statusBar().addPermanentWidget(self._cmake_label)
 
         self._ninja_label: QtWidgets.QLabel = QtWidgets.QLabel()
         self._ninja_label.setFrameStyle(
-            QtWidgets.QFrame.Panel | QtWidgets.QFrame.Sunken
+            QtWidgets.QFrame.Shape.Panel | QtWidgets.QFrame.Shadow.Sunken
         )
         self.statusBar().addPermanentWidget(self._ninja_label)
 
         self._conan_label: QtWidgets.QLabel = QtWidgets.QLabel()
         self._conan_label.setFrameStyle(
-            QtWidgets.QFrame.Panel | QtWidgets.QFrame.Sunken
+            QtWidgets.QFrame.Shape.Panel | QtWidgets.QFrame.Shadow.Sunken
         )
         self.statusBar().addPermanentWidget(self._conan_label)
 
         self._warning_label = QtWidgets.QLabel()
         self._warning_label.setPixmap(
             self.style()
-            .standardIcon(QtWidgets.QStyle.SP_MessageBoxWarning)
+            .standardIcon(QtWidgets.QStyle.StandardPixmap.SP_MessageBoxWarning)
             .pixmap(32, 32)
         )
         self.statusBar().addPermanentWidget(self._warning_label)
         self._warning_label.hide()
-        self._warning_label.setContextMenuPolicy(QtGui.Qt.CustomContextMenu)
+        self._warning_label.setContextMenuPolicy(
+            QtCore.Qt.ContextMenuPolicy.CustomContextMenu
+        )
         self._warning_label.customContextMenuRequested.connect(
             self._on_warning_label_menu
         )
@@ -247,7 +249,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # removed and readded by package managers like pip
         self._status_file_watcher.fileChanged.connect(
             self._refresh_status_bar,
-            QtCore.Qt.QueuedConnection,
+            QtCore.Qt.ConnectionType.QueuedConnection,
         )
 
         self.setWindowTitle(qApp.applicationName())  # type: ignore # noqa: F821
@@ -259,7 +261,9 @@ class MainWindow(QtWidgets.QMainWindow):
         action.triggered.connect(self._on_warning_label_dismiss)
         menu = QtWidgets.QMenu(self)
         menu.addAction(action)
-        menu.exec_(self.sender().mapToGlobal(position))
+        sender_widget = self.sender()
+        assert isinstance(sender_widget, QtWidgets.QWidget)
+        menu.exec_(sender_widget.mapToGlobal(position))
 
     def _on_warning_label_dismiss(self) -> None:
         self._warning_label.setToolTip("")
@@ -310,8 +314,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self._ssh_agent_label.setToolTip(ssh_agent_tooltip)
 
     def closeEvent(self, event: QtGui.QCloseEvent) -> None:
-        self.centralWidget().closeAllSubWindows()
-        if self.centralWidget().subWindowList():
+        mdi_area = self.centralWidget()
+        assert isinstance(mdi_area, QtWidgets.QMdiArea)
+        mdi_area.closeAllSubWindows()
+        if mdi_area.subWindowList():
             # if any recipe widget has blocked close, do not continue
             event.ignore()
             return
@@ -380,7 +386,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 original_recipe.recipe if original_recipe else None,
             )
             if wizard.disambiguation_required:
-                if wizard.exec_() == QtWidgets.QDialog.Accepted:
+                if wizard.exec_() == QtWidgets.QDialog.DialogCode.Accepted:
                     if wizard.has_load_errors:
                         return
                     recipe_uuid = wizard.uuid
@@ -394,6 +400,9 @@ class MainWindow(QtWidgets.QMainWindow):
                 "Recipe does not exist",
                 f"The recipe at {str(recipe_path)} no longer exists. \
 Remove from the recent list?",
+                button0=QtWidgets.QMessageBox.StandardButton.Yes
+                | QtWidgets.QMessageBox.StandardButton.No,
+                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
             )
             if result == QtWidgets.QMessageBox.StandardButton.Yes:
                 # TODO: this is not ideal, as it's not atomic
@@ -433,9 +442,11 @@ Remove from the recent list?",
         recipe_widget = RecipeWidget(recipe_path, recipe_uuid, wizard.local_cache)
         self.local_cache_changed.connect(recipe_widget.on_local_cache_changed)
         self.preferences_updated.connect(recipe_widget.on_preferences_update)
-        self.centralWidget().addSubWindow(recipe_widget)
+        mdi_area = self.centralWidget()
+        assert isinstance(mdi_area, QtWidgets.QMdiArea)
+        mdi_area.addSubWindow(recipe_widget)
         recipe_widget.show()
-        recipe_widget.setFocus(QtCore.Qt.ActiveWindowFocusReason)
+        recipe_widget.setFocus(QtCore.Qt.FocusReason.ActiveWindowFocusReason)
         try:
             recipe_widget.post_init()
         except RecipeInspectionError:
@@ -647,7 +658,7 @@ Remove from the recent list?",
         for license in license_files:
             temp_dir = QtCore.QDir(
                 QtCore.QStandardPaths.writableLocation(
-                    QtCore.QStandardPaths.TempLocation
+                    QtCore.QStandardPaths.StandardLocation.TempLocation
                 )
             )
             temp_path = temp_dir.absoluteFilePath(license)
@@ -655,8 +666,8 @@ Remove from the recent list?",
                 # file may be read-only when copied from resources,
                 # so make writeable and remove it
                 perms = QtCore.QFile.permissions(temp_path)
-                if perms & QtCore.QFileDevice.WriteOwner == 0:
-                    perms = perms | QtCore.QFileDevice.WriteOwner
+                if not (perms & QtCore.QFileDevice.Permission.WriteOwner):
+                    perms = perms | QtCore.QFileDevice.Permission.WriteOwner
                     QtCore.QFile.setPermissions(temp_path, perms)
                 QtCore.QFile.remove(temp_path)
             if not QtCore.QFile.copy(f":/{license}", temp_path):
@@ -664,10 +675,14 @@ Remove from the recent list?",
                     self,
                     "Failed file copy",
                     f"Unable to copy the {license} to a temporary location for viewing",
+                    button0=QtWidgets.QMessageBox.StandardButton.Ok,
+                    button1=QtWidgets.QMessageBox.StandardButton.NoButton,
                 )
                 return
             QtGui.QDesktopServices.openUrl(
-                QtCore.QUrl(f"file:///{temp_path}", QtCore.QUrl.TolerantMode)
+                QtCore.QUrl(
+                    f"file:///{temp_path}", QtCore.QUrl.ParsingMode.TolerantMode
+                )
             )
 
     def is_recipe_active(self, uuid: QtCore.QUuid) -> bool:
@@ -675,8 +690,9 @@ Remove from the recent list?",
         Is the recipe with the given UUID active (i.e. has an open tab)?
         """
         mdi_area = self.centralWidget()
+        assert isinstance(mdi_area, QtWidgets.QMdiArea)
         return any(
-            subwindow.widget().recipe.uuid == uuid
+            subwindow.widget().recipe.uuid == uuid  # type: ignore[attr-defined]
             for subwindow in mdi_area.subWindowList()
         )
 

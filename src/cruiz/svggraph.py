@@ -107,10 +107,14 @@ class _SVGDialog(QtWidgets.QDialog):
 
     def showEvent(self, event: QtGui.QShowEvent) -> None:
         super().showEvent(event)
-        self._view.fitInView(self._scene.sceneRect(), QtCore.Qt.KeepAspectRatio)
+        self._view.fitInView(
+            self._scene.sceneRect(), QtCore.Qt.AspectRatioMode.KeepAspectRatio
+        )
 
     def resizeEvent(self, event: QtGui.QResizeEvent) -> None:
-        self._view.fitInView(self._scene.sceneRect(), QtCore.Qt.KeepAspectRatio)
+        self._view.fitInView(
+            self._scene.sceneRect(), QtCore.Qt.AspectRatioMode.KeepAspectRatio
+        )
         super().resizeEvent(event)
 
     def _context_menu(self, position: QtCore.QPoint) -> None:
