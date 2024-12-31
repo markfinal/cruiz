@@ -29,7 +29,7 @@ class InstallConfigDialog(QtWidgets.QDialog):
 
     def __init__(self, context: ConanContext, parent: QtWidgets.QWidget) -> None:
         super().__init__(parent)
-        self.setAttribute(QtCore.Qt.WA_DeleteOnClose, True)
+        self.setAttribute(QtCore.Qt.WidgetAttribute.WA_DeleteOnClose, True)
         self._ui = Ui_InstallConfigDialog()
         self._ui.setupUi(self)  # type: ignore[no-untyped-call]
         self._context = context
@@ -47,9 +47,9 @@ class InstallConfigDialog(QtWidgets.QDialog):
         self._ui.pathOrUrl.textChanged.connect(self._path_updated)
         self._ui.installButton.setEnabled(False)
         self._ui.installButton.clicked.connect(self._install)
-        self._ui.buttonBox.button(QtWidgets.QDialogButtonBox.Cancel).clicked.connect(
-            self._cancel
-        )
+        self._ui.buttonBox.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Cancel
+        ).clicked.connect(self._cancel)
 
     def _set_url(self, path: str) -> None:
         self._ui.pathOrUrl.setText(path)
@@ -78,6 +78,8 @@ class InstallConfigDialog(QtWidgets.QDialog):
                 self,
                 "Local cache config install failure",
                 str(exception),
+                button0=QtWidgets.QMessageBox.StandardButton.Ok,
+                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
             )
             return
         with RecentConanConfigSettingsReader() as settings:

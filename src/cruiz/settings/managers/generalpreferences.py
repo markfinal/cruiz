@@ -7,7 +7,7 @@ Settings context managers for general preferences
 import platform
 import typing
 
-from qtpy import QtGui
+from qtpy import QtCore, QtGui
 
 from .basesettings import (
     BaseSettings,
@@ -57,7 +57,7 @@ class GeneralSettings(ComparableCommonSettings):
             "busy_icon_colour": SettingMeta(
                 "BusyIconColour",
                 ColourSetting,
-                QtGui.QColor(QtGui.Qt.black),
+                QtGui.QColor(QtCore.Qt.GlobalColor.black),
                 ScalarValue,
             ),
             "found_text_background_colour": SettingMeta(

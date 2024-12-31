@@ -61,10 +61,11 @@ def sanitise_settings(widget: QtWidgets.QWidget) -> bool:
             widget,
             "Inconsistent recipe settings",
             message,
-            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
-            QtWidgets.QMessageBox.Yes,
+            button0=QtWidgets.QMessageBox.StandardButton.Yes
+            | QtWidgets.QMessageBox.StandardButton.No,
+            button1=QtWidgets.QMessageBox.StandardButton.Yes,
         )
-        if response == QtWidgets.QMessageBox.Yes:
+        if response == QtWidgets.QMessageBox.StandardButton.Yes:
             for uuid in incomplete_uuids:
                 real_uuid = QtCore.QUuid(uuid)
                 RecipeSettingsDeleter().delete(real_uuid)
@@ -79,10 +80,11 @@ def sanitise_settings(widget: QtWidgets.QWidget) -> bool:
             widget,
             "Inconsistent recipe settings",
             message,
-            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
-            QtWidgets.QMessageBox.Yes,
+            button0=QtWidgets.QMessageBox.StandardButton.Yes
+            | QtWidgets.QMessageBox.StandardButton.No,
+            button1=QtWidgets.QMessageBox.StandardButton.Yes,
         )
-        if response == QtWidgets.QMessageBox.Yes:
+        if response == QtWidgets.QMessageBox.StandardButton.Yes:
             for uuid, _ in recipe_no_longer_exists_uuid.items():
                 real_uuid = QtCore.QUuid(uuid)
                 RecipeSettingsDeleter().delete(real_uuid)
@@ -97,10 +99,11 @@ def sanitise_settings(widget: QtWidgets.QWidget) -> bool:
             widget,
             "Inconsistent recipe settings",
             message,
-            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
-            QtWidgets.QMessageBox.Yes,
+            button0=QtWidgets.QMessageBox.StandardButton.Yes
+            | QtWidgets.QMessageBox.StandardButton.No,
+            button1=QtWidgets.QMessageBox.StandardButton.Yes,
         )
-        if response == QtWidgets.QMessageBox.Yes:
+        if response == QtWidgets.QMessageBox.StandardButton.Yes:
             for uuid in recent_recipe_only:
                 real_uuid = QtCore.QUuid(uuid)
                 RecentRecipeSettingsDeleter().delete(real_uuid)
@@ -115,10 +118,11 @@ def sanitise_settings(widget: QtWidgets.QWidget) -> bool:
             widget,
             "Inconsistent recipe settings",
             message,
-            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
-            QtWidgets.QMessageBox.Yes,
+            button0=QtWidgets.QMessageBox.StandardButton.Yes
+            | QtWidgets.QMessageBox.StandardButton.No,
+            button1=QtWidgets.QMessageBox.StandardButton.Yes,
         )
-        if response == QtWidgets.QMessageBox.Yes:
+        if response == QtWidgets.QMessageBox.StandardButton.Yes:
             for uuid in all_uuids:
                 real_uuid = QtCore.QUuid(uuid)
                 RecentRecipeSettingsWriter().make_current(real_uuid)

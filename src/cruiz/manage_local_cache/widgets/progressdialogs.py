@@ -20,7 +20,7 @@ class _ContextProgressDialog(QtWidgets.QProgressDialog):
         self, context: ConanContext, title: str, parent: QtWidgets.QWidget
     ) -> None:
         super().__init__(title, "Cancel", 0, 0, parent)
-        self.setAttribute(QtCore.Qt.WA_DeleteOnClose, True)
+        self.setAttribute(QtCore.Qt.WidgetAttribute.WA_DeleteOnClose, True)
         self._title = title
         self._context = context
         self.setValue(0)
@@ -30,7 +30,11 @@ class _ContextProgressDialog(QtWidgets.QProgressDialog):
         # pylint: disable=unused-argument
         if exception:
             QtWidgets.QMessageBox.critical(
-                self, f"{self._title} failed", str(exception)
+                self,
+                f"{self._title} failed",
+                str(exception),
+                button0=QtWidgets.QMessageBox.StandardButton.Ok,
+                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
             )
             return
         self.reset()

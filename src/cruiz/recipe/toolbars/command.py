@@ -41,7 +41,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
 
     def __init__(self, parent: QtWidgets.QWidget) -> None:
         super().__init__(parent)
-        recipe_ui = parent._ui
+        recipe_ui = parent._ui  # type: ignore[attr-defined]
         self.command_started.connect(self._command_started)
         self.command_ended.connect(self._command_ended)
         self._idle_group = QtGui.QActionGroup(self)
@@ -113,12 +113,12 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             action: QtGui.QAction, trigger_slot: typing.Callable[[], None]
         ) -> None:
             action.setShortcutVisibleInContextMenu(True)
-            action.setShortcutContext(QtCore.Qt.WindowShortcut)
+            action.setShortcutContext(QtCore.Qt.ShortcutContext.WindowShortcut)
             action.triggered.connect(trigger_slot)
 
         # shortcuts themselves are set elsewhere, as they can be dynamic
         # through the lifetime of the application
-        recipe_ui = self.parent()._ui
+        recipe_ui = self.parent()._ui  # type: ignore[attr-defined]
         _configure(recipe_ui.actionCreateCommand, self._conan_create)
         _configure(recipe_ui.actionCreateUpdateCommand, self._conan_create_update)
         _configure(recipe_ui.actionInstallCommand, self._conan_install)
@@ -189,7 +189,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
                 icon = QtGui.QIcon(f":/icons/{cruiz.globals.get_theme()}/{icon_path}")
             action.setIcon(icon)
 
-        recipe_ui = self.parent()._ui
+        recipe_ui = self.parent()._ui  # type: ignore[attr-defined]
         _configure_conan_action(
             recipe_ui.actionCreateCommand,
             conan_create,
@@ -405,7 +405,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         v2_need_reference: bool = False,
     ) -> CommandParameters:
         recipe_widget = self._recipe_widget
-        recipe = recipe_widget.recipe
+        recipe = recipe_widget.recipe  # type: ignore[attr-defined]
         params = CommandParameters(verb, worker)
         if with_recipe_path:
             params.recipe_path = recipe.path
@@ -459,34 +459,37 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             if with_cwd:
                 workflow_cwd = settings.local_workflow_cwd.resolve()
                 common_subdir = settings.local_workflow_common_subdir.resolve()
-                params.cwd = recipe_widget.get_working_dir(workflow_cwd, common_subdir)
+                params.cwd = recipe_widget.get_working_dir(workflow_cwd, common_subdir)  # type: ignore[attr-defined] # noqa: E501
             if with_install_folder:
                 install_folder = settings.local_workflow_install_folder.resolve()
-                params.install_folder = recipe_widget.resolve_expression(install_folder)
+                params.install_folder = recipe_widget.resolve_expression(install_folder)  # type: ignore[attr-defined] # noqa: E501
             if with_imports_folder:
                 imports_folder = settings.local_workflow_imports_folder.resolve()
-                params.imports_folder = recipe_widget.resolve_expression(imports_folder)
+                params.imports_folder = recipe_widget.resolve_expression(imports_folder)  # type: ignore[attr-defined] # noqa: E501
             if with_source_folder:
                 source_folder = settings.local_workflow_source_folder.resolve()
-                params.source_folder = recipe_widget.resolve_expression(source_folder)
+                params.source_folder = recipe_widget.resolve_expression(source_folder)  # type: ignore[attr-defined] # noqa: E501
             if fudge_source_folder:
                 source_folder = settings.local_workflow_source_folder.resolve()
-                if not source_folder and not recipe_widget.cwd_is_relative_to_recipe(
-                    workflow_cwd
+                if (
+                    not source_folder
+                    and not recipe_widget.cwd_is_relative_to_recipe(  # type: ignore[attr-defined] # noqa: E501
+                        workflow_cwd
+                    )
                 ):
                     # fudge due to the default source_folder changing between
                     # 'conan source' and 'conan build'
                     source_folder = "."
-                params.source_folder = recipe_widget.resolve_expression(source_folder)
+                params.source_folder = recipe_widget.resolve_expression(source_folder)  # type: ignore[attr-defined] # noqa: E501
             if with_build_folder:
                 build_folder = settings.local_workflow_build_folder.resolve()
-                params.build_folder = recipe_widget.resolve_expression(build_folder)
+                params.build_folder = recipe_widget.resolve_expression(build_folder)  # type: ignore[attr-defined] # noqa: E501
             if with_package_folder:
                 package_folder = settings.local_workflow_package_folder.resolve()
-                params.package_folder = recipe_widget.resolve_expression(package_folder)
+                params.package_folder = recipe_widget.resolve_expression(package_folder)  # type: ignore[attr-defined] # noqa: E501
             if with_test_build_folder:
                 test_folder = settings.local_workflow_test_folder.resolve()
-                params.test_build_folder = recipe_widget.resolve_expression(test_folder)
+                params.test_build_folder = recipe_widget.resolve_expression(test_folder)  # type: ignore[attr-defined] # noqa: E501
             if cruiz.globals.CONAN_MAJOR_VERSION == 1:
                 pass
             else:
@@ -642,7 +645,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             **named_args,
         )
         recipe_widget = self._recipe_widget
-        recipe = recipe_widget.recipe
+        recipe = recipe_widget.recipe  # type: ignore[attr-defined]
         params.recipe_path = recipe.path.parent / "test_package"
         return params
 
@@ -672,11 +675,11 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
         # configuration windows, forcing serialising changes before commands kick off
         recipe_widget = self._recipe_widget
         try:
-            recipe_attributes = recipe_widget.get_recipe_attributes()
+            recipe_attributes = recipe_widget.get_recipe_attributes()  # type: ignore[attr-defined] # noqa: E501
         except RecipeInspectionError:
             return
         self.command_started.emit()
-        recipe_widget.recipe.context.conancommand(
+        recipe_widget.recipe.context.conancommand(  # type: ignore[attr-defined] # noqa: E501
             self._make_conan_create_params(recipe_attributes, args),
             self,
         )
@@ -692,11 +695,11 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
     ) -> None:
         recipe_widget = self._recipe_widget
         try:
-            recipe_attributes = recipe_widget.get_recipe_attributes()
+            recipe_attributes = recipe_widget.get_recipe_attributes()  # type: ignore[attr-defined] # noqa: E501
         except RecipeInspectionError:
             return
         self.command_started.emit()
-        recipe_widget.recipe.context.conancommand(
+        recipe_widget.recipe.context.conancommand(  # type: ignore[attr-defined] # noqa: E501
             self._make_conan_install_params(recipe_attributes, args),
             self,
         )
@@ -710,11 +713,11 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
     def _conan_imports(self) -> None:
         recipe_widget = self._recipe_widget
         try:
-            recipe_attributes = recipe_widget.get_recipe_attributes()
+            recipe_attributes = recipe_widget.get_recipe_attributes()  # type: ignore[attr-defined] # noqa: E501
         except RecipeInspectionError:
             return
         self.command_started.emit()
-        recipe_widget.recipe.context.conancommand(
+        recipe_widget.recipe.context.conancommand(  # type: ignore[attr-defined] # noqa: E501
             self._make_conan_imports_params(recipe_attributes),
             self,
         )
@@ -722,11 +725,11 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
     def _conan_source(self) -> None:
         recipe_widget = self._recipe_widget
         try:
-            recipe_attributes = recipe_widget.get_recipe_attributes()
+            recipe_attributes = recipe_widget.get_recipe_attributes()  # type: ignore[attr-defined] # noqa: E501
         except RecipeInspectionError:
             return
         self.command_started.emit()
-        recipe_widget.recipe.context.conancommand(
+        recipe_widget.recipe.context.conancommand(  # type: ignore[attr-defined] # noqa: E501
             self._make_conan_source_params(recipe_attributes),
             self,
         )
@@ -734,11 +737,11 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
     def _conan_build(self) -> None:
         recipe_widget = self._recipe_widget
         try:
-            recipe_attributes = recipe_widget.get_recipe_attributes()
+            recipe_attributes = recipe_widget.get_recipe_attributes()  # type: ignore[attr-defined] # noqa: E501
         except RecipeInspectionError:
             return
         self.command_started.emit()
-        recipe_widget.recipe.context.conancommand(
+        recipe_widget.recipe.context.conancommand(  # type: ignore[attr-defined] # noqa: E501
             self._make_conan_build_params(recipe_attributes),
             self,
         )
@@ -746,11 +749,11 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
     def _conan_package(self) -> None:
         recipe_widget = self._recipe_widget
         try:
-            recipe_attributes = recipe_widget.get_recipe_attributes()
+            recipe_attributes = recipe_widget.get_recipe_attributes()  # type: ignore[attr-defined] # noqa: E501
         except RecipeInspectionError:
             return
         self.command_started.emit()
-        recipe_widget.recipe.context.conancommand(
+        recipe_widget.recipe.context.conancommand(  # type: ignore[attr-defined] # noqa: E501
             self._make_conan_package_params(recipe_attributes),
             self,
         )
@@ -758,11 +761,11 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
     def _conan_export_package(self) -> None:
         recipe_widget = self._recipe_widget
         try:
-            recipe_attributes = recipe_widget.get_recipe_attributes()
+            recipe_attributes = recipe_widget.get_recipe_attributes()  # type: ignore[attr-defined] # noqa: E501
         except RecipeInspectionError:
             return
         self.command_started.emit()
-        recipe_widget.recipe.context.conancommand(
+        recipe_widget.recipe.context.conancommand(  # type: ignore[attr-defined] # noqa: E501
             self._make_conan_export_package_params(recipe_attributes),
             self,
         )
@@ -770,28 +773,28 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
     def _conan_test(self) -> None:
         recipe_widget = self._recipe_widget
         try:
-            recipe_attributes = recipe_widget.get_recipe_attributes()
+            recipe_attributes = recipe_widget.get_recipe_attributes()  # type: ignore[attr-defined] # noqa: E501
         except RecipeInspectionError:
             return
         self.command_started.emit()
-        recipe_widget.recipe.context.conancommand(
+        recipe_widget.recipe.context.conancommand(  # type: ignore[attr-defined] # noqa: E501
             self._make_conan_test_package_params(recipe_attributes),
             self,
         )
 
     def _cancel_command(self) -> None:
         recipe_widget = self._recipe_widget
-        recipe = recipe_widget.recipe
+        recipe = recipe_widget.recipe  # type: ignore[attr-defined]
         recipe.context.cancel()
 
     def _conan_remove(self) -> None:
         recipe_widget = self._recipe_widget
         try:
-            recipe_attributes = recipe_widget.get_recipe_attributes()
+            recipe_attributes = recipe_widget.get_recipe_attributes()  # type: ignore[attr-defined] # noqa: E501
         except RecipeInspectionError:
             return
         self.command_started.emit()
-        recipe_widget.recipe.context.conancommand(
+        recipe_widget.recipe.context.conancommand(  # type: ignore[attr-defined] # noqa: E501
             self._make_conan_remove_package_params(recipe_attributes),
             self,
         )
@@ -801,7 +804,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
     ) -> None:
         # TODO review
         recipe_widget = self._recipe_widget
-        recipe = recipe_widget.recipe
+        recipe = recipe_widget.recipe  # type: ignore[attr-defined] # noqa: E501
         params = CommandParameters(
             "cmakebuild", workers_api.cmakebuildtool.invoke
         )  # TODO: verb is wrong
@@ -813,15 +816,15 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
                 )
             workflow_cwd = settings.local_workflow_cwd.resolve()
             common_subdir = settings.local_workflow_common_subdir.resolve()
-            params.cwd = recipe_widget.get_working_dir(workflow_cwd, common_subdir)
+            params.cwd = recipe_widget.get_working_dir(workflow_cwd, common_subdir)  # type: ignore[attr-defined] # noqa: E501
             layout_build_subdir = (
-                recipe_widget._dependency_graph.root.layout_build_subdir
+                recipe_widget._dependency_graph.root.layout_build_subdir  # type: ignore[attr-defined] # noqa: E501
             )
             if layout_build_subdir:
                 params.build_folder = layout_build_subdir
             else:
                 build_folder = settings.local_workflow_build_folder.resolve()
-                params.build_folder = recipe_widget.resolve_expression(build_folder)
+                params.build_folder = recipe_widget.resolve_expression(build_folder)  # type: ignore[attr-defined] # noqa: E501
         if args:
             params.arguments.extend(args)
         self.command_started.emit()
@@ -836,22 +839,22 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
     def _cmake_remove_cache(self) -> None:
         # TODO: review
         recipe_widget = self._recipe_widget
-        recipe = recipe_widget.recipe
+        recipe = recipe_widget.recipe  # type: ignore[attr-defined]
         params = CommandParameters(
             "cmakeremovecache", workers_api.deletecmakecache.invoke
         )  # TODO: verb is wrong
         with RecipeSettingsReader.from_recipe(recipe) as settings:
             workflow_cwd = settings.local_workflow_cwd.resolve()
             common_subdir = settings.local_workflow_common_subdir.resolve()
-            params.cwd = recipe_widget.get_working_dir(workflow_cwd, common_subdir)
+            params.cwd = recipe_widget.get_working_dir(workflow_cwd, common_subdir)  # type: ignore[attr-defined] # noqa: E501
             layout_build_subdir = (
-                recipe_widget._dependency_graph.root.layout_build_subdir
+                recipe_widget._dependency_graph.root.layout_build_subdir  # type: ignore[attr-defined] # noqa: E501
             )
             if layout_build_subdir:
                 params.build_folder = layout_build_subdir
             else:
                 build_folder = settings.local_workflow_build_folder.resolve()
-                params.build_folder = recipe_widget.resolve_expression(build_folder)
+                params.build_folder = recipe_widget.resolve_expression(build_folder)  # type: ignore[attr-defined] # noqa: E501
         self.command_started.emit()
         recipe.context.cmakebuildcommand(params, self)
 

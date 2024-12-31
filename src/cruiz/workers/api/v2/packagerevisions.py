@@ -30,7 +30,9 @@ def invoke(
         from conan.internal.conan_app import ConanApp
         from conans.model.package_ref import PkgReference
 
+        assert hasattr(params, "remote_name")
         remote = api.remotes.get(params.remote_name)
+        assert hasattr(params, "reference")
         pref = PkgReference.loads(params.reference)
         try:
             app = ConanApp(api)

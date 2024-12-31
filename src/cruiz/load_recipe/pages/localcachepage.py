@@ -21,7 +21,7 @@ class LoadRecipeLocalCachePage(QtWidgets.QWizardPage):
 
     @property
     def _ui(self) -> typing.Any:
-        return self.wizard().ui
+        return self.wizard().ui  # type: ignore[attr-defined]
 
     def nextId(self) -> int:
         return 3
@@ -33,9 +33,9 @@ class LoadRecipeLocalCachePage(QtWidgets.QWizardPage):
         )
         self._ui.manage_caches.clicked.connect(self._on_manage_caches)
         self._populate_caches()
-        if self.wizard().original_recipe:
+        if self.wizard().original_recipe:  # type: ignore[attr-defined]
             with RecipeSettingsReader.from_recipe(
-                self.wizard().original_recipe
+                self.wizard().original_recipe  # type: ignore[attr-defined]
             ) as settings:
                 original_cache = settings.local_cache_name.resolve()
             self._ui.local_cache_name.setCurrentText(original_cache)
@@ -47,6 +47,7 @@ class LoadRecipeLocalCachePage(QtWidgets.QWizardPage):
 
     def _populate_caches(self) -> None:
         with BlockSignals(self._ui.local_cache_name) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QComboBox)
             blocked_widget.clear()
             with AllNamedLocalCacheSettingsReader() as names:
                 blocked_widget.addItems(names)

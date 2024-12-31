@@ -33,7 +33,7 @@ class AddEnvironmentDialog(QtWidgets.QDialog):
 
     def __init__(self, context: ConanContext, parent: QtWidgets.QWidget) -> None:
         super().__init__(parent)
-        self.setAttribute(QtCore.Qt.WA_DeleteOnClose, True)
+        self.setAttribute(QtCore.Qt.WidgetAttribute.WA_DeleteOnClose, True)
         self._ui = Ui_AddEnvironmentDialog()
         self._ui.setupUi(self)  # type: ignore[no-untyped-call]
         conan_environment_actions: typing.List[QtGui.QAction] = []
@@ -51,17 +51,21 @@ class AddEnvironmentDialog(QtWidgets.QDialog):
         )
         self._ui.name.textChanged.connect(self._updated)
         self._ui.value.textChanged.connect(self._updated)
-        self._ui.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).setEnabled(False)
+        self._ui.buttonBox.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Ok
+        ).setEnabled(False)
         self._name: str = ""
         self._value: str = ""
 
     def _set_name(self) -> None:
-        self._ui.name.setText(self.sender().text())
+        sender_action = self.sender()
+        assert isinstance(sender_action, QtGui.QAction)
+        self._ui.name.setText(sender_action.text())
 
     def _updated(self) -> None:
-        self._ui.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).setEnabled(
-            bool(self._ui.name.text() and self._ui.value.text())
-        )
+        self._ui.buttonBox.button(
+            QtWidgets.QDialogButtonBox.StandardButton.Ok
+        ).setEnabled(bool(self._ui.name.text() and self._ui.value.text()))
 
     def accept(self) -> None:
         self._name = self._ui.name.text()

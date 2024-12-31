@@ -30,7 +30,9 @@ def invoke(
         from conan.internal.conan_app import ConanApp
         from conans.model.recipe_ref import RecipeReference
 
+        assert hasattr(params, "remote_name")
         remote = api.remotes.get(params.remote_name)
+        assert hasattr(params, "reference")
         ref = RecipeReference.loads(params.reference)
         try:
             app = ConanApp(api)

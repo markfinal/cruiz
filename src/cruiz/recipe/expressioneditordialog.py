@@ -16,13 +16,14 @@ class ExpressionEditorDialog(QtWidgets.QDialog):
     Dialog for editing expressions for local workflow folders
     """
 
+    # parent is RecipeWidget
     def __init__(self, parent: QtWidgets.QWidget) -> None:
         super().__init__(parent)
         self._ui = Ui_ExpressionEditor()
         self._ui.setupUi(self)  # type: ignore[no-untyped-call]
 
         self._ui.expression.textChanged.connect(self._evaluate)
-        tokens, _ = parent.tokens()
+        tokens, _ = parent.tokens()  # type: ignore[attr-defined]
 
         self._ui.evaluatedExpression.clear()
         self._ui.nameMacro.setText(tokens["name"])
@@ -33,6 +34,6 @@ class ExpressionEditorDialog(QtWidgets.QDialog):
 
     def _evaluate(self, text: str) -> None:
         try:
-            self._ui.evaluatedExpression.setText(self.parent().resolve_expression(text))
+            self._ui.evaluatedExpression.setText(self.parent().resolve_expression(text))  # type: ignore[attr-defined] # noqa: E501
         except (ValueError, KeyError):
             self._ui.evaluatedExpression.clear()

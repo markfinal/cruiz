@@ -24,7 +24,7 @@ from cruiz.interop.commandparameters import CommandParameters
 from cruiz.interop.dependencygraph import dependencygraph_from_node_dependees
 from cruiz.commands.logdetails import LogDetails
 from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
-from cruiz.settings.managers.recipe import WorkflowCwd
+from cruiz.settings.managers.basesettings import WorkflowCwd
 from cruiz.settings.managers.recipe import (
     RecipeSettings,
     RecipeSettingsReader,
@@ -102,7 +102,9 @@ class RecipeWidget(QtWidgets.QMainWindow):
         self._ui.pane_tabs.tabCloseRequested.connect(self._on_tab_close_request)
 
         self._find_shortcut = QtGui.QShortcut(QtGui.QKeySequence("Ctrl+F"), self)
-        self._find_shortcut.setContext(QtCore.Qt.WidgetWithChildrenShortcut)
+        self._find_shortcut.setContext(
+            QtCore.Qt.ShortcutContext.WidgetWithChildrenShortcut
+        )
         self._find_shortcut.activated.connect(self._open_find_dialog)
         with GeneralSettingsReader() as settings:
             combine_panes = settings.combine_panes.resolve()
@@ -134,8 +136,9 @@ class RecipeWidget(QtWidgets.QMainWindow):
         if not self._git_repository:
             # if not a git repository, disable the option to use relative to git
             model = self._ui.localWorkflowCwd.model()
+            assert isinstance(model, QtGui.QStandardItemModel)
             item = model.item(1)
-            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)  # type: ignore
+            item.setFlags(item.flags() & ~QtCore.Qt.ItemFlag.ItemIsEnabled)
         # TODO: need to fix this responsiveness
         # the QLineEdit.textChanged signal is not used here,
         # as the connected slots are so heavy weight that
@@ -144,7 +147,9 @@ class RecipeWidget(QtWidgets.QMainWindow):
         self._ui.localWorkflowCommonSubdir.editingFinished.connect(
             self._local_workflow_update_common_subdir
         )
-        trash_icon = self.style().standardIcon(QtWidgets.QStyle.SP_TrashIcon)
+        trash_icon = self.style().standardIcon(
+            QtWidgets.QStyle.StandardPixmap.SP_TrashIcon
+        )
         self._local_workflow_common_subdir_trash_action = QtGui.QAction(
             trash_icon, "", self
         )
@@ -154,7 +159,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         )
         self._ui.localWorkflowCommonSubdir.addAction(
             self._local_workflow_common_subdir_trash_action,
-            QtWidgets.QLineEdit.TrailingPosition,
+            QtWidgets.QLineEdit.ActionPosition.TrailingPosition,
         )
         # install command
         self._ui.localWorkflowInstallFolder.editingFinished.connect(
@@ -169,7 +174,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         )
         self._ui.localWorkflowInstallFolder.addAction(
             self._local_workflow_install_folder_trash_action,
-            QtWidgets.QLineEdit.TrailingPosition,
+            QtWidgets.QLineEdit.ActionPosition.TrailingPosition,
         )
         # imports command
         self._ui.localWorkflowImportsFolder.editingFinished.connect(
@@ -184,7 +189,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         )
         self._ui.localWorkflowImportsFolder.addAction(
             self._local_workflow_imports_folder_trash_action,
-            QtWidgets.QLineEdit.TrailingPosition,
+            QtWidgets.QLineEdit.ActionPosition.TrailingPosition,
         )
         # source command
         self._ui.localWorkflowSourceFolder.editingFinished.connect(
@@ -199,7 +204,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         )
         self._ui.localWorkflowSourceFolder.addAction(
             self._local_workflow_source_folder_trash_action,
-            QtWidgets.QLineEdit.TrailingPosition,
+            QtWidgets.QLineEdit.ActionPosition.TrailingPosition,
         )
         # build command
         self._ui.localWorkflowBuildFolder.editingFinished.connect(
@@ -214,7 +219,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         )
         self._ui.localWorkflowBuildFolder.addAction(
             self._local_workflow_build_folder_trash_action,
-            QtWidgets.QLineEdit.TrailingPosition,
+            QtWidgets.QLineEdit.ActionPosition.TrailingPosition,
         )
         # package command
         self._ui.localWorkflowPackageFolder.editingFinished.connect(
@@ -229,7 +234,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         )
         self._ui.localWorkflowPackageFolder.addAction(
             self._local_workflow_package_folder_trash_action,
-            QtWidgets.QLineEdit.TrailingPosition,
+            QtWidgets.QLineEdit.ActionPosition.TrailingPosition,
         )
         # test command
         self._ui.localWorkflowTestFolder.editingFinished.connect(
@@ -244,7 +249,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         )
         self._ui.localWorkflowTestFolder.addAction(
             self._local_workflow_test_folder_trash_action,
-            QtWidgets.QLineEdit.TrailingPosition,
+            QtWidgets.QLineEdit.ActionPosition.TrailingPosition,
         )
         # presets
         self._ui.localWorkflowClearAll.clicked.connect(self._local_workflow_clear_all)
@@ -389,6 +394,8 @@ class RecipeWidget(QtWidgets.QMainWindow):
                 self,
                 "Recipe cannot be closed",
                 "Commands are still running. Cannot close recipe.",
+                button0=QtWidgets.QMessageBox.StandardButton.Ok,
+                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
             )
             event.ignore()
             return
@@ -586,7 +593,9 @@ class RecipeWidget(QtWidgets.QMainWindow):
     def _create_statusbar(self) -> None:
         self._ui.statusbar.addWidget(self._busy_icon)
         if self._git_repository:
-            self._git_workspace_label.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+            self._git_workspace_label.setContextMenuPolicy(
+                QtCore.Qt.ContextMenuPolicy.CustomContextMenu
+            )
             self._git_workspace_label.customContextMenuRequested.connect(
                 self._on_git_context_menu
             )
@@ -641,7 +650,9 @@ class RecipeWidget(QtWidgets.QMainWindow):
         fetch_action = QtGui.QAction("Fetch", self)
         fetch_action.triggered.connect(self._fetch_git_repository)
         menu.addAction(fetch_action)
-        menu.exec_(self.sender().mapToGlobal(position))
+        sender_widget = self.sender()
+        assert isinstance(sender_widget, QtWidgets.QWidget)
+        menu.exec_(sender_widget.mapToGlobal(position))
 
     def _fetch_git_repository(self) -> None:
         assert self._git_repository
@@ -674,7 +685,9 @@ class RecipeWidget(QtWidgets.QMainWindow):
 
     def _changed_local_workflow_cwd(self, index: int) -> None:
         settings = RecipeSettings()
-        settings.local_workflow_cwd = self.sender().itemData(index)
+        sender_combobox = self.sender()
+        assert isinstance(sender_combobox, QtWidgets.QComboBox)
+        settings.local_workflow_cwd = sender_combobox.itemData(index)
         RecipeSettingsWriter.from_recipe(self.recipe).sync(settings)
         self.local_workflow_changed.emit()
 
@@ -691,38 +704,46 @@ class RecipeWidget(QtWidgets.QMainWindow):
 
         # populate local workflow dock
         with BlockSignals(self._ui.localWorkflowCwd) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QComboBox)
             blocked_widget.setCurrentIndex(workflow_cwd)
         with BlockSignals(self._ui.localWorkflowCommonSubdir) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setText(common_subdir)
             self._local_workflow_common_subdir_trash_action.setEnabled(
                 bool(common_subdir)
             )
         with BlockSignals(self._ui.localWorkflowInstallFolder) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setText(install_folder)
             self._local_workflow_install_folder_trash_action.setEnabled(
                 bool(install_folder)
             )
         with BlockSignals(self._ui.localWorkflowImportsFolder) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setText(imports_folder)
             self._local_workflow_imports_folder_trash_action.setEnabled(
                 bool(imports_folder)
             )
         with BlockSignals(self._ui.localWorkflowSourceFolder) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setText(source_folder)
             self._local_workflow_source_folder_trash_action.setEnabled(
                 bool(source_folder)
             )
         with BlockSignals(self._ui.localWorkflowBuildFolder) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setText(build_folder)
             self._local_workflow_build_folder_trash_action.setEnabled(
                 bool(build_folder)
             )
         with BlockSignals(self._ui.localWorkflowPackageFolder) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setText(package_folder)
             self._local_workflow_package_folder_trash_action.setEnabled(
                 bool(package_folder)
             )
         with BlockSignals(self._ui.localWorkflowTestFolder) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QLineEdit)
             blocked_widget.setText(test_folder)
             self._local_workflow_test_folder_trash_action.setEnabled(bool(test_folder))
 
@@ -735,9 +756,11 @@ class RecipeWidget(QtWidgets.QMainWindow):
         if "user" in attributes:
             assert "channel" in attributes
             with BlockSignals(self._ui.configurePkgRefNamespace) as blocked_widget:
+                assert isinstance(blocked_widget, QtWidgets.QLineEdit)
                 blocked_widget.setText(f"@{attributes['user']}/{attributes['channel']}")
         if "extra_config_options" in attributes:
             with BlockSignals(self._ui.configureAdditionalOptions) as blocked_widget:
+                assert isinstance(blocked_widget, QtWidgets.QLineEdit)
                 blocked_widget.setText(attributes["extra_config_options"])
         clear_widgets_from_layout(self._ui.optionsLayout)
         recipe_options = self._get_options_from_recipe(recipe_attributes)
@@ -788,12 +811,15 @@ class RecipeWidget(QtWidgets.QMainWindow):
     def _option_any_changed(self) -> None:
         # divide by 2 as they are added in pairs
         widget = self.sender()
-        assert isinstance(widget, QtWidgets.QWidget)
+        assert isinstance(widget, QtWidgets.QLineEdit)
         index_of_option = self._ui.optionsLayout.indexOf(widget) // 2
         # get the label text (the option name)
-        name_of_option = (
-            self._ui.optionsLayout.itemAtPosition(index_of_option, 0).widget().text()
-        )
+        option_item = self._ui.optionsLayout.itemAtPosition(index_of_option, 0)
+        assert option_item is not None
+        option_label = option_item.widget()
+        assert option_label is not None
+        assert isinstance(option_label, QtWidgets.QLabel)
+        name_of_option = option_label.text()
         settings = RecipeSettings()
         text = widget.text()
         default_value = widget.property("DefaultValue")
@@ -813,12 +839,15 @@ class RecipeWidget(QtWidgets.QMainWindow):
     def _option_combo_changed(self, index: int) -> None:
         # divide by 2 as they are added in pairs
         widget = self.sender()
-        assert isinstance(widget, QtWidgets.QWidget)
+        assert isinstance(widget, QtWidgets.QComboBox)
         index_of_option = self._ui.optionsLayout.indexOf(widget) // 2
         # get the label text (the option name)
-        name_of_option = (
-            self._ui.optionsLayout.itemAtPosition(index_of_option, 0).widget().text()
-        )
+        option_item = self._ui.optionsLayout.itemAtPosition(index_of_option, 0)
+        assert option_item is not None
+        option_label = option_item.widget()
+        assert option_label is not None
+        assert isinstance(option_label, QtWidgets.QLabel)
+        name_of_option = option_label.text()
         option_value = widget.itemText(index)
         real_option_value = widget.itemData(index)
         settings = RecipeSettings()
@@ -833,66 +862,73 @@ class RecipeWidget(QtWidgets.QMainWindow):
 
     def _local_workflow_update_common_subdir(self) -> None:
         settings = RecipeSettings()
-        settings.local_workflow_common_subdir = self.sender().text()
+        sender_lineedit = self.sender()
+        assert isinstance(sender_lineedit, QtWidgets.QLineEdit)
+        sender_text = sender_lineedit.text()
+        settings.local_workflow_common_subdir = sender_text  # type: ignore[assignment]
         RecipeSettingsWriter.from_recipe(self.recipe).sync(settings)
         self.local_workflow_changed.emit()
-        self._local_workflow_common_subdir_trash_action.setEnabled(
-            bool(self.sender().text())
-        )
+        self._local_workflow_common_subdir_trash_action.setEnabled(bool(sender_text))
 
     def _local_workflow_update_install_folder(self) -> None:
         settings = RecipeSettings()
-        settings.local_workflow_install_folder = self.sender().text()
+        sender_lineedit = self.sender()
+        assert isinstance(sender_lineedit, QtWidgets.QLineEdit)
+        sender_text = sender_lineedit.text()
+        settings.local_workflow_install_folder = sender_text  # type: ignore[assignment]
         RecipeSettingsWriter.from_recipe(self.recipe).sync(settings)
         self.local_workflow_changed.emit()
-        self._local_workflow_install_folder_trash_action.setEnabled(
-            bool(self.sender().text())
-        )
+        self._local_workflow_install_folder_trash_action.setEnabled(bool(sender_text))
 
     def _local_workflow_update_imports_folder(self) -> None:
         settings = RecipeSettings()
-        settings.local_workflow_imports_folder = self.sender().text()
+        sender_lineedit = self.sender()
+        assert isinstance(sender_lineedit, QtWidgets.QLineEdit)
+        sender_text = sender_lineedit.text()
+        settings.local_workflow_imports_folder = sender_text  # type: ignore[assignment]
         RecipeSettingsWriter.from_recipe(self.recipe).sync(settings)
         self.local_workflow_changed.emit()
-        self._local_workflow_imports_folder_trash_action.setEnabled(
-            bool(self.sender().text())
-        )
+        self._local_workflow_imports_folder_trash_action.setEnabled(bool(sender_text))
 
     def _local_workflow_update_source_folder(self) -> None:
         settings = RecipeSettings()
-        settings.local_workflow_source_folder = self.sender().text()
+        sender_lineedit = self.sender()
+        assert isinstance(sender_lineedit, QtWidgets.QLineEdit)
+        sender_text = sender_lineedit.text()
+        settings.local_workflow_source_folder = sender_text  # type: ignore[assignment]
         RecipeSettingsWriter.from_recipe(self.recipe).sync(settings)
         self.local_workflow_changed.emit()
-        self._local_workflow_source_folder_trash_action.setEnabled(
-            bool(self.sender().text())
-        )
+        self._local_workflow_source_folder_trash_action.setEnabled(bool(sender_text))
 
     def _local_workflow_update_build_folder(self) -> None:
         settings = RecipeSettings()
-        settings.local_workflow_build_folder = self.sender().text()
+        sender_lineedit = self.sender()
+        assert isinstance(sender_lineedit, QtWidgets.QLineEdit)
+        sender_text = sender_lineedit.text()
+        settings.local_workflow_build_folder = sender_text  # type: ignore[assignment]
         RecipeSettingsWriter.from_recipe(self.recipe).sync(settings)
         self.local_workflow_changed.emit()
-        self._local_workflow_build_folder_trash_action.setEnabled(
-            bool(self.sender().text())
-        )
+        self._local_workflow_build_folder_trash_action.setEnabled(bool(sender_text))
 
     def _local_workflow_update_package_folder(self) -> None:
         settings = RecipeSettings()
-        settings.local_workflow_package_folder = self.sender().text()
+        sender_lineedit = self.sender()
+        assert isinstance(sender_lineedit, QtWidgets.QLineEdit)
+        sender_text = sender_lineedit.text()
+        settings.local_workflow_package_folder = sender_text  # type: ignore[assignment]
         RecipeSettingsWriter.from_recipe(self.recipe).sync(settings)
         self.local_workflow_changed.emit()
-        self._local_workflow_package_folder_trash_action.setEnabled(
-            bool(self.sender().text())
-        )
+        self._local_workflow_package_folder_trash_action.setEnabled(bool(sender_text))
 
     def _local_workflow_update_test_folder(self) -> None:
         settings = RecipeSettings()
-        settings.local_workflow_test_folder = self.sender().text()
+        sender_lineedit = self.sender()
+        assert isinstance(sender_lineedit, QtWidgets.QLineEdit)
+        sender_text = sender_lineedit.text()
+        settings.local_workflow_test_folder = sender_text  # type: ignore[assignment]
         RecipeSettingsWriter.from_recipe(self.recipe).sync(settings)
         self.local_workflow_changed.emit()
-        self._local_workflow_test_folder_trash_action.setEnabled(
-            bool(self.sender().text())
-        )
+        self._local_workflow_test_folder_trash_action.setEnabled(bool(sender_text))
 
     def _local_workflow_sync_dirs(self) -> None:
         # note that this is only necessary since we couldn't use the
@@ -950,15 +986,18 @@ class RecipeWidget(QtWidgets.QMainWindow):
         assert common_subdir
         working_dir = self.get_working_dir(workflow_cwd, common_subdir)
         # working_dir may be an expression so...
-        working_dir = self.resolve_expression(str(working_dir))
+        resolved_working_dir = self.resolve_expression(os.fspath(working_dir))
         result = QtWidgets.QMessageBox.question(
             self,
             "Delete directory",
-            f"Delete the directory '{working_dir}'?",
+            f"Delete the directory '{resolved_working_dir}'?",
+            button0=QtWidgets.QMessageBox.StandardButton.Yes
+            | QtWidgets.QMessageBox.StandardButton.No,
+            button1=QtWidgets.QMessageBox.StandardButton.NoButton,
         )
         if result == QtWidgets.QMessageBox.StandardButton.No:
             return
-        QtCore.QDir(working_dir).removeRecursively()
+        QtCore.QDir(resolved_working_dir).removeRecursively()
 
     def _local_workflow_on_delete_command_folder(self, property_name: str) -> None:
         with RecipeSettingsReader.from_recipe(self.recipe) as settings:
@@ -978,6 +1017,9 @@ class RecipeWidget(QtWidgets.QMainWindow):
             self,
             "Delete directory",
             f"Delete the directory '{command_dir}'?",
+            button0=QtWidgets.QMessageBox.StandardButton.Yes
+            | QtWidgets.QMessageBox.StandardButton.No,
+            button1=QtWidgets.QMessageBox.StandardButton.NoButton,
         )
         if result == QtWidgets.QMessageBox.StandardButton.No:
             return
@@ -1043,10 +1085,14 @@ class RecipeWidget(QtWidgets.QMainWindow):
     def _configure_packageref_namespace(self) -> None:
         # Note: this does appear to get called twice, which also appears to be a bug
         # https://stackoverflow.com/questions/26782211/qlineedit-editingfinished-signal-twice-when-changing-focus
-        text = self.sender().text()
+        sender_lineedit = self.sender()
+        assert isinstance(sender_lineedit, QtWidgets.QLineEdit)
+        text = sender_lineedit.text()
         settings = RecipeSettings()
         if text:
-            regex = self.sender().validator().regularExpression()
+            validator = sender_lineedit.validator()
+            assert isinstance(validator, QtGui.QRegularExpressionValidator)
+            regex = validator.regularExpression()
             matches = regex.match(text)
             assert matches.lastCapturedIndex() == 3
             user = matches.captured(2)
@@ -1060,7 +1106,9 @@ class RecipeWidget(QtWidgets.QMainWindow):
         self.configuration_changed.emit()
 
     def _configure_additional_options(self) -> None:
-        text = self.sender().text()
+        sender_lineedit = self.sender()
+        assert isinstance(sender_lineedit, QtWidgets.QLineEdit)
+        text = sender_lineedit.text()
         settings = RecipeSettings()
         if text:
             settings.append_attribute({"extra_config_options": text})  # type: ignore
@@ -1175,7 +1223,9 @@ class RecipeWidget(QtWidgets.QMainWindow):
         if name:
             font = QtGui.QFont(name, size)
         else:
-            font = QtGui.QFontDatabase.systemFont(QtGui.QFontDatabase.FixedFont)
+            font = QtGui.QFontDatabase.systemFont(
+                QtGui.QFontDatabase.SystemFont.FixedFont
+            )
         for i in range(self._ui.pane_tabs.count()):
             tab_widget = self._ui.pane_tabs.widget(i)
             splitter = (
@@ -1183,8 +1233,13 @@ class RecipeWidget(QtWidgets.QMainWindow):
                 if isinstance(tab_widget, QtWidgets.QSplitter)
                 else tab_widget.findChild(QtWidgets.QSplitter)
             )
-            splitter.widget(0).document().setDefaultFont(font)
-            splitter.widget(1).document().setDefaultFont(font)
+            assert splitter is not None
+            left_widget = splitter.widget(0)
+            assert isinstance(left_widget, QtWidgets.QPlainTextEdit)
+            left_widget.document().setDefaultFont(font)
+            right_widget = splitter.widget(1)
+            assert isinstance(right_widget, QtWidgets.QPlainTextEdit)
+            right_widget.document().setDefaultFont(font)
 
     def failed_to_load(self) -> None:
         """
@@ -1217,30 +1272,34 @@ class RecipeWidget(QtWidgets.QMainWindow):
         self._ui.buildFeaturesToolbar.setEnabled(True)
 
     def _pane_context_menu(self, position: QtCore.QPoint) -> None:
-        menu = self.sender().createStandardContextMenu(position)
+        sender_plaintextedit = self.sender()
+        assert isinstance(sender_plaintextedit, QtWidgets.QPlainTextEdit)
+        menu = sender_plaintextedit.createStandardContextMenu(position)
         menu.addSeparator()
         find_action = QtGui.QAction("Find...", self)
         find_action.setShortcut(self._find_shortcut.key())
         find_action.setShortcutVisibleInContextMenu(True)
-        find_action.setData(self.sender())
+        find_action.setData(sender_plaintextedit)
         find_action.triggered.connect(self._open_find_dialog)
         menu.addAction(find_action)
         menu.addSeparator()
         clear_action = QtGui.QAction("Clear", self)
-        clear_action.triggered.connect(self.sender().clear)
+        clear_action.triggered.connect(sender_plaintextedit.clear)
         menu.addAction(clear_action)
         menu.addSeparator()
         pin_action = QtGui.QAction("Pin to tab", self)
         pin_action.triggered.connect(self._pin_current_output)
         pin_action.setEnabled(self._ui.pane_tabs.count() == 1)
         menu.addAction(pin_action)
-        menu.exec_(self.sender().viewport().mapToGlobal(position))
+        menu.exec_(sender_plaintextedit.viewport().mapToGlobal(position))
 
     def _open_find_dialog(self) -> None:
         if isinstance(self.sender(), QtGui.QShortcut):
             pane = QtWidgets.QApplication.focusWidget()
         else:
-            pane = self.sender().data()
+            sender_action = self.sender()
+            assert isinstance(sender_action, QtGui.QAction)
+            pane = sender_action.data()
         if isinstance(pane, QtWidgets.QPlainTextEdit):
             dialog = FindTextDialog(pane)
             dialog.search_forwards.connect(self._find_next)
@@ -1254,13 +1313,20 @@ class RecipeWidget(QtWidgets.QMainWindow):
         case_sensitive: bool,
         wrap_around: bool,
     ) -> None:
-        flags = QtGui.QTextDocument.FindFlags()
         if case_sensitive:
-            flags |= QtGui.QTextDocument.FindCaseSensitively  # type: ignore
-        result = pane.find(pattern, flags)
+            result = pane.find(
+                pattern, QtGui.QTextDocument.FindFlag.FindCaseSensitively
+            )
+        else:
+            result = pane.find(pattern)
         if not result and wrap_around:
-            pane.moveCursor(QtGui.QTextCursor.Start)
-            result = pane.find(pattern, flags)
+            pane.moveCursor(QtGui.QTextCursor.MoveOperation.Start)
+            if case_sensitive:
+                result = pane.find(
+                    pattern, QtGui.QTextDocument.FindFlag.FindCaseSensitively
+                )
+            else:
+                result = pane.find(pattern)
 
     def _find_prev(
         self,
@@ -1269,12 +1335,12 @@ class RecipeWidget(QtWidgets.QMainWindow):
         case_sensitive: bool,
         wrap_around: bool,
     ) -> None:
-        flags = QtGui.QTextDocument.FindBackward
+        flags = QtGui.QTextDocument.FindFlag.FindBackward
         if case_sensitive:
-            flags |= QtGui.QTextDocument.FindCaseSensitively  # type: ignore
+            flags |= QtGui.QTextDocument.FindFlag.FindCaseSensitively
         result = pane.find(pattern, flags)
         if not result and wrap_around:
-            pane.moveCursor(QtGui.QTextCursor.End)
+            pane.moveCursor(QtGui.QTextCursor.MoveOperation.End)
             result = pane.find(pattern, flags)
 
     def _dependency_list_context_menu(self, position: QtCore.QPoint) -> None:
@@ -1294,7 +1360,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
 
     def _get_package_directory_of_current_dependency(self) -> pathlib.Path:
         index = self._ui.dependenciesPackageList.currentIndex()
-        node = index.data(QtCore.Qt.UserRole)
+        node = index.data(QtCore.Qt.ItemDataRole.UserRole)
         return self.recipe.context.get_package_directory(node)
 
     def _open_package_directory(self) -> None:
@@ -1306,6 +1372,8 @@ class RecipeWidget(QtWidgets.QMainWindow):
                 self,
                 "No such package directory",
                 f"Package directory '{directory}' does not exist",
+                button0=QtWidgets.QMessageBox.StandardButton.Ok,
+                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
             )
 
     def _copy_package_directory(self) -> None:
@@ -1314,17 +1382,19 @@ class RecipeWidget(QtWidgets.QMainWindow):
 
     def _on_what_uses_this(self) -> None:
         index = self._ui.dependenciesPackageList.currentIndex()
-        node = index.data(QtCore.Qt.UserRole)
+        node = index.data(QtCore.Qt.ItemDataRole.UserRole)
         new_graph = dependencygraph_from_node_dependees(node)
         InverseDependencyViewDialog(new_graph).exec_()
 
     def _dependents_log_context_menu(self, position: QtCore.QPoint) -> None:
-        menu = self.sender().createStandardContextMenu(position)
+        sender_plaintextedit = self.sender()
+        assert isinstance(sender_plaintextedit, QtWidgets.QPlainTextEdit)
+        menu = sender_plaintextedit.createStandardContextMenu(position)
         menu.addSeparator()
         clear_action = QtGui.QAction("Clear", self)
         clear_action.triggered.connect(self._clear_dependents_log)
         menu.addAction(clear_action)
-        menu.exec_(self.sender().viewport().mapToGlobal(position))
+        menu.exec_(sender_plaintextedit.viewport().mapToGlobal(position))
 
     def _clear_dependents_log(self) -> None:
         self._ui.dependentsLog.clear()
@@ -1335,7 +1405,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
             widget: QtWidgets.QWidget, colour: QtGui.QColor
         ) -> None:
             palette = widget.palette()
-            palette.setColor(QtGui.QPalette.Highlight, colour)
+            palette.setColor(QtGui.QPalette.ColorRole.Highlight, colour)
             widget.setPalette(palette)
 
         with GeneralSettingsReader() as settings:
@@ -1376,10 +1446,10 @@ class RecipeWidget(QtWidgets.QMainWindow):
     def _disable_delete_on_default_output_tab(self) -> None:
         # default tab containing the output pane is not closable (but others are)
         self._ui.pane_tabs.tabBar().setTabButton(
-            0, QtWidgets.QTabBar.LeftSide, self._empty_widget
+            0, QtWidgets.QTabBar.ButtonPosition.LeftSide, self._empty_widget
         )
         self._ui.pane_tabs.tabBar().setTabButton(
-            0, QtWidgets.QTabBar.RightSide, self._empty_widget
+            0, QtWidgets.QTabBar.ButtonPosition.RightSide, self._empty_widget
         )
 
     def _on_tab_close_request(self, index: int) -> None:
@@ -1401,6 +1471,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
 
     def _close_recipe(self) -> None:
         sub_window = self.parent()
+        assert isinstance(sub_window, QtWidgets.QMdiSubWindow)
         sub_window.close()
 
     def on_local_cache_changed(self, cache_name: str) -> None:
@@ -1417,7 +1488,9 @@ class RecipeWidget(QtWidgets.QMainWindow):
         action.triggered.connect(self._on_configure_package_id_copy)
         menu = QtWidgets.QMenu(self)
         menu.addAction(action)
-        menu.exec_(self.sender().mapToGlobal(position))
+        sender_label = self.sender()
+        assert isinstance(sender_label, QtWidgets.QLabel)
+        menu.exec_(sender_label.mapToGlobal(position))
 
     def _on_configure_package_id_copy(self) -> None:
         QtWidgets.QApplication.clipboard().setText(self._ui.configurePackageId.text())

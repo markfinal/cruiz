@@ -305,8 +305,8 @@ def _patch_settings_from_v0(settings: QtCore.QSettings) -> None:
                 assert isinstance(recent_recipes[i][1], QtCore.QUuid)
                 settings.setValue(
                     "UUID",
-                    recent_recipes[i][1].toString(  # type: ignore
-                        QtCore.QUuid.WithoutBraces
+                    recent_recipes[i][1].toString(
+                        QtCore.QUuid.StringFormat.WithoutBraces
                     ),
                 )
     # recipe settings

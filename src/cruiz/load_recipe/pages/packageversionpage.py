@@ -6,7 +6,7 @@ Wizard page for selecting the version of the package
 
 import typing
 
-from qtpy import QtGui, QtWidgets
+from qtpy import QtCore, QtGui, QtWidgets
 
 from cruiz.widgets.util import BlockSignals
 from cruiz.settings.managers.conanpreferences import ConanSettingsReader
@@ -22,7 +22,7 @@ class LoadRecipePackageVersionPage(QtWidgets.QWizardPage):
 
     @property
     def _ui(self) -> typing.Any:
-        return self.wizard().ui
+        return self.wizard().ui  # type: ignore[attr-defined]
 
     def nextId(self) -> int:
         if self._ui.version.currentText() in self._uuid_versions:
@@ -45,30 +45,32 @@ class LoadRecipePackageVersionPage(QtWidgets.QWizardPage):
     def _on_version_changed(self, text: str) -> None:
         if text in self._uuid_versions:
             self.setFinalPage(True)
-            self.wizard().uuid = self._uuid_versions[text]
+            self.wizard().uuid = self._uuid_versions[text]  # type: ignore[attr-defined]
         else:
-            self.wizard().uuid = None
+            self.wizard().uuid = None  # type: ignore[attr-defined]
         self.completeChanged.emit()
 
     def _resolve_ui_to_possible_versions(self) -> None:
         self._ui.version.setEditable(False)
-        version_in_recipe = self.wizard().recipe_attributes.get("version")
+        version_in_recipe = self.wizard().recipe_attributes.get("version")  # type: ignore[attr-defined] # noqa: E501
         if version_in_recipe is None:
             # get versions from conandata.yml
-            conandata = self.wizard().conandata
+            conandata = self.wizard().conandata  # type: ignore[attr-defined]
             if conandata:
                 versions = self._get_versions_from_conandata(conandata)
                 if versions:
                     # get the versions from uuids with the same paths
-                    for uuid in self.wizard().matching_uuids:
+                    for uuid in self.wizard().matching_uuids:  # type: ignore[attr-defined] # noqa: E501
                         with RecipeSettingsReader.from_uuid(uuid) as settings:
                             attributes = settings.attribute_overrides.resolve()
                         if "version" in attributes:
                             self._uuid_versions[attributes["version"]] = uuid
 
                     with BlockSignals(self._ui.version) as blocked_widget:
+                        assert isinstance(blocked_widget, QtWidgets.QComboBox)
                         blocked_widget.clear()
                         model = blocked_widget.model()
+                        assert isinstance(model, QtGui.QStandardItemModel)
                         for i, version in enumerate(versions):
                             if version in self._uuid_versions:
                                 blocked_widget.addItem(
@@ -79,7 +81,7 @@ class LoadRecipePackageVersionPage(QtWidgets.QWizardPage):
                                 ):
                                     item = model.item(i)
                                     item.setFlags(
-                                        item.flags() & ~QtGui.Qt.ItemIsEnabled
+                                        item.flags() & ~QtCore.Qt.ItemFlag.ItemIsEnabled
                                     )
                             else:
                                 blocked_widget.addItem(version)
@@ -92,6 +94,7 @@ class LoadRecipePackageVersionPage(QtWidgets.QWizardPage):
                 )
         else:
             with BlockSignals(self._ui.version) as blocked_widget:
+                assert isinstance(blocked_widget, QtWidgets.QComboBox)
                 blocked_widget.clear()
                 blocked_widget.addItem(version_in_recipe)
             # combobox disabled to ensure it's clear that there's no choice

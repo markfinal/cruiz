@@ -23,7 +23,7 @@ class LoadRecipeInitialProfilePage(QtWidgets.QWizardPage):
 
     @property
     def _ui(self) -> typing.Any:
-        return self.wizard().ui
+        return self.wizard().ui  # type: ignore[attr-defined]
 
     def nextId(self) -> int:
         return -1
@@ -34,13 +34,14 @@ class LoadRecipeInitialProfilePage(QtWidgets.QWizardPage):
             self._on_initial_profile_changed
         )
         with BlockSignals(self._ui.initial_profile) as blocked_widget:
+            assert isinstance(blocked_widget, QtWidgets.QComboBox)
             blocked_widget.clear()
             for profile_path in self._get_profile_list():
                 blocked_widget.addItem(str(profile_path))
             blocked_widget.setCurrentIndex(-1)
-        if self.wizard().original_recipe:
+        if self.wizard().original_recipe:  # type: ignore[attr-defined]
             with RecipeSettingsReader.from_recipe(
-                self.wizard().original_recipe
+                self.wizard().original_recipe  # type: ignore[attr-defined]
             ) as settings:
                 original_profile = settings.profile.resolve()
             self._ui.initial_profile.setCurrentText(original_profile)

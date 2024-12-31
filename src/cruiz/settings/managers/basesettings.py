@@ -182,8 +182,8 @@ class BaseSettings:
         # is constructed, override the meanings of the argument to make
         # a sensible path to the preferences file
         return QtCore.QSettings(
-            QtCore.QSettings.IniFormat,
-            QtCore.QSettings.UserScope,
+            QtCore.QSettings.Format.IniFormat,
+            QtCore.QSettings.Scope.UserScope,
             "cruiz",  # org name
             "preferences",  # application name
         )

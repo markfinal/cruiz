@@ -26,10 +26,10 @@ class FindTextDialog(QtWidgets.QDialog):
         find_next.clicked.connect(self._find_next)
         find_prev.clicked.connect(self._find_prev)
         self._ui.findTextButtonBox.addButton(
-            find_next, QtWidgets.QDialogButtonBox.ActionRole
+            find_next, QtWidgets.QDialogButtonBox.ButtonRole.ActionRole
         )
         self._ui.findTextButtonBox.addButton(
-            find_prev, QtWidgets.QDialogButtonBox.ActionRole
+            find_prev, QtWidgets.QDialogButtonBox.ButtonRole.ActionRole
         )
 
     def _find_next(self) -> None:

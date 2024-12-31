@@ -13,7 +13,7 @@ from cruiz.pyside6.load_recipe_wizard import Ui_LoadRecipeWizard
 
 from cruiz.exceptions import RecipeDoesNotExistError, RecipeAlreadyOpenError
 from cruiz.settings.managers.recipe import RecipeSettings, RecipeSettingsReader
-from cruiz.recipe.recipewidget import Recipe
+from cruiz.recipe.recipe import Recipe
 
 from cruiz.commands.context import managed_conan_context
 from cruiz.commands.logdetails import LogDetails
@@ -91,7 +91,7 @@ class LoadRecipeWizard(QtWidgets.QWizard):
         Get the version of the recipe. May be None.
         """
         if self.ui.version.isEnabled():
-            return self.field("version")
+            return str(self.field("version"))
         return None
 
     @property
@@ -107,14 +107,14 @@ class LoadRecipeWizard(QtWidgets.QWizard):
                 existing_cache_name = settings.local_cache_name.resolve()
             assert existing_cache_name is not None
             return existing_cache_name
-        return self.field("local_cache")
+        return str(self.field("local_cache"))
 
     @property
     def initial_profile(self) -> str:
         """
         Get the initial profile selected.
         """
-        return self.field("initial_profile")
+        return str(self.field("initial_profile"))
 
     @property
     def uuid(self) -> typing.Optional[QtCore.QUuid]:

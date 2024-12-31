@@ -13,4 +13,4 @@ class LoadRecipeIntroPage(QtWidgets.QWizardPage):
     """
 
     def nextId(self) -> int:
-        return -1 if self.wizard().has_load_errors else 1
+        return -1 if self.wizard().has_load_errors else 1  # type: ignore[attr-defined]

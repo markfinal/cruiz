@@ -4,11 +4,12 @@
 Running commands, a wrapper around subprocess, dealing with Windows console popups
 """
 
-import platform
 import subprocess
 import typing
 
-CREATION_FLAGS = subprocess.CREATE_NO_WINDOW if platform.system() == "Windows" else 0
+CREATION_FLAGS = (
+    subprocess.CREATE_NO_WINDOW if hasattr(subprocess, "CREATE_NO_WINDOW") else 0
+)
 
 
 def run(*args: typing.Any, **kwargs: typing.Any) -> subprocess.CompletedProcess:  # type: ignore[type-arg]  # noqa: E501

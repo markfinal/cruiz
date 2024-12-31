@@ -26,54 +26,67 @@ class Page(QtWidgets.QWidget):
         stacked_widget = self.parent()
         dock_contents = stacked_widget.parent()
         remote_browser = dock_contents.parent()
-        return remote_browser._log_details
+        return remote_browser._log_details  # type: ignore[attr-defined]
 
     @property
     def _context(self) -> ConanContext:
         stacked_widget = self.parent()
         dock_contents = stacked_widget.parent()
         remote_browser = dock_contents.parent()
-        return remote_browser._context
+        return remote_browser._context  # type: ignore[attr-defined]
 
     @property
     def _revisions_enabled(self) -> bool:
         stacked_widget = self.parent()
+        assert isinstance(stacked_widget, QtWidgets.QStackedWidget)
         pkgref_page = stacked_widget.widget(0)
-        return pkgref_page._revs_enabled
+        return pkgref_page._revs_enabled  # type: ignore[attr-defined]
 
     def _on_pkgref_menu(self, position: QtCore.QPoint) -> None:
         menu = QtWidgets.QMenu(self)
         copy_action = QtGui.QAction("Copy to clipboard", self)
-        copy_action.triggered.connect(self._on_copy_pkgref_to_clip)
+        copy_action.triggered.connect(self._on_copy_pkgref_to_clip)  # type: ignore[attr-defined] # noqa: E501
         menu.addAction(copy_action)
-        menu.exec_(self.sender().mapToGlobal(position))
+        sender_label = self.sender()
+        assert isinstance(sender_label, QtWidgets.QLabel)
+        menu.exec_(sender_label.mapToGlobal(position))
 
     def _on_selected_pkgref_menu(self, position: QtCore.QPoint) -> None:
         menu = QtWidgets.QMenu(self)
         copy_action = QtGui.QAction("Copy to clipboard", self)
         copy_action.triggered.connect(self._on_copy_selected_pkgref_to_clip)
         menu.addAction(copy_action)
-        menu.exec_(self.sender().mapToGlobal(position))
+        sender_tableview = self.sender()
+        assert isinstance(sender_tableview, QtWidgets.QTableView)
+        menu.exec_(sender_tableview.mapToGlobal(position))
 
     def _on_copy_selected_pkgref_to_clip(self) -> None:
-        QtWidgets.QApplication.clipboard().setText(self.package_reference)
+        QtWidgets.QApplication.clipboard().setText(self.package_reference)  # type: ignore[attr-defined] # noqa: E501
 
     def _open_start(self) -> None:
-        self.parent().setCurrentIndex(0)
-        self.parent().widget(0).invalidate()
+        stacked_widget = self.parent()
+        assert isinstance(stacked_widget, QtWidgets.QStackedWidget)
+        stacked_widget.setCurrentIndex(0)
+        stacked_widget.widget(0).invalidate()  # type: ignore[attr-defined]
 
     def _open_previous_page(self) -> None:
-        self.parent().setCurrentIndex(self.page_index - 1)
+        parent_stackedwidget = self.parent()
+        assert isinstance(parent_stackedwidget, QtWidgets.QStackedWidget)
+        parent_stackedwidget.setCurrentIndex(self.page_index - 1)
 
     def _open_next_page(self) -> None:
-        self.parent().setCurrentIndex(self.page_index + 1)
+        parent_stackedwidget = self.parent()
+        assert isinstance(parent_stackedwidget, QtWidgets.QStackedWidget)
+        parent_stackedwidget.setCurrentIndex(self.page_index + 1)
 
     @property
     def _previous_page(self) -> QtWidgets.QWidget:
+        stacked_widget = self.parent()
+        assert isinstance(stacked_widget, QtWidgets.QStackedWidget)
         if self._revisions_enabled:
-            return self.parent().widget(self.page_index - 1)
-        return self.parent().widget(self.page_index - 2)
+            return stacked_widget.widget(self.page_index - 1)
+        return stacked_widget.widget(self.page_index - 2)
 
     @property
     def _previous_pkgref(self) -> str:
-        return self._previous_page.package_reference
+        return self._previous_page.package_reference  # type: ignore[attr-defined] # noqa: E501

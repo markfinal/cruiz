@@ -150,8 +150,8 @@ class _PackageBinaryModel(QtCore.QAbstractItemModel):
 
     def headerData(self, section, orientation, role):  # type: ignore
         if (
-            role == QtCore.Qt.DisplayRole
-            and orientation == QtCore.Qt.Horizontal
+            role == QtCore.Qt.ItemDataRole.DisplayRole
+            and orientation == QtCore.Qt.Orientation.Horizontal
             and section == 0
         ):
             return "Path"
@@ -159,24 +159,25 @@ class _PackageBinaryModel(QtCore.QAbstractItemModel):
 
     def data(self, index, role):  # type: ignore
         node = index.internalPointer()
-        if role == QtCore.Qt.DisplayRole and index.column() == 0:
+        if role == QtCore.Qt.ItemDataRole.DisplayRole and index.column() == 0:
             return pathlib.Path(node.path).name
         if (
-            role == QtCore.Qt.ToolTipRole
+            role == QtCore.Qt.ItemDataRole.ToolTipRole
             and index.column() == 0
             and node.is_file
             and node.link_target
         ):
             return f"Symbolic link to {node.link_target}"
-        if role == QtCore.Qt.DecorationRole and index.column() == 0:
+        if role == QtCore.Qt.ItemDataRole.DecorationRole and index.column() == 0:
             if node.is_file:
                 if node.link_target:
+                    assert isinstance(self._parent_object, PackageBinaryPage)
                     return self._parent_object.style().standardIcon(
-                        QtWidgets.QStyle.SP_FileLinkIcon
+                        QtWidgets.QStyle.StandardPixmap.SP_FileLinkIcon
                     )
             else:
                 return QtWidgets.QFileIconProvider().icon(
-                    QtWidgets.QFileIconProvider.Folder
+                    QtGui.QAbstractFileIconProvider.IconType.Folder
                 )
         return None
 
@@ -184,7 +185,7 @@ class _PackageBinaryModel(QtCore.QAbstractItemModel):
         default_flags = super().flags(index)
         node = index.internalPointer()
         if node.link_target:
-            return default_flags & ~QtCore.Qt.ItemIsEnabled
+            return default_flags & ~QtCore.Qt.ItemFlag.ItemIsEnabled
         return default_flags
 
 
@@ -200,7 +201,8 @@ class _FileViewer(QtWidgets.QDialog):
         self._ui = Ui_remote_browser_fileview()
         self._ui.setupUi(self)  # type: ignore[no-untyped-call]
         self._ui.fileview.page().settings().setAttribute(
-            QtWebEngineCore.QWebEngineSettings.LocalContentCanAccessRemoteUrls, True
+            QtWebEngineCore.QWebEngineSettings.WebAttribute.LocalContentCanAccessRemoteUrls,  # noqa: E501
+            True,
         )
         if container:
             html_path = _FileViewer._write_html(path, root / container)
@@ -212,7 +214,7 @@ class _FileViewer(QtWidgets.QDialog):
 
     @staticmethod
     def _write_html(
-        path: pathlib.PurePath, archive: typing.Optional[pathlib.Path]
+        path: pathlib.Path, archive: typing.Optional[pathlib.Path]
     ) -> pathlib.Path:
         if archive:
             with tarfile.open(archive, "r") as tar:
@@ -326,14 +328,16 @@ class PackageBinaryPage(Page):
             self._open_previous_page()
         else:
             # skip package revisions
-            self.parent().setCurrentIndex(self.page_index - 2)
+            parent_stackedwidget = self.parent()
+            assert isinstance(parent_stackedwidget, QtWidgets.QStackedWidget)
+            parent_stackedwidget.setCurrentIndex(self.page_index - 2)
 
     def _on_prev_dclicked(self, index: QtCore.QModelIndex) -> None:
         node = index.internalPointer()
-        if not node.is_file:  # type: ignore
+        if not node.is_file:
             return
-        path = node.path  # type: ignore
-        container = node.container  # type: ignore
+        path = node.path
+        container = node.container
         try:
             assert self._artifact_folder
             _FileViewer(self._artifact_folder, path, container, self).exec_()
@@ -342,6 +346,8 @@ class PackageBinaryPage(Page):
                 self,
                 "Cannot view file contents",
                 f"Unable to interpret file {path} in archive {container} " "as text",
+                button0=QtWidgets.QMessageBox.StandardButton.Ok,
+                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
             )
 
     def on_cancel(self) -> None:
@@ -369,7 +375,9 @@ class PackageBinaryPage(Page):
         save_action = QtGui.QAction("Save ...", self)
         save_action.triggered.connect(self._on_file_save)
         menu.addAction(save_action)
-        menu.exec_(self.sender().mapToGlobal(position))
+        sender_treeview = self.sender()
+        assert isinstance(sender_treeview, QtWidgets.QTreeView)
+        menu.exec_(sender_treeview.mapToGlobal(position))
 
     def _on_file_save(self) -> None:
         selection = self._ui.package_binary.selectedIndexes()

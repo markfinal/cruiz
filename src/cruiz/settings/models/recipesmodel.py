@@ -49,7 +49,10 @@ class RecipesModel(QtCore.QAbstractTableModel):
         return 3
 
     def headerData(self, section, orientation, role):  # type: ignore
-        if role == QtCore.Qt.DisplayRole and orientation == QtCore.Qt.Horizontal:
+        if (
+            role == QtCore.Qt.ItemDataRole.DisplayRole
+            and orientation == QtCore.Qt.Orientation.Horizontal
+        ):
             if section == 0:
                 return "Path"
             if section == 1:
@@ -59,7 +62,7 @@ class RecipesModel(QtCore.QAbstractTableModel):
         return None
 
     def data(self, index, role):  # type: ignore
-        if role == QtCore.Qt.DisplayRole:
+        if role == QtCore.Qt.ItemDataRole.DisplayRole:
             assert self._uuids
             if index.column() == 0:
                 with RecipeSettingsReader.from_uuid(
@@ -85,5 +88,5 @@ class RecipesModel(QtCore.QAbstractTableModel):
         if self._uuids and cruiz.globals.get_main_window().is_recipe_active(
             self._uuids[index.row()]
         ):
-            return def_flags & ~QtCore.Qt.ItemIsEnabled
+            return def_flags & ~QtCore.Qt.ItemFlag.ItemIsEnabled
         return def_flags

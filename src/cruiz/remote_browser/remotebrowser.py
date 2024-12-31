@@ -54,6 +54,8 @@ class RemoteBrowserDock(QtWidgets.QDockWidget):
                 self,
                 "Remote browser cannot be closed",
                 "Commands are still running. Cannot close remote browser.",
+                button0=QtWidgets.QMessageBox.StandardButton.Ok,
+                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
             )
             event.ignore()
             return
@@ -61,7 +63,7 @@ class RemoteBrowserDock(QtWidgets.QDockWidget):
         super().closeEvent(event)
 
     def cleanup(self) -> None:
-        self._ui.stackedWidget.currentWidget().on_cancel()
+        self._ui.stackedWidget.currentWidget().on_cancel()  # type: ignore[attr-defined]
         self._log_details.stop()
         self._context.close()
 
@@ -76,12 +78,14 @@ class RemoteBrowserDock(QtWidgets.QDockWidget):
             self._clear_log()
 
     def _log_context_menu(self, position: QtCore.QPoint) -> None:
-        menu = self.sender().createStandardContextMenu(position)
+        sender_plaintextedit = self.sender()
+        assert isinstance(sender_plaintextedit, QtWidgets.QPlainTextEdit)
+        menu = sender_plaintextedit.createStandardContextMenu(position)
         menu.addSeparator()
         clear_action = QtGui.QAction("Clear", self)
         clear_action.triggered.connect(self._clear_log)
         menu.addAction(clear_action)
-        menu.exec_(self.sender().viewport().mapToGlobal(position))
+        menu.exec_(sender_plaintextedit.viewport().mapToGlobal(position))
 
     def _clear_log(self) -> None:
         self._ui.log.clear()
