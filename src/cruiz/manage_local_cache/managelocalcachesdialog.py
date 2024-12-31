@@ -552,23 +552,29 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
                 item.row(), ManageLocalCachesDialog._HooksTableColumnIndex.PATH
             )
             hook_path = pathlib.Path(path_item.text().strip())
-            item_enabled = bool(item.checkState())
+            item_enabled = item.checkState() == QtCore.Qt.CheckState.Checked
             hooks = self._context.get_hooks_list()
             hook = next(item for item in hooks if item.has_path(hook_path))
             assert hook
-            if item_enabled == hook.enabled:
-                hook_unchanged = next(
-                    item
-                    for item in self._modifications["Hooks"]
-                    if item.has_path(hook_path)
-                )
-                self._modifications["Hooks"].remove(hook_unchanged)
-                if not self._modifications["Hooks"]:
-                    del self._modifications["Hooks"]
+            if "Hooks" in self._modifications:
+                try:
+                    # remove the modified hook if it has not yet been submitted
+                    hook_unchanged = next(
+                        item
+                        for item in self._modifications["Hooks"]
+                        if item.has_path(hook_path)
+                    )
+                    self._modifications["Hooks"].remove(hook_unchanged)
+                    if not self._modifications["Hooks"]:
+                        del self._modifications["Hooks"]
+                except StopIteration:
+                    # record the toggled enabled state
+                    self._modifications["Hooks"].append(
+                        ConanHook(hook_path, item_enabled)
+                    )
             else:
-                if "Hooks" not in self._modifications:
-                    self._modifications["Hooks"] = []
-                self._modifications["Hooks"].append(ConanHook(hook_path, item_enabled))
+                # record the toggled enabled state
+                self._modifications["Hooks"] = [ConanHook(hook_path, item_enabled)]
             self._modified.emit()
 
     def _operations_install_config(self) -> None:
