@@ -19,20 +19,7 @@ def _run_command(args: typing.List[str]) -> None:
     subprocess.run(args, check=True)
 
 
-@contextmanager
-def _temp_resource_generation(
-    callback: typing.Callable[[typing.List[pathlib.Path]], None]
-) -> typing.Generator[None, None, None]:
-    paths_written: typing.List[pathlib.Path] = []
-    callback(paths_written)
-    try:
-        yield
-    finally:
-        for path in paths_written:
-            path.unlink()
-
-
-def _compile_qrc(paths_written: typing.List[pathlib.Path]) -> None:
+def _compile_qrc() -> None:
     def _compile_pyside_resources(ver: int) -> pathlib.Path:
         pyside_dir = PACKAGE_DIR / f"pyside{ver}"
         pyside_dir.mkdir(exist_ok=True)
@@ -48,10 +35,10 @@ def _compile_qrc(paths_written: typing.List[pathlib.Path]) -> None:
         )
         return dst_file
 
-    paths_written.append(_compile_pyside_resources(6))
+    _compile_pyside_resources(6)
 
 
-def _compile_uis(paths_written: typing.List[pathlib.Path]) -> None:
+def _compile_uis() -> None:
     ui_variants = {
         "pyside6": "pyside6-uic",
     }
@@ -73,14 +60,12 @@ def _compile_uis(paths_written: typing.List[pathlib.Path]) -> None:
                     os.fspath(PACKAGE_DIR / "resources" / f"{basename}.ui"),
                 ]
             )
-            paths_written.append(dst_file)
 
 
-def _capture_version(paths_written: typing.List[pathlib.Path]) -> None:
+def _capture_version() -> None:
     version_path = PACKAGE_DIR / "RELEASE_VERSION.py"
     with open(version_path, "wt") as version_file:
-        version_file.write(f'__version__ = "{get_version()}"')
-    paths_written.append(version_path)
+        version_file.write(f'__version__ = "{get_version()}"\n')
 
 
 class _BuildPyCommand(setuptools.command.build_py.build_py):
@@ -90,10 +75,10 @@ class _BuildPyCommand(setuptools.command.build_py.build_py):
     """
 
     def run(self) -> None:
-        with _temp_resource_generation(_capture_version):
-            with _temp_resource_generation(_compile_qrc):
-                with _temp_resource_generation(_compile_uis):
-                    super().run()
+        _capture_version()
+        _compile_qrc()
+        _compile_uis()
+        super().run()
 
 
 class _SDistCommand(setuptools.command.sdist.sdist):
@@ -102,8 +87,8 @@ class _SDistCommand(setuptools.command.sdist.sdist):
     """
 
     def run(self) -> None:
-        with _temp_resource_generation(_capture_version):
-            super().run()
+        _capture_version()
+        super().run()
 
 
 setup(
