@@ -117,3 +117,38 @@ exclude = "src/cruiz/pyside6"
 per-file-ignores = [
     "__init__.py:F401",
 ]
+
+[tool.tox]
+skipsdist = true
+envlist = [
+    "lint",
+    "test",
+]
+
+[tool.tox.pytest]
+testpaths = [
+    "tests",
+]
+
+[tool.tox.env.lint]
+deps = [
+    "-r{toxinidir}/requirements_dev.txt",
+    "-r{toxinidir}/requirements.txt",
+]
+commands = [
+    ["pip", "install", "-e", "."],
+    ["flake8", "src/cruiz"],
+    ["flake8", "tests"],
+    ["mypy", "src/cruiz"],
+    ["mypy", "tests"],
+]
+
+[tool.tox.env.test]
+deps = [
+    "-r{toxinidir}/requirements_dev.txt",
+    "-r{toxinidir}/requirements.txt",
+]
+commands = [
+    ["pip", "install", "."],
+    ["pytest"],
+]
