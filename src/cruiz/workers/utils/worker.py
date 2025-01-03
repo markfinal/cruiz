@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Utils for worker context managers
-"""
+"""Utils for worker context managers."""
 
 from __future__ import annotations
 
@@ -30,9 +28,7 @@ if typing.TYPE_CHECKING:
 
 
 class Worker:
-    """
-    Non-Conan specific worker context manager
-    """
+    """Non-Conan specific worker context manager."""
 
     # TODO: tried to use typing.Type[CommonParameters] here but mypy didn't like it
     def __init__(
@@ -47,6 +43,7 @@ class Worker:
             PackageBinaryParameters,
         ],
     ):
+        """Initialise a Worker."""
         self._queue = queue
         self._params = params
         if isinstance(params, CommandParameters):
@@ -56,6 +53,7 @@ class Worker:
             self._wall_clock = None
 
     def __enter__(self) -> None:
+        """Enter a context manager with a Worker."""
         multiprocessing.get_logger().debug("%i (child): %s", os.getpid(), self._params)
         clear_conan_env()
         if isinstance(self._params, (CommandParameters, CommonParameters)):
@@ -93,6 +91,7 @@ class Worker:
     def __exit__(
         self, exc_type: typing.Any, exc_value: typing.Any, exc_traceback: typing.Any
     ) -> typing.Any:
+        """Exit a context manager with a Worker."""
         if exc_value:
             self._exception_to_html(exc_type, exc_value, exc_traceback)
         if self._wall_clock is not None:

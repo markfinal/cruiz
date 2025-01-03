@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Dialog that represent progress of operations
-"""
+"""Dialog that represent progress of operations."""
 
 from __future__ import annotations
 
@@ -15,13 +13,12 @@ if typing.TYPE_CHECKING:
 
 
 class _ContextProgressDialog(QtWidgets.QProgressDialog):
-    """
-    Common base class for all progress dialogs.
-    """
+    """Common base class for all progress dialogs."""
 
     def __init__(
         self, context: ConanContext, title: str, parent: QtWidgets.QWidget
     ) -> None:
+        """Initialise a _ContextProgressDialog."""
         super().__init__(title, "Cancel", 0, 0, parent)
         self.setAttribute(QtCore.Qt.WidgetAttribute.WA_DeleteOnClose, True)
         self._title = title
@@ -47,20 +44,18 @@ class _ContextProgressDialog(QtWidgets.QProgressDialog):
 
 
 class RemoveLocksDialog(_ContextProgressDialog):
-    """
-    Progress dialog for removing locks from the Conan local cache.
-    """
+    """Progress dialog for removing locks from the Conan local cache."""
 
     def __init__(self, context: ConanContext, parent: QtWidgets.QWidget) -> None:
+        """Initialise a RemoveLocksDialog."""
         super().__init__(context, "Removing locks", parent)
         context.remove_local_cache_locks(self._done)
 
 
 class RemoveAllPackagesDialog(_ContextProgressDialog):
-    """
-    Progress dialog for removing all packages from the local cache.
-    """
+    """Progress dialog for removing all packages from the local cache."""
 
     def __init__(self, context: ConanContext, parent: QtWidgets.QWidget) -> None:
+        """Initialise a RemoveAllPackagesDialog."""
         super().__init__(context, "Removing all packages", parent)
         context.remove_all_packages(self._done)

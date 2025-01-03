@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-A list, guarded by a mutex, that periodically flushes the joined list
-to a QPlainTextEdit
-"""
+"""A list, guarded by a mutex, that periodically flushes the joined list to a QPlainTextEdit."""  # noqa: E501
 
 import typing
 
@@ -11,11 +8,10 @@ from qtpy import QtCore, QtWidgets
 
 
 class GuardedListToFlush(QtCore.QObject):
-    """
-    Guard a list of strings by a mutex, and flush it to a QPlainTextEdit periodically
-    """
+    """Guard a list of strings by a mutex, and flush it to a QPlainTextEdit periodically."""  # noqa: E501
 
     def __init__(self) -> None:
+        """Initialise a GuardedListToFlush."""
         super().__init__()
         self._widget: typing.Optional[QtWidgets.QPlainTextEdit] = None
         self._list: typing.List[str] = []
@@ -24,25 +20,19 @@ class GuardedListToFlush(QtCore.QObject):
         self.poll.timeout.connect(self._flush_list)
 
     def append(self, message: str) -> None:
-        """
-        Append a new message to the list.
-        """
+        """Append a new message to the list."""
         # blocking lock
         self._guard.lock()
         self._list.append(message)
         self._guard.unlock()
 
     def start(self, frequency: int, widget: QtWidgets.QPlainTextEdit) -> None:
-        """
-        Start flushing the list
-        """
+        """Start flushing the list."""
         self._widget = widget
         self.poll.start(frequency)
 
     def stop(self) -> None:
-        """
-        Stop flushing the list
-        """
+        """Stop flushing the list."""
         self.poll.stop()
         if self._widget:
             # ensure there's no other data left in the buffer

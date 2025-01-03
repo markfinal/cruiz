@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Dialog for moving local caches
-"""
+"""Dialog for moving local caches."""
 
 from __future__ import annotations
 
@@ -27,11 +25,10 @@ if typing.TYPE_CHECKING:
 
 
 class MoveLocalCacheDialog(QtWidgets.QDialog):
-    """
-    Dialog for moving a non-default local cache.
-    """
+    """Dialog for moving a non-default local cache."""
 
     def __init__(self, context: ConanContext, parent: QtWidgets.QWidget) -> None:
+        """Initialise a MoveLocalCacheDialog."""
         super().__init__(parent)
         self.setAttribute(QtCore.Qt.WidgetAttribute.WA_DeleteOnClose, True)
         self._context = context
@@ -94,6 +91,7 @@ class MoveLocalCacheDialog(QtWidgets.QDialog):
         ).setEnabled(condition)
 
     def accept(self) -> None:
+        """Override the accept dialog method."""
         with NamedLocalCacheSettingsReader(self._context.cache_name) as settings:
             home_dir = settings.home_dir.resolve()
             short_home_dir = settings.short_home_dir.resolve()

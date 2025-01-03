@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Utility to ensure a default local cache exists
-"""
+"""Utility to ensure a default local cache exists."""
 
 from cruiz.constants import DEFAULT_CACHE_NAME
 from cruiz.settings.managers.namedlocalcache import (
@@ -12,9 +10,7 @@ from cruiz.settings.managers.namedlocalcache import (
 
 
 def ensure_default_local_cache() -> None:
-    """
-    Ensure that the settings has a default local cache
-    """
+    """Ensure that the settings has a default local cache."""
     with AllNamedLocalCacheSettingsReader() as caches:
         need_to_add = DEFAULT_CACHE_NAME not in caches
     if not need_to_add:

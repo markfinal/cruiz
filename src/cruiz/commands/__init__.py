@@ -1,5 +1,3 @@
 #!/usr/bin/env python3
 
-"""
-Conan commands sub-package
-"""
+"""Conan commands sub-package."""

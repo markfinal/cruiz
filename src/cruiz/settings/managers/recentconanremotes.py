@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Settings context manager for recent Conan remotes
-"""
+"""Settings context manager for recent Conan remotes."""
 
 import typing
 
@@ -13,20 +11,17 @@ from .writermixin import _WriterMixin
 
 # TODO: CommonSettings not all used
 class RecentConanRemotesSettings(CommonSettings):
-    """
-    Settings representing recent Conan remotes
-    """
+    """Settings representing recent Conan remotes."""
 
     def __init__(self) -> None:
+        """Initialise a RecentConanRemotesSettings."""
         self._property_meta = {
             "urls": SettingMeta("RecentConanRemotes", ListSetting, [], ListValue),
         }
 
     @property
     def urls(self) -> ListSetting:
-        """
-        Get all the URLs representing the Conan remotes
-        """
+        """Get all the URLs representing the Conan remotes."""
         result: typing.List[str] = []
         assert self.settings_reader
         settings = self.settings_reader.settings
@@ -42,9 +37,7 @@ class RecentConanRemotesSettings(CommonSettings):
 
     @urls.setter
     def urls(self, urls: typing.List[str]) -> None:
-        """
-        Set the URLs used for Conan remotes.
-        """
+        """Set the URLs used for Conan remotes."""
         # avoids private name mangling
         setattr(  # noqa: B010
             self, "__new_urls", ListValue(urls, "urls", "RecentConanRemotes", "URL")
@@ -52,17 +45,17 @@ class RecentConanRemotesSettings(CommonSettings):
 
 
 class RecentConanRemotesSettingsReader:
-    """
-    Context manager for reading recent Conan remotes from disk settings
-    """
+    """Context manager for reading recent Conan remotes from disk settings."""
 
     def __init__(self) -> None:
+        """Initialise a RecentConanRemotesSettingReader."""
         self.group = ""
         self.array = "RecentConanRemotes"
         self.settings = BaseSettings.make_settings()
         self.count = 0
 
     def __enter__(self) -> RecentConanRemotesSettings:
+        """Enter a context manager with a RecentConanRemotesSettingReader."""
         self.count = self.settings.beginReadArray(self.array)
         self._settings_object = RecentConanRemotesSettings()
         self._settings_object.settings_reader = self
@@ -71,6 +64,7 @@ class RecentConanRemotesSettingsReader:
     def __exit__(
         self, exc_type: typing.Any, exc_value: typing.Any, exc_traceback: typing.Any
     ) -> typing.Any:
+        """Exit a context manager with a RecentConanRemotesSettingReader."""
         self.settings.endArray()
         self._settings_object.settings_reader = None
         del self._settings_object
@@ -82,26 +76,22 @@ class RecentConanRemotesSettingsReader:
 
 
 class RecentConanRemotesSettingsWriter(_WriterMixin):
-    """
-    Utility for writing changed recent Conan remote settings to disk
-    """
+    """Utility for writing changed recent Conan remote settings to disk."""
 
     def __init__(self) -> None:
+        """Initialise a RecentConanRemotesSettingsWriter."""
         self._reader_for_writer = RecentConanRemotesSettingsReader()
 
 
 class RecentConanRemotesSettingsDeleter:
-    """
-    Utility for deleting the named recent Conan remote from disk settings
-    """
+    """Utility for deleting the named recent Conan remote from disk settings."""
 
     def __init__(self) -> None:
+        """Initialise a RecentConanRemotesSettingsDeleter."""
         self._reader_for_deleter = RecentConanRemotesSettingsReader()
 
     def delete(self, url: str) -> None:
-        """
-        Delete a specific recent Conan remote URL from disk settings
-        """
+        """Delete a specific recent Conan remote URL from disk settings."""
         with self._reader_for_deleter as settings:
             current_list = settings.urls.resolve()
         current_list = [x for x in current_list if x != url]

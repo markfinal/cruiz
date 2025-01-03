@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 
 """
-Meta commands are short lived queries that do not warrant having their own
-process spun up to resolve.
+Meta commands are short lived queries that do not warrant having their own process spun up to resolve.
 
 One long-lived meta process runs continually to service these.
-"""
+"""  # noqa: E501
 
 from __future__ import annotations
 
@@ -143,9 +142,7 @@ def invoke(
     reply_queue: multiprocessing.Queue[Message],
     params: CommandParameters,
 ) -> None:
-    """
-    Run continuous loop, waiting on requests from the main process
-    """
+    """Run continuous loop, waiting on requests from the main process."""
     with worker.ConanWorker(reply_queue, params) as api:
         while True:
             try:

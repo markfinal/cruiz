@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Package binary parameters
-"""
+"""Package binary parameters."""
 
 import typing
 
@@ -10,11 +8,10 @@ from .commonparameters import CommonParameters
 
 
 class PackageBinaryParameters(CommonParameters):
-    """
-    Representation of all the arguments to get package binaries
-    """
+    """Representation of all the arguments to get package binaries."""
 
     def __init__(self, **args: typing.Any) -> None:
+        """Initialise a PackageBinaryParameters."""
         import cruiz.workers.api as workers_api
 
         super().__init__(workers_api.packagebinary.invoke)

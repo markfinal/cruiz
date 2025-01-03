@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Remote browser
-"""
+"""Remote browser."""
 
 import logging
 import typing
@@ -18,14 +16,14 @@ logger = logging.getLogger(__name__)
 
 
 class RemoteBrowserDock(QtWidgets.QDockWidget):
-    """
-    Dock widget for browsing Conan remotes
-    """
+    """Dock widget for browsing Conan remotes."""
 
     def __del__(self) -> None:
+        """Log when a RemoteBrowserDock is deleted."""
         logger.debug("-=%d", id(self))
 
     def __init__(self, parent: typing.Optional[QtWidgets.QWidget] = None) -> None:
+        """Initialise a RemoteBrowserDock."""
         logger.debug("+=%d", id(self))
         super().__init__(parent)
         self.setVisible(False)
@@ -43,11 +41,13 @@ class RemoteBrowserDock(QtWidgets.QDockWidget):
         self._ui.pbinary.setup(self._ui)
 
     def showEvent(self, event: QtGui.QShowEvent) -> None:
+        """Override the widget's showEvent method."""
         # although this looks like a no-op, it regenerates necessary resources
         self._context.change_cache(self._context.cache_name)
         super().showEvent(event)
 
     def closeEvent(self, event: QtGui.QCloseEvent) -> None:
+        """Override the widget's closeEvent method."""
         if self._context.is_busy:
             QtWidgets.QMessageBox.warning(
                 self,
@@ -62,14 +62,13 @@ class RemoteBrowserDock(QtWidgets.QDockWidget):
         super().closeEvent(event)
 
     def cleanup(self) -> None:
+        """Clean up the widget."""
         self._ui.stackedWidget.currentWidget().on_cancel()  # type: ignore[attr-defined]
         self._log_details.stop()
         self._context.close()
 
     def on_local_cache_modified(self, cache_name: str) -> None:
-        """
-        Called when a local cache has been changed upstream
-        """
+        """Call when a local cache has been changed upstream."""
         self._ui.pkgref.refresh_local_cache_names()
         if cache_name == self._context.cache_name:
             self._ui.pkgref.on_local_cache_change(cache_name)

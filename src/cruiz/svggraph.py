@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Utilities for generating SVGs from Conan dependency graphs
-"""
+"""Utilities for generating SVGs from Conan dependency graphs."""
 
 from __future__ import annotations
 
@@ -22,13 +20,12 @@ if typing.TYPE_CHECKING:
 
 
 class DependenciesToDigraph:
-    """
-    Convert a Conan dependency graph into a GraphViz Digraph
-    """
+    """Convert a Conan dependency graph into a GraphViz Digraph."""
 
     def __init__(
         self, depgraph: DependencyGraph, rankdir: str, flipped_edges: bool = False
     ) -> None:
+        """Initialise a DependenciesToDigraph."""
         graph = graphviz.Digraph(
             comment="Conan package dependency graph",
             format="svg",
@@ -71,11 +68,10 @@ class DependenciesToDigraph:
 
 
 class DigraphToSVG:
-    """
-    Convert a Graphviz Digraph to an SVG
-    """
+    """Convert a Graphviz Digraph to an SVG."""
 
     def __init__(self, depstodigraph: DependenciesToDigraph) -> None:
+        """Initialise a DigraphToSVG."""
         with EnvironSaver():
             with GraphVizSettingsReader() as settings:
                 graphviz_bin_dir = settings.bin_directory.resolve()
@@ -147,11 +143,10 @@ class _SVGDialog(QtWidgets.QDialog):
 
 
 class SVGScene(QtWidgets.QGraphicsScene):
-    """
-    Wrapper around an SVG scene
-    """
+    """Wrapper around an SVG scene."""
 
     def __init__(self, renderer: QtSvg.QSvgRenderer) -> None:
+        """Initialise an SVGScene."""
         super().__init__()
         self._renderer = renderer
         item = QtSvgWidgets.QGraphicsSvgItem()
@@ -159,6 +154,7 @@ class SVGScene(QtWidgets.QGraphicsScene):
         self.addItem(item)
 
     def mouseDoubleClickEvent(self, event: QtWidgets.QGraphicsSceneMouseEvent) -> None:
+        """Override the default mouseDoubleClickEvent to show a dialog."""
         item = self.itemAt(event.scenePos(), QtGui.QTransform())
         if item and isinstance(item, QtSvgWidgets.QGraphicsSvgItem):
             _SVGDialog(self._renderer).exec_()

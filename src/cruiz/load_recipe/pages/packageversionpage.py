@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Wizard page for selecting the version of the package
-"""
+"""Wizard page for selecting the version of the package."""
 
 import typing
 
@@ -15,20 +13,20 @@ from qtpy import QtCore, QtGui, QtWidgets
 
 
 class LoadRecipePackageVersionPage(QtWidgets.QWizardPage):
-    """
-    Wizard page for selecting the recipe version to bind to.
-    """
+    """Wizard page for selecting the recipe version to bind to."""
 
     @property
     def _ui(self) -> typing.Any:
         return self.wizard().ui  # type: ignore[attr-defined]
 
     def nextId(self) -> int:
+        """Get the next page id."""
         if self._ui.version.currentText() in self._uuid_versions:
             return -1
         return 2
 
     def initializePage(self) -> None:
+        """Override the initializePage method."""
         self.registerField("version*", self._ui.version, "currentText")
 
         self._ui.version.currentTextChanged.connect(self._on_version_changed)
@@ -38,6 +36,7 @@ class LoadRecipePackageVersionPage(QtWidgets.QWizardPage):
         super().initializePage()
 
     def cleanupPage(self) -> None:
+        """Override the cleanupPage method."""
         self._ui.version.currentTextChanged.disconnect()
         return super().cleanupPage()
 

@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Wizard page for selecting a local cache
-"""
+"""Wizard page for selecting a local cache."""
 
 import typing
 
@@ -15,18 +13,18 @@ from qtpy import QtWidgets
 
 
 class LoadRecipeLocalCachePage(QtWidgets.QWizardPage):
-    """
-    Wizard page for selecting the local cache to associate with the recipe instance.
-    """
+    """Wizard page for selecting the local cache to associate with the recipe instance."""  # noqa: E501
 
     @property
     def _ui(self) -> typing.Any:
         return self.wizard().ui  # type: ignore[attr-defined]
 
     def nextId(self) -> int:
+        """Get the next page id."""
         return 3
 
     def initializePage(self) -> None:
+        """Override the initializePage method."""
         self.registerField("local_cache*", self._ui.local_cache_name, "currentText")
         self._ui.local_cache_name.currentIndexChanged.connect(
             self._on_local_cache_changed
@@ -42,6 +40,7 @@ class LoadRecipeLocalCachePage(QtWidgets.QWizardPage):
         super().initializePage()
 
     def cleanupPage(self) -> None:
+        """Override the cleanupPage method."""
         self._ui.local_cache_name.currentIndexChanged.disconnect()
         return super().cleanupPage()
 

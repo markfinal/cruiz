@@ -1,5 +1,3 @@
 #!/usr/bin/env python3
 
-"""
-Conan remote browser
-"""
+"""Conan remote browser."""

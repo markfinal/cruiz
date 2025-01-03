@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Conan dependency view
-"""
+"""Conan dependency view."""
 
 from __future__ import annotations
 
@@ -18,10 +16,14 @@ if typing.TYPE_CHECKING:
 
 
 class DependencyView(QtWidgets.QGraphicsView):
+    """View of the dependencies."""
+
     def clear(self) -> None:
+        """Clear the contents of the view."""
         self.setScene(None)
 
     def visualise(self, depgraph: DependencyGraph, rankdir: int) -> None:
+        """Visualise the dependency graph."""
         if rankdir == 0:
             rank_dir = "LR"
         elif rankdir == 1:
@@ -33,11 +35,14 @@ class DependencyView(QtWidgets.QGraphicsView):
 
 
 class InverseDependencyViewDialog(QtWidgets.QDialog):
+    """View of the inverse of the dependencies."""
+
     def __init__(
         self,
         depgraph: DependencyGraph,
         parent: typing.Optional[QtWidgets.QWidget] = None,
     ) -> None:
+        """Initialise an InverseDependencyViewDialog."""
         super().__init__(parent)
         self.setWindowTitle(f"What uses {depgraph.root.name}")
 

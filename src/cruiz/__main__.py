@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-cruiz: Conan recipe user interface
-"""
+"""cruiz: Conan recipe user interface."""
 
 import os
 

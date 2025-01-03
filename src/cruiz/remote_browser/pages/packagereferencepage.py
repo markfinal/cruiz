@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Remote browser page
-"""
+"""Remote browser page."""
 
 import typing
 
@@ -23,17 +21,13 @@ class _PackageReferenceModel(QtCore.QAbstractListModel):
         self._list: typing.List[str] = []
 
     def clear(self) -> None:
-        """
-        Clear the model
-        """
+        """Clear the model."""
         self.beginResetModel()
         self._list = []
         self.endResetModel()
 
     def add(self, text: str) -> None:
-        """
-        Add a package reference to the model
-        """
+        """Add a package reference to the model."""
         count = len(self._list)
         self.beginInsertRows(QtCore.QModelIndex(), count, count + 1)
         self._list.append(text)
@@ -59,9 +53,7 @@ class _PackageReferenceModel(QtCore.QAbstractListModel):
 
 
 class _PackageSearchValidator(QtGui.QValidator):
-    """
-    Validate the input given to the package search
-    """
+    """Validate the input given to the package search."""
 
     def validate(self, input_to_validate: str, pos: int) -> QtGui.QValidator.State:
         # pylint: disable=unused-argument
@@ -71,14 +63,10 @@ class _PackageSearchValidator(QtGui.QValidator):
 
 
 class PackageReferencePage(Page):
-    """
-    Remote browser page for finding package references
-    """
+    """Remote browser page for finding package references."""
 
     def setup(self, self_ui: typing.Any) -> None:
-        """
-        Setup the UI for the page
-        """
+        """Set up the UI for the page."""
         self._base_setup(self_ui, 0)
 
         self._revs_enabled = False
@@ -101,13 +89,12 @@ class PackageReferencePage(Page):
         self._ui.pkgref_cancel.clicked.connect(self.on_cancel)
 
     def showEvent(self, event: QtGui.QShowEvent) -> None:
+        """Override the widget's showEvent method."""
         self.refresh_local_cache_names()
         super().showEvent(event)
 
     def refresh_local_cache_names(self) -> None:
-        """
-        Refresh the UI for current local cache names.
-        """
+        """Refresh the UI for current local cache names."""
         with BlockSignals(self._ui.local_cache_name) as blocked_widget:
             assert isinstance(blocked_widget, QtWidgets.QComboBox)
             blocked_widget.clear()
@@ -118,17 +105,13 @@ class PackageReferencePage(Page):
 
     @property
     def package_reference(self) -> str:
-        """
-        Get the package reference selected on this page
-        """
+        """Get the package reference selected on this page."""
         selection = self._ui.package_references.selectedIndexes()
         assert len(selection) == 1
         return self._model.data(selection[0], QtCore.Qt.ItemDataRole.DisplayRole)
 
     def on_local_cache_change(self, text: str) -> None:
-        """
-        Called when which local cache has been selected has changed
-        """
+        """Call when which local cache has been selected has changed."""
         self._context.change_cache(text)
         index_of_first_enabled_remote: typing.Optional[int] = None
         with BlockSignals(self._ui.remote) as blocked_widget:
@@ -213,15 +196,11 @@ class PackageReferencePage(Page):
             parent_stackedwidget.setCurrentIndex(self.page_index + 2)
 
     def on_cancel(self) -> None:
-        """
-        Called when the user cancels the operation.
-        """
+        """Call when the user cancels the operation."""
         self._context.cancel()
         self._enable_progress(False)
 
     def invalidate(self) -> None:
-        """
-        Invalidate the package reference search.
-        """
+        """Invalidate the package reference search."""
         self._model.clear()
         self._ui.search_pattern.clear()

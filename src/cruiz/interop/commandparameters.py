@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Conan command parameters
-"""
+"""Conan command parameters."""
 
 from __future__ import annotations
 
@@ -20,9 +18,7 @@ if typing.TYPE_CHECKING:
 
 # TODO: should a recipe be in here? it is quite a heavyweight Context object though
 class CommandParameters(CommonParameters):
-    """
-    Representation of all the arguments to a command
-    """
+    """Representation of all the arguments to a command."""
 
     def __init__(
         self,
@@ -32,6 +28,7 @@ class CommandParameters(CommonParameters):
             typing.Callable[[typing.Any, typing.Any, typing.Any], None],
         ],
     ) -> None:
+        """Initialise a CommandParameters."""
         super().__init__(worker)
         self.verb = verb
         self._recipe_path: typing.Optional[pathlib.Path] = (
@@ -63,9 +60,7 @@ class CommandParameters(CommonParameters):
         self._extra_options: typing.Optional[str] = None
 
     def to_args(self) -> typing.List[str]:
-        """
-        Get the argument list corresponding to these command parameters.
-        """
+        """Get the argument list corresponding to these command parameters."""
         components = [self.verb]
         if self._profile:
             components.extend(
@@ -136,6 +131,7 @@ class CommandParameters(CommonParameters):
         return components
 
     def __str__(self) -> str:
+        """Convert CommandParameters to a string."""
         components = ["conan"]
         for comp in self.to_args():
             if comp:
@@ -152,9 +148,7 @@ class CommandParameters(CommonParameters):
 
     @property
     def cmd_expression(self) -> StringIO:
-        """
-        Get the expression valid in a CMD batch shell for this command
-        """
+        """Get the expression valid in a CMD batch shell for this command."""
         expression = StringIO()
         for key, value in self.added_environment.items():
             # internal envvars used in multi-process that don't immediately
@@ -183,9 +177,7 @@ class CommandParameters(CommonParameters):
 
     @property
     def bash_expression(self) -> StringIO:
-        """
-        Get the expression valid in a bash shell for this command
-        """
+        """Get the expression valid in a bash shell for this command."""
         expression = StringIO()
         for key, value in self.added_environment.items():
             # internal envvars used in multi-process that don't immediately
@@ -214,9 +206,7 @@ class CommandParameters(CommonParameters):
 
     @property
     def zsh_expression(self) -> StringIO:
-        """
-        Get the expression valid in a zsh shell for this command
-        """
+        """Get the expression valid in a zsh shell for this command."""
         expression = StringIO()
         expression.write("setopt interactivecomments\n")
         expression.write(self.bash_expression.getvalue())
@@ -226,6 +216,7 @@ class CommandParameters(CommonParameters):
     def recipe_path(self) -> typing.Optional[pathlib.Path]:
         """
         Get the path of the recipe used in this command.
+
         May be None.
         """
         return self._recipe_path
@@ -238,6 +229,7 @@ class CommandParameters(CommonParameters):
     def cwd(self) -> typing.Optional[pathlib.Path]:
         """
         Get the current directory used in this command.
+
         May be None.
         """
         return self._cwd
@@ -250,6 +242,7 @@ class CommandParameters(CommonParameters):
     def profile(self) -> typing.Optional[str]:
         """
         Get the profile to use in the command against this recipe.
+
         -pr/--profile switch
         May be None to omit
         """
@@ -263,6 +256,7 @@ class CommandParameters(CommonParameters):
     def common_subdir(self) -> typing.Optional[pathlib.PurePosixPath]:
         """
         Get the common subdirectory to apply atop of the current working directory.
+
         May be None to omit
         """
         return self._common_subdir
@@ -275,6 +269,7 @@ class CommandParameters(CommonParameters):
     def install_folder(self) -> typing.Optional[pathlib.PurePosixPath]:
         """
         Get the install folder to use in the command against this recipe.
+
         -if/--install-folder switch
         May be None to omit
         """
@@ -288,6 +283,7 @@ class CommandParameters(CommonParameters):
     def imports_folder(self) -> typing.Optional[pathlib.PurePosixPath]:
         """
         Get the imports folder to use in the command against this recipe.
+
         -imf/--import-folder switch
         May be None to omit
         """
@@ -301,6 +297,7 @@ class CommandParameters(CommonParameters):
     def source_folder(self) -> typing.Optional[pathlib.PurePosixPath]:
         """
         Get the source folder to use in the command against this recipe.
+
         -sf/--source-folder switch
         May be None to omit
         """
@@ -314,6 +311,7 @@ class CommandParameters(CommonParameters):
     def build_folder(self) -> typing.Optional[pathlib.PurePosixPath]:
         """
         Get the build folder to use in the command against this recipe.
+
         -bf/--build-folder switch
         May be None to omit
         """
@@ -327,6 +325,7 @@ class CommandParameters(CommonParameters):
     def package_folder(self) -> typing.Optional[pathlib.PurePosixPath]:
         """
         Get the package folder to use in the command against this recipe.
+
         -pf/--package-folder switch
         May be None to omit
         """
@@ -340,6 +339,7 @@ class CommandParameters(CommonParameters):
     def test_build_folder(self) -> typing.Optional[pathlib.PurePosixPath]:
         """
         Get the test build folder to use in the command against this recipe.
+
         -tbf/--test-build-folder switch
         May be None to omit
         """
@@ -353,6 +353,7 @@ class CommandParameters(CommonParameters):
     def name(self) -> typing.Optional[str]:
         """
         Get the package name.
+
         May be None.
         """
         return self._name
@@ -365,6 +366,7 @@ class CommandParameters(CommonParameters):
     def version(self) -> typing.Optional[str]:
         """
         Get the package version.
+
         May be None.
         """
         return self._version
@@ -377,6 +379,7 @@ class CommandParameters(CommonParameters):
     def user(self) -> typing.Optional[str]:
         """
         Get the package user.
+
         May be None.
         """
         return self._user
@@ -389,6 +392,7 @@ class CommandParameters(CommonParameters):
     def channel(self) -> typing.Optional[str]:
         """
         Get the package channel.
+
         May be None.
         """
         return self._channel
@@ -399,9 +403,7 @@ class CommandParameters(CommonParameters):
 
     @property
     def options(self) -> typing.Dict[str, str]:  # TODO: should this be immutable?
-        """
-        Get the recipe options.
-        """
+        """Get the recipe options."""
         return self._options
 
     def add_option(
@@ -409,6 +411,7 @@ class CommandParameters(CommonParameters):
     ) -> None:
         """
         Add an option key-value pair.
+
         If package_name is provided, the option key is prefixed with package_name:
         """
         assert key not in self._options
@@ -421,6 +424,7 @@ class CommandParameters(CommonParameters):
     def force(self) -> typing.Optional[bool]:
         """
         Get whether an option is forced.
+
         May be None.
         """
         return self._force
@@ -433,14 +437,13 @@ class CommandParameters(CommonParameters):
     def package_reference(self) -> typing.Optional[str]:
         """
         Get the package reference.
+
         May be None.
         """
         return self._package_reference
 
     def make_package_reference(self) -> None:
-        """
-        Make the package reference given name, version, user and channel already set.
-        """
+        """Make the package reference given name, version, user and channel already set."""  # noqa: E501
         package_reference = StringIO()
         if self._name:
             package_reference.write(f"{self._name}/")
@@ -456,15 +459,14 @@ class CommandParameters(CommonParameters):
 
     @property
     def arguments(self) -> typing.List[str]:
-        """
-        Get the optional arguments passed as a parameter list.
-        """
+        """Get the optional arguments passed as a parameter list."""
         return self._args
 
     @property
     def named_arguments(self) -> typing.Dict[str, str]:
         """
         Get the optional named arguments.
+
         These are not passed on the command line.
         """
         return self._named_args
@@ -473,6 +475,7 @@ class CommandParameters(CommonParameters):
     def time_commands(self) -> typing.Optional[bool]:
         """
         Get whether commands are timed.
+
         May be None.
         """
         return self._time_commands
@@ -482,17 +485,12 @@ class CommandParameters(CommonParameters):
         self._time_commands = value
 
     def set_build_feature(self, feature: BuildFeatureConstants, value: str) -> None:
-        """
-        Set an optional build feature
-        """
+        """Set an optional build feature."""
         self.added_environment[str(feature)] = value
 
     @property
     def v2_omit_test_folder(self) -> typing.Optional[bool]:
-        """
-        Whether to omit to the test folder parameter
-        Conan v2+
-        """
+        """Whether to omit to the test folder parameter in Conan v2+."""
         return self._v2_omit_test_folder
 
     @v2_omit_test_folder.setter
@@ -501,10 +499,7 @@ class CommandParameters(CommonParameters):
 
     @property
     def v2_need_reference(self) -> typing.Optional[bool]:
-        """
-        Whether a package reference is actually needed.
-        Conan v2+
-        """
+        """Whether a package reference is actually needed in Conan v2+."""
         return self._v2_needs_reference
 
     @v2_need_reference.setter
@@ -515,6 +510,7 @@ class CommandParameters(CommonParameters):
     def extra_options(self) -> typing.Optional[str]:
         """
         Get the extra options string.
+
         May be None.
         """
         return self._extra_options

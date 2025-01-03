@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Settings context manager for recent recipes
-"""
+"""Settings context manager for recent recipes."""
 
 import typing
 
@@ -13,14 +11,10 @@ from .basesettings import BaseSettings, CommonSettings
 
 # TODO CommonSettings not all used
 class RecentRecipeSettings(CommonSettings):
-    """
-    Settings for recent recipes
-    """
+    """Settings for recent recipes."""
 
     def uuids(self) -> typing.List[QtCore.QUuid]:
-        """
-        Get the list of UUIDs for the recent recipes.
-        """
+        """Get the list of UUIDs for the recent recipes."""
         result: typing.List[QtCore.QUuid] = []
         assert self.settings_reader
         settings = self.settings_reader.settings
@@ -31,17 +25,17 @@ class RecentRecipeSettings(CommonSettings):
 
 
 class RecentRecipeSettingsReader:
-    """
-    Context manager for reading recent recipes from disk.
-    """
+    """Context manager for reading recent recipes from disk."""
 
     def __init__(self) -> None:
+        """Initialise a RecentRecipeSettingsReader."""
         self.group = ""
         self._array = "RecentRecipes"
         self.settings = BaseSettings.make_settings()
         self.count = 0
 
     def __enter__(self) -> RecentRecipeSettings:
+        """Enter a context manager with a RecentRecipeSettingsReader."""
         self.count = self.settings.beginReadArray(self._array)
         self._settings_object = RecentRecipeSettings()
         self._settings_object.settings_reader = self
@@ -50,6 +44,7 @@ class RecentRecipeSettingsReader:
     def __exit__(
         self, exc_type: typing.Any, exc_value: typing.Any, exc_traceback: typing.Any
     ) -> typing.Any:
+        """Exit a context manager with a RecentRecipeSettingsReader."""
         self.settings.endArray()
         self._settings_object.settings_reader = None
         del self._settings_object
@@ -61,18 +56,15 @@ class RecentRecipeSettingsReader:
 
 
 class RecentRecipeSettingsWriter:  # TODO: should this derive from _WriterMixin?
-    """
-    Context manager for writing recent recipes to disk
-    """
+    """Context manager for writing recent recipes to disk."""
 
     def __init__(self) -> None:
+        """Initialise a RecentRecipeSettingsWriter."""
         self._reader_for_writer = RecentRecipeSettingsReader()
         self._array = "RecentRecipes"
 
     def make_current(self, uuid: QtCore.QUuid) -> bool:
-        """
-        Make the specified recipe current
-        """
+        """Make the specified recipe current."""
         with self._reader_for_writer as settings:
             current_list = settings.uuids()
         uuid_exists = uuid in current_list
@@ -92,18 +84,15 @@ class RecentRecipeSettingsWriter:  # TODO: should this derive from _WriterMixin?
 
 
 class RecentRecipeSettingsDeleter:
-    """
-    Context manager for deleting a recent recipe
-    """
+    """Context manager for deleting a recent recipe."""
 
     def __init__(self) -> None:
+        """Initialise a RecentRecipeSettingsDeleter."""
         self._reader_for_deleter = RecentRecipeSettingsReader()
         self._array = "RecentRecipes"
 
     def delete(self, uuid: QtCore.QUuid) -> None:
-        """
-        Delete the recent recipe represented by UUID
-        """
+        """Delete the recent recipe represented by UUID."""
         with self._reader_for_deleter as settings:
             current_list = settings.uuids()
         current_list = [u for u in current_list if u != uuid]

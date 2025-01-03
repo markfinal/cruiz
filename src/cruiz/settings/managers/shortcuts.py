@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Settings context managers for shortcuts
-"""
+"""Settings context managers for shortcuts."""
 
 import typing
 
@@ -17,11 +15,10 @@ from .writermixin import _WriterMixin
 
 
 class ShortcutSettings(ComparableCommonSettings):
-    """
-    Settings for keyboard shortcuts
-    """
+    """Settings for keyboard shortcuts."""
 
     def __init__(self) -> None:
+        """Initialise a ShortcutSettings."""
         self._property_meta = {
             "conan_create": SettingMeta(
                 "Conan/Create", StringSetting, "Alt+C", ScalarValue
@@ -70,9 +67,7 @@ class ShortcutSettings(ComparableCommonSettings):
 
     @property
     def conan_create(self) -> StringSetting:
-        """
-        Get the shortcut for 'conan create'
-        """
+        """Get the shortcut for 'conan create'."""
         return self._get_value_via_meta()
 
     @conan_create.setter
@@ -81,9 +76,7 @@ class ShortcutSettings(ComparableCommonSettings):
 
     @property
     def conan_create_updates(self) -> StringSetting:
-        """
-        Get the shortcut for 'conan create -u'
-        """
+        """Get the shortcut for 'conan create -u'."""
         return self._get_value_via_meta()
 
     @conan_create_updates.setter
@@ -92,9 +85,7 @@ class ShortcutSettings(ComparableCommonSettings):
 
     @property
     def conan_imports(self) -> StringSetting:
-        """
-        Get the shortcut for 'conan imports'
-        """
+        """Get the shortcut for 'conan imports'."""
         return self._get_value_via_meta()
 
     @conan_imports.setter
@@ -103,9 +94,7 @@ class ShortcutSettings(ComparableCommonSettings):
 
     @property
     def conan_install(self) -> StringSetting:
-        """
-        Get the shortcut for 'conan install'
-        """
+        """Get the shortcut for 'conan install'."""
         return self._get_value_via_meta()
 
     @conan_install.setter
@@ -114,9 +103,7 @@ class ShortcutSettings(ComparableCommonSettings):
 
     @property
     def conan_install_updates(self) -> StringSetting:
-        """
-        Get the shortcut for 'conan install -u'
-        """
+        """Get the shortcut for 'conan install -u'."""
         return self._get_value_via_meta()
 
     @conan_install_updates.setter
@@ -125,9 +112,7 @@ class ShortcutSettings(ComparableCommonSettings):
 
     @property
     def conan_source(self) -> StringSetting:
-        """
-        Get the shortcut for 'conan source'
-        """
+        """Get the shortcut for 'conan source'."""
         return self._get_value_via_meta()
 
     @conan_source.setter
@@ -136,9 +121,7 @@ class ShortcutSettings(ComparableCommonSettings):
 
     @property
     def conan_build(self) -> StringSetting:
-        """
-        Get the shortcut for 'conan build'
-        """
+        """Get the shortcut for 'conan build'."""
         return self._get_value_via_meta()
 
     @conan_build.setter
@@ -147,9 +130,7 @@ class ShortcutSettings(ComparableCommonSettings):
 
     @property
     def conan_package(self) -> StringSetting:
-        """
-        Get the shortcut for 'conan package'
-        """
+        """Get the shortcut for 'conan package'."""
         return self._get_value_via_meta()
 
     @conan_package.setter
@@ -158,9 +139,7 @@ class ShortcutSettings(ComparableCommonSettings):
 
     @property
     def conan_export_package(self) -> StringSetting:
-        """
-        Get the shortcut for 'conan export-pkg'
-        """
+        """Get the shortcut for 'conan export-pkg'."""
         return self._get_value_via_meta()
 
     @conan_export_package.setter
@@ -169,9 +148,7 @@ class ShortcutSettings(ComparableCommonSettings):
 
     @property
     def conan_test_package(self) -> StringSetting:
-        """
-        Get the shortcut for 'conan test'
-        """
+        """Get the shortcut for 'conan test'."""
         return self._get_value_via_meta()
 
     @conan_test_package.setter
@@ -180,9 +157,7 @@ class ShortcutSettings(ComparableCommonSettings):
 
     @property
     def conan_remove_package(self) -> StringSetting:
-        """
-        Get the shortcut for 'conan remove'
-        """
+        """Get the shortcut for 'conan remove'."""
         return self._get_value_via_meta()
 
     @conan_remove_package.setter
@@ -191,9 +166,7 @@ class ShortcutSettings(ComparableCommonSettings):
 
     @property
     def cancel(self) -> StringSetting:
-        """
-        Get the shortcut for cancelling the current command
-        """
+        """Get the shortcut for cancelling the current command."""
         return self._get_value_via_meta()
 
     @cancel.setter
@@ -202,9 +175,7 @@ class ShortcutSettings(ComparableCommonSettings):
 
     @property
     def cmake_build_tool(self) -> StringSetting:
-        """
-        Get the shortcut for running the CMake build tool
-        """
+        """Get the shortcut for running the CMake build tool."""
         return self._get_value_via_meta()
 
     @cmake_build_tool.setter
@@ -213,9 +184,7 @@ class ShortcutSettings(ComparableCommonSettings):
 
     @property
     def cmake_build_tool_verbose(self) -> StringSetting:
-        """
-        Get the shortcut for CMake build tool in verbose
-        """
+        """Get the shortcut for CMake build tool in verbose."""
         return self._get_value_via_meta()
 
     @cmake_build_tool_verbose.setter
@@ -224,9 +193,7 @@ class ShortcutSettings(ComparableCommonSettings):
 
     @property
     def delete_cmake_cache(self) -> StringSetting:
-        """
-        Get the shortcut for deleting the CMake cache
-        """
+        """Get the shortcut for deleting the CMake cache."""
         return self._get_value_via_meta()
 
     @delete_cmake_cache.setter
@@ -235,15 +202,15 @@ class ShortcutSettings(ComparableCommonSettings):
 
 
 class ShortcutSettingsReader:
-    """
-    Context manager to read shortcuts from disk
-    """
+    """Context manager to read shortcuts from disk."""
 
     def __init__(self) -> None:
+        """Initialise a ShortcutSettingsReader."""
         self.settings = BaseSettings.make_settings()
         self.group = "Shortcut"
 
     def __enter__(self) -> ShortcutSettings:
+        """Enter a context manager with a ShortcutSettingsReader."""
         self.settings.beginGroup(self.group)
         self._settings_object = ShortcutSettings()
         self._settings_object.settings_reader = self
@@ -252,6 +219,7 @@ class ShortcutSettingsReader:
     def __exit__(
         self, exc_type: typing.Any, exc_value: typing.Any, exc_traceback: typing.Any
     ) -> typing.Any:
+        """Exit a context manager with a ShortcutSettingsReader."""
         self.settings.endGroup()
         self._settings_object.settings_reader = None
         del self._settings_object
@@ -263,9 +231,8 @@ class ShortcutSettingsReader:
 
 
 class ShortcutSettingsWriter(_WriterMixin):
-    """
-    Context manager to write shortcuts to disk
-    """
+    """Context manager to write shortcuts to disk."""
 
     def __init__(self) -> None:
+        """Initialise a ShortcutSettingsWriter."""
         self._reader_for_writer = ShortcutSettingsReader()

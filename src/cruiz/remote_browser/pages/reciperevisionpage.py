@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Remote browser page
-"""
+"""Remote browser page."""
 
 import typing
 
@@ -19,9 +17,7 @@ class _RecipeRevisionModel(QtCore.QAbstractTableModel):
         self._rrevs: typing.Optional[typing.List[typing.Dict[str, str]]] = None
 
     def set(self, results: typing.Optional[typing.List[typing.Dict[str, str]]]) -> None:
-        """
-        Set the results against the model
-        """
+        """Set the results against the model."""
         self.beginResetModel()
         self._rrevs = results
         self.endResetModel()
@@ -61,14 +57,10 @@ class _RecipeRevisionModel(QtCore.QAbstractTableModel):
 
 
 class RecipeRevisionPage(Page):
-    """
-    Remote browser page for recipe revisions
-    """
+    """Remote browser page for recipe revisions."""
 
     def setup(self, self_ui: typing.Any) -> None:
-        """
-        Setup the UI for the page
-        """
+        """Set up the UI for the page."""
         self._base_setup(self_ui, 1)
         self._current_pkgref: typing.Optional[str] = None
         self._model = _RecipeRevisionModel()
@@ -88,9 +80,7 @@ class RecipeRevisionPage(Page):
 
     @property
     def package_reference(self) -> str:
-        """
-        Get the package reference for the selection on this page
-        """
+        """Get the package reference for the selection on this page."""
         selection = self._ui.recipe_revisions.selectedIndexes()
         assert len(selection) == 2  # num columns in row
         rrev = self._model.data(selection[0], QtCore.Qt.ItemDataRole.DisplayRole)
@@ -102,6 +92,7 @@ class RecipeRevisionPage(Page):
         self._ui.rrev_cancel.setEnabled(enable)
 
     def showEvent(self, event: QtGui.QShowEvent) -> None:
+        """Override the widget's showEvent method."""
         # pylint: disable=unused-argument
         self._ui.rrev_pkgref.setText(self._previous_pkgref)
         self._compute()
@@ -126,9 +117,7 @@ class RecipeRevisionPage(Page):
         self._open_next_page()
 
     def on_cancel(self) -> None:
-        """
-        Called when the user cancels the operation.
-        """
+        """Call when the user cancels the operation."""
         self._context.cancel()
         self._enable_progress(False)
 

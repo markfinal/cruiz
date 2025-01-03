@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Child process commands
-"""
+"""Child process commands."""
 
 from __future__ import annotations
 
@@ -21,7 +19,7 @@ def invoke(
     queue: multiprocessing.Queue[Message], params: PackageRevisionsParameters
 ) -> None:
     """
-    Equivalent to
+    Equivalent to.
 
     'conan search -r <remote_name> <reference> -rev'
 

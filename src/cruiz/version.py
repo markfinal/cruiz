@@ -10,12 +10,15 @@ after the last annotated tag.
 
 def get_version() -> str:
     """
-    Try to get a fixed version number from the RELEASE_VERSION module (written by
-    source and binary distributions).
+    Try to get a fixed version number from the RELEASE_VERSION module.
+
+    RELEASE_VERSION is written by source and binary distributions.
+
     Otherwise, fallback to accessing Git information.
     """
     try:
         # in an editable install, RELEASE_VERSION does not exist
+        # TODO: the above statement is no longer true
         from .RELEASE_VERSION import __version__
 
         return __version__

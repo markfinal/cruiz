@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Settings cleanup
-"""
+"""Settings cleanup."""
 
 import pathlib
 

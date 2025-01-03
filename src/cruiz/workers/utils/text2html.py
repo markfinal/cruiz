@@ -1,17 +1,13 @@
 #!/usr/bin/env python3
 
-"""
-Converting text to HTML
-"""
+"""Converting text to HTML."""
 
 import html as html_module
 from io import StringIO
 
 
 def text_to_html(text: str, spaces_per_tab: int = 4) -> str:
-    """
-    Break a block of text into text and HTML markup.
-    """
+    """Break a block of text into text and HTML markup."""
     html = StringIO()
     stripped_line = text.lstrip()
     num_leading_chars = len(text) - len(stripped_line)

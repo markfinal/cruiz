@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Worker implementation for testing packages
-"""
+"""Worker implementation for testing packages."""
 
 from __future__ import annotations
 
@@ -18,9 +16,7 @@ if typing.TYPE_CHECKING:
 
 
 def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> None:
-    """
-    Run 'conan test'
-    """
+    """Run 'conan test'."""
     with worker.ConanWorker(queue, params) as api:
         import importlib
 

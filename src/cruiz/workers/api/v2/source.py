@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Get source code for the package
-"""
+"""Get source code for the package."""
 
 from __future__ import annotations
 
@@ -19,9 +17,7 @@ if typing.TYPE_CHECKING:
 
 
 def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> None:
-    """
-    Run 'conan source'
-    """
+    """Run 'conan source'."""
     with worker.ConanWorker(queue, params) as api:
         assert params.recipe_path
         assert params.cwd

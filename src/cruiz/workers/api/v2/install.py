@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Install dependencies into the local cache
-"""
+"""Install dependencies into the local cache."""
 
 from __future__ import annotations
 
@@ -18,9 +16,7 @@ if typing.TYPE_CHECKING:
 
 
 def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> None:
-    """
-    Run 'conan install'
-    """
+    """Run 'conan install'."""
     with worker.ConanWorker(queue, params) as api:
         import importlib
 

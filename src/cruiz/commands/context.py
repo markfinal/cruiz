@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-A context object wrapping the Conan API
-"""
+"""A context object wrapping the Conan API."""
 
 from __future__ import annotations
 
@@ -58,6 +56,7 @@ def _strtobool(val: str) -> bool:
 class ConanContext(QtCore.QObject):
     """
     Context for invoking Conan instances.
+
     Some are for long running commands, with a background thread to process information.
     Others are for just quering meta data.
     """
@@ -66,6 +65,7 @@ class ConanContext(QtCore.QObject):
     cancelled = QtCore.Signal()
 
     def __del__(self) -> None:
+        """Log when a ConanContext is deleted."""
         logger.debug("-=%d", id(self))
 
     def __init__(
@@ -73,6 +73,7 @@ class ConanContext(QtCore.QObject):
         cache_name: str,
         log_details: LogDetails,
     ) -> None:
+        """Initialise a ConanContext."""
         logger.debug("+=%d", id(self))
         super().__init__(None)
         self.command_history_widget: typing.Optional[RecipeCommandHistoryWidget] = None
@@ -81,9 +82,7 @@ class ConanContext(QtCore.QObject):
         self._configure_to_local_cache(cache_name)
 
     def close(self) -> None:
-        """
-        Close the context and any resources associated with it
-        """
+        """Close the context and any resources associated with it."""
         try:
             assert not self.is_busy
             self._meta_invocation.close()
@@ -94,9 +93,7 @@ class ConanContext(QtCore.QObject):
             pass
 
     def change_cache(self, cache_name: str, force: bool = False) -> None:
-        """
-        Change the local cache used by this context.
-        """
+        """Change the local cache used by this context."""
         # don't even try to check for a name no-op if the cache has already been closed
         if hasattr(self, "_meta_invocation"):
             if cache_name == self.cache_name and not force:
@@ -174,8 +171,9 @@ class ConanContext(QtCore.QObject):
         ] = None,
     ) -> None:
         """
-        Run a conan command, with parameters as provided, and a continuation
-        if further processing is needed
+        Run a conan command.
+
+        Use parameters as provided, and a continuation if further processing is needed.
         """
         self._start_invocation(params, command_toolbar, continuation)
 
@@ -187,9 +185,7 @@ class ConanContext(QtCore.QObject):
             typing.Callable[[typing.Any, typing.Any], None]
         ] = None,
     ) -> None:
-        """
-        Invoke the CMake build tool on the build folder of the recipe
-        """
+        """Invoke the CMake build tool on the build folder of the recipe."""
         self._start_invocation(
             params,
             command_toolbar,
@@ -229,9 +225,7 @@ class ConanContext(QtCore.QObject):
         config_subdir: str,
         continuation: typing.Optional[typing.Callable[[typing.Any, typing.Any], None]],
     ) -> None:
-        """
-        Run 'conan editable add'
-        """
+        """Run 'conan editable add'."""
         # this path has to match that in BaseCommand._get_paths
         package_dir = recipe_path.parent / "_edit_" / config_subdir / "package"
         target_symlink = package_dir / recipe_path.name
@@ -252,9 +246,7 @@ class ConanContext(QtCore.QObject):
         ref: str,
         continuation: typing.Optional[typing.Callable[[typing.Any, typing.Any], None]],
     ) -> None:
-        """
-        Run 'conan editable remove'
-        """
+        """Run 'conan editable remove'."""
         result, exception = self._meta_invocation.request_data(
             "editable_remove", {"ref": ref}
         )
@@ -267,9 +259,7 @@ class ConanContext(QtCore.QObject):
         self,
         continuation: typing.Optional[typing.Callable[[typing.Any, typing.Any], None]],
     ) -> None:
-        """
-        Run 'conan remove [-f] *'
-        """
+        """Run 'conan remove [-f] *'."""
         params = CommandParameters(
             "removeallpackages", workers_api.removeallpackages.invoke
         )
@@ -280,9 +270,7 @@ class ConanContext(QtCore.QObject):
         self,
         continuation: typing.Optional[typing.Callable[[typing.Any, typing.Any], None]],
     ) -> None:
-        """
-        Run 'conan remove --locks' to remove all lock files from the local cache
-        """
+        """Run 'conan remove --locks' to remove all lock files from the local cache."""
         params = CommandParameters("removelocks", workers_api.removelocks.invoke)
         self._start_invocation(params, None, continuation)
 
@@ -293,15 +281,11 @@ class ConanContext(QtCore.QObject):
             typing.Callable[[typing.Any, typing.Any], None]
         ] = None,
     ) -> None:
-        """
-        Run 'conan config install <URI> [--args -b branch] [-s source] [-t target]'
-        """
+        """Run 'conan config install <URI> [--args -b branch] [-s source] [-t target]'."""  # noqa: E501
         self._start_invocation(params, None, continuation)
 
     def remotes_sync(self, remotes: typing.List[ConanRemote]) -> None:
-        """
-        Sync the remotes to the given list.
-        """
+        """Sync the remotes to the given list."""
         _, exception = self._meta_invocation.request_data(
             "remotes_sync", {"remotes": remotes}
         )
@@ -309,9 +293,7 @@ class ConanContext(QtCore.QObject):
             raise Exception("Sync remotes failed") from exception
 
     def get_remotes_list(self) -> typing.List[ConanRemote]:
-        """
-        Equivalent to 'conan remote list'
-        """
+        """Equivalent to 'conan remote list'."""
         remotes_list, exception = self._meta_invocation.request_data("remotes_list")
         if exception:
             raise Exception("Get remote list failed") from exception
@@ -321,9 +303,7 @@ class ConanContext(QtCore.QObject):
     def get_profile_meta(
         self, profile_name: str
     ) -> typing.Dict[str, typing.Dict[str, str]]:
-        """
-        Get the meta information for a named profile
-        """
+        """Get the meta information for a named profile."""
         result, exception = self._meta_invocation.request_data(
             "profile_meta", {"name": profile_name}
         )
@@ -343,15 +323,11 @@ class ConanContext(QtCore.QObject):
         ],
         continuation: typing.Optional[typing.Callable[[typing.Any, typing.Any], None]],
     ) -> None:
-        """
-        Perform one of the actions to get package details from a remote.
-        """
+        """Perform one of the actions to get package details from a remote."""
         self._start_invocation(params, None, continuation)
 
     def get_package_directory(self, pkgdata: PackageNode) -> pathlib.Path:
-        """
-        Get the package directory for the specified package.
-        """
+        """Get the package directory for the specified package."""
         package_dir, exception = self._meta_invocation.request_data(
             "package_dir",
             {
@@ -367,9 +343,7 @@ class ConanContext(QtCore.QObject):
         return package_dir
 
     def cancel(self) -> None:
-        """
-        Cancel any current running worker thread.
-        """
+        """Cancel any current running worker thread."""
         if self._invocations:
             for invocation in self._invocations:
                 invocation.cancel()
@@ -378,9 +352,7 @@ class ConanContext(QtCore.QObject):
 
     def conan_version(self) -> str:
         # pylint: disable=no-self-use
-        """
-        Get the Conan version
-        """
+        """Get the Conan version."""
         version, exception = self._meta_invocation.request_data("version")
         if exception:
             raise Exception("Get Conan version failed") from exception
@@ -388,9 +360,7 @@ class ConanContext(QtCore.QObject):
         return version
 
     def profiles_dir(self) -> pathlib.Path:
-        """
-        Get the directory containing the profiles in the local cache.
-        """
+        """Get the directory containing the profiles in the local cache."""
         profiles_dir, exception = self._meta_invocation.request_data("profiles_dir")
         if exception:
             raise Exception("Get profiles directory failed") from exception
@@ -398,9 +368,7 @@ class ConanContext(QtCore.QObject):
         return pathlib.Path(profiles_dir)
 
     def all_profile_dirs(self) -> typing.List[pathlib.Path]:
-        """
-        Get a list of all profile directories inspected.
-        """
+        """Get a list of all profile directories inspected."""
         profile_dirs = [self.profiles_dir()]
         with NamedLocalCacheSettingsReader(self.cache_name) as settings:
             extra_profile_dirs = settings.extra_profile_directories.resolve()
@@ -409,9 +377,7 @@ class ConanContext(QtCore.QObject):
         return profile_dirs
 
     def default_profile_path(self) -> str:
-        """
-        Get the default profile path from the Conan object.
-        """
+        """Get the default profile path from the Conan object."""
         default_path, exception = self._meta_invocation.request_data(
             "default_profile_path"
         )
@@ -421,17 +387,13 @@ class ConanContext(QtCore.QObject):
         return default_path
 
     def default_profile_filename(self) -> str:
-        """
-        Query Conan for the default profile filename.
-        """
+        """Query Conan for the default profile filename."""
         return str(
             pathlib.Path(self.default_profile_path()).relative_to(self.profiles_dir())
         )
 
     def get_list_of_profiles(self) -> typing.List[typing.Tuple[pathlib.Path, str]]:
-        """
-        Return a list of all profiles in this context.
-        """
+        """Return a list of all profiles in this context."""
         profile_paths: typing.List[typing.Tuple[pathlib.Path, str]] = []
         # TODO: Conan2 candidate: api.profiles.list() for the local-cache based profiles
         profiles_dir = QtCore.QDir(str(self.profiles_dir()))
@@ -457,17 +419,12 @@ class ConanContext(QtCore.QObject):
         params: CommandParameters,
         continuation: typing.Callable[[typing.Any, typing.Any], None],
     ) -> None:
-        """
-        Run an arbitrary Conan command in the local cache.
-        """
-
+        """Run an arbitrary Conan command in the local cache."""
         self._start_invocation(params, None, continuation)
 
     # TODO: remove editables
     def get_editables_list(self) -> typing.Dict[str, str]:
-        """
-        Equivalent to 'conan editable list'
-        """
+        """Equivalent to 'conan editable list'."""
         editable_dict, exception = self._meta_invocation.request_data("editable_list")
         if exception:
             raise Exception("Get editables list failed") from exception
@@ -477,9 +434,7 @@ class ConanContext(QtCore.QObject):
     def inspect_recipe(
         self, recipe_path: pathlib.Path, propagate_errors: bool = False
     ) -> typing.Dict[str, str]:
-        """
-        Equivalent to 'conan inspect'
-        """
+        """Equivalent to 'conan inspect'."""
         results, exception = self._meta_invocation.request_data(
             "inspect_recipe", {"path": recipe_path}
         )
@@ -502,8 +457,9 @@ class ConanContext(QtCore.QObject):
 
     def get_hooks_list(self) -> typing.List[ConanHook]:
         """
-        No equivalent on the command line, but lists all hooks in the config and their
-        enabled states
+        No equivalent on the command line.
+
+        But lists all hooks in the config and their enabled states.
         """
         hooks_list, exception = self._meta_invocation.request_data("get_hooks")
         if exception:
@@ -512,9 +468,7 @@ class ConanContext(QtCore.QObject):
         return hooks_list
 
     def hooks_sync(self, hook_changes: typing.List[ConanHook]) -> None:
-        """
-        Equivalent to either conan config set <hook> or conan config rm <hook>
-        """
+        """Equivalent to either conan config set <hook> or conan config rm <hook>."""
         _, exception = self._meta_invocation.request_data(
             "hooks_sync", {"hooks": hook_changes}
         )
@@ -522,9 +476,7 @@ class ConanContext(QtCore.QObject):
             raise Exception("Syncing hooks failed") from exception
 
     def enable_hook(self, hook: str, enabled: bool) -> None:
-        """
-        Equivalent to either conan config set <hook> or conan config rm <hook>
-        """
+        """Equivalent to either conan config set <hook> or conan config rm <hook>."""
         _, exception = self._meta_invocation.request_data(
             "enable_hook", {"hook": hook, "hook_enabled": enabled}
         )
@@ -532,9 +484,7 @@ class ConanContext(QtCore.QObject):
             raise Exception("Enable/disable hook failed") from exception
 
     def get_cmake_generator(self) -> str:
-        """
-        Equivalent to conan config get general.cmake_generator
-        """
+        """Equivalent to conan config get general.cmake_generator."""
         generator, exception = self._meta_invocation.request_data(
             "get_cmake_generator", {}
         )
@@ -545,9 +495,7 @@ class ConanContext(QtCore.QObject):
     def get_conandata(
         self, recipe_path: pathlib.Path
     ) -> typing.Dict[str, typing.Dict[str, str]]:
-        """
-        Fetch the YAML dictionary of the conandata.yml beside the recipe.
-        """
+        """Fetch the YAML dictionary of the conandata.yml beside the recipe."""
         conandata, exception = self._meta_invocation.request_data(
             "get_conandata", {"path": recipe_path}
         )
@@ -561,9 +509,11 @@ class ConanContext(QtCore.QObject):
         self, config: ConanConfigBoolean, default_value: bool
     ) -> bool:
         """
-        Equivalent to conan config get, with the specified config key.
-        If the specified config key is not in the configuration,
-        return the default value.
+        Equivalent to conan config get.
+
+        Use the specified config key.
+        If the specified config key is not in the configuration, return the default
+        value.
         """
         config_value, exception = self._meta_invocation.request_data(
             "get_config", {"config": config.value}
@@ -578,9 +528,7 @@ class ConanContext(QtCore.QObject):
         return config_value or default_value
 
     def set_boolean_config(self, config: ConanConfigBoolean, value: bool) -> None:
-        """
-        Equivalent to conan config set, with the specified config key and value.
-        """
+        """Equivalent to conan config set, with the specified config key and value."""
         _, exception = self._meta_invocation.request_data(
             "set_config", {"config": config.value, "value": str(value)}
         )
@@ -591,14 +539,13 @@ class ConanContext(QtCore.QObject):
 
     @property
     def is_default(self) -> bool:
-        """
-        Does this context refer to the 'default' local cache?
-        """
+        """Does this context refer to the 'default' local cache?."""
         return self.cache_name == DEFAULT_CACHE_NAME
 
     def get_conan_config_environment_variables(self) -> typing.List[str]:
         """
         Get a list of all Conan environment variables names.
+
         This doesn't get all of them, but at least some.
         """
         envvars, exception = self._meta_invocation.request_data("get_config_envvars")
@@ -611,7 +558,8 @@ class ConanContext(QtCore.QObject):
     @property
     def is_busy(self) -> bool:
         """
-        Is the context busy running any Conan commands?
+        Is the context busy running any Conan commands?.
+
         Explicitly or via its meta commands
         """
         return bool(self._invocations) or self._meta_invocation.active
@@ -619,6 +567,7 @@ class ConanContext(QtCore.QObject):
     def create_default_profile(self) -> None:
         """
         Create the default profile in the local cache by detecting the environment.
+
         This will overwrite any existing default profile.
         """
         _, exception = self._meta_invocation.request_data("create_default_profile")
@@ -633,8 +582,9 @@ def managed_conan_context(
     cache_name: str, log_details: LogDetails
 ) -> typing.Generator[ConanContext, None, None]:
     """
-    Context manager for uses where all API calls on the ConanContext are guaranteed
-    to be synchronous.
+    Context manager for the ConanContext.
+
+    For uses where all API calls on the ConanContext are guaranteed to be synchronous.
     """
     context = ConanContext(cache_name, log_details)
     try:

@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Remote browser page
-"""
+"""Remote browser page."""
 
 import typing
 
@@ -19,9 +17,7 @@ class _PackageRevisionModel(QtCore.QAbstractTableModel):
         self._prevs: typing.Optional[typing.List[typing.Dict[str, str]]] = None
 
     def set(self, results: typing.Optional[typing.List[typing.Dict[str, str]]]) -> None:
-        """
-        Set the results into the model
-        """
+        """Set the results into the model."""
         self.beginResetModel()
         self._prevs = results
         self.endResetModel()
@@ -61,14 +57,10 @@ class _PackageRevisionModel(QtCore.QAbstractTableModel):
 
 
 class PackageRevisionPage(Page):
-    """
-    Remote browser page for displaying package revisions
-    """
+    """Remote browser page for displaying package revisions."""
 
     def setup(self, self_ui: typing.Any) -> None:
-        """
-        Setup the UI for the page
-        """
+        """Set up the UI for the page."""
         self._base_setup(self_ui, 3)
         self._current_pkgref: typing.Optional[str] = None
         self._model = _PackageRevisionModel()
@@ -89,9 +81,7 @@ class PackageRevisionPage(Page):
 
     @property
     def package_reference(self) -> str:
-        """
-        Get the package reference selected in the current page
-        """
+        """Get the package reference selected in the current page."""
         selection = self._ui.package_revisions.selectedIndexes()
         assert len(selection) == 2
         package_rev = self._model.data(selection[0], QtCore.Qt.ItemDataRole.DisplayRole)
@@ -103,6 +93,7 @@ class PackageRevisionPage(Page):
         self._ui.prev_cancel.setEnabled(enable)
 
     def showEvent(self, event: QtGui.QShowEvent) -> None:
+        """Override the widget's showEvent method."""
         # pylint: disable=unused-argument
         self._ui.prev_pkgref.setText(self._previous_pkgref)
         self._compute()
@@ -127,9 +118,7 @@ class PackageRevisionPage(Page):
         self._open_next_page()
 
     def on_cancel(self) -> None:
-        """
-        Called when the user cancels the operation.
-        """
+        """Call when the user cancels the operation."""
         self._context.cancel()
         self._enable_progress(False)
 

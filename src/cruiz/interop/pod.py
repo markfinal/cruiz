@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Plain old data classes
-"""
+"""Plain old data classes."""
 
 from __future__ import annotations
 
@@ -29,9 +27,7 @@ def _strtobool(val: str) -> bool:
 
 @dataclass(frozen=True)
 class LocalCacheDetails:
-    """
-    Plain old data class representing Conan local cache details.
-    """
+    """Plain old data class representing Conan local cache details."""
 
     home_directory: typing.Optional[str] = None
     short_home_directory: typing.Optional[str] = None
@@ -46,9 +42,7 @@ class LocalCacheDetails:
 
 @dataclass(frozen=True)
 class ConanRemote:
-    """
-    Plain old data class representing a Conan remote.
-    """
+    """Plain old data class representing a Conan remote."""
 
     name: str
     url: str
@@ -56,9 +50,7 @@ class ConanRemote:
 
     @classmethod
     def from_string(cls, string: str) -> ConanRemote:
-        """
-        Convert a string into a ConanRemote.
-        """
+        """Convert a string into a ConanRemote."""
         assert string.startswith("ConanRemote(")
         assert string.endswith(")")
         string = string.replace("ConanRemote(", "")
@@ -76,24 +68,18 @@ class ConanRemote:
 
 @dataclass(frozen=True)
 class ConanHook:
-    """
-    Plain old data class representing a Conan hook
-    """
+    """Plain old data class representing a Conan hook."""
 
     path: pathlib.Path
     enabled: bool
 
     def has_path(self, path: pathlib.Path) -> bool:
-        """
-        Does the hook contain the specified path?
-        """
+        """Return whether the hook contains the specified path."""
         return self.path in (path, path.stem)
 
     @classmethod
     def from_string(cls, string: str) -> ConanHook:
-        """
-        Convert a string to a ConanHook.
-        """
+        """Convert a string to a ConanHook."""
         assert string.startswith("ConanHook(")
         assert string.endswith(")")
         string = string.replace("ConanHook(", "")
@@ -113,9 +99,7 @@ class ConanHook:
 
 @dataclass(frozen=True)
 class ExtraProfileDirectory:
-    """
-    Plain old data class representing an additional profile directory.
-    """
+    """Plain old data class representing an additional profile directory."""
 
     name: str
     directory: str

@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Conan recipe find text dialog
-"""
+"""Conan recipe find text dialog."""
 
 from cruiz.pyside6.find_text_dialog import Ui_FindTextDialog
 
@@ -10,14 +8,13 @@ from qtpy import QtCore, QtWidgets
 
 
 class FindTextDialog(QtWidgets.QDialog):
-    """
-    Widget representing a Find dialog
-    """
+    """Widget representing a Find dialog."""
 
     search_forwards = QtCore.Signal(QtWidgets.QPlainTextEdit, str, bool, bool)
     search_backwards = QtCore.Signal(QtWidgets.QPlainTextEdit, str, bool, bool)
 
     def __init__(self, parent: QtWidgets.QWidget) -> None:
+        """Initialise a FindTextDialog."""
         super().__init__(parent)
         self._ui = Ui_FindTextDialog()
         self._ui.setupUi(self)  # type: ignore[no-untyped-call]

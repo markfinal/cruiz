@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Settings context manager for named local caches
-"""
+"""Settings context manager for named local caches."""
 
 from __future__ import annotations
 
@@ -27,11 +25,10 @@ if typing.TYPE_CHECKING:
 
 
 class NamedLocalCacheSettings(CommonSettings):
-    """
-    Settings for named local caches.
-    """
+    """Settings for named local caches."""
 
     def __init__(self) -> None:
+        """Initialise a NamedLocalCacheSettings."""
         self._property_meta = {
             "home_dir": SettingMeta("Dir", StringSetting, None, ScalarValue),
             "short_home_dir": SettingMeta("ShortDir", StringSetting, None, ScalarValue),
@@ -48,9 +45,7 @@ class NamedLocalCacheSettings(CommonSettings):
     # Also, current uses of this function only check to see its length
     @property
     def recipe_uuids(self) -> typing.List[str]:
-        """
-        Return list of UUIDs for the recipes in this cache.
-        """
+        """Return list of UUIDs for the recipes in this cache."""
         results: typing.List[str] = []
         settings = BaseSettings.make_settings()
         assert self.settings_reader
@@ -66,9 +61,7 @@ class NamedLocalCacheSettings(CommonSettings):
 
     @property
     def home_dir(self) -> StringSetting:
-        """
-        Return the home directory of this cache.
-        """
+        """Return the home directory of this cache."""
         return self._get_value_via_meta()
 
     @home_dir.setter
@@ -77,9 +70,7 @@ class NamedLocalCacheSettings(CommonSettings):
 
     @property
     def short_home_dir(self) -> StringSetting:
-        """
-        Return the short home directory of this cache.
-        """
+        """Return the short home directory of this cache."""
         return self._get_value_via_meta()
 
     @short_home_dir.setter
@@ -88,9 +79,7 @@ class NamedLocalCacheSettings(CommonSettings):
 
     @property
     def environment_added(self) -> DictSetting:
-        """
-        Return the added environment dictionary for this cache.
-        """
+        """Return the added environment dictionary for this cache."""
         assert self.settings_reader
         settings = self.settings_reader.settings
         key = "Environment"
@@ -104,9 +93,7 @@ class NamedLocalCacheSettings(CommonSettings):
         return DictSetting(env, {})
 
     def environment_added_at(self, row_index: int) -> typing.Tuple[str, str]:
-        """
-        Get the key-value pair at the specified index.
-        """
+        """Get the key-value pair at the specified index."""
         assert self.settings_reader
         settings = self.settings_reader.settings
         key = "Environment"
@@ -118,9 +105,7 @@ class NamedLocalCacheSettings(CommonSettings):
 
     @property
     def environment_removed(self) -> ListSetting:
-        """
-        Return the removed environment keys for this cache.
-        """
+        """Return the removed environment keys for this cache."""
         assert self.settings_reader
         settings = self.settings_reader.settings
         key = "EnvironmentRemoved"
@@ -138,12 +123,11 @@ class NamedLocalCacheSettings(CommonSettings):
         changes: _EnvChangeManagement,
     ) -> None:
         """
-        Synchronise the changes environment into the NamedLocalCacheSettings
-        ready to be written back to disk.
+        Synchronise the changes environment into the NamedLocalCacheSettings ready to be written back to disk.
 
         The existing 'removed' environment keys are provided here because it's a list
         which must always be provided in full.
-        """
+        """  # noqa: E501
         assert changes.has_change
         if changes.add_required or changes.add_clear:
             env_added: typing.Dict[str, typing.Optional[str]] = {}
@@ -178,9 +162,7 @@ class NamedLocalCacheSettings(CommonSettings):
 
     @property
     def extra_profile_directories(self) -> DictSetting:
-        """
-        Return extra profile directories for this cache.
-        """
+        """Return extra profile directories for this cache."""
         assert self.settings_reader
         settings = self.settings_reader.settings
         key = "ExtraProfileDirs"
@@ -197,7 +179,7 @@ class NamedLocalCacheSettings(CommonSettings):
         self, extra_dir: ExtraProfileDirectory
     ) -> None:
         """
-        Append new extra profile directories
+        Append new extra profile directories.
 
         self.__extra_profile_directories set at the end of the function,
         but in case this is called several times, read at the start too
@@ -222,7 +204,7 @@ class NamedLocalCacheSettings(CommonSettings):
 
     def remove_extra_profile_directories(self, name: str) -> None:
         """
-        Append new extra profile directories
+        Append new extra profile directories.
 
         self.__extra_profile_directories set at the end of the function,
         but in case this is called several times, read at the start too
@@ -247,9 +229,7 @@ class NamedLocalCacheSettings(CommonSettings):
 
 
 class _EnvChangeManagement:
-    """
-    Manage the changes (CM) in the requested environment
-    """
+    """Manage the changes (CM) in the requested environment."""
 
     def __init__(self) -> None:
         self.add_required: typing.Dict[str, str] = {}
@@ -259,14 +239,16 @@ class _EnvChangeManagement:
 
     def key_required(self, key: str, value: str) -> None:
         """
-        The environment key-value pair is required to be used.
+        Environment key-value pair required to be used.
+
         If used on a key that is already stored, the value is overwritten.
         """
         self.add_required[key] = value
 
     def key_not_required(self, key: str) -> None:
         """
-        The environment key is no longer required.
+        Environment key is no longer required.
+
         If added in this CM, it is no longer added.
         Otherwise, it is already in the environment and will be scheduled to be removed.
         """
@@ -276,14 +258,13 @@ class _EnvChangeManagement:
             self.add_clear.append(key)
 
     def key_never_required(self, key: str) -> None:
-        """
-        The key is scheduled to not be present in the applied environment.
-        """
+        """Key is scheduled to not be present in the applied environment."""
         self.remove_required.append(key)
 
     def key_not_never_required(self, key: str) -> None:
         """
         If the key was scheduled in this CM not to be present, this is undone.
+
         Otherwise, the key will no longer be removed.
         """
         if key in self.remove_required:
@@ -293,9 +274,7 @@ class _EnvChangeManagement:
 
     @property
     def has_change(self) -> bool:
-        """
-        Determine whether any change management is required.
-        """
+        """Determine whether any change management is required."""
         return (
             bool(self.add_required)
             or bool(self.add_clear)
@@ -305,11 +284,10 @@ class _EnvChangeManagement:
 
 
 class NamedLocalCacheSettingsReader:
-    """
-    Context manager reader for named local cache settings.
-    """
+    """Context manager reader for named local cache settings."""
 
     def __init__(self, cache_name: str) -> None:
+        """Initialise a NamedLocalCacheSettingsReader."""
         self.cache_name = cache_name
         self.group = BaseSettings._location_of_key_value_pair(
             "Conan/LocalCaches", "Name", cache_name
@@ -317,6 +295,7 @@ class NamedLocalCacheSettingsReader:
         self.settings = BaseSettings.make_settings()
 
     def __enter__(self) -> NamedLocalCacheSettings:
+        """Enter a context manager with a NamedLocalCacheSettingsReader."""
         self.settings.beginGroup(self.group)
         self._settings_object = NamedLocalCacheSettings()
         self._settings_object.settings_reader = self
@@ -325,6 +304,7 @@ class NamedLocalCacheSettingsReader:
     def __exit__(
         self, exc_type: typing.Any, exc_value: typing.Any, exc_traceback: typing.Any
     ) -> typing.Any:
+        """Exit a context manager with a NamedLocalCacheSettingsReader."""
         self.settings.endGroup()
         self._settings_object.settings_reader = None
         del self._settings_object
@@ -336,23 +316,22 @@ class NamedLocalCacheSettingsReader:
 
 
 class NamedLocalCacheSettingsWriter(_WriterMixin):
-    """
-    Context manager to write named local cache settings to disk.
-    """
+    """Context manager to write named local cache settings to disk."""
 
     def __init__(self, name: str) -> None:
+        """Initialise a NamedLocalCacheSettingsWriter."""
         self._reader_for_writer = NamedLocalCacheSettingsReader(name)
 
 
 class AllNamedLocalCacheSettingsReader:
-    """
-    Context manager for returning the names of all local caches.
-    """
+    """Context manager for returning the names of all local caches."""
 
     def __init__(self) -> None:
+        """Initialise an AllNamedLocalCacheSettingsReader."""
         self._settings = BaseSettings.make_settings()
 
     def __enter__(self) -> typing.List[str]:
+        """Enter a context manager with an AllNamedLocalCacheSettingsReader."""
         all_names: typing.List[str] = []
         size = self._settings.beginReadArray("Conan/LocalCaches")
         for i in range(size):
@@ -364,22 +343,20 @@ class AllNamedLocalCacheSettingsReader:
     def __exit__(
         self, exc_type: typing.Any, exc_value: typing.Any, exc_traceback: typing.Any
     ) -> typing.Any:
+        """Exit a context manager with an AllNamedLocalCacheSettingsReader."""
         return False
 
 
 class NamedLocalCacheDeleter:
-    """
-    Delete a named local cache.
-    """
+    """Delete a named local cache."""
 
     def __init__(self) -> None:
+        """Initialise a NamedLocalCacheDeleter."""
         self._group = "Conan"
         self._settings = BaseSettings.make_settings()
 
     def delete(self, name: str) -> None:
-        """
-        Delete the named local cache from settings.
-        """
+        """Delete the named local cache from settings."""
         caches: typing.List[typing.Dict[str, object]] = []
         with BaseSettings.ReadArray(f"{self._group}/LocalCaches", self._settings) as (
             settings,
@@ -405,11 +382,10 @@ class NamedLocalCacheDeleter:
 
 
 class NamedLocalCacheCreator:
-    """
-    Create a named local cache.
-    """
+    """Create a named local cache."""
 
     def __init__(self) -> None:
+        """Initialise a NamedLocalCacheCreator."""
         self._group = "Conan/LocalCaches"
         self._settings = BaseSettings.make_settings()
 
@@ -419,9 +395,7 @@ class NamedLocalCacheCreator:
         home_dir: typing.Optional[str],
         short_home_dir: typing.Optional[str],
     ) -> None:
-        """
-        Create the named local cache from settings.
-        """
+        """Create the named local cache from settings."""
         with BaseSettings.ReadArray(self._group, self._settings) as (_, count):
             pass
         with BaseSettings.WriteArray(self._group, settings=self._settings) as settings:

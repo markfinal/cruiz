@@ -1,1 +1,1 @@
-# Cruiz workers Conan 2 API
+"""Cruiz workers Conan 2 API."""

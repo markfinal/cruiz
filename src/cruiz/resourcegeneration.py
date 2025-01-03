@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Resource generation from PySide
-"""
+"""Resource generation from PySide."""
 
 import logging
 import os
@@ -62,9 +60,7 @@ def _ensure_ui_files_are_up_to_date(
 
 
 def generate_resources() -> None:
-    """
-    Generate PySide resources if out of date
-    """
+    """Generate PySide resources if out of date."""
     current_dir = pathlib.Path(__file__).parent
     resources_dir = current_dir / "resources"
     if not resources_dir.exists():

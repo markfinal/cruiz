@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
 """
-Get the package binary for a given:
+Get the package binary for a given:.
+
 reference, recipe revision, package_id, package revision
 """
 

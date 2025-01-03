@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Conan manage local cache widgets
-"""
+"""Conan manage local cache widgets."""
 
 from .addenvironmentdialog import AddEnvironmentDialog as AddEnvironmentDialog
 from .addextraprofiledirectorydialog import (

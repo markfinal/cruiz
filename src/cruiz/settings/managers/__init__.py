@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-Settings context managers
+Settings context managers.
 
 *Settings can be instanced either on it's own (write only) to accumulate changes or
 from a *SettingsReader context manager, in order to read from the 'current settings'
@@ -20,5 +20,4 @@ The *SettingsWriter needs a *SettingsReader in order to compare values, so
 If the *SettingsReader needs a parameter to initialise it, this should be mimick'd in
 the *SettingsWriter initialiser:
 - FontSettingsReader, NamedLocalCacheSettingsReader, RecipeSettingsReader
-
 """

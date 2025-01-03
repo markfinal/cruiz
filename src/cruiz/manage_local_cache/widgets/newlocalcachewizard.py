@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Wizard for creating new Conan local caches
-"""
+"""Wizard for creating new Conan local caches."""
 
 import platform
 import typing
@@ -22,11 +20,10 @@ from qtpy import QtGui, QtWidgets
 
 
 class NewLocalCacheWizard(QtWidgets.QWizard):
-    """
-    Wizard for creating new local caches
-    """
+    """Wizard for creating new local caches."""
 
     def __init__(self, parent: typing.Optional[QtWidgets.QWidget] = None) -> None:
+        """Initialise a NewLocalCacheWizard."""
         super().__init__(parent)
         self._ui = Ui_NewLocalCacheWizard()
         self._ui.setupUi(self)  # type: ignore[no-untyped-call]
@@ -82,6 +79,7 @@ class NewLocalCacheWizard(QtWidgets.QWizard):
         self.currentIdChanged.connect(self._changed_page)
 
     def done(self, result: int) -> None:
+        """Override the done method."""
         self._context.close()
         super().done(result)
 
@@ -179,14 +177,10 @@ class NewLocalCacheWizard(QtWidgets.QWizard):
 
     @property
     def switch_to_new_cache(self) -> bool:
-        """
-        Should the user switch to the new cache once complete?
-        """
+        """Should the user switch to the new cache once complete?."""
         return self._ui.summary_switch_to_new.isChecked()
 
     @property
     def cache_name(self) -> str:
-        """
-        The name of the new cache once complete
-        """
+        """The name of the new cache once complete."""
         return self._ui.new_cache_name.text()

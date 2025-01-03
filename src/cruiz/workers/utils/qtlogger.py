@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Qt logger for Conan
-"""
+"""Qt logger for Conan."""
 
 from __future__ import annotations
 
@@ -16,9 +14,7 @@ from cruiz.interop.message import ConanLogMessage, Message
 
 
 class _Singleton(type):
-    """
-    Base class for all singletons
-    """
+    """Base class for all singletons."""
 
     _instances: typing.Dict[typing.Any, typing.Any] = {}
 
@@ -31,11 +27,13 @@ class _Singleton(type):
 class QtLogger(logging.Handler, metaclass=_Singleton):
     """
     A logger handler that can be used by Qt to emit signals.
+
     Signals are delegated to another class that derives from QObject
     This is a singleton.
     """
 
     def __init__(self) -> None:
+        """Initialise a QtLogger."""
         super().__init__()
         formatter = conans.util.log.MultiLineFormatter(
             "%(levelname)-6s:%(filename)-15s[%(lineno)d]: %(message)s [%(asctime)s]"
@@ -47,11 +45,10 @@ class QtLogger(logging.Handler, metaclass=_Singleton):
         self,
         queue: multiprocessing.Queue[Message],
     ) -> None:
-        """
-        Set the multiprocessing queue to send messages with.
-        """
+        """Set the multiprocessing queue to send messages with."""
         self._queue = queue
 
     def emit(self, record: typing.Any) -> None:
+        """Emit a log message."""
         assert self._queue
         self._queue.put(ConanLogMessage(self.format(record)))

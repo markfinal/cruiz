@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Stream data via a multiprocessing queue
-"""
+"""Stream data via a multiprocessing queue."""
 
 from __future__ import annotations
 
@@ -20,6 +18,7 @@ if typing.TYPE_CHECKING:
 class QueuedStreamSix(six.StringIO):
     """
     A stream class that uses multiprocessing.Queue to send messages.
+
     Complete messages may be passed piecemeal, so that coloured output is generated.
     This buffers up a message, so that it is passed across the process divide as a
     single HTML paragraph.
@@ -28,15 +27,14 @@ class QueuedStreamSix(six.StringIO):
     def __init__(
         self, queue: multiprocessing.Queue[Message], message_type: typing.Any
     ) -> None:
+        """Initialise a QueuedStreamSix."""
         super().__init__()
         self._queue = queue
         self._message_type = message_type
         self._block = six.StringIO()
 
     def write(self, message: str) -> int:
-        """
-        Write a message.
-        """
+        """Write a message."""
         result = self._block.write(convert_from_colorama_to_html(message))
         if message.endswith("\n"):
             self._queue.put(self._message_type(self._block.getvalue()))

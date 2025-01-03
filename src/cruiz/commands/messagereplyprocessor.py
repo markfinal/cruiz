@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
 """
-Worker class that is run on a background thread, processing replies
-from child processes and converting to signals.
+Worker class that is run on a background thread.
+
+Processing replies from child processes and converting to signals.
 """
 
 from __future__ import annotations
@@ -32,6 +33,7 @@ logger = logging.getLogger(__name__)
 class MessageReplyProcessor(QtCore.QObject):
     """
     Process replies across a multiprocessing Queue in a background thread.
+
     Emit signals for recognised messages, since you cannot add to UI in a
     background thread.
     """
@@ -43,21 +45,21 @@ class MessageReplyProcessor(QtCore.QObject):
     critical_failure = QtCore.Signal(str)
 
     def __del__(self) -> None:
+        """Log when a MessageReplyProcessor is deleted."""
         logger.debug("-=%d", id(self))
 
     def __init__(
         self,
         queue: multiprocessing.Queue[Message],
     ):
+        """Initialise a MessageReplyProcessor."""
         logger.debug("+=%d", id(self))
         super().__init__()
         self._mp_context = multiprocessing.get_context("spawn")
         self._queue = queue
 
     def stop(self) -> None:
-        """
-        Stop the background thread.
-        """
+        """Stop the background thread."""
         # start a process to shut down the thread
         shutdown_process = self._mp_context.Process(
             target=workers_api.endmessagethread.invoke, args=(self._queue,)
@@ -78,9 +80,7 @@ class MessageReplyProcessor(QtCore.QObject):
 
     # pylint: disable=too-many-branches
     def process(self) -> None:
-        """
-        Process messages received from a child process.
-        """
+        """Process messages received from a child process."""
         try:
             # pylint: disable=import-error,import-outside-toplevel
             # make any debugger aware of this thread

@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Recipe behaviour toolbar
-"""
+"""Recipe behaviour toolbar."""
 
 import os
 import pathlib
@@ -65,9 +63,7 @@ class _ProfileFrame(QtWidgets.QFrame):
         self._ui.profileLabel.setToolTip(tooltip)
 
     def refresh_content(self, recipe: Recipe) -> None:
-        """
-        Refresh the contents.
-        """
+        """Refresh the contents."""
         profile_list = recipe.context.get_list_of_profiles()
         with RecipeSettingsReader.from_recipe(recipe) as settings:
             current_profile = settings.profile.resolve()
@@ -123,9 +119,7 @@ class _CPUCoresFrame(QtWidgets.QFrame):
         return recipe
 
     def refresh_content(self, recipe: Recipe) -> None:
-        """
-        Refresh the contents.
-        """
+        """Refresh the contents."""
         with RecipeSettingsReader.from_recipe(recipe) as settings:
             num_cores = settings.num_cpu_cores
         if num_cores.value is None:
@@ -148,13 +142,15 @@ class _CPUCoresFrame(QtWidgets.QFrame):
 
 class RecipeBehaviourToolbar(QtWidgets.QToolBar):
     """
-    QToolBar representing tne behaviour of a recipe, profile and cpu cores
+    QToolBar representing tne behaviour of a recipe, profile and cpu cores.
+
     CPU cores not available in Conan 2 at this time
     """
 
     profile_changed = QtCore.Signal(str)
 
     def __init__(self, parent: QtWidgets.QWidget) -> None:
+        """Initialise a RecipeBehaviourToolbar."""
         super().__init__(parent)
         self._profile = _ProfileFrame(self)
         self.addWidget(self._profile)
@@ -171,9 +167,7 @@ class RecipeBehaviourToolbar(QtWidgets.QToolBar):
         return recipe
 
     def refresh_content(self) -> None:
-        """
-        Refresh the content of the toolbar.
-        """
+        """Refresh the content of the toolbar."""
         recipe = self._recipe
         self._profile.refresh_content(recipe)
         if cruiz.globals.CONAN_MAJOR_VERSION == 1:

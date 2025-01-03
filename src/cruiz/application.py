@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-The Qt application
-"""
+"""The Qt application."""
 
 from __future__ import annotations
 
@@ -15,11 +13,14 @@ from qtpy import QtCore, QtGui, QtWidgets
 
 
 class Application(QtWidgets.QApplication):
-    """
-    The application
-    """
+    """The application."""
 
     def __init__(self, argv: typing.List[str]) -> None:
+        """
+        Initialise an Application.
+
+        argv is passed to the super type.
+        """
         super().__init__(argv)
         ensure_default_local_cache()
         self.setAttribute(QtCore.Qt.ApplicationAttribute.AA_DontUseNativeMenuBar)
@@ -31,6 +32,7 @@ class Application(QtWidgets.QApplication):
     def instance() -> Application:
         """
         Get the application instance.
+
         qApp does the job already, but this returns it as an Application so that pylint
         can do static analysis on the additional methods on the subclass
         """
@@ -38,9 +40,7 @@ class Application(QtWidgets.QApplication):
         return qApp  # type: ignore  # noqa: F821
 
     def on_preferences_updated(self) -> None:
-        """
-        Slot executed when preferences have reported an update.
-        """
+        """Slot executed when preferences have reported an update."""
         with FontSettingsReader(FontUsage.UI) as settings:
             font_details = (settings.name.resolve(), settings.size.resolve())
         if font_details[0]:

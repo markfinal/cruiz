@@ -8,6 +8,7 @@ flake8-use-pathlib; python_version < "3.12"
 flake8-pyproject
 flake8-type-checking
 flake8-import-order
+flake8-docstrings
 mypy
 types-colorama
 types-six

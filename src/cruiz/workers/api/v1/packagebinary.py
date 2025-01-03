@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Child process commands
-"""
+"""Child process commands."""
 
 from __future__ import annotations
 

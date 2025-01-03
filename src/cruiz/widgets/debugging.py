@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Widget debugging
-"""
+"""Widget debugging."""
 
 from __future__ import annotations
 
@@ -261,9 +259,7 @@ def _widget_attributes_to_string(widget: QtWidgets.QWidget) -> str:
 
 
 def log_created_widget(widget: QtWidgets.QWidget, logger: logging.Logger) -> None:
-    """
-    Logging a created widget
-    """
+    """Log a created widget."""
     logger.debug(
         "+=%d : (%s)(%s)",
         id(widget),

@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Dialog for installing a new Conan config
-"""
+"""Dialog for installing a new Conan config."""
 
 from __future__ import annotations
 
@@ -25,11 +23,10 @@ if typing.TYPE_CHECKING:
 
 
 class InstallConfigDialog(QtWidgets.QDialog):
-    """
-    Dialog for installing a new Conan config onto the local cache.
-    """
+    """Dialog for installing a new Conan config onto the local cache."""
 
     def __init__(self, context: ConanContext, parent: QtWidgets.QWidget) -> None:
+        """Initialise an InstallConfigDialog."""
         super().__init__(parent)
         self.setAttribute(QtCore.Qt.WidgetAttribute.WA_DeleteOnClose, True)
         self._ui = Ui_InstallConfigDialog()

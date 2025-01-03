@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Interop between Conan and cruiz
-"""
+"""Interop between Conan and cruiz."""
 
 from __future__ import annotations
 
@@ -12,9 +10,7 @@ from dataclasses import dataclass, field
 
 @dataclass
 class PackageNode:
-    """
-    Representation of a node in the Conan dependency graph
-    """
+    """Representation of a node in the Conan dependency graph."""
 
     name: str
     reference: str
@@ -28,6 +24,7 @@ class PackageNode:
     parents: typing.List[PackageNode] = field(default_factory=list)
 
     def clone_standalone(self) -> PackageNode:
+        """Clone a PackageNode but without children or parents."""
         return PackageNode(
             self.name,
             self.reference,

@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Dialog for running a Conan command in a local cache.
-"""
+"""Dialog for running a Conan command in a local cache."""
 
 import typing
 
@@ -17,11 +15,10 @@ from qtpy import QtCore, QtWidgets
 
 
 class RunConanCommandDialog(QtWidgets.QDialog):
-    """
-    Dialog for adding an environment key-value pair to the local cache.
-    """
+    """Dialog for adding an environment key-value pair to the local cache."""
 
     def __init__(self, context_name: str, parent: QtWidgets.QWidget) -> None:
+        """Initialise a RunConanCommandDialog."""
         super().__init__(parent)
         self.setAttribute(QtCore.Qt.WidgetAttribute.WA_DeleteOnClose, True)
         self._ui = Ui_RunConanCommandDialog()
@@ -33,6 +30,7 @@ class RunConanCommandDialog(QtWidgets.QDialog):
         self._ui.run.setEnabled(False)
 
     def done(self, result: int) -> None:
+        """Override the done method."""
         self._context.close()
         super().done(result)
 

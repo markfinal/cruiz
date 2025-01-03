@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
 """
-Wrapper around a child process, that can process multiple requests for
-meta data from a Conan instance
+Wrapper around a child process.
+
+A process that can process multiple requests for meta data from a Conan instance.
 """
 
 from __future__ import annotations
@@ -38,11 +39,13 @@ logger = logging.getLogger(__name__)
 
 class MetaRequestConanInvocation(QtCore.QObject):
     """
-    Wrapper around request-reply interaction for meta data from a Conan local cache
-    Request-replies are synchronous, since it's just metadata
+    Wrapper around request-reply interaction for meta data from a Conan local cache.
+
+    Request-replies are synchronous, since it's just metadata.
     """
 
     def __del__(self) -> None:
+        """Log when a MetaRequestConanInvocation is deleted."""
         logger.debug("-=%d", id(self))
 
     def __init__(  # noqa: F811
@@ -51,6 +54,7 @@ class MetaRequestConanInvocation(QtCore.QObject):
         cache_name: str,
         log_details: LogDetails,
     ) -> None:
+        """Initialise a MetaRequestConanInvocation."""
         logger.debug("+=%d", id(self))
         super().__init__(parent)
         self._log_details = log_details
@@ -65,9 +69,7 @@ class MetaRequestConanInvocation(QtCore.QObject):
         self._invoke_conan_process(params)
 
     def close(self) -> None:
-        """
-        Close all resources associated with the invocation
-        """
+        """Close all resources associated with the invocation."""
         logger.debug("(%d) closing request queue...", id(self))
         self._request_queue.put("end")
         self._request_queue.join()
@@ -112,6 +114,7 @@ class MetaRequestConanInvocation(QtCore.QObject):
     ) -> typing.Tuple[typing.Any, typing.Optional[Exception]]:
         """
         Request a named metadata, and synchronously wait for a reply.
+
         Reply is a tuple, with result and exception.
         """
         meta_request = (

@@ -1,1 +1,1 @@
-# Cruiz workers common API
+"""Cruiz workers common API."""

@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Build features toolbar
-"""
+"""Build features toolbar."""
 
 import typing
 
@@ -35,9 +33,7 @@ class _CMakeFeaturesFrame(QtWidgets.QFrame):
         self._ui.cmakeVerbose.stateChanged.connect(self._toggle_cmake_verbose)
 
     def refresh_content(self, uuid: QtCore.QUuid) -> None:
-        """
-        Refresh the content of the frame for the specified recipe UUID
-        """
+        """Refresh the content of the frame for the specified recipe UUID."""
         self._uuid = uuid
         with RecipeSettingsReader.from_uuid(uuid) as settings:
             find_debug = settings.cmake_find_debug.resolve()
@@ -177,9 +173,7 @@ class _CompilerCacheFeaturesFrame(QtWidgets.QFrame):
         self._ui.configureCache.clicked.connect(self._open_configuration)
 
     def refresh_content(self, uuid: QtCore.QUuid) -> None:
-        """
-        Refresh the content of the frame for the specified recipe UUID
-        """
+        """Refresh the content of the frame for the specified recipe UUID."""
         self._uuid = uuid
         with RecipeSettingsReader.from_uuid(uuid) as settings:
             compiler_cache = settings.compiler_cache.resolve()
@@ -226,11 +220,10 @@ class _CompilerCacheFeaturesFrame(QtWidgets.QFrame):
 
 
 class BuildFeaturesToolbar(QtWidgets.QToolBar):
-    """
-    QToolBar representing the build features of a recipe, CMake and compiler caching
-    """
+    """QToolBar representing the build features of a recipe, CMake and compiler caching."""  # noqa: E501
 
     def __init__(self, parent: typing.Optional[QtWidgets.QWidget] = None) -> None:
+        """Initialise a BuildFeaturesToolbar."""
         super().__init__(parent)
         self._cmake_features = _CMakeFeaturesFrame()
         self._compilercache_features = _CompilerCacheFeaturesFrame()
@@ -240,8 +233,6 @@ class BuildFeaturesToolbar(QtWidgets.QToolBar):
         self.addSeparator()
 
     def refresh_content(self, uuid: QtCore.QUuid) -> None:
-        """
-        Refresh the content of the toolbar.
-        """
+        """Refresh the content of the toolbar."""
         self._cmake_features.refresh_content(uuid)
         self._compilercache_features.refresh_content(uuid)

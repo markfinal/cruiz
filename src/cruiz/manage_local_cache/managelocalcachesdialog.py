@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Dialog for managing local caches
-"""
+"""Dialog for managing local caches."""
 
 import dataclasses
 import os
@@ -52,17 +50,13 @@ from .widgets import (
 
 
 class ManageLocalCachesDialog(QtWidgets.QDialog):
-    """
-    New Manage Local Caches dialog.
-    """
+    """New Manage Local Caches dialog."""
 
     _modified = QtCore.Signal()
     cache_changed = QtCore.Signal(str)
 
     class _HooksTableColumnIndex(IntEnum):
-        """
-        Column indices of the hooks table
-        """
+        """Column indices of the hooks table."""
 
         ENABLED = 0
         PATH = 1
@@ -72,6 +66,7 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
         parent: QtWidgets.QWidget,
         cache_name_to_open: typing.Optional[str],
     ) -> None:
+        """Initialise a ManageLocalCachesDialog."""
         super().__init__(parent)
         self.setAttribute(QtCore.Qt.WidgetAttribute.WA_DeleteOnClose, True)
         self._ui = Ui_ManageLocalCaches()
@@ -228,12 +223,14 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
         ).setEnabled(bool(self._modifications))
 
     def accept(self) -> None:
+        """Override the accept dialog method."""
         if self._modifications:
             self._save_modifications()
         self._context.close()
         super().accept()
 
     def reject(self) -> None:
+        """Override the reject dialog method."""
         if self._modifications and (
             QtWidgets.QMessageBox.question(
                 self,

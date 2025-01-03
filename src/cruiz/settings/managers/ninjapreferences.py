@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Settings context manager for Ninja preferences
-"""
+"""Settings context manager for Ninja preferences."""
 
 import typing
 
@@ -17,20 +15,17 @@ from .writermixin import _WriterMixin
 
 
 class NinjaSettings(ComparableCommonSettings):
-    """
-    Settings for Ninja
-    """
+    """Settings for Ninja."""
 
     def __init__(self) -> None:
+        """Initialise a NinjaSettings."""
         self._property_meta = {
             "bin_directory": SettingMeta("BinDir", StringSetting, None, ScalarValue),
         }
 
     @property
     def bin_directory(self) -> StringSetting:
-        """
-        Get the bin directory for Ninja.
-        """
+        """Get the bin directory for Ninja."""
         return self._get_value_via_meta()
 
     @bin_directory.setter
@@ -39,15 +34,15 @@ class NinjaSettings(ComparableCommonSettings):
 
 
 class NinjaSettingsReader:
-    """
-    Context manager to read Ninja settings from disk.
-    """
+    """Context manager to read Ninja settings from disk."""
 
     def __init__(self) -> None:
+        """Initialise a NinjaSettingsReader."""
         self.group = "Thirdparty/Ninja"
         self.settings = BaseSettings.make_settings()
 
     def __enter__(self) -> NinjaSettings:
+        """Enter a context manager with a NinjaSettingsReader."""
         self.settings.beginGroup(self.group)
         self._settings_object = NinjaSettings()
         self._settings_object.settings_reader = self
@@ -56,6 +51,7 @@ class NinjaSettingsReader:
     def __exit__(
         self, exc_type: typing.Any, exc_value: typing.Any, exc_traceback: typing.Any
     ) -> typing.Any:
+        """Exit a context manager with a NinjaSettingsReader."""
         self.settings.endGroup()
         self._settings_object.settings_reader = None
         del self._settings_object
@@ -67,9 +63,8 @@ class NinjaSettingsReader:
 
 
 class NinjaSettingsWriter(_WriterMixin):
-    """
-    Context manager to write Ninja settings to disk.
-    """
+    """Context manager to write Ninja settings to disk."""
 
     def __init__(self) -> None:
+        """Initialise a NinjaSettingsWriter."""
         self._reader_for_writer = NinjaSettingsReader()

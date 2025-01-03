@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Settings context manager for recipes
-"""
+"""Settings context manager for recipes."""
 
 from __future__ import annotations
 
@@ -34,29 +32,24 @@ if typing.TYPE_CHECKING:
 
 
 class RecipeSettings(ComparableCommonSettings):
-    """
-    Representation of recipe settings
-    """
+    """Representation of recipe settings."""
 
     @classmethod
     def from_recipe(cls, recipe: Recipe) -> RecipeSettings:
-        """
-        Create an instance using a recipe
-        """
+        """Create an instance using a recipe."""
         instance = cls()
         instance._recipe = recipe
         return instance
 
     @classmethod
     def from_uuid(cls, uuid: QtCore.QUuid) -> RecipeSettings:
-        """
-        Create an instance using a UUID
-        """
+        """Create an instance using a UUID."""
         instance = cls()
         instance._uuid = uuid
         return instance
 
     def __init__(self) -> None:
+        """Initialise a RecipeSettings."""
         super().__init__()
         self._uuid: typing.Optional[QtCore.QUuid] = None
         self._recipe: typing.Optional[Recipe] = None
@@ -145,9 +138,7 @@ class RecipeSettings(ComparableCommonSettings):
 
     @property
     def all_uuids(self) -> typing.List[QtCore.QUuid]:
-        """
-        Get all UUIDs that have settings.
-        """
+        """Get all UUIDs that have settings."""
         settings = BaseSettings.make_settings()
         settings.beginGroup("Recipe")
         uuids = settings.childGroups()
@@ -158,9 +149,7 @@ class RecipeSettings(ComparableCommonSettings):
         return uuid_list
 
     def matching_uuids(self, recipe_path: pathlib.Path) -> typing.List[QtCore.QUuid]:
-        """
-        Get UUIDs matching the recipe path provided.
-        """
+        """Get UUIDs matching the recipe path provided."""
         # TODO: context management around groups would be beneficial here
         settings = BaseSettings.make_settings()
         settings.beginGroup("Recipe")
@@ -179,9 +168,7 @@ class RecipeSettings(ComparableCommonSettings):
 
     @property
     def path(self) -> StringSetting:
-        """
-        Get the path of the recipe
-        """
+        """Get the path of the recipe."""
         return self._get_value_via_meta()
 
     @path.setter
@@ -190,9 +177,7 @@ class RecipeSettings(ComparableCommonSettings):
 
     @property
     def local_cache_name(self) -> StringSetting:
-        """
-        Get the associated local cache name
-        """
+        """Get the associated local cache name."""
         return self._get_value_via_meta()
 
     @local_cache_name.setter
@@ -201,9 +186,7 @@ class RecipeSettings(ComparableCommonSettings):
 
     @property
     def profile(self) -> StringSetting:
-        """
-        Get the profile currently used by the recipe
-        """
+        """Get the profile currently used by the recipe."""
         return self._get_value_via_meta()
 
     @profile.setter
@@ -212,9 +195,7 @@ class RecipeSettings(ComparableCommonSettings):
 
     @property
     def num_cpu_cores(self) -> IntSetting:
-        """
-        Get the number of CPU cores used by the recipe
-        """
+        """Get the number of CPU cores used by the recipe."""
         return self._get_value_via_meta()
 
     @num_cpu_cores.setter
@@ -223,9 +204,7 @@ class RecipeSettings(ComparableCommonSettings):
 
     @property
     def options(self) -> DictSetting:
-        """
-        Get the dictionary of recipe options
-        """
+        """Get the dictionary of recipe options."""
         assert self.settings_reader
         settings = self.settings_reader.settings
         key = "Options"
@@ -241,10 +220,10 @@ class RecipeSettings(ComparableCommonSettings):
 
     def append_options(self, options: DictSetting) -> None:
         """
-        Append new option settings
+        Append new option settings.
 
         self.__options set at the end of the function, but in case this is called
-        several times, read at the start too
+        several times, read at the start too.
         """
         try:
             existing_options, prop, real_key = self.__options  # type: ignore
@@ -262,9 +241,7 @@ class RecipeSettings(ComparableCommonSettings):
 
     @property
     def attribute_overrides(self) -> DictSetting:
-        """
-        Get the dictionary of attributes
-        """
+        """Get the dictionary of attributes."""
         assert self.settings_reader
         settings = self.settings_reader.settings
         key = "Attributes"
@@ -280,10 +257,10 @@ class RecipeSettings(ComparableCommonSettings):
 
     def append_attribute(self, attributes: DictSetting) -> None:
         """
-        Append new attributes
+        Append new attributes.
 
         self.__attributes set at the end of the function, but in case this is called
-        several times, read at the start too
+        several times, read at the start too.
         """
         try:
             existing_attributes, prop, real_key = self.__attributes  # type: ignore
@@ -301,9 +278,7 @@ class RecipeSettings(ComparableCommonSettings):
 
     @property
     def local_workflow_cwd(self) -> WorkflowCwdSetting:
-        """
-        Get the local workflow current working directory
-        """
+        """Get the local workflow current working directory."""
         return self._get_value_via_meta()
 
     @local_workflow_cwd.setter
@@ -312,9 +287,7 @@ class RecipeSettings(ComparableCommonSettings):
 
     @property
     def local_workflow_common_subdir(self) -> StringSetting:
-        """
-        Get the local workflow common subdirectory to build into
-        """
+        """Get the local workflow common subdirectory to build into."""
         return self._get_value_via_meta()
 
     @local_workflow_common_subdir.setter
@@ -323,9 +296,7 @@ class RecipeSettings(ComparableCommonSettings):
 
     @property
     def local_workflow_install_folder(self) -> StringSetting:
-        """
-        Get the local workflow Conan install folder
-        """
+        """Get the local workflow Conan install folder."""
         return self._get_value_via_meta()
 
     @local_workflow_install_folder.setter
@@ -334,9 +305,7 @@ class RecipeSettings(ComparableCommonSettings):
 
     @property
     def local_workflow_imports_folder(self) -> StringSetting:
-        """
-        Get the local workflow Conan imports folder
-        """
+        """Get the local workflow Conan imports folder."""
         return self._get_value_via_meta()
 
     @local_workflow_imports_folder.setter
@@ -345,9 +314,7 @@ class RecipeSettings(ComparableCommonSettings):
 
     @property
     def local_workflow_source_folder(self) -> StringSetting:
-        """
-        Get the local workflow Conan source folder
-        """
+        """Get the local workflow Conan source folder."""
         return self._get_value_via_meta()
 
     @local_workflow_source_folder.setter
@@ -356,9 +323,7 @@ class RecipeSettings(ComparableCommonSettings):
 
     @property
     def local_workflow_build_folder(self) -> StringSetting:
-        """
-        Get the local workflow Conan build folder
-        """
+        """Get the local workflow Conan build folder."""
         return self._get_value_via_meta()
 
     @local_workflow_build_folder.setter
@@ -367,9 +332,7 @@ class RecipeSettings(ComparableCommonSettings):
 
     @property
     def local_workflow_package_folder(self) -> StringSetting:
-        """
-        Get the local workflow Conan package folder
-        """
+        """Get the local workflow Conan package folder."""
         return self._get_value_via_meta()
 
     @local_workflow_package_folder.setter
@@ -378,9 +341,7 @@ class RecipeSettings(ComparableCommonSettings):
 
     @property
     def local_workflow_test_folder(self) -> StringSetting:
-        """
-        Get the local workflow Conan test folder
-        """
+        """Get the local workflow Conan test folder."""
         return self._get_value_via_meta()
 
     @local_workflow_test_folder.setter
@@ -391,9 +352,7 @@ class RecipeSettings(ComparableCommonSettings):
     # also editables are not part of the current UI
     @property
     def editables_count(self) -> IntSetting:
-        """
-        Get the number of editables in this recipe
-        """
+        """Get the number of editables in this recipe."""
         key = "Editables"
         assert self.settings_reader
         with BaseSettings.ReadArray(key, settings=self.settings_reader.settings) as (
@@ -404,9 +363,7 @@ class RecipeSettings(ComparableCommonSettings):
 
     @property
     def cmake_find_debug(self) -> BoolSetting:
-        """
-        Get whether CMake find debug is enabled for this recipe
-        """
+        """Get whether CMake find debug is enabled for this recipe."""
         return self._get_value_via_meta()
 
     @cmake_find_debug.setter
@@ -415,9 +372,7 @@ class RecipeSettings(ComparableCommonSettings):
 
     @property
     def cmake_verbose(self) -> BoolSetting:
-        """
-        Get whether CMake verbose mode is enabled for this recipe
-        """
+        """Get whether CMake verbose mode is enabled for this recipe."""
         return self._get_value_via_meta()
 
     @cmake_verbose.setter
@@ -426,9 +381,7 @@ class RecipeSettings(ComparableCommonSettings):
 
     @property
     def compiler_cache(self) -> StringSetting:
-        """
-        Get the compiler cache in use with this recipe
-        """
+        """Get the compiler cache in use with this recipe."""
         return self._get_value_via_meta()
 
     @compiler_cache.setter
@@ -437,9 +390,7 @@ class RecipeSettings(ComparableCommonSettings):
 
     @property
     def compilercache_autotools_configuration(self) -> DictSetting:
-        """
-        Get the dictionary of autotools configuration for this recipe
-        """
+        """Get the dictionary of autotools configuration for this recipe."""
         assert self.settings_reader
         settings = self.settings_reader.settings
         key = "CompilerCacheAutoToolsConfig"
@@ -457,10 +408,10 @@ class RecipeSettings(ComparableCommonSettings):
         self, cache: CompilerCacheTypes, arguments: typing.Optional[str]
     ) -> None:
         """
-        Append new autotools compiler cache configurations
+        Append new autotools compiler cache configurations.
 
         self.__compilercache_autotools_config set at the end of the function,
-        but in case this is called several times, read at the start too
+        but in case this is called several times, read at the start too.
         """
         try:
             (
@@ -484,31 +435,27 @@ class RecipeSettings(ComparableCommonSettings):
 
 
 class RecipeSettingsReader:
-    """
-    Context manager for reading recipe settings from disk
-    """
+    """Context manager for reading recipe settings from disk."""
 
     @classmethod
     def from_recipe(cls, recipe: Recipe) -> RecipeSettingsReader:
-        """
-        Create an instance using a recipe
-        """
+        """Create an instance using a recipe."""
         return cls(recipe, recipe.uuid)
 
     @classmethod
     def from_uuid(cls, uuid: QtCore.QUuid) -> RecipeSettingsReader:
-        """
-        Create an instance using a UUID
-        """
+        """Create an instance using a UUID."""
         return cls(None, uuid)
 
     def __init__(self, recipe: typing.Optional[Recipe], uuid: QtCore.QUuid) -> None:
+        """Initialise a RecipeSettingsReader."""
         self.recipe = recipe
         self._uuid = uuid
         self.group = f"Recipe/{uuid.toString(QtCore.QUuid.StringFormat.WithoutBraces)}"
         self.settings = BaseSettings.make_settings()
 
     def __enter__(self) -> RecipeSettings:
+        """Enter a context manager with a RecipeSettingsReader."""
         self.settings.beginGroup(self.group)
         self._settings_object = (
             RecipeSettings.from_recipe(self.recipe)
@@ -521,6 +468,7 @@ class RecipeSettingsReader:
     def __exit__(
         self, exc_type: typing.Any, exc_value: typing.Any, exc_traceback: typing.Any
     ) -> typing.Any:
+        """Exit a context manager with a RecipeSettingsReader."""
         self.settings.endGroup()
         self._settings_object.settings_reader = None
         del self._settings_object
@@ -532,40 +480,31 @@ class RecipeSettingsReader:
 
 
 class RecipeSettingsWriter(_WriterMixin):
-    """
-    Utiiity for writing current recipe settings to disk
-    """
+    """Utiiity for writing current recipe settings to disk."""
 
     @classmethod
     def from_recipe(cls, recipe: Recipe) -> RecipeSettingsWriter:
-        """
-        Create an instance using a recipe
-        """
+        """Create an instance using a recipe."""
         instance = cls()
         instance._reader_for_writer = RecipeSettingsReader.from_recipe(recipe)  # type: ignore[attr-defined] # noqa: E501
         return instance
 
     @classmethod
     def from_uuid(cls, uuid: QtCore.QUuid) -> RecipeSettingsWriter:
-        """
-        Create an instance using a UUID
-        """
+        """Create an instance using a UUID."""
         instance = cls()
         instance._reader_for_writer = RecipeSettingsReader.from_uuid(uuid)  # type: ignore[attr-defined] # noqa: E501
         return instance
 
 
 class RecipeSettingsDeleter:
-    """
-    Utility for deleting all recipe settings, associated by a UUID, from disk
-    """
+    """Utility for deleting all recipe settings, associated by a UUID, from disk."""
 
     def __init__(self) -> None:
+        """Initialise a RecipeSettingsDeleter."""
         self._settings = BaseSettings.make_settings()
 
     def delete(self, uuid: QtCore.QUuid) -> None:
-        """
-        Delete the recipe settings from the specified UUID
-        """
+        """Delete the recipe settings from the specified UUID."""
         group = f"Recipe/{uuid.toString(QtCore.QUuid.StringFormat.WithoutBraces)}"
         self._settings.remove(group)

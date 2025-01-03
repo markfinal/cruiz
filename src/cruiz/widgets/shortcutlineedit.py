@@ -1,18 +1,15 @@
 #!/usr/bin/env python3
 
-"""
-QLineEdit that can capture keyboard shortcuts
-"""
+"""QLineEdit that can capture keyboard shortcuts."""
 
 from qtpy import QtCore, QtGui, QtWidgets
 
 
 class ShortcutLineEdit(QtWidgets.QLineEdit):
-    """
-    A QLineEdit specifically for capturing keyboard shortcuts
-    """
+    """A QLineEdit specifically for capturing keyboard shortcuts."""
 
     def keyPressEvent(self, event: QtGui.QKeyEvent) -> None:
+        """Override the widget's keyPressEvent method."""
         assert event.type() == QtCore.QEvent.Type.KeyPress
         key = event.key()
         if key in (

@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-"""
-Global configuration
-"""
+"""Global configuration."""
 
 # empty currently, but present if needed to introduce configuration changes

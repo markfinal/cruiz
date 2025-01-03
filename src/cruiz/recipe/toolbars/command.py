@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Recipe command toolbar
-"""
+"""Recipe command toolbar."""
 
 import os
 import typing
@@ -26,14 +24,13 @@ IS_CONAN_V1 = cruiz.globals.CONAN_MAJOR_VERSION == 1
 
 
 class RecipeCommandToolbar(QtWidgets.QToolBar):
-    """
-    QToolBar representing the recipe commands
-    """
+    """QToolBar representing the recipe commands."""
 
     command_started = QtCore.Signal()
     command_ended = QtCore.Signal()
 
     def __init__(self, parent: QtWidgets.QWidget) -> None:
+        """Initialise a RecipeCommandToolbar."""
         super().__init__(parent)
         recipe_ui = parent._ui  # type: ignore[attr-defined]
         self.command_started.connect(self._command_started)
@@ -99,9 +96,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
                 self._idle_group.addAction(action)
 
     def configure_actions(self) -> None:
-        """
-        Configure the QActions in the toolbar
-        """
+        """Configure the QActions in the toolbar."""
 
         def _configure(
             action: QtGui.QAction, trigger_slot: typing.Callable[[], None]
@@ -137,18 +132,14 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             )
 
     def disable_all_actions(self) -> None:
-        """
-        Disable everything in the case of recipe loading errors
-        """
+        """Disable everything in the case of recipe loading errors."""
         self._idle_group.setEnabled(False)
         self._cancel_command_group.setEnabled(False)
 
     def refresh_action_shortcuts_and_tooltips(
         self, recipe_attributes: typing.Dict[str, typing.Optional[str]]
     ) -> None:
-        """
-        Refresh all command action shortcuts and tooltips
-        """
+        """Refresh all command action shortcuts and tooltips."""
         with ShortcutSettingsReader() as settings:
             conan_create = settings.conan_create.resolve()
             conan_create_updates = settings.conan_create_updates.resolve()

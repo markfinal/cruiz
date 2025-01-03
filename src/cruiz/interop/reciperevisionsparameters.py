@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Recipe revisions parameters
-"""
+"""Recipe revisions parameters."""
 
 import typing
 
@@ -11,12 +9,13 @@ from .commonparameters import CommonParameters
 
 class RecipeRevisionsParameters(CommonParameters):
     """
-    Representation of all the arguments to get recipe revisions
+    Representation of all the arguments to get recipe revisions.
 
     Attributes are dynamically added from the keyword-args passed in.
     """
 
     def __init__(self, **args: typing.Any) -> None:
+        """Initialise a RecipeRevisionsParameters."""
         import cruiz.workers.api as workers_api
 
         super().__init__(workers_api.reciperevisions.invoke)

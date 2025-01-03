@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Remote browser page
-"""
+"""Remote browser page."""
 
 from __future__ import annotations
 
@@ -16,9 +14,7 @@ if typing.TYPE_CHECKING:
 
 
 class Page(QtWidgets.QWidget):
-    """
-    Base class for all pages shown in the remote browser
-    """
+    """Base class for all pages shown in the remote browser."""
 
     def _base_setup(self, self_ui: typing.Any, index: int) -> None:
         self._ui = self_ui

@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Settings context manager for recent Conan configurations
-"""
+"""Settings context manager for recent Conan configurations."""
 
 import typing
 
@@ -13,20 +11,17 @@ from .writermixin import _WriterMixin
 
 # TODO: CommonSettings isn't completely used
 class RecentConanConfigSettings(CommonSettings):
-    """
-    Settings representing the recent Conan configurations visited
-    """
+    """Settings representing the recent Conan configurations visited."""
 
     def __init__(self) -> None:
+        """Initialise a RecentConanConfigSettings."""
         self._property_meta = {
             "paths": SettingMeta("RecentConanConfigs", ListSetting, [], ListValue),
         }
 
     @property
     def paths(self) -> ListSetting:
-        """
-        Get the paths of the Conan configurations visited
-        """
+        """Get the paths of the Conan configurations visited."""
         result: typing.List[str] = []
         assert self.settings_reader
         settings = self.settings_reader.settings
@@ -42,9 +37,7 @@ class RecentConanConfigSettings(CommonSettings):
 
     @paths.setter
     def paths(self, paths: typing.List[str]) -> None:
-        """
-        Set the list of paths used for Conan configurations.
-        """
+        """Set the list of paths used for Conan configurations."""
         # avoids private name mangling
         setattr(  # noqa: B010
             self, "__new_paths", ListValue(paths, "paths", "RecentConanConfigs", "Path")
@@ -52,17 +45,17 @@ class RecentConanConfigSettings(CommonSettings):
 
 
 class RecentConanConfigSettingsReader:
-    """
-    Context manager to read recent Conan configurations from disk
-    """
+    """Context manager to read recent Conan configurations from disk."""
 
     def __init__(self) -> None:
+        """Initialise a RecentConanConfigSettingsReader."""
         self.group = ""
         self.array = "RecentConanConfigs"
         self.settings = BaseSettings.make_settings()
         self.count = 0
 
     def __enter__(self) -> RecentConanConfigSettings:
+        """Enter a context manager with a RecentConanConfigSettingsReader."""
         self.count = self.settings.beginReadArray(self.array)
         self._settings_object = RecentConanConfigSettings()
         self._settings_object.settings_reader = self
@@ -71,6 +64,7 @@ class RecentConanConfigSettingsReader:
     def __exit__(
         self, exc_type: typing.Any, exc_value: typing.Any, exc_traceback: typing.Any
     ) -> typing.Any:
+        """Exit a context manager with a RecentConanConfigSettingsReader."""
         self.settings.endArray()
         self._settings_object.settings_reader = None
         del self._settings_object
@@ -82,26 +76,22 @@ class RecentConanConfigSettingsReader:
 
 
 class RecentConanConfigSettingsWriter(_WriterMixin):
-    """
-    Utility class to write recent Conan configurations to disk
-    """
+    """Utility class to write recent Conan configurations to disk."""
 
     def __init__(self) -> None:
+        """Initialise a RecentConanConfigSettingsWriter."""
         self._reader_for_writer = RecentConanConfigSettingsReader()
 
 
 class RecentConanConfigSettingsDeleter:
-    """
-    Utility class to delete recent Conan configurations from disk settings
-    """
+    """Utility class to delete recent Conan configurations from disk settings."""
 
     def __init__(self) -> None:
+        """Initialise a RecentConanConfigSettingsDeleter."""
         self._reader_for_deleter = RecentConanConfigSettingsReader()
 
     def delete(self, path: str) -> None:
-        """
-        Delete the specified Conan configuration from disk settings
-        """
+        """Delete the specified Conan configuration from disk settings."""
         with self._reader_for_deleter as settings:
             current_list = settings.paths.resolve()
         current_list = [x for x in current_list if x != path]

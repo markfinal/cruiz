@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Remote browser page
-"""
+"""Remote browser page."""
 
 from __future__ import annotations
 
@@ -35,9 +33,7 @@ class _FileNode:
         self.tar_info: typing.Optional[tarfile.TarInfo] = None
 
     def add_child(self, path: str) -> _FileNode:
-        """
-        Add a child path
-        """
+        """Add a child path."""
         find = [x for x in self.children if x.path == path]
         if find:
             assert len(find) == 1
@@ -49,9 +45,7 @@ class _FileNode:
     def add_tarball(
         self, directory: pathlib.Path, tarball_basename: str, parent: _FileNode
     ) -> None:
-        """
-        Adding a tarball containing many children
-        """
+        """Adding a tarball containing many children."""
         tar_node = parent.add_child(tarball_basename)
         tar_node.is_container = True
         tarball_path = directory / tarball_basename
@@ -79,9 +73,7 @@ class _FileNode:
 
     @property
     def child_index(self) -> int:
-        """
-        Get the child index of this node in relation to its parent
-        """
+        """Get the child index of this node in relation to its parent."""
         if self.parent:
             return self.parent.children.index(self)
         return 0
@@ -98,9 +90,7 @@ class _PackageBinaryModel(QtCore.QAbstractItemModel):
         results: typing.Optional[typing.List[str]],
         folder: typing.Optional[pathlib.Path],
     ) -> None:
-        """
-        Set the results against the model
-        """
+        """Set the results against the model."""
         self.beginResetModel()
         if results:
             assert folder
@@ -265,14 +255,10 @@ class _FileViewer(QtWidgets.QDialog):
 
 
 class PackageBinaryPage(Page):
-    """
-    Remote browser page for displaying package binaries
-    """
+    """Remote browser page for displaying package binaries."""
 
     def setup(self, self_ui: typing.Any) -> None:
-        """
-        Setup the UI for the page
-        """
+        """Set up the UI for the page."""
         self._base_setup(self_ui, 4)
         self._current_pkgref: typing.Optional[str] = None
         self._artifact_folder: typing.Optional[pathlib.Path] = None
@@ -292,6 +278,7 @@ class PackageBinaryPage(Page):
         self._ui.pbinary_cancel.setEnabled(enable)
 
     def showEvent(self, event: QtGui.QShowEvent) -> None:
+        """Override the widget's showEvent method."""
         # pylint: disable=unused-argument
         pkgref = self._previous_pkgref
         self._ui.pbinary_pkgref.setText(pkgref)
@@ -347,9 +334,7 @@ class PackageBinaryPage(Page):
             )
 
     def on_cancel(self) -> None:
-        """
-        Called when the user cancels the operation.
-        """
+        """Call when the user cancels the operation."""
         self._context.cancel()
         self._enable_progress(False)
 

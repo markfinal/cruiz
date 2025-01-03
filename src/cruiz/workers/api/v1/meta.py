@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Child process commands
-"""
+"""Child process commands."""
 
 from __future__ import annotations
 
@@ -332,9 +330,7 @@ def invoke(
     params: CommandParameters,
 ) -> None:
     # pylint: disable=too-many-branches
-    """
-    Run continuous loop, waiting on requests from the main process
-    """
+    """Run continuous loop, waiting on requests from the main process."""
     with worker.ConanWorker(reply_queue, params) as api:
         while True:
             try:

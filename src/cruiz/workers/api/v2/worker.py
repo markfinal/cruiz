@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Utils for worker context managers for Conan v2
-"""
+"""Utils for worker context managers for Conan v2."""
 
 from __future__ import annotations
 
@@ -62,11 +60,10 @@ def _do_patching(queue: multiprocessing.Queue[Message]) -> None:
 
 # pylint: disable=too-few-public-methods
 class ConanWorker(Worker):
-    """
-    Conan specific context manager
-    """
+    """Conan specific context manager."""
 
     def __enter__(self) -> typing.Any:
+        """Enter a context manager with a Conan Worker."""
         super().__enter__()
         # import here because it can use the environment variables
         # set in the super class

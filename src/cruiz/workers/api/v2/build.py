@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Build the source code of the package
-"""
+"""Build the source code of the package."""
 
 from __future__ import annotations
 
@@ -18,9 +16,7 @@ if typing.TYPE_CHECKING:
 
 
 def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> None:
-    """
-    Run 'conan build'
-    """
+    """Run 'conan build'."""
     with worker.ConanWorker(queue, params) as api:
         import importlib
 

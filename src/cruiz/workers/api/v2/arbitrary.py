@@ -2,6 +2,7 @@
 
 """
 Run an arbtitrary Conan command.
+
 It must match one of the Conan verbs though.
 """
 
@@ -19,9 +20,7 @@ if typing.TYPE_CHECKING:
 
 
 def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> None:
-    """
-    Run an arbitrary command
-    """
+    """Run an arbitrary command."""
     with worker.ConanWorker(queue, params):
         from conans.conan import run
         from io import StringIO
