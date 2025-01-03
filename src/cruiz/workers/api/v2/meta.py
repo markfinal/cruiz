@@ -15,11 +15,13 @@ import pathlib
 import urllib.parse
 import typing
 
-from cruiz.interop.commandparameters import CommandParameters
 from cruiz.interop.message import Message, Failure, Success
 from cruiz.interop.pod import ConanRemote, ConanHook
 
 from . import worker
+
+if typing.TYPE_CHECKING:
+    from cruiz.interop.commandparameters import CommandParameters
 
 
 def _interop_remote_list(api: typing.Any) -> typing.List[ConanRemote]:

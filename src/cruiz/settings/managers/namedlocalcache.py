@@ -8,8 +8,6 @@ from __future__ import annotations
 
 import typing
 
-from cruiz.interop.pod import ExtraProfileDirectory
-
 from .writermixin import _WriterMixin
 from .valueclasses import ScalarValue, DictValue, ListValue
 
@@ -21,6 +19,9 @@ from .basesettings import (
     SettingMeta,
     ListSetting,
 )
+
+if typing.TYPE_CHECKING:
+    from cruiz.interop.pod import ExtraProfileDirectory
 
 
 # TODO: this needs some work as there is a lot of repetition

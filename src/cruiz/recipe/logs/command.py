@@ -4,13 +4,16 @@
 Recipe command log window
 """
 
+from __future__ import annotations
+
 import pathlib
 import stat
 import typing
 
 from qtpy import QtCore, QtGui, QtWidgets
 
-from cruiz.interop.commandparameters import CommandParameters
+if typing.TYPE_CHECKING:
+    from cruiz.interop.commandparameters import CommandParameters
 
 
 class CommandListWidgetItem(QtWidgets.QListWidgetItem):

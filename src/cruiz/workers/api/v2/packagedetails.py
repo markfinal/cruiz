@@ -6,13 +6,15 @@ Get package_ids for a given package reference with revision
 
 from __future__ import annotations
 
-import multiprocessing
 import typing
 
-from cruiz.interop.packageidparameters import PackageIdParameters
 from cruiz.interop.message import Message, Success
 
 from . import worker
+
+if typing.TYPE_CHECKING:
+    import multiprocessing
+    from cruiz.interop.packageidparameters import PackageIdParameters
 
 
 def invoke(queue: multiprocessing.Queue[Message], params: PackageIdParameters) -> None:

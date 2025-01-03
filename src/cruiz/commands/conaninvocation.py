@@ -5,6 +5,8 @@ Representation on the host of an instance of a Conan or Conan-related
 command running in a child process
 """
 
+from __future__ import annotations
+
 import logging
 import multiprocessing
 import os
@@ -18,17 +20,18 @@ import psutil
 from qtpy import QtCore, QtWidgets
 
 from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
-from cruiz.interop.commandparameters import CommandParameters
-from cruiz.interop.searchrecipesparameters import SearchRecipesParameters
-from cruiz.interop.reciperevisionsparameters import RecipeRevisionsParameters
-from cruiz.interop.packageidparameters import PackageIdParameters
-from cruiz.interop.packagerevisionsparameters import PackageRevisionsParameters
-from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
 
 from .messagereplyprocessor import MessageReplyProcessor
 
-from .logdetails import LogDetails
 
+if typing.TYPE_CHECKING:
+    from cruiz.interop.commandparameters import CommandParameters
+    from cruiz.interop.searchrecipesparameters import SearchRecipesParameters
+    from cruiz.interop.reciperevisionsparameters import RecipeRevisionsParameters
+    from cruiz.interop.packageidparameters import PackageIdParameters
+    from cruiz.interop.packagerevisionsparameters import PackageRevisionsParameters
+    from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
+    from .logdetails import LogDetails
 
 logger = logging.getLogger(__name__)
 

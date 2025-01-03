@@ -6,12 +6,14 @@ Child process commands
 
 from __future__ import annotations
 
-import multiprocessing
-
-from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
+import typing
 from cruiz.interop.message import Message, Success
 
 from . import worker
+
+if typing.TYPE_CHECKING:
+    import multiprocessing
+    from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
 
 
 def invoke(

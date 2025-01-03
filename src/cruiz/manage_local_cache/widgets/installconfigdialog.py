@@ -4,12 +4,13 @@
 Dialog for installing a new Conan config
 """
 
+from __future__ import annotations
+
 from functools import partial
 import typing
 
 from qtpy import QtCore, QtGui, QtWidgets
 
-from cruiz.commands.context import ConanContext
 from cruiz.interop.commandparameters import CommandParameters
 
 from cruiz.pyside6.local_cache_install_config import Ui_InstallConfigDialog
@@ -20,6 +21,9 @@ from cruiz.settings.managers.recentconanconfigs import (
     RecentConanConfigSettingsWriter,
 )
 import cruiz.workers.api as workers_api
+
+if typing.TYPE_CHECKING:
+    from cruiz.commands.context import ConanContext
 
 
 class InstallConfigDialog(QtWidgets.QDialog):

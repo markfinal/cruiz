@@ -4,9 +4,14 @@
 Widget debugging
 """
 
-import logging
+from __future__ import annotations
+
+import typing
 
 from qtpy import QtCore, QtWidgets
+
+if typing.TYPE_CHECKING:
+    import logging
 
 
 def _widget_window_flags_to_string(widget: QtWidgets.QWidget) -> str:

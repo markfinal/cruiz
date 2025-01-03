@@ -7,9 +7,12 @@ this side of the message queue.
 
 from __future__ import annotations
 
-import multiprocessing
+import typing
 
 from cruiz.interop.message import Message, End
+
+if typing.TYPE_CHECKING:
+    import multiprocessing
 
 
 def invoke(queue: multiprocessing.Queue[Message]) -> None:

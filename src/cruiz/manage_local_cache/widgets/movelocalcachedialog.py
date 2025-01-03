@@ -4,6 +4,8 @@
 Dialog for moving local caches
 """
 
+from __future__ import annotations
+
 import pathlib
 import platform
 import shutil
@@ -12,8 +14,6 @@ import typing
 from qtpy import QtCore, QtGui, QtWidgets
 
 import cruiz.globals
-
-from cruiz.commands.context import ConanContext
 
 from cruiz.settings.managers.namedlocalcache import (
     NamedLocalCacheSettings,
@@ -24,6 +24,9 @@ from cruiz.settings.managers.namedlocalcache import (
 from cruiz.pyside6.local_cache_move import Ui_LocalCacheMove
 
 from cruiz.widgets.util import search_for_dir_options
+
+if typing.TYPE_CHECKING:
+    from cruiz.commands.context import ConanContext
 
 
 class MoveLocalCacheDialog(QtWidgets.QDialog):

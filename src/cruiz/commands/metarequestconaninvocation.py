@@ -5,6 +5,8 @@ Wrapper around a child process, that can process multiple requests for
 meta data from a Conan instance
 """
 
+from __future__ import annotations
+
 import logging
 import multiprocessing
 import os
@@ -26,7 +28,9 @@ import cruiz.workers.api as workers_api
 from cruiz.dumpobjecttypes import dump_object_types
 
 from .conanenv import get_conan_env
-from .logdetails import LogDetails
+
+if typing.TYPE_CHECKING:
+    from .logdetails import LogDetails
 
 
 logger = logging.getLogger(__name__)

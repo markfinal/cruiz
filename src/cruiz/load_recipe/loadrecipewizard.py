@@ -4,6 +4,8 @@
 Wizard for loading a recipe
 """
 
+from __future__ import annotations
+
 import pathlib
 import typing
 
@@ -13,13 +15,15 @@ from cruiz.pyside6.load_recipe_wizard import Ui_LoadRecipeWizard
 
 from cruiz.exceptions import RecipeDoesNotExistError, RecipeAlreadyOpenError
 from cruiz.settings.managers.recipe import RecipeSettings, RecipeSettingsReader
-from cruiz.recipe.recipe import Recipe
 
 from cruiz.commands.context import managed_conan_context
 from cruiz.commands.logdetails import LogDetails
 from cruiz.constants import DEFAULT_CACHE_NAME
 
 import cruiz.globals
+
+if typing.TYPE_CHECKING:
+    from cruiz.recipe.recipe import Recipe
 
 
 class LoadRecipeWizard(QtWidgets.QWizard):

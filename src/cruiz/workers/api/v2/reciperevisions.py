@@ -9,11 +9,12 @@ from __future__ import annotations
 import datetime
 import multiprocessing
 import typing
-
-from cruiz.interop.reciperevisionsparameters import RecipeRevisionsParameters
 from cruiz.interop.message import Message, Success
 
 from . import worker
+
+if typing.TYPE_CHECKING:
+    from cruiz.interop.reciperevisionsparameters import RecipeRevisionsParameters
 
 
 def invoke(

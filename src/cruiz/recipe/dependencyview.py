@@ -4,13 +4,17 @@
 Conan dependency view
 """
 
+from __future__ import annotations
+
 import typing
 
 # TODO: note, change, as QtSvgWidgets wasn't available here previously
 from qtpy import QtWidgets, QtSvg, QtSvgWidgets
 
-from cruiz.interop.dependencygraph import DependencyGraph
 from cruiz.svggraph import DependenciesToDigraph, DigraphToSVG, SVGScene
+
+if typing.TYPE_CHECKING:
+    from cruiz.interop.dependencygraph import DependencyGraph
 
 
 class DependencyView(QtWidgets.QGraphicsView):

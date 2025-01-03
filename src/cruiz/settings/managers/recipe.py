@@ -11,10 +11,7 @@ import pathlib
 import typing
 
 from qtpy import QtCore
-from cruiz.constants import CompilerCacheTypes
 from cruiz.exceptions import InconsistentSettingsError
-
-from cruiz.recipe.recipe import Recipe
 
 from .basesettings import (
     BaseSettings,
@@ -29,6 +26,10 @@ from .basesettings import (
 )
 from .writermixin import _WriterMixin
 from .valueclasses import ScalarValue, DictValue
+
+if typing.TYPE_CHECKING:
+    from cruiz.constants import CompilerCacheTypes
+    from cruiz.recipe.recipe import Recipe
 
 
 class RecipeSettings(ComparableCommonSettings):

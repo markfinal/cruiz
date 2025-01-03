@@ -4,6 +4,8 @@
 Dialog for adding an environment variable
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass
 import typing
 
@@ -11,9 +13,10 @@ from qtpy import QtCore, QtGui, QtWidgets
 
 import cruiz.globals
 
-from cruiz.commands.context import ConanContext
-
 from cruiz.pyside6.local_cache_add_environment import Ui_AddEnvironmentDialog
+
+if typing.TYPE_CHECKING:
+    from cruiz.commands.context import ConanContext
 
 
 @dataclass
