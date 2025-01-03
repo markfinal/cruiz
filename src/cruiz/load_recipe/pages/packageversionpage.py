@@ -6,13 +6,12 @@ Wizard page for selecting the version of the package
 
 import typing
 
-from qtpy import QtCore, QtGui, QtWidgets
-
-from cruiz.widgets.util import BlockSignals
+import cruiz.globals
 from cruiz.settings.managers.conanpreferences import ConanSettingsReader
 from cruiz.settings.managers.recipe import RecipeSettingsReader
+from cruiz.widgets.util import BlockSignals
 
-import cruiz.globals
+from qtpy import QtCore, QtGui, QtWidgets
 
 
 class LoadRecipePackageVersionPage(QtWidgets.QWizardPage):

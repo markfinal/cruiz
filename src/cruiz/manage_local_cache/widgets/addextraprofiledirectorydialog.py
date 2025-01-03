@@ -6,14 +6,13 @@ Dialog for adding extra profile directories
 
 import typing
 
-from qtpy import QtCore, QtGui, QtWidgets
-
 from cruiz.interop.pod import ExtraProfileDirectory
-from cruiz.widgets.util import search_for_dir_options
-
 from cruiz.pyside6.local_cache_add_profile_directory import (
     Ui_AddExtraProfileDirectoryDialog,
 )
+from cruiz.widgets.util import search_for_dir_options
+
+from qtpy import QtCore, QtGui, QtWidgets
 
 
 class AddExtraProfileDirectoryDialog(QtWidgets.QDialog):

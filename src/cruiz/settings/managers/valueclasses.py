@@ -4,8 +4,8 @@
 Settings context manager value classes
 """
 
-from dataclasses import dataclass
 import typing
+from dataclasses import dataclass
 
 
 @dataclass

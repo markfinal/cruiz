@@ -7,8 +7,9 @@ Stream data via a multiprocessing queue
 from __future__ import annotations
 
 import multiprocessing
-import six
 import typing
+
+import six
 
 from .colorarma_conversion import convert_from_colorama_to_html
 

@@ -12,13 +12,13 @@ from qtpy import QtCore, QtGui
 from .basesettings import (
     BaseSettings,
     BoolSetting,
-    StringSetting,
     ColourSetting,
     ComparableCommonSettings,
     SettingMeta,
+    StringSetting,
 )
-from .writermixin import _WriterMixin
 from .valueclasses import ScalarValue
+from .writermixin import _WriterMixin
 
 
 class GeneralSettings(ComparableCommonSettings):

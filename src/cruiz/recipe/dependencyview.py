@@ -8,10 +8,10 @@ from __future__ import annotations
 
 import typing
 
-# TODO: note, change, as QtSvgWidgets wasn't available here previously
-from qtpy import QtWidgets, QtSvg, QtSvgWidgets
-
 from cruiz.svggraph import DependenciesToDigraph, DigraphToSVG, SVGScene
+
+# TODO: note, change, as QtSvgWidgets wasn't available here previously
+from qtpy import QtSvg, QtSvgWidgets, QtWidgets
 
 if typing.TYPE_CHECKING:
     from cruiz.interop.dependencygraph import DependencyGraph

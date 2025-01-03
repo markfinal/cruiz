@@ -5,27 +5,28 @@ Dialog for managing local caches
 """
 
 import dataclasses
-from enum import IntEnum
 import os
 import pathlib
 import platform
 import shutil
 import stat
 import typing
-
-from qtpy import QtCore, QtGui, QtWidgets
+from enum import IntEnum
 
 import cruiz.globals
-
+from cruiz.commands.conanconf import ConanConfigBoolean
+from cruiz.commands.context import ConanContext
 from cruiz.commands.logdetails import LogDetails
-
+from cruiz.constants import DEFAULT_CACHE_NAME
 from cruiz.interop.pod import ConanHook
+from cruiz.pyside6.local_cache_manage import Ui_ManageLocalCaches
+from cruiz.revealonfilesystem import reveal_on_filesystem
 from cruiz.settings.managers.namedlocalcache import (
+    AllNamedLocalCacheSettingsReader,
+    NamedLocalCacheDeleter,
     NamedLocalCacheSettings,
     NamedLocalCacheSettingsReader,
     NamedLocalCacheSettingsWriter,
-    AllNamedLocalCacheSettingsReader,
-    NamedLocalCacheDeleter,
     _EnvChangeManagement,
 )
 from cruiz.settings.managers.recentconanremotes import (
@@ -33,24 +34,19 @@ from cruiz.settings.managers.recentconanremotes import (
     RecentConanRemotesSettingsWriter,
 )
 from cruiz.widgets.util import BlockSignals
-from cruiz.commands.context import ConanContext
-from cruiz.commands.conanconf import ConanConfigBoolean
 
-from cruiz.revealonfilesystem import reveal_on_filesystem
-from cruiz.constants import DEFAULT_CACHE_NAME
-
-from cruiz.pyside6.local_cache_manage import Ui_ManageLocalCaches
+from qtpy import QtCore, QtGui, QtWidgets
 
 from .widgets import (
-    NewLocalCacheWizard,
+    AddEnvironmentDialog,
+    AddExtraProfileDirectoryDialog,
+    AddRemoteDialog,
     InstallConfigDialog,
     MoveLocalCacheDialog,
-    AddRemoteDialog,
-    RemoveLocksDialog,
+    NewLocalCacheWizard,
     RemoveAllPackagesDialog,
-    AddExtraProfileDirectoryDialog,
-    AddEnvironmentDialog,
     RemoveEnvironmentDialog,
+    RemoveLocksDialog,
     RunConanCommandDialog,
 )
 

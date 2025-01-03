@@ -6,26 +6,27 @@ Settings context manager for recipes
 
 from __future__ import annotations
 
-from multiprocessing import cpu_count
 import pathlib
 import typing
+from multiprocessing import cpu_count
+
+from cruiz.exceptions import InconsistentSettingsError
 
 from qtpy import QtCore
-from cruiz.exceptions import InconsistentSettingsError
 
 from .basesettings import (
     BaseSettings,
     BoolSetting,
-    StringSetting,
-    IntSetting,
+    ComparableCommonSettings,
     DictSetting,
+    IntSetting,
+    SettingMeta,
+    StringSetting,
     WorkflowCwd,
     WorkflowCwdSetting,
-    ComparableCommonSettings,
-    SettingMeta,
 )
+from .valueclasses import DictValue, ScalarValue
 from .writermixin import _WriterMixin
-from .valueclasses import ScalarValue, DictValue
 
 if typing.TYPE_CHECKING:
     from cruiz.constants import CompilerCacheTypes

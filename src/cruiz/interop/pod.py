@@ -6,9 +6,9 @@ Plain old data classes
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 import pathlib
 import typing
+from dataclasses import dataclass, field
 
 
 # copied from distutils.url.strtobool and modified

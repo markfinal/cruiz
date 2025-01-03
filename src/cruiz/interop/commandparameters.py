@@ -6,9 +6,9 @@ Conan command parameters
 
 from __future__ import annotations
 
-from io import StringIO
 import pathlib
 import typing
+from io import StringIO
 
 import cruiz.globals
 

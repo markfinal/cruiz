@@ -7,9 +7,9 @@ Wizard pages for naming new Conan local caches
 import platform
 import typing
 
-from qtpy import QtWidgets
-
 from cruiz.settings.managers.namedlocalcache import AllNamedLocalCacheSettingsReader
+
+from qtpy import QtWidgets
 
 
 class NewLocalCacheNamePage(QtWidgets.QWizardPage):

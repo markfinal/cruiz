@@ -6,7 +6,6 @@ The Qt main window of the application
 
 from __future__ import annotations
 
-from functools import partial
 import importlib.util
 import logging
 import os
@@ -15,49 +14,46 @@ import platform
 import subprocess
 import time
 import typing
+from functools import partial
 
-from qtpy import QtCore, QtGui, QtWidgets
-import psutil
-
+import cruiz.config
+import cruiz.globals
+import cruiz.runcommands
+from cruiz.environ import EnvironSaver
 from cruiz.exceptions import (
     InconsistentSettingsError,
     RecipeAlreadyOpenError,
     RecipeDoesNotExistError,
     RecipeInspectionError,
 )
-
+from cruiz.load_recipe.loadrecipewizard import LoadRecipeWizard
+from cruiz.manage_local_cache import ManageLocalCachesDialog
 from cruiz.recipe.recipewidget import RecipeWidget
+from cruiz.remote_browser.remotebrowser import RemoteBrowserDock
+from cruiz.settings.managers.cmakepreferences import CMakeSettingsReader
+from cruiz.settings.managers.compilercachepreferences import CompilerCacheSettingsReader
+from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
+from cruiz.settings.managers.ninjapreferences import NinjaSettingsReader
+from cruiz.settings.managers.recentrecipes import (
+    RecentRecipeSettingsDeleter,
+    RecentRecipeSettingsReader,
+    RecentRecipeSettingsWriter,
+)
 from cruiz.settings.managers.recipe import (
     RecipeSettings,
+    RecipeSettingsDeleter,
     RecipeSettingsReader,
     RecipeSettingsWriter,
 )
 from cruiz.settings.preferencesdialog import PreferencesDialog
-from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
-from cruiz.settings.managers.recentrecipes import (
-    RecentRecipeSettingsReader,
-    RecentRecipeSettingsWriter,
-    RecentRecipeSettingsDeleter,
-)
-from cruiz.settings.managers.cmakepreferences import CMakeSettingsReader
-from cruiz.settings.managers.ninjapreferences import NinjaSettingsReader
-from cruiz.settings.managers.compilercachepreferences import CompilerCacheSettingsReader
-from cruiz.settings.managers.recipe import RecipeSettingsDeleter
 from cruiz.widgets import (
     AboutDialog,
     log_created_widget,
 )
-from cruiz.manage_local_cache import ManageLocalCachesDialog
 
-from cruiz.environ import EnvironSaver
-from cruiz.remote_browser.remotebrowser import RemoteBrowserDock
+import psutil
 
-from cruiz.load_recipe.loadrecipewizard import LoadRecipeWizard
-
-import cruiz.config
-
-import cruiz.globals
-import cruiz.runcommands
+from qtpy import QtCore, QtGui, QtWidgets
 
 logger = logging.getLogger(__name__)
 

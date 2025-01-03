@@ -6,6 +6,7 @@ Global variables
 """
 
 from __future__ import annotations
+
 import typing
 
 CRUIZ_MAINWINDOW: typing.Optional[cruiz.MainWindow] = None  # type: ignore # noqa: F821

@@ -10,7 +10,7 @@ from __future__ import annotations
 import multiprocessing
 import typing
 
-from cruiz.interop.message import Message, Success, Failure
+from cruiz.interop.message import Failure, Message, Success
 
 from . import worker
 

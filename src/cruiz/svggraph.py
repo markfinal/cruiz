@@ -9,11 +9,12 @@ from __future__ import annotations
 import os
 import typing
 
-import graphviz
-from qtpy import QtCore, QtGui, QtSvg, QtWidgets, QtSvgWidgets
-
-from cruiz.settings.managers.graphvizpreferences import GraphVizSettingsReader
 from cruiz.environ import EnvironSaver
+from cruiz.settings.managers.graphvizpreferences import GraphVizSettingsReader
+
+import graphviz
+
+from qtpy import QtCore, QtGui, QtSvg, QtSvgWidgets, QtWidgets
 
 if typing.TYPE_CHECKING:
     from cruiz.interop.packagenode import PackageNode

@@ -4,18 +4,18 @@
 Settings context managers for font preferences
 """
 
-from enum import Enum
 import typing
+from enum import Enum
 
 from .basesettings import (
     BaseSettings,
-    StringSetting,
-    IntSetting,
     ComparableCommonSettings,
+    IntSetting,
     SettingMeta,
+    StringSetting,
 )
-from .writermixin import _WriterMixin
 from .valueclasses import ScalarValue
+from .writermixin import _WriterMixin
 
 
 class FontUsage(Enum):

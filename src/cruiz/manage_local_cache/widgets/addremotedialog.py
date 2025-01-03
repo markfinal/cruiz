@@ -4,18 +4,16 @@
 Dialog for adding a new remote.
 """
 
-from functools import partial
 import typing
+from functools import partial
+
+from cruiz.interop.pod import ConanRemote
+from cruiz.pyside6.local_cache_add_remote import Ui_AddRemoteDialog
+from cruiz.settings.managers.recentconanremotes import RecentConanRemotesSettingsReader
 
 from qtpy import QtCore, QtGui, QtWidgets
 
 import validators
-
-from cruiz.interop.pod import ConanRemote
-
-from cruiz.settings.managers.recentconanremotes import RecentConanRemotesSettingsReader
-
-from cruiz.pyside6.local_cache_add_remote import Ui_AddRemoteDialog
 
 
 class AddRemoteDialog(QtWidgets.QDialog):

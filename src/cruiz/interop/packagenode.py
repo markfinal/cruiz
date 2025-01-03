@@ -6,8 +6,8 @@ Interop between Conan and cruiz
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 import typing
+from dataclasses import dataclass, field
 
 
 @dataclass

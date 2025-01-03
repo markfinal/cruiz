@@ -6,9 +6,9 @@ Widget for a table of key-value pairs
 
 from enum import IntEnum
 
-from qtpy import QtCore, QtWidgets
-
 from cruiz.widgets.util import BlockSignals
+
+from qtpy import QtCore, QtWidgets
 
 
 class KeyValueTable(QtWidgets.QTableWidget):

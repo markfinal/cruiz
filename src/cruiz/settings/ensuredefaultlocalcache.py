@@ -4,12 +4,11 @@
 Utility to ensure a default local cache exists
 """
 
+from cruiz.constants import DEFAULT_CACHE_NAME
 from cruiz.settings.managers.namedlocalcache import (
     AllNamedLocalCacheSettingsReader,
     NamedLocalCacheCreator,
 )
-
-from cruiz.constants import DEFAULT_CACHE_NAME
 
 
 def ensure_default_local_cache() -> None:

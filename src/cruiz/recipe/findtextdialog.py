@@ -4,9 +4,9 @@
 Conan recipe find text dialog
 """
 
-from qtpy import QtCore, QtWidgets
-
 from cruiz.pyside6.find_text_dialog import Ui_FindTextDialog
+
+from qtpy import QtCore, QtWidgets
 
 
 class FindTextDialog(QtWidgets.QDialog):

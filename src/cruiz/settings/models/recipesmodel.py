@@ -6,11 +6,10 @@ Qt model for recipes
 
 import typing
 
-from qtpy import QtCore
-
-
-from cruiz.settings.managers.recipe import RecipeSettingsReader
 import cruiz.globals
+from cruiz.settings.managers.recipe import RecipeSettingsReader
+
+from qtpy import QtCore
 
 
 class RecipesModel(QtCore.QAbstractTableModel):

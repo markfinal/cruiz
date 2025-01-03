@@ -6,17 +6,13 @@ Remote browser page
 
 import typing
 
-from qtpy import QtCore, QtGui, QtWidgets
-
 import cruiz.globals
-
 from cruiz.commands.conanconf import ConanConfigBoolean
-
 from cruiz.interop.searchrecipesparameters import SearchRecipesParameters
-
 from cruiz.settings.managers.namedlocalcache import AllNamedLocalCacheSettingsReader
-
 from cruiz.widgets.util import BlockSignals
+
+from qtpy import QtCore, QtGui, QtWidgets
 
 from .page import Page
 

@@ -4,9 +4,8 @@
 Mixin for helping to write settings
 """
 
-from enum import Enum
-
 import typing
+from enum import Enum
 
 from qtpy import QtGui
 

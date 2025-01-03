@@ -9,9 +9,9 @@ from __future__ import annotations
 import multiprocessing
 import typing
 
-from cruiz.interop.message import Message, Success, Stdout, Stderr
-from cruiz.workers.utils.worker import Worker
 import cruiz.runcommands
+from cruiz.interop.message import Message, Stderr, Stdout, Success
+from cruiz.workers.utils.worker import Worker
 
 if typing.TYPE_CHECKING:
     from cruiz.interop.commandparameters import CommandParameters
