@@ -6,12 +6,12 @@ Wizard page for selecting a local cache
 
 import typing
 
-from qtpy import QtWidgets
-
-from cruiz.widgets.util import BlockSignals
+from cruiz.manage_local_cache import ManageLocalCachesDialog
 from cruiz.settings.managers.namedlocalcache import AllNamedLocalCacheSettingsReader
 from cruiz.settings.managers.recipe import RecipeSettingsReader
-from cruiz.manage_local_cache import ManageLocalCachesDialog
+from cruiz.widgets.util import BlockSignals
+
+from qtpy import QtWidgets
 
 
 class LoadRecipeLocalCachePage(QtWidgets.QWizardPage):

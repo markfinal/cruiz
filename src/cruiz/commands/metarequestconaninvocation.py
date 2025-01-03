@@ -14,18 +14,18 @@ import sys
 import typing
 import urllib.parse
 
-from qtpy import QtCore
-
-from cruiz.interop.commandparameters import CommandParameters
-from cruiz.interop.message import (
-    Success,
-    Failure,
-    Stdout,
-    Stderr,
-    ConanLogMessage,
-)
 import cruiz.workers.api as workers_api
 from cruiz.dumpobjecttypes import dump_object_types
+from cruiz.interop.commandparameters import CommandParameters
+from cruiz.interop.message import (
+    ConanLogMessage,
+    Failure,
+    Stderr,
+    Stdout,
+    Success,
+)
+
+from qtpy import QtCore
 
 from .conanenv import get_conan_env
 

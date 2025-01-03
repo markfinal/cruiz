@@ -13,15 +13,11 @@ import tarfile
 import tempfile
 import typing
 
-from qtpy import QtCore, QtGui, QtWidgets
-
-from qtpy import QtWebEngineCore
-
 import cruiz.globals
-
 from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
-
 from cruiz.pyside6.remote_browser_fileview import Ui_remote_browser_fileview
+
+from qtpy import QtCore, QtGui, QtWebEngineCore, QtWidgets
 
 from .page import Page
 

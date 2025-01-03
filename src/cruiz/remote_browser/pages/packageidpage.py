@@ -6,10 +6,10 @@ Remote browser page
 
 import typing
 
-from qtpy import QtCore, QtGui, QtWidgets
-
 from cruiz.interop.packageidparameters import PackageIdParameters
 from cruiz.widgets.util import BlockSignals
+
+from qtpy import QtCore, QtGui, QtWidgets
 
 from .page import Page
 

@@ -8,13 +8,12 @@ from __future__ import annotations
 
 import typing
 
-from qtpy import QtWidgets
-
 from cruiz.commands.context import managed_conan_context
 from cruiz.commands.logdetails import LogDetails
-
-from cruiz.widgets.util import BlockSignals
 from cruiz.settings.managers.recipe import RecipeSettingsReader
+from cruiz.widgets.util import BlockSignals
+
+from qtpy import QtWidgets
 
 if typing.TYPE_CHECKING:
     import pathlib

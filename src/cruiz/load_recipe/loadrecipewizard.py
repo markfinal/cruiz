@@ -9,18 +9,15 @@ from __future__ import annotations
 import pathlib
 import typing
 
-from qtpy import QtCore, QtWidgets
-
-from cruiz.pyside6.load_recipe_wizard import Ui_LoadRecipeWizard
-
-from cruiz.exceptions import RecipeDoesNotExistError, RecipeAlreadyOpenError
-from cruiz.settings.managers.recipe import RecipeSettings, RecipeSettingsReader
-
+import cruiz.globals
 from cruiz.commands.context import managed_conan_context
 from cruiz.commands.logdetails import LogDetails
 from cruiz.constants import DEFAULT_CACHE_NAME
+from cruiz.exceptions import RecipeAlreadyOpenError, RecipeDoesNotExistError
+from cruiz.pyside6.load_recipe_wizard import Ui_LoadRecipeWizard
+from cruiz.settings.managers.recipe import RecipeSettings, RecipeSettingsReader
 
-import cruiz.globals
+from qtpy import QtCore, QtWidgets
 
 if typing.TYPE_CHECKING:
     from cruiz.recipe.recipe import Recipe

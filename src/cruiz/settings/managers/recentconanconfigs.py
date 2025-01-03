@@ -6,9 +6,9 @@ Settings context manager for recent Conan configurations
 
 import typing
 
-from .basesettings import BaseSettings, ListSetting, CommonSettings, SettingMeta
-from .writermixin import _WriterMixin
+from .basesettings import BaseSettings, CommonSettings, ListSetting, SettingMeta
 from .valueclasses import ListValue
+from .writermixin import _WriterMixin
 
 
 # TODO: CommonSettings isn't completely used

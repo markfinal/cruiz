@@ -12,20 +12,19 @@ import multiprocessing
 import sys
 import typing
 
-from qtpy import QtCore
-
-from cruiz.dumpobjecttypes import dump_object_types
-
 import cruiz.workers.api as workers_api
+from cruiz.dumpobjecttypes import dump_object_types
 from cruiz.interop.message import (
-    Message,
-    End,
-    Stdout,
-    Stderr,
-    Success,
-    Failure,
     ConanLogMessage,
+    End,
+    Failure,
+    Message,
+    Stderr,
+    Stdout,
+    Success,
 )
+
+from qtpy import QtCore
 
 logger = logging.getLogger(__name__)
 

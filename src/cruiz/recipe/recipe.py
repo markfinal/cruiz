@@ -8,9 +8,9 @@ from __future__ import annotations
 
 import typing
 
-from qtpy import QtCore
-
 from cruiz.commands.context import ConanContext
+
+from qtpy import QtCore
 
 if typing.TYPE_CHECKING:
     import pathlib

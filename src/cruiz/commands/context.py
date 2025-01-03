@@ -6,27 +6,23 @@ A context object wrapping the Conan API
 
 from __future__ import annotations
 
-from contextlib import contextmanager
 import logging
 import pathlib
 import typing
+from contextlib import contextmanager
+
+import cruiz.workers.api as workers_api
+from cruiz.constants import DEFAULT_CACHE_NAME
+from cruiz.exceptions import RecipeInspectionError
+from cruiz.interop.commandparameters import CommandParameters
+from cruiz.recipe.logs.command import CommandListWidgetItem, RecipeCommandHistoryWidget
+from cruiz.settings.managers.namedlocalcache import NamedLocalCacheSettingsReader
 
 from qtpy import QtCore, QtWidgets
 
-from cruiz.exceptions import RecipeInspectionError
-
-from cruiz.interop.commandparameters import CommandParameters
-from cruiz.recipe.logs.command import CommandListWidgetItem
-from cruiz.settings.managers.namedlocalcache import NamedLocalCacheSettingsReader
-
-import cruiz.workers.api as workers_api
-
-from cruiz.recipe.logs.command import RecipeCommandHistoryWidget
-from cruiz.constants import DEFAULT_CACHE_NAME
-
+from .conanenv import get_conan_env
 from .conaninvocation import ConanInvocation
 from .metarequestconaninvocation import MetaRequestConanInvocation
-from .conanenv import get_conan_env
 
 if typing.TYPE_CHECKING:
     from cruiz.interop.packagenode import PackageNode

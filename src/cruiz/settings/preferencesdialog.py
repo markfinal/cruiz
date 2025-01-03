@@ -8,29 +8,40 @@ import json
 import pathlib
 import typing
 
-from qtpy import QtCore, QtGui, QtWidgets
-
 import cruiz.globals
-
-from cruiz.settings.managers.namedlocalcache import NamedLocalCacheSettingsReader
-
+from cruiz.constants import DEFAULT_CACHE_NAME
 from cruiz.pyside6.preferences import Ui_PreferencesDialog
-
-from cruiz.settings.managers.generalpreferences import (
-    GeneralSettings,
-    GeneralSettingsReader,
-    GeneralSettingsWriter,
+from cruiz.settings.managers.cleansettings import sanitise_settings
+from cruiz.settings.managers.cmakepreferences import (
+    CMakeSettings,
+    CMakeSettingsReader,
+    CMakeSettingsWriter,
 )
-from cruiz.settings.managers.fontpreferences import (
-    FontUsage,
-    FontSettings,
-    FontSettingsReader,
-    FontSettingsWriter,
+from cruiz.settings.managers.compilercachepreferences import (
+    CompilerCacheSettings,
+    CompilerCacheSettingsReader,
+    CompilerCacheSettingsWriter,
 )
 from cruiz.settings.managers.conanpreferences import (
     ConanSettings,
     ConanSettingsReader,
     ConanSettingsWriter,
+)
+from cruiz.settings.managers.fontpreferences import (
+    FontSettings,
+    FontSettingsReader,
+    FontSettingsWriter,
+    FontUsage,
+)
+from cruiz.settings.managers.generalpreferences import (
+    GeneralSettings,
+    GeneralSettingsReader,
+    GeneralSettingsWriter,
+)
+from cruiz.settings.managers.graphvizpreferences import (
+    GraphVizSettings,
+    GraphVizSettingsReader,
+    GraphVizSettingsWriter,
 )
 from cruiz.settings.managers.localcachepreferences import (
     LocalCacheSettings,
@@ -40,60 +51,43 @@ from cruiz.settings.managers.localcachepreferences import (
 from cruiz.settings.managers.namedlocalcache import (
     AllNamedLocalCacheSettingsReader,
     NamedLocalCacheDeleter,
-)
-from cruiz.settings.managers.graphvizpreferences import (
-    GraphVizSettings,
-    GraphVizSettingsReader,
-    GraphVizSettingsWriter,
-)
-from cruiz.settings.managers.cmakepreferences import (
-    CMakeSettings,
-    CMakeSettingsReader,
-    CMakeSettingsWriter,
+    NamedLocalCacheSettingsReader,
 )
 from cruiz.settings.managers.ninjapreferences import (
     NinjaSettings,
     NinjaSettingsReader,
     NinjaSettingsWriter,
 )
-from cruiz.settings.managers.compilercachepreferences import (
-    CompilerCacheSettings,
-    CompilerCacheSettingsReader,
-    CompilerCacheSettingsWriter,
-)
-from cruiz.settings.managers.recentrecipes import (
-    RecentRecipeSettingsReader,
-    RecentRecipeSettingsDeleter,
-)
-from cruiz.settings.managers.recipe import (
-    RecipeSettingsReader,
-    RecipeSettingsWriter,
-    RecipeSettings,
-    RecipeSettingsDeleter,
-)
 from cruiz.settings.managers.recentconanconfigs import (
-    RecentConanConfigSettingsReader,
     RecentConanConfigSettingsDeleter,
+    RecentConanConfigSettingsReader,
 )
 from cruiz.settings.managers.recentconanremotes import (
-    RecentConanRemotesSettingsReader,
     RecentConanRemotesSettingsDeleter,
+    RecentConanRemotesSettingsReader,
 )
+from cruiz.settings.managers.recentrecipes import (
+    RecentRecipeSettingsDeleter,
+    RecentRecipeSettingsReader,
+)
+from cruiz.settings.managers.recipe import (
+    RecipeSettings,
+    RecipeSettingsDeleter,
+    RecipeSettingsReader,
+    RecipeSettingsWriter,
+)
+from cruiz.settings.managers.restoredefaults import factory_reset
 from cruiz.settings.managers.shortcuts import (
     ShortcutSettings,
     ShortcutSettingsReader,
     ShortcutSettingsWriter,
 )
-from cruiz.settings.managers.cleansettings import sanitise_settings
-from cruiz.settings.managers.restoredefaults import factory_reset
-
-from cruiz.settings.models.recentconanremotesmodel import RecentConanRemotesModel
 from cruiz.settings.models.recentconanconfigmodel import RecentConanConfigModel
+from cruiz.settings.models.recentconanremotesmodel import RecentConanRemotesModel
 from cruiz.settings.models.recipesmodel import RecipesModel
-
 from cruiz.widgets.util import BlockSignals, search_for_file_options
 
-from cruiz.constants import DEFAULT_CACHE_NAME
+from qtpy import QtCore, QtGui, QtWidgets
 
 
 class PreferencesDialog(QtWidgets.QDialog):

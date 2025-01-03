@@ -12,7 +12,7 @@ import typing
 
 import conans.util.log
 
-from cruiz.interop.message import Message, ConanLogMessage
+from cruiz.interop.message import ConanLogMessage, Message
 
 
 class _Singleton(type):

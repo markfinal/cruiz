@@ -7,23 +7,19 @@ Recipe behaviour toolbar
 import os
 import pathlib
 
-from qtpy import QtCore, QtWidgets
-
 import cruiz.globals
-
-from cruiz.pyside6.recipe_profile_frame import Ui_profileFrame
 from cruiz.pyside6.recipe_cpucores_frame import Ui_cpuCoresFrame
-
-from cruiz.widgets.util import BlockSignals
-
+from cruiz.pyside6.recipe_profile_frame import Ui_profileFrame
+from cruiz.recipe.recipe import Recipe
+from cruiz.settings.managers.namedlocalcache import NamedLocalCacheSettingsReader
 from cruiz.settings.managers.recipe import (
     RecipeSettings,
     RecipeSettingsReader,
     RecipeSettingsWriter,
 )
-from cruiz.settings.managers.namedlocalcache import NamedLocalCacheSettingsReader
+from cruiz.widgets.util import BlockSignals
 
-from cruiz.recipe.recipe import Recipe
+from qtpy import QtCore, QtWidgets
 
 
 class _ProfileFrame(QtWidgets.QFrame):

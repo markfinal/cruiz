@@ -36,8 +36,7 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-import cruiz.pyside6.resources  # noqa: F401, E402
-
+import cruiz.pyside6.resources  # noqa: F401, E402, I100
 from cruiz.application import Application  # noqa: E402
 from cruiz.mainwindow import MainWindow  # noqa: E402
 from cruiz.settings.updatesettings import (  # noqa: E402

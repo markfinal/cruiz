@@ -5,7 +5,6 @@ Converting text to HTML
 """
 
 import html as html_module
-
 from io import StringIO
 
 

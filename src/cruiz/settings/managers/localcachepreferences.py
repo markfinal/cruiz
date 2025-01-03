@@ -8,12 +8,12 @@ import typing
 
 from .basesettings import (
     BaseSettings,
-    StringSetting,
     ComparableCommonSettings,
     SettingMeta,
+    StringSetting,
 )
-from .writermixin import _WriterMixin
 from .valueclasses import ScalarValue
+from .writermixin import _WriterMixin
 
 
 # TODO: rename to NewLocalCacheSettings?

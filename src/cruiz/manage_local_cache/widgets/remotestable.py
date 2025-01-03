@@ -4,13 +4,13 @@
 Widget for the table of local cache remote
 """
 
-from enum import IntEnum
 import typing
-
-from qtpy import QtCore, QtGui, QtWidgets
+from enum import IntEnum
 
 from cruiz.interop.pod import ConanRemote
 from cruiz.widgets.util import BlockSignals
+
+from qtpy import QtCore, QtGui, QtWidgets
 
 
 class RemotesTable(QtWidgets.QTableWidget):

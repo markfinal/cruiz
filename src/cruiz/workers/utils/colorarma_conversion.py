@@ -5,8 +5,8 @@ Util module to convert colorama escpe codes to HTML
 """
 
 import copy
-from io import StringIO
 import re
+from io import StringIO
 
 import colorama
 

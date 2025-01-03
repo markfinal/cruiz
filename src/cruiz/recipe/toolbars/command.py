@@ -4,28 +4,22 @@
 Recipe command toolbar
 """
 
-from io import StringIO
 import os
 import typing
-
-from qtpy import QtCore, QtGui, QtWidgets
+from io import StringIO
 
 import cruiz.globals
-
-from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
-
-from cruiz.settings.managers.recipe import RecipeSettings, RecipeSettingsReader
-from cruiz.settings.managers.shortcuts import ShortcutSettingsReader
-from cruiz.settings.managers.compilercachepreferences import CompilerCacheSettingsReader
-
 import cruiz.workers.api as workers_api
-
-from cruiz.interop.commandparameters import CommandParameters
-
 from cruiz.constants import BuildFeatureConstants, CompilerCacheTypes
 from cruiz.environ import EnvironSaver
-
 from cruiz.exceptions import RecipeInspectionError
+from cruiz.interop.commandparameters import CommandParameters
+from cruiz.settings.managers.compilercachepreferences import CompilerCacheSettingsReader
+from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
+from cruiz.settings.managers.recipe import RecipeSettings, RecipeSettingsReader
+from cruiz.settings.managers.shortcuts import ShortcutSettingsReader
+
+from qtpy import QtCore, QtGui, QtWidgets
 
 
 IS_CONAN_V1 = cruiz.globals.CONAN_MAJOR_VERSION == 1

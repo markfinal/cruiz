@@ -6,10 +6,10 @@ Settings base classes
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from enum import IntEnum
 import inspect
 import typing
+from dataclasses import dataclass
+from enum import IntEnum
 
 from qtpy import QtCore, QtGui
 

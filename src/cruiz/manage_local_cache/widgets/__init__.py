@@ -4,17 +4,17 @@
 Conan manage local cache widgets
 """
 
-from .newlocalcachewizard import NewLocalCacheWizard as NewLocalCacheWizard
-from .installconfigdialog import InstallConfigDialog as InstallConfigDialog
-from .movelocalcachedialog import MoveLocalCacheDialog as MoveLocalCacheDialog
-from .addremotedialog import AddRemoteDialog as AddRemoteDialog
-from .progressdialogs import (
-    RemoveLocksDialog as RemoveLocksDialog,
-    RemoveAllPackagesDialog as RemoveAllPackagesDialog,
-)
+from .addenvironmentdialog import AddEnvironmentDialog as AddEnvironmentDialog
 from .addextraprofiledirectorydialog import (
     AddExtraProfileDirectoryDialog as AddExtraProfileDirectoryDialog,
 )
-from .addenvironmentdialog import AddEnvironmentDialog as AddEnvironmentDialog
-from .runconancommanddialog import RunConanCommandDialog as RunConanCommandDialog
+from .addremotedialog import AddRemoteDialog as AddRemoteDialog
+from .installconfigdialog import InstallConfigDialog as InstallConfigDialog
+from .movelocalcachedialog import MoveLocalCacheDialog as MoveLocalCacheDialog
+from .newlocalcachewizard import NewLocalCacheWizard as NewLocalCacheWizard
+from .progressdialogs import (
+    RemoveAllPackagesDialog as RemoveAllPackagesDialog,
+    RemoveLocksDialog as RemoveLocksDialog,
+)
 from .removeenvironmentdialog import RemoveEnvironmentDialog as RemoveEnvironmentDialog
+from .runconancommanddialog import RunConanCommandDialog as RunConanCommandDialog

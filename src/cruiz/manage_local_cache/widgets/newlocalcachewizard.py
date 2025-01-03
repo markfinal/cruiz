@@ -7,21 +7,18 @@ Wizard for creating new Conan local caches
 import platform
 import typing
 
-from qtpy import QtGui, QtWidgets
-
 import cruiz.globals
-
+import cruiz.workers.api as workers_api
 from cruiz.commands.context import ConanContext
-from cruiz.interop.commandparameters import CommandParameters
 from cruiz.commands.logdetails import LogDetails
+from cruiz.constants import DEFAULT_CACHE_NAME
+from cruiz.interop.commandparameters import CommandParameters
+from cruiz.pyside6.local_cache_new_wizard import Ui_NewLocalCacheWizard
 from cruiz.settings.managers.localcachepreferences import LocalCacheSettingsReader
 from cruiz.settings.managers.namedlocalcache import NamedLocalCacheCreator
 from cruiz.widgets.util import search_for_dir_options
-from cruiz.constants import DEFAULT_CACHE_NAME
 
-import cruiz.workers.api as workers_api
-
-from cruiz.pyside6.local_cache_new_wizard import Ui_NewLocalCacheWizard
+from qtpy import QtGui, QtWidgets
 
 
 class NewLocalCacheWizard(QtWidgets.QWizard):

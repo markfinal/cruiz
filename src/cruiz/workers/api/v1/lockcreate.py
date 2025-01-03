@@ -7,10 +7,10 @@ Child process commands
 from __future__ import annotations
 
 import typing
-from cruiz.interop.packagenode import PackageNode
+
 from cruiz.interop.dependencygraph import DependencyGraph
 from cruiz.interop.message import Message, Success
-
+from cruiz.interop.packagenode import PackageNode
 from cruiz.workers.utils.formatoptions import format_options
 
 from . import worker

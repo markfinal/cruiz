@@ -8,7 +8,6 @@ import logging
 import typing
 
 import cruiz.globals
-
 from cruiz.settings.managers.conanpreferences import ConanSettingsReader
 from cruiz.settings.managers.namedlocalcache import NamedLocalCacheSettingsReader
 

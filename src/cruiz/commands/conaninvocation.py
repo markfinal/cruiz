@@ -15,11 +15,11 @@ import sys
 import threading
 import typing
 
+from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
+
 import psutil
 
 from qtpy import QtCore, QtWidgets
-
-from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
 
 from .messagereplyprocessor import MessageReplyProcessor
 

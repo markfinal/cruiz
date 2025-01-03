@@ -10,6 +10,29 @@ import pathlib
 import re
 import typing
 
+import cruiz.globals
+import cruiz.revealonfilesystem
+import cruiz.workers.api as workers_api
+from cruiz.commands.context import ConanContext
+from cruiz.commands.logdetails import LogDetails
+from cruiz.exceptions import RecipeInspectionError
+from cruiz.interop.commandparameters import CommandParameters
+from cruiz.interop.dependencygraph import dependencygraph_from_node_dependees
+from cruiz.manage_local_cache import ManageLocalCachesDialog
+from cruiz.model.graphaslistmodel import DependenciesListModel, DependenciesTreeModel
+from cruiz.pyside6.recipe_window import Ui_RecipeWindow
+from cruiz.revealonfilesystem import reveal_on_filesystem
+from cruiz.settings.managers.basesettings import WorkflowCwd
+from cruiz.settings.managers.fontpreferences import FontSettingsReader, FontUsage
+from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
+from cruiz.settings.managers.namedlocalcache import NamedLocalCacheSettingsReader
+from cruiz.settings.managers.recipe import (
+    RecipeSettings,
+    RecipeSettingsReader,
+    RecipeSettingsWriter,
+)
+from cruiz.widgets.util import BlockSignals, clear_widgets_from_layout
+
 from qtpy import QtCore, QtGui, QtWidgets
 
 try:
@@ -17,34 +40,10 @@ try:
 except ImportError as exc:
     print(exc)
 
-from cruiz.pyside6.recipe_window import Ui_RecipeWindow
-
-from cruiz.commands.context import ConanContext
-from cruiz.interop.commandparameters import CommandParameters
-from cruiz.interop.dependencygraph import dependencygraph_from_node_dependees
-from cruiz.commands.logdetails import LogDetails
-from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
-from cruiz.settings.managers.basesettings import WorkflowCwd
-from cruiz.settings.managers.recipe import (
-    RecipeSettings,
-    RecipeSettingsReader,
-    RecipeSettingsWriter,
-)
-from cruiz.settings.managers.namedlocalcache import NamedLocalCacheSettingsReader
-from cruiz.settings.managers.fontpreferences import FontSettingsReader, FontUsage
-from cruiz.widgets.util import BlockSignals, clear_widgets_from_layout
-from cruiz.revealonfilesystem import reveal_on_filesystem
-import cruiz.workers.api as workers_api
-from cruiz.model.graphaslistmodel import DependenciesListModel, DependenciesTreeModel
-from cruiz.manage_local_cache import ManageLocalCachesDialog
-import cruiz.revealonfilesystem
-import cruiz.globals
-from cruiz.exceptions import RecipeInspectionError
-
-from .recipe import Recipe
-from .findtextdialog import FindTextDialog
-from .expressioneditordialog import ExpressionEditorDialog
 from .dependencyview import InverseDependencyViewDialog
+from .expressioneditordialog import ExpressionEditorDialog
+from .findtextdialog import FindTextDialog
+from .recipe import Recipe
 
 
 logger = logging.getLogger(__name__)

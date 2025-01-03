@@ -6,9 +6,9 @@ Remote browser page
 
 import typing
 
-from qtpy import QtCore, QtGui, QtWidgets
-
 from cruiz.interop.packagerevisionsparameters import PackageRevisionsParameters
+
+from qtpy import QtCore, QtGui, QtWidgets
 
 from .page import Page
 

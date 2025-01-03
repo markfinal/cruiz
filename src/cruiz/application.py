@@ -8,10 +8,10 @@ from __future__ import annotations
 
 import typing
 
-from qtpy import QtCore, QtGui, QtWidgets
-
 from cruiz.settings.ensuredefaultlocalcache import ensure_default_local_cache
 from cruiz.settings.managers.fontpreferences import FontSettingsReader, FontUsage
+
+from qtpy import QtCore, QtGui, QtWidgets
 
 
 class Application(QtWidgets.QApplication):
