@@ -15,3 +15,4 @@ types-six
 types-psutil
 pytest
 adr-tools-python
+pylint

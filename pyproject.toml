@@ -141,6 +141,9 @@ commands = [
     ["flake8", "tests"],
     ["mypy", "src/cruiz"],
     ["mypy", "tests"],
+    ["pylint", "--reports=n", "--disable=all", "--enable=no-name-in-module", "--ignore-paths=^src/cruiz/pyside6/.*$,^src/cruiz/workers/api/v1/.*$", "src/cruiz"],
+    ["pip", "install", "conan<2"],
+    ["pylint", "--reports=n", "--disable=all", "--enable=no-name-in-module", "--ignore-paths=^src/cruiz/pyside6/.*$,^src/cruiz/workers/api/v2/.*$", "src/cruiz"],
 ]
 
 [tool.tox.env.test]

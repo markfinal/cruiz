@@ -351,7 +351,6 @@ class ConanContext(QtCore.QObject):
             self.cancelled.emit()
 
     def conan_version(self) -> str:
-        # pylint: disable=no-self-use
         """Get the Conan version."""
         version, exception = self._meta_invocation.request_data("version")
         if exception:
