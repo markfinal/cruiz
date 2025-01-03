@@ -10,10 +10,12 @@ import datetime
 import multiprocessing
 import typing
 
-from cruiz.interop.packagerevisionsparameters import PackageRevisionsParameters
 from cruiz.interop.message import Message, Success
 
 from . import worker
+
+if typing.TYPE_CHECKING:
+    from cruiz.interop.packagerevisionsparameters import PackageRevisionsParameters
 
 
 def invoke(

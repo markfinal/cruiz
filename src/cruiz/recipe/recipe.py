@@ -4,13 +4,17 @@
 Representation of a recipe
 """
 
-import pathlib
+from __future__ import annotations
+
 import typing
 
 from qtpy import QtCore
 
 from cruiz.commands.context import ConanContext
-from cruiz.commands.logdetails import LogDetails
+
+if typing.TYPE_CHECKING:
+    import pathlib
+    from cruiz.commands.logdetails import LogDetails
 
 
 # TODO: need to remember why this is derived from QObject?

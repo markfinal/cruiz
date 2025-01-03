@@ -9,7 +9,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 import typing
 
-from .packagenode import PackageNode
+if typing.TYPE_CHECKING:
+    from .packagenode import PackageNode
 
 
 @dataclass

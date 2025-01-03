@@ -8,11 +8,14 @@ from __future__ import annotations
 
 import multiprocessing
 import re
+import typing
 
-from cruiz.interop.searchrecipesparameters import SearchRecipesParameters
 from cruiz.interop.message import Message, Success
 
 from . import worker
+
+if typing.TYPE_CHECKING:
+    from cruiz.interop.searchrecipesparameters import SearchRecipesParameters
 
 
 def invoke(

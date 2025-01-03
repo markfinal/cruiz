@@ -12,12 +12,13 @@ import pathlib
 import urllib.parse
 import typing
 
-from cruiz.interop.commandparameters import CommandParameters
 from cruiz.interop.pod import ConanRemote, ConanHook
 from cruiz.interop.message import Message, Success, Failure
 
 from . import worker
 
+if typing.TYPE_CHECKING:
+    from cruiz.interop.commandparameters import CommandParameters
 
 # pylint: disable=protected-access, import-outside-toplevel
 

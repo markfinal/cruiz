@@ -4,15 +4,18 @@
 Conan command parameters
 """
 
+from __future__ import annotations
+
 from io import StringIO
 import pathlib
 import typing
 
 import cruiz.globals
 
-from cruiz.constants import BuildFeatureConstants
-
 from .commonparameters import CommonParameters
+
+if typing.TYPE_CHECKING:
+    from cruiz.constants import BuildFeatureConstants
 
 
 # TODO: should a recipe be in here? it is quite a heavyweight Context object though

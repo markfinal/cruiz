@@ -4,7 +4,8 @@
 Wizard page for selecting the initial profile
 """
 
-import pathlib
+from __future__ import annotations
+
 import typing
 
 from qtpy import QtWidgets
@@ -14,6 +15,9 @@ from cruiz.commands.logdetails import LogDetails
 
 from cruiz.widgets.util import BlockSignals
 from cruiz.settings.managers.recipe import RecipeSettingsReader
+
+if typing.TYPE_CHECKING:
+    import pathlib
 
 
 class LoadRecipeInitialProfilePage(QtWidgets.QWizardPage):

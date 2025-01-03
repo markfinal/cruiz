@@ -4,6 +4,8 @@
 A context object wrapping the Conan API
 """
 
+from __future__ import annotations
+
 from contextlib import contextmanager
 import logging
 import pathlib
@@ -13,14 +15,7 @@ from qtpy import QtCore, QtWidgets
 
 from cruiz.exceptions import RecipeInspectionError
 
-from cruiz.interop.packagenode import PackageNode
-from cruiz.interop.pod import ConanRemote, ConanHook
 from cruiz.interop.commandparameters import CommandParameters
-from cruiz.interop.searchrecipesparameters import SearchRecipesParameters
-from cruiz.interop.reciperevisionsparameters import RecipeRevisionsParameters
-from cruiz.interop.packageidparameters import PackageIdParameters
-from cruiz.interop.packagerevisionsparameters import PackageRevisionsParameters
-from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
 from cruiz.recipe.logs.command import CommandListWidgetItem
 from cruiz.settings.managers.namedlocalcache import NamedLocalCacheSettingsReader
 
@@ -32,9 +27,17 @@ from cruiz.constants import DEFAULT_CACHE_NAME
 from .conaninvocation import ConanInvocation
 from .metarequestconaninvocation import MetaRequestConanInvocation
 from .conanenv import get_conan_env
-from .conanconf import ConanConfigBoolean
-from .logdetails import LogDetails
 
+if typing.TYPE_CHECKING:
+    from cruiz.interop.packagenode import PackageNode
+    from cruiz.interop.pod import ConanRemote, ConanHook
+    from cruiz.interop.searchrecipesparameters import SearchRecipesParameters
+    from cruiz.interop.reciperevisionsparameters import RecipeRevisionsParameters
+    from cruiz.interop.packageidparameters import PackageIdParameters
+    from cruiz.interop.packagerevisionsparameters import PackageRevisionsParameters
+    from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
+    from .conanconf import ConanConfigBoolean
+    from .logdetails import LogDetails
 
 logger = logging.getLogger(__name__)
 

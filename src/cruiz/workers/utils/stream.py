@@ -12,7 +12,8 @@ import typing
 
 from .colorarma_conversion import convert_from_colorama_to_html
 
-from cruiz.interop.message import Message
+if typing.TYPE_CHECKING:
+    from cruiz.interop.message import Message
 
 
 class QueuedStreamSix(six.StringIO):

@@ -6,14 +6,16 @@ Child process commands
 
 from __future__ import annotations
 
-import multiprocessing
 import typing
 
-from cruiz.interop.commandparameters import CommandParameters
 from cruiz.interop.message import Message, Success
 from cruiz.workers.utils.formatoptions import format_options
 
 from . import worker
+
+if typing.TYPE_CHECKING:
+    import multiprocessing
+    from cruiz.interop.commandparameters import CommandParameters
 
 
 def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> None:

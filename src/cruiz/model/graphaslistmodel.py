@@ -4,9 +4,14 @@
 Conan dependency graph Qt model
 """
 
+from __future__ import annotations
+
+import typing
+
 from qtpy import QtCore, QtGui
 
-from cruiz.interop.dependencygraph import DependencyGraph
+if typing.TYPE_CHECKING:
+    from cruiz.interop.dependencygraph import DependencyGraph
 
 
 class DependenciesListModel(QtGui.QStandardItemModel):

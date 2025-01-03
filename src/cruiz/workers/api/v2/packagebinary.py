@@ -7,12 +7,15 @@ reference, recipe revision, package_id, package revision
 
 from __future__ import annotations
 
-import multiprocessing
+import typing
 
-from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
 from cruiz.interop.message import Message, Success
 
 from . import worker
+
+if typing.TYPE_CHECKING:
+    import multiprocessing
+    from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
 
 
 def invoke(

@@ -4,6 +4,8 @@
 Utilities for generating SVGs from Conan dependency graphs
 """
 
+from __future__ import annotations
+
 import os
 import typing
 
@@ -12,8 +14,10 @@ from qtpy import QtCore, QtGui, QtSvg, QtWidgets, QtSvgWidgets
 
 from cruiz.settings.managers.graphvizpreferences import GraphVizSettingsReader
 from cruiz.environ import EnvironSaver
-from cruiz.interop.packagenode import PackageNode
-from cruiz.interop.dependencygraph import DependencyGraph
+
+if typing.TYPE_CHECKING:
+    from cruiz.interop.packagenode import PackageNode
+    from cruiz.interop.dependencygraph import DependencyGraph
 
 
 class DependenciesToDigraph:

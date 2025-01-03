@@ -4,12 +4,15 @@
 Remote browser page
 """
 
+from __future__ import annotations
+
 import typing
 
 from qtpy import QtCore, QtGui, QtWidgets
 
-from cruiz.commands.context import ConanContext
-from cruiz.commands.logdetails import LogDetails
+if typing.TYPE_CHECKING:
+    from cruiz.commands.context import ConanContext
+    from cruiz.commands.logdetails import LogDetails
 
 
 class Page(QtWidgets.QWidget):

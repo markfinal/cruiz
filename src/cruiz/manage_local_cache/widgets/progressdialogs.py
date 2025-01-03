@@ -4,11 +4,14 @@
 Dialog that represent progress of operations
 """
 
+from __future__ import annotations
+
 import typing
 
 from qtpy import QtCore, QtWidgets
 
-from cruiz.commands.context import ConanContext
+if typing.TYPE_CHECKING:
+    from cruiz.commands.context import ConanContext
 
 
 class _ContextProgressDialog(QtWidgets.QProgressDialog):

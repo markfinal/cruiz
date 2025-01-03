@@ -6,13 +6,15 @@ Process requests for searching a remote for package references
 
 from __future__ import annotations
 
-import multiprocessing
 import typing
 
-from cruiz.interop.searchrecipesparameters import SearchRecipesParameters
 from cruiz.interop.message import Message, Success
 
 from . import worker
+
+if typing.TYPE_CHECKING:
+    import multiprocessing
+    from cruiz.interop.searchrecipesparameters import SearchRecipesParameters
 
 
 def invoke(
