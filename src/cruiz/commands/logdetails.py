@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Logging details
-"""
+"""Logging details."""
 
 import typing
 
@@ -12,9 +10,7 @@ from .guardedlisttoflush import GuardedListToFlush
 
 
 class LogDetails(QtCore.QObject):
-    """
-    Representation of how and where to perform logging during commands
-    """
+    """Representation of how and where to perform logging during commands."""
 
     logging = QtCore.Signal()
 
@@ -26,6 +22,7 @@ class LogDetails(QtCore.QObject):
         batched: bool,
         conan_log: typing.Optional[QtWidgets.QPlainTextEdit],
     ) -> None:
+        """Initialise a LogDetails."""
         super().__init__()
         self.output = output
         self.error = output if combined else error
@@ -39,9 +36,7 @@ class LogDetails(QtCore.QObject):
         self._conan_log = conan_log
 
     def start(self) -> None:
-        """
-        Start logging
-        """
+        """Start logging."""
         if self._stdout_list:
             self._stdout_list.start(1000, self.output)
         if self._stderr_list and self._stderr_list != self._stdout_list:
@@ -50,18 +45,14 @@ class LogDetails(QtCore.QObject):
             self._stderr_list.start(1000, err_widget)
 
     def stop(self) -> None:
-        """
-        Stop logging
-        """
+        """Stop logging."""
         if self._stdout_list:
             self._stdout_list.stop()
         if self._stderr_list and self._stderr_list != self._stdout_list:
             self._stderr_list.stop()
 
     def stdout(self, text: str) -> None:
-        """
-        Append text to stdout
-        """
+        """Append text to stdout."""
         if self._stdout_list:
             self._stdout_list.append(text)
         else:
@@ -69,9 +60,7 @@ class LogDetails(QtCore.QObject):
         self.logging.emit()
 
     def stderr(self, text: str) -> None:
-        """
-        Append text to stderr
-        """
+        """Append text to stderr."""
         if self._stderr_list:
             self._stderr_list.append(text)
         else:
@@ -80,8 +69,6 @@ class LogDetails(QtCore.QObject):
         self.logging.emit()
 
     def conan_log(self, text: str) -> None:
-        """
-        Append a Conan log message
-        """
+        """Append a Conan log message."""
         if self._conan_log:
             self._conan_log.appendPlainText(text)

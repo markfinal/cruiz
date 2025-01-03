@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Representation of a recipe
-"""
+"""Representation of a recipe."""
 
 from __future__ import annotations
 
@@ -20,9 +18,7 @@ if typing.TYPE_CHECKING:
 # TODO: need to remember why this is derived from QObject?
 # TODO: possibly due to the parent-child ownership, and thus lifetime
 class Recipe(QtCore.QObject):
-    """
-    Sufficient information to uniquely identify a recipe
-    """
+    """Sufficient information to uniquely identify a recipe."""
 
     def __init__(
         self,
@@ -32,21 +28,21 @@ class Recipe(QtCore.QObject):
         log_details: LogDetails,
         parent: QtCore.QObject,
     ) -> None:
+        """Initialise a Recipe."""
         super().__init__(parent)
         self.path = path
         self.uuid = uuid
         self.context = ConanContext(cache_name, log_details)
 
     def close(self) -> None:
-        """
-        Close the recipe
-        """
+        """Close the recipe."""
         self.context.close()
 
     @property
     def version(self) -> typing.Optional[str]:
         """
         Get the version of the recipe.
+
         May be None.
         """
         from cruiz.settings.managers.recipe import RecipeSettingsReader
@@ -59,6 +55,7 @@ class Recipe(QtCore.QObject):
     def user(self) -> typing.Optional[str]:
         """
         Get the user namespace of the recipe.
+
         May be None.
         """
         from cruiz.settings.managers.recipe import RecipeSettingsReader
@@ -71,6 +68,7 @@ class Recipe(QtCore.QObject):
     def channel(self) -> typing.Optional[str]:
         """
         Get the channel namespace of the recipe.
+
         May be None.
         """
         from cruiz.settings.managers.recipe import RecipeSettingsReader
@@ -81,7 +79,5 @@ class Recipe(QtCore.QObject):
 
     @property
     def folder(self) -> pathlib.Path:
-        """
-        Get the folder containing the recipe.
-        """
+        """Get the folder containing the recipe."""
         return self.path.parent

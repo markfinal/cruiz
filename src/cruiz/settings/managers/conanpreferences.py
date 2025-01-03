@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Settings context managers for conan preferences
-"""
+"""Settings context managers for conan preferences."""
 
 import typing
 
@@ -17,11 +15,10 @@ from .writermixin import _WriterMixin
 
 
 class ConanSettings(ComparableCommonSettings):
-    """
-    Representation of Conan settings on disk
-    """
+    """Representation of Conan settings on disk."""
 
     def __init__(self) -> None:
+        """Initialise a ConanSettings."""
         self._property_meta = {
             "log_level": SettingMeta(
                 "Log/Level", StringSetting, "CRITICAL", ScalarValue
@@ -36,9 +33,7 @@ class ConanSettings(ComparableCommonSettings):
 
     @property
     def log_level(self) -> StringSetting:
-        """
-        Get the logging level used for Conan
-        """
+        """Get the logging level used for Conan."""
         return self._get_value_via_meta()
 
     @log_level.setter
@@ -47,9 +42,7 @@ class ConanSettings(ComparableCommonSettings):
 
     @property
     def conandata_version_yaml_pathsegment(self) -> StringSetting:
-        """
-        Get the YAML segment used to reference the 'version' element in conandata.yml
-        """
+        """Get the YAML segment used to reference the 'version' element in conandata.yml."""  # noqa: E501
         return self._get_value_via_meta()
 
     @conandata_version_yaml_pathsegment.setter
@@ -58,15 +51,15 @@ class ConanSettings(ComparableCommonSettings):
 
 
 class ConanSettingsReader:
-    """
-    Context manager for reading Conan settings from disk
-    """
+    """Context manager for reading Conan settings from disk."""
 
     def __init__(self) -> None:
+        """Initialise a ConanSettingsReader."""
         self.settings = BaseSettings.make_settings()
         self.group = "Conan"
 
     def __enter__(self) -> ConanSettings:
+        """Enter a context manager with a ConanSettingsReader."""
         self.settings.beginGroup(self.group)
         self._settings_object = ConanSettings()
         self._settings_object.settings_reader = self
@@ -75,6 +68,7 @@ class ConanSettingsReader:
     def __exit__(
         self, exc_type: typing.Any, exc_value: typing.Any, exc_traceback: typing.Any
     ) -> typing.Any:
+        """Exit a context manager with a ConanSettingsReader."""
         self.settings.endGroup()
         self._settings_object.settings_reader = None
         del self._settings_object
@@ -86,9 +80,8 @@ class ConanSettingsReader:
 
 
 class ConanSettingsWriter(_WriterMixin):
-    """
-    Utility class for writing changed Conan settings to disk
-    """
+    """Utility class for writing changed Conan settings to disk."""
 
     def __init__(self) -> None:
+        """Initialise a ConanSettingsWriter."""
         self._reader_for_writer = ConanSettingsReader()

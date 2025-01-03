@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Create an instance of the Conan API object
-"""
+"""Create an instance of the Conan API object."""
 
 from __future__ import annotations
 
@@ -31,9 +29,7 @@ def instance(
     queue: multiprocessing.Queue[Message],
     params: typing.Union[CommandParameters, CommonParameters],
 ) -> conan_api.ConanAPIV1:
-    """
-    Get a new instance of the Conan API object
-    """
+    """Get a new instance of the Conan API object."""
     # pylint: disable=no-member
     cruiz.workers.utils.qtlogger.QtLogger().set_queue(queue)
     stdout = QueuedStreamSix(queue, Stdout)

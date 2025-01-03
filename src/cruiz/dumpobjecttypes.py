@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 """
+Dumping object types.
+
 Debug utility to recursively identify all the types of all attributes in an object.
 Useful to figure out if Conan types made it across the process divide.
 
@@ -49,7 +51,8 @@ def __examine(obj: typing.Any, loglevel: int, depth: int, prefix: str = "") -> N
 
 def dump_object_types(obj: typing.Any, loglevel: str = "DEBUG") -> None:
     """
-    Recursively dump the types of all attributes of the specified object
+    Recursively dump the types of all attributes of the specified object.
+
     Optional logging level for the output
     """
     __VISITED.clear()

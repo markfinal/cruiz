@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
 """
-Send a message to indicate it's the end of data, and close down
-this side of the message queue.
+Send a message to indicate it's the end of data.
+
+Thenclose down this side of the message queue.
 """
 
 from __future__ import annotations
@@ -16,9 +17,7 @@ if typing.TYPE_CHECKING:
 
 
 def invoke(queue: multiprocessing.Queue[Message]) -> None:
-    """
-    Run an arbitrary command
-    """
+    """Run an arbitrary command."""
     queue.put(End())
     queue.close()
     queue.join_thread()

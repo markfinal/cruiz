@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Child process commands
-"""
+"""Child process commands."""
 
 from __future__ import annotations
 
@@ -18,9 +16,7 @@ if typing.TYPE_CHECKING:
 
 
 def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> None:
-    """
-    Run 'conan remove --locks'
-    """
+    """Run 'conan remove --locks'."""
     with worker.ConanWorker(queue, params) as api:
         result = api.remove_locks()
 

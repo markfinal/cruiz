@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Child process commands
-"""
+"""Child process commands."""
 
 from __future__ import annotations
 
@@ -19,9 +17,7 @@ if typing.TYPE_CHECKING:
 
 def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> None:
     # pylint: disable=too-many-branches
-    """
-    Run CMake build tool
-    """
+    """Run CMake build tool."""
     assert params.cwd
     # generate build command
     if "CONAN_CMAKE_PROGRAM" in params.added_environment:

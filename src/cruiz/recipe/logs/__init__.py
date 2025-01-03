@@ -1,5 +1,3 @@
 #!/usr/bin/env python3
 
-"""
-Conan recipe log windows
-"""
+"""Conan recipe log windows."""

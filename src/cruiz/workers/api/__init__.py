@@ -1,4 +1,4 @@
-# Cruiz workers API
+"""Cruiz workers API."""
 
 import cruiz.globals as globals
 

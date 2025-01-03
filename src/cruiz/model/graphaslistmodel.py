@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Conan dependency graph Qt model
-"""
+"""Conan dependency graph Qt model."""
 
 from __future__ import annotations
 
@@ -15,11 +13,10 @@ if typing.TYPE_CHECKING:
 
 
 class DependenciesListModel(QtGui.QStandardItemModel):
-    """
-    Qt model representing the list of dependencies to a recipe
-    """
+    """Qt model representing the list of dependencies to a recipe."""
 
     def __init__(self, graph: DependencyGraph) -> None:
+        """Initialise a DependenciesListModel."""
         super().__init__(len(graph.nodes), 1)
         for row, node in enumerate(graph.nodes):
             item = QtGui.QStandardItem()
@@ -47,11 +44,10 @@ class DependenciesListModel(QtGui.QStandardItemModel):
 
 
 class DependenciesTreeModel(QtGui.QStandardItemModel):
-    """
-    Qt model representing the tree of dependencies to a recipe
-    """
+    """Qt model representing the tree of dependencies to a recipe."""
 
     def __init__(self, graph: DependencyGraph) -> None:
+        """Initialise a DependenciesTreeModel."""
         super().__init__()
         parent_item = self.invisibleRootItem()
         # TODO: revisit this algorithm

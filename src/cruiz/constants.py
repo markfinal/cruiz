@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-Useful constants
-"""
+"""Useful constants."""
 
 from enum import Enum, auto
 
 
 class BuildFeatureConstants(Enum):
-    """
-    Constants representing build features
-    """
+    """Constants representing build features."""
 
     CMAKEFINDDEBUGMODE = auto()
     CMAKEVERBOSEMODE = auto()
@@ -23,9 +19,7 @@ class BuildFeatureConstants(Enum):
 
 
 class CompilerCacheTypes(Enum):
-    """
-    Compiler cache types
-    """
+    """Compiler cache types."""
 
     NONE = None
     CCACHE = "ccache"

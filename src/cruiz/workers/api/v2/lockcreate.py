@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Create a lockfile but in memory
-"""
+"""Create a lockfile but in memory."""
 
 from __future__ import annotations
 
@@ -21,9 +19,7 @@ if typing.TYPE_CHECKING:
 
 
 def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> None:
-    """
-    Run 'conan lock create'
-    """
+    """Run 'conan lock create'."""
     with worker.ConanWorker(queue, params) as api:
         try:
             import dataclasses

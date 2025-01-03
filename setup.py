@@ -65,6 +65,7 @@ def _compile_uis() -> None:
 def _capture_version() -> None:
     version_path = PACKAGE_DIR / "RELEASE_VERSION.py"
     with open(version_path, "wt") as version_file:
+        version_file.write('"""Generated file containing the version number."""\n\n')
         version_file.write(f'__version__ = "{get_version()}"\n')
 
 

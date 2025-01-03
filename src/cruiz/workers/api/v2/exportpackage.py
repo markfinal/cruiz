@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Worker for runnin conan export-pkg
-"""
+"""Worker for runnin conan export-pkg."""
 
 from __future__ import annotations
 
@@ -18,9 +16,7 @@ if typing.TYPE_CHECKING:
 
 
 def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> None:
-    """
-    Run 'conan export-pkg'
-    """
+    """Run 'conan export-pkg'."""
     with worker.ConanWorker(queue, params) as api:
         import importlib
 

@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Get recipe revisions for the specific package reference
-"""
+"""Get recipe revisions for the specific package reference."""
 
 from __future__ import annotations
 
@@ -22,7 +20,7 @@ def invoke(
     queue: multiprocessing.Queue[Message], params: RecipeRevisionsParameters
 ) -> None:
     """
-    Equivalent to
+    Equivalent to:.
 
     'conan search -r <remote_name> <reference> -rev'
 

@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Conan recipe widget representation
-"""
+"""Conan recipe widget representation."""
 
 import logging
 import os
@@ -66,9 +64,7 @@ def _strtobool(val: str) -> bool:
 
 
 class RecipeWidget(QtWidgets.QMainWindow):
-    """
-    Widget representing a Conan recipe.
-    """
+    """Widget representing a Conan recipe."""
 
     configuration_changed = QtCore.Signal()
     local_workflow_changed = QtCore.Signal()
@@ -80,6 +76,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         cache_name: str,
         parent: typing.Optional[QtWidgets.QWidget] = None,
     ) -> None:
+        """Initialise a RecipeWidget."""
         super().__init__(parent)
         self._ui = Ui_RecipeWindow()
         self._ui.setupUi(self)  # type: ignore[no-untyped-call]
@@ -374,8 +371,10 @@ class RecipeWidget(QtWidgets.QMainWindow):
 
     def post_init(self) -> None:
         """
-        Post initialisation commands that need to be performed once the
-        recipe is visible, or that might fail (e.g. recipe syntax error)
+        Post initialisation commands.
+
+        These need to be performed once the recipe is visible, or that might fail
+        (e.g. recipe syntax error)
         """
         attributes = self.get_recipe_attributes()
         self._update_window_title(attributes)
@@ -388,6 +387,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         return self.recipe.context.is_busy or self._dependency_generate_context.is_busy
 
     def closeEvent(self, event: QtGui.QCloseEvent) -> None:
+        """Override the widget's closeEvent."""
         if self._are_commands_running:
             QtWidgets.QMessageBox.warning(
                 self,
@@ -407,9 +407,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
     def get_recipe_attributes(
         self,
     ) -> typing.Dict[str, typing.Any]:
-        """
-        Get the attributes written into the recipe
-        """
+        """Get the attributes written into the recipe."""
         return self.recipe.context.inspect_recipe(
             self.recipe.path, propagate_errors=True
         )
@@ -480,9 +478,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         workflow_cwd: WorkflowCwd,
         common_subdir: typing.Optional[str],
     ) -> pathlib.PurePosixPath:
-        """
-        Get the working directory for the recipe
-        """
+        """Get the working directory for the recipe."""
         if common_subdir is not None:
             common_subdir_path = pathlib.Path(common_subdir)
             if common_subdir_path.is_absolute():
@@ -498,17 +494,13 @@ class RecipeWidget(QtWidgets.QMainWindow):
         return cwd
 
     def cwd_is_relative_to_recipe(self, workflow_cmd: WorkflowCwd) -> bool:
-        """
-        Is the current working directory relative to the recipe folder?
-        """
+        """Is the current working directory relative to the recipe folder?."""
         if workflow_cmd == WorkflowCwd.RELATIVE_TO_RECIPE:
             return True
         return False
 
     def tokens(self) -> typing.Tuple[typing.Dict[str, str], str]:
-        """
-        Get a dict of tokens usable in expressions
-        """
+        """Get a dict of tokens usable in expressions."""
         recipe_attributes = self.get_recipe_attributes()
         with RecipeSettingsReader.from_recipe(self.recipe) as settings_recipe:
             profile = settings_recipe.profile.resolve()
@@ -547,9 +539,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
     def resolve_expression(
         self, expression: typing.Optional[str]
     ) -> typing.Optional[str]:
-        """
-        Resolve an expression using token expansion.
-        """
+        """Resolve an expression using token expansion."""
         if not expression:
             return None
         tokens, token_regex = self.tokens()
@@ -663,9 +653,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
             logger.exception(exc)
 
     def on_preferences_update(self) -> None:
-        """
-        Slot called when preferences are updated
-        """
+        """Slot called when preferences are updated."""
         attributes = self.get_recipe_attributes()
         self._ui.commandToolbar.refresh_action_shortcuts_and_tooltips(attributes)
         self._ui.buildFeaturesToolbar.refresh_content(self.recipe.uuid)
@@ -1241,9 +1229,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
             right_widget.document().setDefaultFont(font)
 
     def failed_to_load(self) -> None:
-        """
-        Call this in a recipe failure to load situation, that disables everything
-        """
+        """Call this in a recipe failure to load situation, that disables everything."""
         self._ui.conanDependencyDock.setEnabled(False)
         self._ui.conanCommandsDock.setEnabled(False)
         self._ui.conanCommandHistory.setEnabled(False)
@@ -1474,10 +1460,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         sub_window.close()
 
     def on_local_cache_changed(self, cache_name: str) -> None:
-        """
-        Slot called when a local cache is changed so that user facing information
-        can be updated
-        """
+        """Slot called when a local cache is changed so that user facing information can be updated."""  # noqa: E501
         if cache_name != self.recipe.context.cache_name:
             return
         self._ui.behaviourToolbar.refresh_content()

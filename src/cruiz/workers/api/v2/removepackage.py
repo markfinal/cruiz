@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Worker implementation for conan remove
-"""
+"""Worker implementation for conan remove."""
 
 from __future__ import annotations
 
@@ -18,9 +16,7 @@ if typing.TYPE_CHECKING:
 
 
 def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> None:
-    """
-    Run 'conan remove [-c] ref'
-    """
+    """Run 'conan remove [-c] ref'."""
     with worker.ConanWorker(queue, params) as api:
         from conan.api.model import ListPattern
 

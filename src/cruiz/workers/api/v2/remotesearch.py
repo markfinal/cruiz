@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Process requests for searching a remote for package references
-"""
+"""Process requests for searching a remote for package references."""
 
 from __future__ import annotations
 
@@ -21,7 +19,8 @@ def invoke(
     queue: multiprocessing.Queue[Message], params: SearchRecipesParameters
 ) -> None:
     """
-    Equivalent to:
+    Equivalent to:.
+
     'conan search -r <remote_name> [--case-sensitive] <pattern>'
 
     with optional extra processing when aliases are detected.

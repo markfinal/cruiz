@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Dialog for removing an environment variable
-"""
+"""Dialog for removing an environment variable."""
 
 from cruiz.pyside6.local_cache_remove_environment import Ui_RemoveEnvironmentDialog
 
@@ -10,12 +8,10 @@ from qtpy import QtCore, QtWidgets
 
 
 class RemoveEnvironmentDialog(QtWidgets.QDialog):
-    """
-    Dialog for removing an environment variable from the collection used to run
-    Conan commands
-    """
+    """Dialog for removing an environment variable from the collection used to run Conan commands."""  # noqa: E501
 
     def __init__(self, parent: QtWidgets.QWidget) -> None:
+        """Initialise a RemoveEnvironmentDialog."""
         super().__init__(parent)
         self.setAttribute(QtCore.Qt.WidgetAttribute.WA_DeleteOnClose, True)
         self._ui = Ui_RemoveEnvironmentDialog()
@@ -37,5 +33,6 @@ class RemoveEnvironmentDialog(QtWidgets.QDialog):
         ).setEnabled(bool(self._ui.name.text()))
 
     def accept(self) -> None:
+        """Override the accept dialog method."""
         self.name = self._ui.name.text()
         super().accept()

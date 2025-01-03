@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Wizard page for selecting the initial profile
-"""
+"""Wizard page for selecting the initial profile."""
 
 from __future__ import annotations
 
@@ -20,18 +18,18 @@ if typing.TYPE_CHECKING:
 
 
 class LoadRecipeInitialProfilePage(QtWidgets.QWizardPage):
-    """
-    Wizard page allowing selection of an initial profile to apply to the recipe.
-    """
+    """Wizard page allowing selection of an initial profile to apply to the recipe."""
 
     @property
     def _ui(self) -> typing.Any:
         return self.wizard().ui  # type: ignore[attr-defined]
 
     def nextId(self) -> int:
+        """Get the next page id."""
         return -1
 
     def initializePage(self) -> None:
+        """Override the initializePage method."""
         self.registerField("initial_profile*", self._ui.initial_profile, "currentText")
         self._ui.initial_profile.currentIndexChanged.connect(
             self._on_initial_profile_changed
@@ -51,6 +49,7 @@ class LoadRecipeInitialProfilePage(QtWidgets.QWizardPage):
         super().initializePage()
 
     def cleanupPage(self) -> None:
+        """Override the cleanupPage method."""
         self._ui.initial_profile.currentIndexChanged.disconnect()
         return super().cleanupPage()
 

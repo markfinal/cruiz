@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Remove all packages from the local cache
-"""
+"""Remove all packages from the local cache."""
 
 from __future__ import annotations
 
@@ -18,9 +16,7 @@ if typing.TYPE_CHECKING:
 
 
 def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> None:
-    """
-    Run 'conan remove *'
-    """
+    """Run 'conan remove *'."""
     with worker.ConanWorker(queue, params) as api:
         from conan.api.model import ListPattern
 

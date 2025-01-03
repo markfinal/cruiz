@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 """
+Representation of a child process.
+
 Representation on the host of an instance of a Conan or Conan-related
 command running in a child process
 """
@@ -37,9 +39,7 @@ logger = logging.getLogger(__name__)
 
 
 class ConanInvocation(QtCore.QObject):
-    """
-    Wrapper around invoking a conan child process
-    """
+    """Wrapper around invoking a conan child process."""
 
     # pylint: disable=too-many-instance-attributes
 
@@ -48,9 +48,11 @@ class ConanInvocation(QtCore.QObject):
     _begin_processing = QtCore.Signal()
 
     def __del__(self) -> None:
+        """Log when a ConanInvocation is deleted."""
         logger.debug("-=%d", id(self))
 
     def __init__(self) -> None:
+        """Initialise a ConanInvocation."""
         logger.debug("+=%d", id(self))
         super().__init__()  # note that parent is None
         self._mp_context = multiprocessing.get_context("spawn")
@@ -72,9 +74,7 @@ class ConanInvocation(QtCore.QObject):
         self._begin_processing.emit()
 
     def close(self) -> None:
-        """
-        Tidy up any resources on the context that need closing
-        """
+        """Tidy up any resources on the context that need closing."""
         if self._process:
             self._process.join()
             self._process.close()
@@ -110,9 +110,7 @@ class ConanInvocation(QtCore.QObject):
         log_details: LogDetails,
         continuation: typing.Optional[typing.Callable[[typing.Any, typing.Any], None]],
     ) -> None:
-        """
-        Invoke a command, with optional continuation
-        """
+        """Invoke a command, with optional continuation."""
         assert self._process is None
 
         if continuation:
@@ -145,9 +143,7 @@ class ConanInvocation(QtCore.QObject):
         self._process = process
 
     def cancel(self) -> None:
-        """
-        Cancel the current running worker thread.
-        """
+        """Cancel the current running worker thread."""
         if not self._process:
             return
         if not self._process.is_alive():

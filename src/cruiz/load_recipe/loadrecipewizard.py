@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Wizard for loading a recipe
-"""
+"""Wizard for loading a recipe."""
 
 from __future__ import annotations
 
@@ -24,9 +22,7 @@ if typing.TYPE_CHECKING:
 
 
 class LoadRecipeWizard(QtWidgets.QWizard):
-    """
-    Wizard for loading recipes.
-    """
+    """Wizard for loading recipes."""
 
     def __init__(
         self,
@@ -35,6 +31,7 @@ class LoadRecipeWizard(QtWidgets.QWizard):
         uuid: typing.Optional[QtCore.QUuid],
         original_recipe: typing.Optional[Recipe],
     ) -> None:
+        """Initialise a LoadRecipeWizard."""
         super().__init__(parent)
         self.has_load_errors = False
         self._path = path
@@ -81,26 +78,19 @@ class LoadRecipeWizard(QtWidgets.QWizard):
 
     @property
     def disambiguation_required(self) -> bool:
-        """
-        Determine whether the recipe needs to be disambiguated by user input.
-        """
+        """Determine whether the recipe needs to be disambiguated by user input."""
         return self._uuid is None or self._ambiguous_version
 
     @property
     def recipe_version(self) -> typing.Optional[str]:
-        """
-        Get the version of the recipe. May be None.
-        """
+        """Get the version of the recipe. May be None."""
         if self.ui.version.isEnabled():
             return str(self.field("version"))
         return None
 
     @property
     def local_cache(self) -> str:
-        """
-        Get the local cache to use, either from a clone of an existing recipe
-        or from user selection.
-        """
+        """Get the local cache to use, either from a clone of an existing recipe or from user selection."""  # noqa: E501
         if self._uuid:
             # come via the recent recipe menu, or chosen as a version
             # from 'open another version'
@@ -112,30 +102,25 @@ class LoadRecipeWizard(QtWidgets.QWizard):
 
     @property
     def initial_profile(self) -> str:
-        """
-        Get the initial profile selected.
-        """
+        """Get the initial profile selected."""
         return str(self.field("initial_profile"))
 
     @property
     def uuid(self) -> typing.Optional[QtCore.QUuid]:
         """
         Get the uuid to use for the recipe.
+
         May be None to indicate that the recipe has not been seen before.
         """
         return self._uuid
 
     @uuid.setter
     def uuid(self, uuid: typing.Optional[QtCore.QUuid]) -> None:
-        """
-        Allow setting the uuid. May be None.
-        """
+        """Allow setting the uuid. May be None."""
         self._uuid = uuid
 
     def validate(self) -> None:
-        """
-        Validate the recipe in the wizard.
-        """
+        """Validate the recipe in the wizard."""
         if not self._path.exists():
             raise RecipeDoesNotExistError()
         if self._uuid and cruiz.globals.get_main_window().is_recipe_active(self._uuid):

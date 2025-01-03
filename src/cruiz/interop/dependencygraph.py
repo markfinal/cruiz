@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Interop between Conan and cruiz
-"""
+"""Interop between Conan and cruiz."""
 
 from __future__ import annotations
 
@@ -15,9 +13,7 @@ if typing.TYPE_CHECKING:
 
 @dataclass
 class DependencyGraph:
-    """
-    Representation of Conan's dependency graph
-    """
+    """Representation of Conan's dependency graph."""
 
     nodes: typing.List[PackageNode]
     root: PackageNode
@@ -25,8 +21,10 @@ class DependencyGraph:
 
 def dependencygraph_from_node_dependees(node: PackageNode) -> DependencyGraph:
     """
-    Generate a DependencyGraph from the immediate parents (those nodes requiring
-    the node specified) as an inverted dependency graph.
+    Generate a DependencyGraph from the immediate parents.
+
+    Immediate parents (those nodes requiring the node specified) as an inverted
+    dependency graph.
     """
     new_root = node.clone_standalone()
     for parent in node.parents:

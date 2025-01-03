@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Dialog for adding an environment variable
-"""
+"""Dialog for adding an environment variable."""
 
 from __future__ import annotations
 
@@ -20,20 +18,17 @@ if typing.TYPE_CHECKING:
 
 @dataclass
 class KeyValuePair:
-    """
-    Representation of a key-value pair
-    """
+    """Representation of a key-value pair."""
 
     key: str
     value: str
 
 
 class AddEnvironmentDialog(QtWidgets.QDialog):
-    """
-    Dialog for adding an environment key-value pair to the local cache.
-    """
+    """Dialog for adding an environment key-value pair to the local cache."""
 
     def __init__(self, context: ConanContext, parent: QtWidgets.QWidget) -> None:
+        """Initialise an AddEnvironmentDialog."""
         super().__init__(parent)
         self.setAttribute(QtCore.Qt.WidgetAttribute.WA_DeleteOnClose, True)
         self._ui = Ui_AddEnvironmentDialog()
@@ -70,13 +65,12 @@ class AddEnvironmentDialog(QtWidgets.QDialog):
         ).setEnabled(bool(self._ui.name.text() and self._ui.value.text()))
 
     def accept(self) -> None:
+        """Override the accept dialog method."""
         self._name = self._ui.name.text()
         self._value = self._ui.value.text()
         super().accept()
 
     @property
     def environment_variable(self) -> KeyValuePair:
-        """
-        Get the environment key-value pair just added.
-        """
+        """Get the environment key-value pair just added."""
         return KeyValuePair(self._name, self._value)

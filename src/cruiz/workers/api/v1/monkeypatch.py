@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Any monkeypatching required
-"""
+"""Any monkeypatching required."""
 
 import logging
 import os

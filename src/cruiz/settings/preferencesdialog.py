@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Application settings utilities
-"""
+"""Application settings utilities."""
 
 import json
 import pathlib
@@ -91,14 +89,13 @@ from qtpy import QtCore, QtGui, QtWidgets
 
 
 class PreferencesDialog(QtWidgets.QDialog):
-    """
-    Dialog representing the preferences.
-    """
+    """Dialog representing the preferences."""
 
     modified = QtCore.Signal()
     preferences_updated = QtCore.Signal()
 
     def __init__(self) -> None:
+        """Initialise a PreferencesDialog."""
         super().__init__()
         self._ui = Ui_PreferencesDialog()
         self._ui.setupUi(self)  # type: ignore[no-untyped-call]
@@ -485,6 +482,7 @@ class PreferencesDialog(QtWidgets.QDialog):
             raise RuntimeError(f"Unknown toolbox widget with name '{name}")
 
     def reject(self) -> None:
+        """Override the dialog's reject method."""
         if self._any_modifications():
             response = QtWidgets.QMessageBox.question(
                 self,
@@ -723,6 +721,8 @@ class PreferencesDialog(QtWidgets.QDialog):
 
     def _font_reset(self, usage: FontUsage) -> None:
         """
+        Desired code.
+
         with FontWriteAccess(usage) as fontsettings:
             del fontsettings.name
             del fontsettings.size

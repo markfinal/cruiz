@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Get environment for Conan
-"""
+"""Get environment for Conan."""
 
 import logging
 import typing
@@ -19,6 +17,8 @@ def get_conan_env(
     cache_name: str,
 ) -> typing.Tuple[typing.Dict[str, str], typing.List[str]]:
     """
+    Get the Conan environment.
+
     Get a tuple of
     - a dictionary of environment variables to add
     - a list of environment variable keys to remove

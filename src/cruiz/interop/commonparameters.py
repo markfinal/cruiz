@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Common parameters
-"""
+"""Common parameters."""
 
 import typing
 from dataclasses import dataclass, field
@@ -10,9 +8,7 @@ from dataclasses import dataclass, field
 
 @dataclass
 class CommonParameters:
-    """
-    Common parameters for all commands to run
-    """
+    """Common parameters for all commands to run."""
 
     worker: typing.Union[
         typing.Callable[[typing.Any, typing.Any], None],

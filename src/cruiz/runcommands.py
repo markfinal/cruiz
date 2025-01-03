@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Running commands, a wrapper around subprocess, dealing with Windows console popups
-"""
+"""Running commands a wrapper around subprocess, dealing with Windows console popups."""
 
 import subprocess
 import typing
@@ -13,9 +11,7 @@ CREATION_FLAGS = (
 
 
 def run(*args: typing.Any, **kwargs: typing.Any) -> subprocess.CompletedProcess:  # type: ignore[type-arg]  # noqa: E501
-    """
-    Run a command, checking for failure.
-    """
+    """Run a command, checking for failure."""
     kwargs["creationflags"] = CREATION_FLAGS
     kwargs["check"] = True
     return subprocess.run(*args, **kwargs)
@@ -24,6 +20,7 @@ def run(*args: typing.Any, **kwargs: typing.Any) -> subprocess.CompletedProcess:
 def run_get_output(*args: typing.Any, **kwargs: typing.Any) -> str:
     """
     Run a command, to capture stdout.
+
     Return the output.
     """
     kwargs["creationflags"] = CREATION_FLAGS
@@ -36,7 +33,8 @@ def run_get_output(*args: typing.Any, **kwargs: typing.Any) -> str:
 
 def run_get_combined_output(*args: typing.Any, **kwargs: typing.Any) -> str:
     """
-    Run a command, combining and capturing stdout and stderr together
+    Run a command, combining and capturing stdout and stderr together.
+
     Return the output.
     """
     kwargs["creationflags"] = CREATION_FLAGS
@@ -51,6 +49,7 @@ def run_get_combined_output(*args: typing.Any, **kwargs: typing.Any) -> str:
 def get_popen_for_capture(*args: typing.Any, **kwargs: typing.Any) -> subprocess.Popen:  # type: ignore[type-arg]  # noqa: E501
     """
     Get the Popen object, while capturing both stdout and stderr as separate pipes.
+
     Returns the Popen object.
     """
     kwargs["stdout"] = subprocess.PIPE

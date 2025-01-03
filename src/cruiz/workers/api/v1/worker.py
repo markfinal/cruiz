@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Utils for worker context managers for Conan v1
-"""
+"""Utils for worker context managers for Conan v1."""
 
 import contextlib
 import typing
@@ -12,11 +10,10 @@ from cruiz.workers.utils.worker import Worker
 
 # pylint: disable=too-few-public-methods
 class ConanWorker(Worker):
-    """
-    Conan specific context manager
-    """
+    """Conan specific context manager."""
 
     def __enter__(self) -> typing.Any:
+        """Enter a context manager with a ConanWorker."""
         super().__enter__()
         # import here because it can use the environment variables set in the
         # super class
@@ -31,8 +28,9 @@ def replace_conan_version_struct_with_string(
     result: typing.Dict[typing.Any, typing.Any]
 ) -> None:
     """
-    Results have ConanVersion structs, but these cannot be passed over the
-    process divide so just convert them to strings
+    Results have ConanVersion structs.
+
+    But these cannot be passed over the process divide so just convert them to strings.
     """
     if "installed" not in result:
         return

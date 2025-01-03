@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Settings context managers for general preferences
-"""
+"""Settings context managers for general preferences."""
 
 import platform
 import typing
@@ -22,11 +20,10 @@ from .writermixin import _WriterMixin
 
 
 class GeneralSettings(ComparableCommonSettings):
-    """
-    Representation of 'general' disk settings
-    """
+    """Representation of 'general' disk settings."""
 
     def __init__(self) -> None:
+        """Initialise a GeneralSettings."""
         super().__init__()
 
         default_stdout_batching_value = platform.system() == "Windows"
@@ -73,9 +70,7 @@ class GeneralSettings(ComparableCommonSettings):
 
     @property
     def clear_panes(self) -> BoolSetting:
-        """
-        Get whether output panes are cleared on each command
-        """
+        """Get whether output panes are cleared on each command."""
         return self._get_value_via_meta()
 
     @clear_panes.setter
@@ -84,9 +79,7 @@ class GeneralSettings(ComparableCommonSettings):
 
     @property
     def combine_panes(self) -> BoolSetting:
-        """
-        Get whether output and error panes are combined
-        """
+        """Get whether output and error panes are combined."""
         return self._get_value_via_meta()
 
     @combine_panes.setter
@@ -95,9 +88,7 @@ class GeneralSettings(ComparableCommonSettings):
 
     @property
     def use_stdout_batching(self) -> BoolSetting:
-        """
-        Get whether standard output and error streamed are batched before displaying
-        """
+        """Get whether standard output and error streamed are batched before displaying."""  # noqa: E501
         return self._get_value_via_meta()
 
     @use_stdout_batching.setter
@@ -106,9 +97,7 @@ class GeneralSettings(ComparableCommonSettings):
 
     @property
     def enable_command_timing(self) -> BoolSetting:
-        """
-        Get whether command wallclock timing is enabled
-        """
+        """Get whether command wallclock timing is enabled."""
         return self._get_value_via_meta()
 
     @enable_command_timing.setter
@@ -119,6 +108,7 @@ class GeneralSettings(ComparableCommonSettings):
     def use_compact_look(self) -> BoolSetting:
         """
         Get whether a compact look is enabled.
+
         OBSOLETE
         """
         return self._get_value_via_meta()
@@ -129,9 +119,7 @@ class GeneralSettings(ComparableCommonSettings):
 
     @property
     def default_recipe_directory(self) -> StringSetting:
-        """
-        Get the default recipe directory to look for recipes to load
-        """
+        """Get the default recipe directory to look for recipes to load."""
         return self._get_value_via_meta()
 
     @default_recipe_directory.setter
@@ -140,9 +128,7 @@ class GeneralSettings(ComparableCommonSettings):
 
     @property
     def default_recipe_editor(self) -> StringSetting:
-        """
-        Get the default recipe editor to open recipes in.
-        """
+        """Get the default recipe editor to open recipes in."""
         return self._get_value_via_meta()
 
     @default_recipe_editor.setter
@@ -151,9 +137,7 @@ class GeneralSettings(ComparableCommonSettings):
 
     @property
     def busy_icon_colour(self) -> ColourSetting:
-        """
-        Get the colour of the busy icon
-        """
+        """Get the colour of the busy icon."""
         return self._get_value_via_meta()
 
     @busy_icon_colour.setter
@@ -162,9 +146,7 @@ class GeneralSettings(ComparableCommonSettings):
 
     @property
     def found_text_background_colour(self) -> ColourSetting:
-        """
-        Get the background colour of found text.
-        """
+        """Get the background colour of found text."""
         return self._get_value_via_meta()
 
     @found_text_background_colour.setter
@@ -175,6 +157,7 @@ class GeneralSettings(ComparableCommonSettings):
     def new_recipe_loading_behaviour(self) -> BoolSetting:
         """
         Get whether the new recipe loading behaviour is enabled.
+
         OSBOLETE
         """
         return self._get_value_via_meta()
@@ -185,15 +168,15 @@ class GeneralSettings(ComparableCommonSettings):
 
 
 class GeneralSettingsReader:
-    """
-    Context manager to read from disk settings
-    """
+    """Context manager to read from disk settings."""
 
     def __init__(self) -> None:
+        """Initialise a GeneralSettingsReader."""
         self.settings = BaseSettings.make_settings()
         self.group = ""
 
     def __enter__(self) -> GeneralSettings:
+        """Enter a context manager with a GeneralSettingsReader."""
         self.settings.beginGroup(self.group)
         self._settings_object = GeneralSettings()
         self._settings_object.settings_reader = self
@@ -202,6 +185,7 @@ class GeneralSettingsReader:
     def __exit__(
         self, exc_type: typing.Any, exc_value: typing.Any, exc_traceback: typing.Any
     ) -> typing.Any:
+        """Exit a context manager with a GeneralSettingsReader."""
         self.settings.endGroup()
         self._settings_object.settings_reader = None
         del self._settings_object
@@ -213,9 +197,8 @@ class GeneralSettingsReader:
 
 
 class GeneralSettingsWriter(_WriterMixin):
-    """
-    Utility class for writing changed settings to disk
-    """
+    """Utility class for writing changed settings to disk."""
 
     def __init__(self) -> None:
+        """Initialise a GeneralSettingsWriter."""
         self._reader_for_writer = GeneralSettingsReader()

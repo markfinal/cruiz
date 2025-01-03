@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Worker for installing Conan local cache configuration
-"""
+"""Worker for installing Conan local cache configuration."""
 
 from __future__ import annotations
 
@@ -19,9 +17,7 @@ if typing.TYPE_CHECKING:
 
 
 def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> None:
-    """
-    Run 'conan config install'
-    """
+    """Run 'conan config install'."""
     with worker.ConanWorker(queue, params) as api:
         args = {}
         if "gitBranch" in params.named_arguments:

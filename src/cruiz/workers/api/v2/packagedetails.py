@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Get package_ids for a given package reference with revision
-"""
+"""Get package_ids for a given package reference with revision."""
 
 from __future__ import annotations
 
@@ -19,7 +17,7 @@ if typing.TYPE_CHECKING:
 
 def invoke(queue: multiprocessing.Queue[Message], params: PackageIdParameters) -> None:
     """
-    Equivalent to
+    Equivalent to.
 
     'conan search -r <remote_name> <reference>'
 

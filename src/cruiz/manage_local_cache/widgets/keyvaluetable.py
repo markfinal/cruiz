@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Widget for a table of key-value pairs
-"""
+"""Widget for a table of key-value pairs."""
 
 from enum import IntEnum
 
@@ -12,22 +10,16 @@ from qtpy import QtCore, QtWidgets
 
 
 class KeyValueTable(QtWidgets.QTableWidget):
-    """
-    Table of key-value pairs
-    """
+    """Table of key-value pairs."""
 
     class ColumnIndex(IntEnum):
-        """
-        Column indices of the table
-        """
+        """Column indices of the table."""
 
         KEY = 0
         VALUE = 1
 
     def add_key_value_pair(self, key: str, value: str) -> None:
-        """
-        Add a key-value pair to the table.
-        """
+        """Add a key-value pair to the table."""
         row_count = self.rowCount()
         key_item = QtWidgets.QTableWidgetItem(key)
         key_item.setFlags(
@@ -52,7 +44,10 @@ class KeyValueTable(QtWidgets.QTableWidget):
 
     def remove_selected(self) -> str:
         """
+        Remove the selected row.
+
         Selections are single-row selection.
+
         Remove that selected row, and return the key string for that removed row.
         """
         selected_ranges = self.selectedRanges()

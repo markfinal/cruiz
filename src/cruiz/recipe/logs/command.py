@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Recipe command log window
-"""
+"""Recipe command log window."""
 
 from __future__ import annotations
 
@@ -17,15 +15,14 @@ if typing.TYPE_CHECKING:
 
 
 class CommandListWidgetItem(QtWidgets.QListWidgetItem):
-    """
-    QListWidgetItem representing a Conan command
-    """
+    """QListWidgetItem representing a Conan command."""
 
     def __init__(
         self,
         parameters: CommandParameters,
         parent: typing.Optional[QtWidgets.QListWidget] = None,
     ) -> None:
+        """Initialise a CommandListWidgetItem."""
         if parameters.cwd:
             expression = f"{parameters} (in {parameters.cwd})"
         else:
@@ -35,11 +32,10 @@ class CommandListWidgetItem(QtWidgets.QListWidgetItem):
 
 
 class RecipeCommandHistoryWidget(QtWidgets.QListWidget):
-    """
-    QListWidget representing a history of Conan commands
-    """
+    """QListWidget representing a history of Conan commands."""
 
     def __init__(self, parent: typing.Optional[QtWidgets.QWidget] = None) -> None:
+        """Initialise a RecipeCommandHistoryWidget."""
         super().__init__(parent)
         self.customContextMenuRequested.connect(self._show_context_menu)
         self.itemSelectionChanged.connect(self._selection_changed)

@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Settings base classes
-"""
+"""Settings base classes."""
 
 from __future__ import annotations
 
@@ -16,6 +14,8 @@ from qtpy import QtCore, QtGui
 
 @dataclass
 class SettingMeta:
+    """Metadata for settings."""
+
     settings_key: str
     type: typing.Type[typing.Any]
     default_value: typing.Any
@@ -24,17 +24,13 @@ class SettingMeta:
 
 @dataclass
 class StringSetting:
-    """
-    Representation of a string value from disk settings and its fallback
-    """
+    """Representation of a string value from disk settings and its fallback."""
 
     value: typing.Optional[str]
     fallback: str
 
     def resolve(self) -> str:
-        """
-        If a value exists on disk, return that, otherwise return the fallback.
-        """
+        """If a value exists on disk, return that, otherwise return the fallback."""
         if self.value is None:
             return self.fallback
         return self.value
@@ -42,17 +38,13 @@ class StringSetting:
 
 @dataclass
 class IntSetting:
-    """
-    Representation of an integer value from disk settings and its fallback
-    """
+    """Representation of an integer value from disk settings and its fallback."""
 
     value: typing.Optional[int]
     fallback: int
 
     def resolve(self) -> int:
-        """
-        If a value exists on disk, return that, otherwise return the fallback.
-        """
+        """If a value exists on disk, return that, otherwise return the fallback."""
         if self.value is None:
             return self.fallback
         return self.value
@@ -60,17 +52,13 @@ class IntSetting:
 
 @dataclass
 class BoolSetting:
-    """
-    Representation of a Boolean value from disk settings and its fallback
-    """
+    """Representation of a Boolean value from disk settings and its fallback."""
 
     value: typing.Optional[bool]
     fallback: bool
 
     def resolve(self) -> bool:
-        """
-        If a value exists on disk, return that, otherwise return the fallback.
-        """
+        """If a value exists on disk, return that, otherwise return the fallback."""
         if self.value is None:
             return self.fallback
         return self.value
@@ -78,17 +66,13 @@ class BoolSetting:
 
 @dataclass
 class ColourSetting:
-    """
-    Representation of a QColor value from disk settings and its fallback
-    """
+    """Representation of a QColor value from disk settings and its fallback."""
 
     value: typing.Optional[QtGui.QColor]
     fallback: QtGui.QColor
 
     def resolve(self) -> QtGui.QColor:
-        """
-        If a value exists on disk, return that, otherwise return the fallback.
-        """
+        """If a value exists on disk, return that, otherwise return the fallback."""
         if self.value is None:
             return self.fallback
         return self.value
@@ -96,47 +80,42 @@ class ColourSetting:
 
 @dataclass
 class DictSetting:
-    """
-    Representation of a dictionary from disk settings and its fallback
-    """
+    """Representation of a dictionary from disk settings and its fallback."""
 
     value: typing.Optional[typing.Dict[str, str]]
     fallback: typing.Dict[str, str]
 
     def resolve(self) -> typing.Dict[str, str]:
-        """
-        If a value exists on disk, return that, otherwise return the fallback.
-        """
+        """If a value exists on disk, return that, otherwise return the fallback."""
         if self.value is None:
             return self.fallback
         return self.value
 
     def __getitem__(self, name: str) -> str:
+        """Get the named item."""
         assert self.value
         return self.value[name]
 
     def __setitem__(self, name: str, value: str) -> None:
+        """Set the value of the named item."""
         assert self.value
         self.value[name] = value
 
     def __delitem__(self, name: str) -> None:
+        """Delete the named item."""
         assert self.value
         del self.value[name]
 
 
 @dataclass
 class ListSetting:
-    """
-    Representation of a list from disk settings and its fallback
-    """
+    """Representation of a list from disk settings and its fallback."""
 
     value: typing.Optional[typing.List[str]]
     fallback: typing.List[str]
 
     def resolve(self) -> typing.List[str]:
-        """
-        If a value exists on disk, return that, otherwise return the fallback.
-        """
+        """If a value exists on disk, return that, otherwise return the fallback."""
         if self.value is None:
             return self.fallback
         return self.value
@@ -144,9 +123,7 @@ class ListSetting:
 
 # TODO: does this need renaming?
 class WorkflowCwd(IntEnum):
-    """
-    Supported current working directories in workflow
-    """
+    """Supported current working directories in workflow."""
 
     RELATIVE_TO_RECIPE = 0
     RELATIVE_TO_GIT = 1
@@ -154,30 +131,22 @@ class WorkflowCwd(IntEnum):
 
 @dataclass
 class WorkflowCwdSetting:
-    """
-    Setting value representing the enum WorkflowCwd, with a fallback
-    """
+    """Setting value representing the enum WorkflowCwd, with a fallback."""
 
     value: typing.Optional[WorkflowCwd]
     fallback: WorkflowCwd
 
     def resolve(self) -> WorkflowCwd:
-        """
-        Resolve the setting value, either the current value or the fallback
-        """
+        """Resolve the setting value, either the current value or the fallback."""
         return self.value or self.fallback
 
 
 class BaseSettings:
-    """
-    Common settings functionality
-    """
+    """Common settings functionality."""
 
     @staticmethod
     def make_settings() -> QtCore.QSettings:
-        """
-        Make a QSettings instance to operate on settings.
-        """
+        """Make a QSettings instance to operate on settings."""
         # since there is a central location to where the QSettings
         # is constructed, override the meanings of the argument to make
         # a sensible path to the preferences file
@@ -198,43 +167,45 @@ class BaseSettings:
         raise RuntimeError(f"Unable to locate '{key}={value}' in array '{array_key}'")
 
     class Group:
-        """
-        Representation of a QSettings group as a context manager
-        """
+        """Representation of a QSettings group as a context manager."""
 
         def __init__(
             self, group: str, settings: typing.Optional[QtCore.QSettings] = None
         ) -> None:
+            """Initialise a Group."""
             self._settings = settings or BaseSettings.make_settings()
             self._group = group
 
         def __enter__(self) -> QtCore.QSettings:
+            """Enter a context manager with a Group."""
             self._settings.beginGroup(self._group)
             return self._settings
 
         def __exit__(
             self, exc_type: typing.Any, exc_value: typing.Any, exc_traceback: typing.Any
         ) -> typing.Any:
+            """Exit a context manager with a Group."""
             self._settings.endGroup()
 
     class ReadArray:
-        """
-        Representation of a QSettings array as a context manager
-        """
+        """Representation of a QSettings array as a context manager."""
 
         def __init__(
             self, array: str, settings: typing.Optional[QtCore.QSettings] = None
         ) -> None:
+            """Initialise a ReadArray."""
             self._settings = settings or BaseSettings.make_settings()
             self._array = array
 
         def __enter__(self) -> typing.Tuple[QtCore.QSettings, int]:
+            """Enter a context manager with a ReadArray."""
             count = self._settings.beginReadArray(self._array)
             return self._settings, count
 
         def __exit__(
             self, exc_type: typing.Any, exc_value: typing.Any, exc_traceback: typing.Any
         ) -> typing.Any:
+            """Exit a context manager with a ReadArray."""
             self._settings.endArray()
 
     # TODO: this is not such an elegant solution when the array to write
@@ -245,9 +216,7 @@ class BaseSettings:
     # it's not an exception either to have a zero-length array, so how is it reported
     # back?
     class WriteArray:
-        """
-        Representation of writing an array to QSettings as a context manager
-        """
+        """Representation of writing an array to QSettings as a context manager."""
 
         def __init__(
             self,
@@ -255,11 +224,13 @@ class BaseSettings:
             replace: bool = False,
             settings: typing.Optional[QtCore.QSettings] = None,
         ) -> None:
+            """Initialise a WriteAray."""
             self._settings = settings or BaseSettings.make_settings()
             self._array = array
             self._replace = replace
 
         def __enter__(self) -> QtCore.QSettings:
+            """Enter a context manager with a WriteArray."""
             if self._replace:
                 self._settings.remove(self._array)
             self._settings.beginWriteArray(self._array)
@@ -268,6 +239,7 @@ class BaseSettings:
         def __exit__(
             self, exc_type: typing.Any, exc_value: typing.Any, exc_traceback: typing.Any
         ) -> typing.Any:
+            """Exit a context manager with a WriteArray."""
             self._settings.endArray()
 
 
@@ -279,13 +251,11 @@ class CommonSettings:
     """
 
     def __init__(self) -> None:
+        """Initialise a CommonSettings."""
         self.settings_reader: typing.Optional[typing.Any] = None
 
     def _get_value_via_meta(self) -> typing.Any:
-        """
-        Get the value from settings using meta data to determine
-        types and settings key
-        """
+        """Get the value from settings using meta data to determine types and settings key."""  # noqa: E501
         assert self.settings_reader
         property_name = inspect.getouterframes(inspect.currentframe())[1][3]
         map = self._property_meta[property_name]  # type: ignore
@@ -301,10 +271,7 @@ class CommonSettings:
         return map.type(value, map.default_value)
 
     def _set_value_via_meta(self, value: typing.Any) -> None:
-        """
-        Set the value into temporary storage before serialising, using
-        meta data to know where to read and what to write.
-        """
+        """Set the value into temporary storage before serialising, using meta data to know where to read and what to write."""  # noqa: E501
         property_name = inspect.getouterframes(inspect.currentframe())[1][3]
         map = self._property_meta[property_name]  # type: ignore
         value_to_store = map.save_type(value, property_name, map.settings_key)
@@ -313,15 +280,10 @@ class CommonSettings:
 
 
 class ComparableCommonSettings(CommonSettings):
-    """
-    Extended common functionality to settings classes that want to compare their
-    current state with that on disk
-    """
+    """Extended common functionality to settings classes that want to compare their current state with that on disk."""  # noqa: E501
 
     def empty(self, reader_context_manager: typing.Any) -> bool:
-        """
-        Are current settings values different from those on disk?
-        """
+        """Are current settings values different from those on disk?."""
         keys_to_set = [k for k, _ in self.__dict__.items() if k.startswith("__")]
         if not keys_to_set:
             return True

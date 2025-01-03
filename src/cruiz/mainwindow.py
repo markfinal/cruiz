@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-The Qt main window of the application
-"""
+"""The Qt main window of the application."""
 
 from __future__ import annotations
 
@@ -59,9 +57,7 @@ logger = logging.getLogger(__name__)
 
 
 class MainWindow(QtWidgets.QMainWindow):
-    """
-    The main window of the application
-    """
+    """The main window of the application."""
 
     # pylint: disable=too-many-instance-attributes, too-many-locals
 
@@ -72,9 +68,11 @@ class MainWindow(QtWidgets.QMainWindow):
     theme_changed = QtCore.Signal(str)
 
     def __del__(self) -> None:
+        """Log when the MainWindow is deleted."""
         logger.debug("-=%d", id(self))
 
     def __init__(self) -> None:
+        """Initialise a MainWindow."""
         # pylint: disable=too-many-statements, global-statement
         super().__init__()
         log_created_widget(self, logger)
@@ -310,6 +308,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._ssh_agent_label.setToolTip(ssh_agent_tooltip)
 
     def closeEvent(self, event: QtGui.QCloseEvent) -> None:
+        """Override the default closeEvent for MainWindow."""
         mdi_area = self.centralWidget()
         assert isinstance(mdi_area, QtWidgets.QMdiArea)
         mdi_area.closeAllSubWindows()
@@ -369,11 +368,8 @@ class MainWindow(QtWidgets.QMainWindow):
         recipe_uuid: typing.Optional[QtCore.QUuid] = None,
         original_recipe: typing.Optional[RecipeWidget] = None,
     ) -> None:
+        """Load the Conan recipe into a usable environment."""
         # pylint: disable=too-many-branches, too-many-statements
-        """
-        Load the Conan recipe into a usable environment
-        """
-
         try:
             wizard = LoadRecipeWizard(
                 self,
@@ -682,9 +678,7 @@ Remove from the recent list?",
             )
 
     def is_recipe_active(self, uuid: QtCore.QUuid) -> bool:
-        """
-        Is the recipe with the given UUID active (i.e. has an open tab)?
-        """
+        """Is the recipe with the given UUID active (i.e. has an open tab)?."""
         mdi_area = self.centralWidget()
         assert isinstance(mdi_area, QtWidgets.QMdiArea)
         return any(

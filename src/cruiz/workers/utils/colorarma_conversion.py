@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Util module to convert colorama escpe codes to HTML
-"""
+"""Util module to convert colorama escpe codes to HTML."""
 
 import copy
 import re
@@ -14,9 +12,7 @@ from .text2html import text_to_html
 
 
 def convert_from_colorama_to_html(escaped_string: str) -> str:
-    """
-    Attempt to convert colorama escape sequences into something that HTML can use
-    """
+    """Attempt to convert colorama escape sequences into something that HTML can use."""
     # pylint: disable=anomalous-backslash-in-string,too-many-branches
     if escaped_string.endswith("\n"):
         # last new line is catered for by the HTML block

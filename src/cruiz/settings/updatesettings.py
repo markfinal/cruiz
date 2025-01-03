@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Patching settings
-"""
+"""Patching settings."""
 
 from __future__ import annotations
 
@@ -20,29 +18,29 @@ CURRENT_SETTINGS_VERSION = 9
 
 
 class SettingsGroup:
-    """
-    Context manager for using groups in QSettings
-    """
+    """Context manager for using groups in QSettings."""
 
     def __init__(self, settings: QtCore.QSettings, group: str) -> None:
+        """Initialise a SettingsGroup."""
         self._settings = settings
         self._group_name = group
 
     def __enter__(self) -> None:
+        """Enter the context manager with a SettingsGroup."""
         self._settings.beginGroup(self._group_name)
 
     def __exit__(
         self, exc_type: typing.Any, value: typing.Any, exc_traceback: typing.Any
     ) -> None:
+        """Exit the context manager with a SettingsGroup."""
         self._settings.endGroup()
 
 
 class SettingsReadArray:
-    """
-    Context manager for reading arrays in QSettings
-    """
+    """Context manager for reading arrays in QSettings."""
 
     def __init__(self, settings: QtCore.QSettings, array: str) -> None:
+        """Initialise a SettingsReadArray."""
         self._settings = settings
         self._array_name = array
         self._array_size = 0
@@ -50,42 +48,45 @@ class SettingsReadArray:
     # TODO: why isn't this just a public attribute?
     @property
     def size(self) -> int:
-        """
-        Property containing the size of the array found in the settings
-        """
+        """Property containing the size of the array found in the settings."""
         return self._array_size
 
     def __enter__(self) -> SettingsReadArray:
+        """Enter a context manager with a SettingsReadArray."""
         self._array_size = self._settings.beginReadArray(self._array_name)
         return self
 
     def __exit__(
         self, exc_type: typing.Any, value: typing.Any, exc_traceback: typing.Any
     ) -> None:
+        """Exit a context manager with a SettingsReadArray."""
         self._settings.endArray()
 
 
 class SettingsWriteArray:
-    """
-    Context manager for writing arrays in QSettings
-    """
+    """Context manager for writing arrays in QSettings."""
 
     def __init__(self, settings: QtCore.QSettings, array: str, size: int) -> None:
+        """Initialise a SettingsWriteArray."""
         self._settings = settings
         self._array_name = array
         self._array_size = size
 
     def __enter__(self) -> None:
+        """Enter a context manager with a SettingsWriteArray."""
         self._settings.beginWriteArray(self._array_name, self._array_size)
 
     def __exit__(
         self, exc_type: typing.Any, value: typing.Any, exc_traceback: typing.Any
     ) -> None:
+        """Exit a context manager with a SettingsWriteArray."""
         self._settings.endArray()
 
 
 def _patch_settings_from_v8(settings: QtCore.QSettings) -> None:
     """
+    Patch up settings.
+
     Remove
       - DarkMode
     """
@@ -94,6 +95,8 @@ def _patch_settings_from_v8(settings: QtCore.QSettings) -> None:
 
 def _patch_settings_from_v7(settings: QtCore.QSettings) -> None:
     """
+    Patch up settings.
+
     Remove
       - NewLoadingBehaviour
       - UseCompactLook
@@ -110,6 +113,8 @@ def _patch_settings_from_v7(settings: QtCore.QSettings) -> None:
 
 def _patch_settings_from_v6(settings: QtCore.QSettings) -> None:
     """
+    Patch up settings.
+
     V2Mode and UseRevisions move from global settings to per-cache
     If either were true, this was global, so apply to all caches
     """
@@ -131,6 +136,8 @@ def _patch_settings_from_v6(settings: QtCore.QSettings) -> None:
 
 def _patch_settings_from_v5(settings: QtCore.QSettings) -> None:
     """
+    Patch up settings.
+
     Moves recent recipe paths from the recent recipe array to the recipe array.
     """
     recipes = []
@@ -156,6 +163,8 @@ def _patch_settings_from_v5(settings: QtCore.QSettings) -> None:
 
 def _patch_settings_from_v4(settings: QtCore.QSettings) -> None:
     """
+    Patch up settings.
+
     This patch refactors any editables keys.
     "Name" is converted to "Reference", and reformats the value so it's back to being
     a Conan Reference (so matches that in the local cache's editables.json keys) rather
@@ -201,6 +210,8 @@ def _patch_settings_from_v4(settings: QtCore.QSettings) -> None:
 
 def _patch_settings_from_v3(settings: QtCore.QSettings) -> None:
     """
+    Patch up settings.
+
     This patch adds a name key to each extra profiles dir for a local cache.
     """
     settings = BaseSettings.make_settings()
@@ -232,6 +243,8 @@ def _patch_settings_from_v3(settings: QtCore.QSettings) -> None:
 
 def _patch_settings_from_v2(settings: QtCore.QSettings) -> None:
     """
+    Patch up settings.
+
     This patch moves Conan V2 from general to conan settings
     """
     old_key = "ConanV2Mode"
@@ -243,6 +256,8 @@ def _patch_settings_from_v2(settings: QtCore.QSettings) -> None:
 
 def _patch_settings_from_v1(settings: QtCore.QSettings) -> None:
     """
+    Patch up settings.
+
     This patch moves editables from a separate group to under the recipe.
     """
     editable_groups = [k for k in settings.childGroups() if k.endswith("-editables")]
@@ -261,8 +276,9 @@ def _patch_settings_from_v1(settings: QtCore.QSettings) -> None:
         settings.remove(editable_group)
     for editable_uuid_str, editable_array in editable_data.items():
         group = f"Recipe/{editable_uuid_str}"
-        with SettingsGroup(settings, group), SettingsWriteArray(
-            settings, "Editables", len(editable_array)
+        with (
+            SettingsGroup(settings, group),
+            SettingsWriteArray(settings, "Editables", len(editable_array)),
         ):
             for i, editable_dict in enumerate(editable_array):
                 settings.setArrayIndex(i)
@@ -273,6 +289,8 @@ def _patch_settings_from_v1(settings: QtCore.QSettings) -> None:
 def _patch_settings_from_v0(settings: QtCore.QSettings) -> None:
     # pylint: disable=too-many-locals, too-many-branches
     """
+    Patch up settings.
+
     This patch:
     1) Removes the %General group
     2) converts the QVariant versions of QUuids into strings.
@@ -363,9 +381,7 @@ def _backup_settings(settings: QtCore.QSettings) -> None:
 
 
 def update_settings_to_current_version() -> None:
-    """
-    Upgrade settings to the latest version, incrementally
-    """
+    """Upgrade settings to the latest version, incrementally."""
     settings = BaseSettings.make_settings()
     if len(settings.allKeys()) > 0:
         version = settings.value("SettingsVersion", 0, type=int)

@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Dialog for adding a new remote.
-"""
+"""Dialog for adding a new remote."""
 
 import typing
 from functools import partial
@@ -17,11 +15,10 @@ import validators
 
 
 class AddRemoteDialog(QtWidgets.QDialog):
-    """
-    Dialog for adding a new remote.
-    """
+    """Dialog for adding a new remote."""
 
     def __init__(self, parent: QtWidgets.QWidget) -> None:
+        """Initialise an AddRemoteDialog."""
         super().__init__(parent)
         self.setAttribute(QtCore.Qt.WidgetAttribute.WA_DeleteOnClose, True)
         self._ui = Ui_AddRemoteDialog()
@@ -64,13 +61,12 @@ class AddRemoteDialog(QtWidgets.QDialog):
         )
 
     def accept(self) -> None:
+        """Override the accept dialog method."""
         self._new_remote = ConanRemote(self._ui.name.text(), self._ui.url.text(), True)
         super().accept()
 
     @property
     def new_remote(self) -> ConanRemote:
-        """
-        Details of the new remote just added.
-        """
+        """Details of the new remote just added."""
         assert self._new_remote
         return self._new_remote

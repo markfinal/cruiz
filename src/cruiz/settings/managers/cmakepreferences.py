@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Settings context manager for CMake preferences
-"""
+"""Settings context manager for CMake preferences."""
 
 import typing
 
@@ -17,20 +15,17 @@ from .writermixin import _WriterMixin
 
 
 class CMakeSettings(ComparableCommonSettings):
-    """
-    Representation of CMake settings
-    """
+    """Representation of CMake settings."""
 
     def __init__(self) -> None:
+        """Initialise a CMakeSettings."""
         self._property_meta = {
             "bin_directory": SettingMeta("BinDir", StringSetting, None, ScalarValue),
         }
 
     @property
     def bin_directory(self) -> StringSetting:
-        """
-        Get the CMake bin directory
-        """
+        """Get the CMake bin directory."""
         return self._get_value_via_meta()
 
     @bin_directory.setter
@@ -39,15 +34,15 @@ class CMakeSettings(ComparableCommonSettings):
 
 
 class CMakeSettingsReader:
-    """
-    Context manager for reading CMake settings from disk
-    """
+    """Context manager for reading CMake settings from disk."""
 
     def __init__(self) -> None:
+        """Initialise a CMakeSettingsReader."""
         self.group = "Thirdparty/CMake"
         self.settings = BaseSettings.make_settings()
 
     def __enter__(self) -> CMakeSettings:
+        """Enter a context manager with a CMakeSettingsReader."""
         self.settings.beginGroup(self.group)
         settings = CMakeSettings()
         settings.settings_reader = self
@@ -56,6 +51,7 @@ class CMakeSettingsReader:
     def __exit__(
         self, exc_type: typing.Any, exc_value: typing.Any, exc_traceback: typing.Any
     ) -> typing.Any:
+        """Exit a context manager with a CMakeSettingsReader."""
         self.settings.endGroup()
         if exc_type is None:
             pass
@@ -65,9 +61,8 @@ class CMakeSettingsReader:
 
 
 class CMakeSettingsWriter(_WriterMixin):
-    """
-    Utility class for writing changed CMake settings to disk
-    """
+    """Utility class for writing changed CMake settings to disk."""
 
     def __init__(self) -> None:
+        """Initialise a CMakeSettingsWriter."""
         self._reader_for_writer = CMakeSettingsReader()

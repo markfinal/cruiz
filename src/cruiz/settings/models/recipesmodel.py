@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Qt model for recipes
-"""
+"""Qt model for recipes."""
 
 import typing
 
@@ -13,30 +11,26 @@ from qtpy import QtCore
 
 
 class RecipesModel(QtCore.QAbstractTableModel):
-    """
-    Model representing a Conan recipe
-    """
+    """Model representing a Conan recipe."""
 
     def __init__(self) -> None:
+        """Initialise a RecipesModel."""
         super().__init__()
         self._uuids: typing.Optional[typing.List[QtCore.QUuid]] = None
 
     def set_uuids(self, uuids: typing.List[QtCore.QUuid]) -> None:
-        """
-        Set the recipe UUIDs for the model
-        """
+        """Set the recipe UUIDs for the model."""
         self.beginResetModel()
         self._uuids = uuids
         self.endResetModel()
 
     def uuid(self, index: int) -> QtCore.QUuid:
-        """
-        Get the recipe UUID specified by its index
-        """
+        """Get the recipe UUID specified by its index."""
         assert self._uuids
         return self._uuids[index]
 
     def rowCount(self, parent) -> int:  # type: ignore
+        """Get the row count of the model."""
         if parent.isValid():
             return 0
         if self._uuids is None:
@@ -44,10 +38,12 @@ class RecipesModel(QtCore.QAbstractTableModel):
         return len(self._uuids)
 
     def columnCount(self, parent) -> int:  # type: ignore
+        """Get the column count of the model."""
         # pylint: disable=unused-argument
         return 3
 
     def headerData(self, section, orientation, role):  # type: ignore
+        """Get the header data of the model."""
         if (
             role == QtCore.Qt.ItemDataRole.DisplayRole
             and orientation == QtCore.Qt.Orientation.Horizontal
@@ -61,6 +57,7 @@ class RecipesModel(QtCore.QAbstractTableModel):
         return None
 
     def data(self, index, role):  # type: ignore
+        """Get data from the model."""
         if role == QtCore.Qt.ItemDataRole.DisplayRole:
             assert self._uuids
             if index.column() == 0:
@@ -83,6 +80,7 @@ class RecipesModel(QtCore.QAbstractTableModel):
         return None
 
     def flags(self, index):  # type: ignore
+        """Get flags of the cells in the model."""
         def_flags = super().flags(index)
         if self._uuids and cruiz.globals.get_main_window().is_recipe_active(
             self._uuids[index.row()]

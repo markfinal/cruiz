@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Util to set the process' environment
-"""
+"""Util to set the process' environment."""
 
 import multiprocessing
 import os
@@ -10,10 +8,7 @@ import typing
 
 
 def clear_conan_env() -> None:
-    """
-    cruiz needs to control all Conan environments, so ignore everything from
-    the calling environment
-    """
+    """Cruiz needs to control all Conan environments, so ignore everything from the calling environment."""  # noqa: E501
     external_conan_envvar_names = [
         key for key, _ in os.environ.items() if key.startswith("CONAN_")
     ]
@@ -31,6 +26,7 @@ def set_env(
 ) -> None:
     """
     Set the environment given key-value pairs to add, and keys to remove.
+
     If a key is added, and already exists in the public environment map,
     then it is prepended with a path separator.
     """

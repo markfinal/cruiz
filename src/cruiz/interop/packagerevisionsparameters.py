@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Package revisions parameters
-"""
+"""Package revisions parameters."""
 
 import typing
 
@@ -10,11 +8,10 @@ from .commonparameters import CommonParameters
 
 
 class PackageRevisionsParameters(CommonParameters):
-    """
-    Representation of all the arguments to get package revisions
-    """
+    """Representation of all the arguments to get package revisions."""
 
     def __init__(self, **args: typing.Any) -> None:
+        """Initialise a PackageRevisionsParameters."""
         import cruiz.workers.api as workers_api
 
         super().__init__(workers_api.packagerevisions.invoke)

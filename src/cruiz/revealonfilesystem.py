@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-Reveal on a filesystem
+Reveal on a filesystem.
 
 Based on the C++ code in
 https://github.com/qt-creator/qt-creator/blob/master/src/plugins/coreplugin/fileutils.cpp, # noqa: E501
@@ -55,9 +55,7 @@ def _use_xdg_open(file_info: QtCore.QFileInfo) -> None:
 
 
 def reveal_on_filesystem(path: pathlib.Path) -> None:
-    """
-    Reveal the path in a filesystem GUI
-    """
+    """Reveal the path in a filesystem GUI."""
     if not path.exists():
         QtWidgets.QMessageBox.critical(
             None,  # type: ignore[arg-type]
@@ -79,9 +77,7 @@ def reveal_on_filesystem(path: pathlib.Path) -> None:
 
 
 def open_terminal_at(path: str) -> None:
-    """
-    Open a terminal at the given directory path.
-    """
+    """Open a terminal at the given directory path."""
     # cannot use QProcess here, as it starts a shell in-pr5ocess, even if called
     # with startDetached
     file_info = QtCore.QFileInfo(path)

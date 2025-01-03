@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-cruiz: Conan recipe user interface
-"""
+"""cruiz: Conan recipe user interface."""
 
 import importlib.util
 import logging
@@ -118,9 +116,7 @@ def _message_handler(
 
 
 def main() -> int:
-    """
-    Entry point
-    """
+    """Entry point."""
     QtCore.qInstallMessageHandler(_message_handler)
 
     QtWidgets.QApplication.setAttribute(

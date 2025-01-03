@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Package id parameters
-"""
+"""Package id parameters."""
 
 import typing
 
@@ -10,11 +8,10 @@ from .commonparameters import CommonParameters
 
 
 class PackageIdParameters(CommonParameters):
-    """
-    Representation of all the arguments to get package ids
-    """
+    """Representation of all the arguments to get package ids."""
 
     def __init__(self, **args: typing.Any) -> None:
+        """Initialise a PackageIdParameters."""
         import cruiz.workers.api as workers_api
 
         super().__init__(workers_api.packagedetails.invoke)

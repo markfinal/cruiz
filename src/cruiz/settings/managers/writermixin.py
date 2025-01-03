@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Mixin for helping to write settings
-"""
+"""Mixin for helping to write settings."""
 
 import typing
 from enum import Enum
@@ -13,16 +11,13 @@ from .basesettings import BaseSettings
 
 
 class _WriterMixin:
-    """
-    Mixing class for writing utilities
+    """Mixing class for writing utilities.
 
     self._reader_for_writer defined in the consuming class.
     """
 
     def sync(self, changes: typing.Any) -> None:
-        """
-        Synchronise incoming settings changes with those on disk
-        """
+        """Synchronise incoming settings changes with those on disk."""
         assert hasattr(self, "_reader_for_writer")
         keys_to_set = [k for k in changes.__dict__.keys() if k.startswith("__")]
         if not keys_to_set:

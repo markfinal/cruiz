@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Remote browser page
-"""
+"""Remote browser page."""
 
 import typing
 
@@ -41,9 +39,7 @@ class _PackageIdModel(QtCore.QAbstractTableModel):
             ]
         ],
     ) -> None:
-        """
-        Set the package ids into the model
-        """
+        """Set the package ids into the model."""
         self.beginResetModel()
         self._pids = results
         if results is not None:
@@ -210,14 +206,10 @@ class _PackageIdSortFilterProxyModel(QtCore.QSortFilterProxyModel):
 
 
 class PackageIdPage(Page):
-    """
-    Remote browser page for displaying package ids
-    """
+    """Remote browser page for displaying package ids."""
 
     def setup(self, self_ui: typing.Any) -> None:
-        """
-        Setup the UI for the page
-        """
+        """Set up the UI for the page."""
         self._base_setup(self_ui, 2)
         self._current_pkgref: typing.Optional[str] = None
         self._model = _PackageIdModel()
@@ -260,9 +252,7 @@ class PackageIdPage(Page):
 
     @property
     def package_reference(self) -> str:
-        """
-        Get the package reference selected in the current page
-        """
+        """Get the package reference selected in the current page."""
         selection = self._ui.package_ids.selectedIndexes()
         assert (
             len(selection) > 0
@@ -278,6 +268,7 @@ class PackageIdPage(Page):
         self._ui.pid_cancel.setEnabled(enable)
 
     def showEvent(self, event: QtGui.QShowEvent) -> None:
+        """Override the widget's showEvent method."""
         # pylint: disable=unused-argument
         self._ui.pid_pkgref.setText(self._previous_pkgref)
         self._compute()
@@ -339,9 +330,7 @@ class PackageIdPage(Page):
             parent_stackedwidget.setCurrentIndex(self.page_index + 2)
 
     def on_cancel(self) -> None:
-        """
-        Called when the user cancels the operation.
-        """
+        """Call when the user cancels the operation."""
         self._context.cancel()
         self._enable_progress(False)
 

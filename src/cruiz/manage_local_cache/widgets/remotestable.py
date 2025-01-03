@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Widget for the table of local cache remote
-"""
+"""Widget for the table of local cache remote."""
 
 import typing
 from enum import IntEnum
@@ -14,14 +12,10 @@ from qtpy import QtCore, QtGui, QtWidgets
 
 
 class RemotesTable(QtWidgets.QTableWidget):
-    """
-    Table of remotes that can handle moving rows
-    """
+    """Table of remotes that can handle moving rows."""
 
     class _ColumnIndex(IntEnum):
-        """
-        Column indices of the remotes table
-        """
+        """Column indices of the remotes table."""
 
         ENABLED = 0
         NAME = 1
@@ -31,6 +25,7 @@ class RemotesTable(QtWidgets.QTableWidget):
     remote_enabled = QtCore.Signal(str, QtCore.Qt.CheckState)
 
     def __init__(self, parent: typing.Optional[QtWidgets.QWidget] = None) -> None:
+        """Initialise a RemotesTable."""
         super().__init__(parent)
         self.itemChanged.connect(self._item_changed)
 
@@ -41,6 +36,7 @@ class RemotesTable(QtWidgets.QTableWidget):
                 self.remote_enabled.emit(name_item.text().strip(), item.checkState())
 
     def dropEvent(self, event: QtGui.QDropEvent) -> None:
+        """Override the dropEvent method."""
         if self == event.source():
             index_at_drop = self.indexAt(event.pos())
             source_row = self.selectedItems()[0].row()
@@ -56,9 +52,7 @@ class RemotesTable(QtWidgets.QTableWidget):
         super().dropEvent(event)
 
     def add_remote(self, remote: ConanRemote) -> None:
-        """
-        Add the specified remote to the table.
-        """
+        """Add the specified remote to the table."""
         row_count = self.rowCount()
         enabled_item = QtWidgets.QTableWidgetItem()
         enabled_item.setFlags(
@@ -108,9 +102,7 @@ class RemotesTable(QtWidgets.QTableWidget):
         return remote
 
     def remotes_list(self) -> typing.List[ConanRemote]:
-        """
-        Return list of remotes from the table.
-        """
+        """Return list of remotes from the table."""
         remotes = []
         for i in range(self.rowCount()):
             remotes.append(self._row_to_remote(i))
@@ -132,7 +124,7 @@ class RemotesTable(QtWidgets.QTableWidget):
 
     def same(self, remotes: typing.List[ConanRemote]) -> bool:
         """
-        Are the list of remotes passed in the same as those in the table?
+        Are the list of remotes passed in the same as those in the table?.
 
         There may be more rows in the table than what is in the stored list
         so we only check those from the stored list.

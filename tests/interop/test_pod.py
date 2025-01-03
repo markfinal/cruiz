@@ -1,3 +1,5 @@
+"""Tests for plain old data."""
+
 import pathlib
 import urllib.parse
 
@@ -6,6 +8,8 @@ from cruiz.interop.pod import ConanHook
 
 def test_pod_hook_invariant_after_serialization() -> None:
     """
+    Conan hooks need to serialise and deserialise.
+
     ConanHook objects are passed over multiprocessing via encoded URLs
     which need to be deserialized in the child process.
     """

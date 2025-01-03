@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Dialog for adding extra profile directories
-"""
+"""Dialog for adding extra profile directories."""
 
 import typing
 
@@ -16,11 +14,10 @@ from qtpy import QtCore, QtGui, QtWidgets
 
 
 class AddExtraProfileDirectoryDialog(QtWidgets.QDialog):
-    """
-    Dialog for adding an extra profile directory.
-    """
+    """Dialog for adding an extra profile directory."""
 
     def __init__(self, parent: typing.Optional[QtWidgets.QWidget] = None) -> None:
+        """Initialise an AddExtraProfileDirectoryDialog."""
         super().__init__(parent)
         self.setAttribute(QtCore.Qt.WidgetAttribute.WA_DeleteOnClose, True)
         self._ui = Ui_AddExtraProfileDirectoryDialog()
@@ -51,6 +48,7 @@ class AddExtraProfileDirectoryDialog(QtWidgets.QDialog):
         ).setEnabled(bool(self._ui.name.text() and self._ui.directory.text()))
 
     def accept(self) -> None:
+        """Override the accept dialog method."""
         self._extra = ExtraProfileDirectory(
             self._ui.name.text(), self._ui.directory.text()
         )
@@ -68,8 +66,6 @@ class AddExtraProfileDirectoryDialog(QtWidgets.QDialog):
 
     @property
     def extra(self) -> ExtraProfileDirectory:
-        """
-        The extra profile directory added.
-        """
+        """The extra profile directory added."""
         assert self._extra
         return self._extra

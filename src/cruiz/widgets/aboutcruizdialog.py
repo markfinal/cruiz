@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Dialog to show cruiz information
-"""
+"""Dialog to show cruiz information."""
 
 import sys
 import typing
@@ -14,7 +12,10 @@ from qtpy import QtCore, QtGui, QtWidgets
 
 
 class AboutDialog(QtWidgets.QDialog):
+    """Dialog showing about details of cruiz."""
+
     def __init__(self, parent: typing.Optional[QtWidgets.QWidget] = None) -> None:
+        """Initialise an AboutDialog."""
         super().__init__(parent)
         self._ui = Ui_AboutCruiz()
         self._ui.setupUi(self)  # type: ignore[no-untyped-call]

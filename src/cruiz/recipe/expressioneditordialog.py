@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Local workflow folder expression editor dialog
-"""
+"""Local workflow folder expression editor dialog."""
 
 from cruiz.pyside6.recipe_local_workflow_expression_editor import (
     Ui_ExpressionEditor,
@@ -12,12 +10,11 @@ from qtpy import QtWidgets
 
 
 class ExpressionEditorDialog(QtWidgets.QDialog):
-    """
-    Dialog for editing expressions for local workflow folders
-    """
+    """Dialog for editing expressions for local workflow folders."""
 
     # parent is RecipeWidget
     def __init__(self, parent: QtWidgets.QWidget) -> None:
+        """Initialise an ExpressionEditorDialog."""
         super().__init__(parent)
         self._ui = Ui_ExpressionEditor()
         self._ui.setupUi(self)  # type: ignore[no-untyped-call]
