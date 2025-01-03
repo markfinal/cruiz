@@ -70,8 +70,6 @@ class Worker:
     def _exception_to_html(
         self, exc_type: typing.Any, value: typing.Any, exc_tb: typing.Any
     ) -> None:
-        # pylint: disable=unused-argument
-
         # since tracebacks objects can't be passed over the multiprocessing queue,
         # encode it into the string of a new Exception object
         # (also removes the issue of Conan exception types passing the divide)

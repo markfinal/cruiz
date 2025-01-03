@@ -130,6 +130,7 @@ class _CompilerCacheConfigurationDialog(QtWidgets.QDialog):
         self.modified.emit()
 
     def reject(self) -> None:
+        """Override the reject method of the Dialog."""
         if self._any_modifications():
             response = QtWidgets.QMessageBox.question(
                 self,

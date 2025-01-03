@@ -106,6 +106,7 @@ class _PackageBinaryModel(QtCore.QAbstractItemModel):
         self.endResetModel()
 
     def rowCount(self, parent) -> int:  # type: ignore
+        """Get the number of rows in the model."""
         if self._root is None:
             return 0
         if parent.isValid():
@@ -114,12 +115,14 @@ class _PackageBinaryModel(QtCore.QAbstractItemModel):
         return 1
 
     def columnCount(self, parent) -> int:  # type: ignore
+        """Get the number of columns in the model."""
         # pylint: disable=unused-argument
         if self._root is None:
             return 0
         return 1
 
     def parent(self, index) -> QtCore.QModelIndex:  # type: ignore
+        """Get the index's parent."""
         if not index.isValid():
             return QtCore.QModelIndex()
         node = index.internalPointer()
@@ -128,6 +131,7 @@ class _PackageBinaryModel(QtCore.QAbstractItemModel):
         return super().createIndex(node.parent.child_index, 0, node.parent)
 
     def index(self, row, column, parent):  # type: ignore
+        """Get the model index given the coordinates."""
         if not parent.isValid():
             return super().createIndex(row, column, self._root)
         parent_node = parent.internalPointer()
@@ -135,26 +139,28 @@ class _PackageBinaryModel(QtCore.QAbstractItemModel):
         return super().createIndex(row, column, node)
 
     def headerData(self, section, orientation, role):  # type: ignore
+        """Get the header data from the model."""
         if (
             role == QtCore.Qt.ItemDataRole.DisplayRole
             and orientation == QtCore.Qt.Orientation.Horizontal
-            and section == 0
+            and not section
         ):
             return "Path"
         return None
 
     def data(self, index, role):  # type: ignore
+        """Get data from the model."""
         node = index.internalPointer()
-        if role == QtCore.Qt.ItemDataRole.DisplayRole and index.column() == 0:
+        if role == QtCore.Qt.ItemDataRole.DisplayRole and not index.column():
             return pathlib.Path(node.path).name
         if (
             role == QtCore.Qt.ItemDataRole.ToolTipRole
-            and index.column() == 0
+            and not index.column()
             and node.is_file
             and node.link_target
         ):
             return f"Symbolic link to {node.link_target}"
-        if role == QtCore.Qt.ItemDataRole.DecorationRole and index.column() == 0:
+        if role == QtCore.Qt.ItemDataRole.DecorationRole and not index.column():
             if node.is_file:
                 if node.link_target:
                     assert isinstance(self._parent_object, PackageBinaryPage)
@@ -168,6 +174,7 @@ class _PackageBinaryModel(QtCore.QAbstractItemModel):
         return None
 
     def flags(self, index):  # type: ignore
+        """Get the flags from a model index."""
         default_flags = super().flags(index)
         node = index.internalPointer()
         if node.link_target:

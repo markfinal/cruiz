@@ -141,6 +141,9 @@ commands = [
     ["flake8", "tests"],
     ["mypy", "src/cruiz"],
     ["mypy", "tests"],
+    ["pylint", "src/cruiz"],
+    ["pip", "install", "conan<2"],
+    ["pylint", "--ignore-paths=^src/cruiz/pyside6/.*$,^src/cruiz/workers/api/v2/.*$", "src/cruiz"],  # assuming Conan1 APIs
 ]
 
 [tool.tox.env.test]
@@ -150,4 +153,37 @@ deps = [
 commands = [
     ["pip", "install", "-e", "."],
     ["pytest"],
+]
+
+[tool.pylint.main]
+ignore-paths = [
+    "^src/cruiz/pyside6/.*$",
+    "^src/cruiz/pyside6/.*$,^src/cruiz/workers/api/v1/.*$",  # assuming Conan 2 APIs
+]
+
+[tool.pylint.format]
+max-line-length = 88
+
+[tool.pylint."messages control"]
+disable = ["all"]
+enable = [
+    "no-name-in-module",
+    "no-else-return",
+    "unspecified-encoding",
+    "use-implicit-booleaness-not-comparison-to-zero",
+    "consider-using-f-string",
+    "useless-suppression",
+    "protected-access",
+    "missing-function-docstring",
+    "super-init-not-called",
+    "inconsistent-return-statements",
+    "consider-using-join",
+    "consider-using-dict-items",
+    "redefined-argument-from-local",
+    "redefined-builtin",
+    "subprocess-run-check",
+    "possibly-used-before-assignment",
+    "unused-import",
+    "unused-argument",
+    "useless-suppression",
 ]

@@ -34,7 +34,7 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-import cruiz.pyside6.resources  # noqa: F401, E402, I100
+import cruiz.pyside6.resources  # noqa: F401, E402, I100 # pylint: disable=unused-import
 from cruiz.application import Application  # noqa: E402
 from cruiz.mainwindow import MainWindow  # noqa: E402
 from cruiz.settings.updatesettings import (  # noqa: E402
@@ -102,6 +102,7 @@ def _warning_message_filter(message: str) -> bool:
 def _message_handler(
     mode: QtCore.QtMsgType, context: QtCore.QMessageLogContext, message: str
 ) -> None:
+    # pylint: disable=unused-argument
     if mode == QtCore.QtMsgType.QtInfoMsg:
         logger.info(message)
     elif mode == QtCore.QtMsgType.QtWarningMsg:

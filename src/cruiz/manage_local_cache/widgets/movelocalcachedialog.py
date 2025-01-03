@@ -178,7 +178,6 @@ class MoveLocalCacheDialog(QtWidgets.QDialog):
         settings.home_dir = new_home_dir  # type: ignore
         settings.short_home_dir = new_short_home_dir  # type: ignore
         NamedLocalCacheSettingsWriter(self._context.cache_name).sync(settings)
-        # pylint: disable=broad-except
         try:
             old_conan_dir = pathlib.Path(old_home_dir)
             new_conan_dir = pathlib.Path(new_home_dir)
@@ -200,28 +199,25 @@ class MoveLocalCacheDialog(QtWidgets.QDialog):
             settings.short_home_dir = old_short_home_dir  # type: ignore
             NamedLocalCacheSettingsWriter(self._context.cache_name).sync(settings)
             return
-        else:
-            if old_short_home_dir:
-                try:
-                    assert new_short_home_dir
-                    shutil.move(old_short_home_dir, new_short_home_dir)
-                except Exception as exception:
-                    QtWidgets.QMessageBox.critical(
-                        self,
-                        "Conan move local cache",
-                        "Failed to move the local cache short home dir because: "
-                        f"{exception}.",
-                        button0=QtWidgets.QMessageBox.StandardButton.Ok,
-                        button1=QtWidgets.QMessageBox.StandardButton.NoButton,
-                    )
-                    # roll back previous steps
-                    shutil.move(new_home_dir, str(old_conan_dir))
-                    settings.home_dir = old_home_dir  # type: ignore
-                    settings.short_home_dir = old_short_home_dir  # type: ignore
-                    NamedLocalCacheSettingsWriter(self._context.cache_name).sync(
-                        settings
-                    )
-                    return
+        if old_short_home_dir:
+            try:
+                assert new_short_home_dir
+                shutil.move(old_short_home_dir, new_short_home_dir)
+            except Exception as exception:
+                QtWidgets.QMessageBox.critical(
+                    self,
+                    "Conan move local cache",
+                    "Failed to move the local cache short home dir because: "
+                    f"{exception}.",
+                    button0=QtWidgets.QMessageBox.StandardButton.Ok,
+                    button1=QtWidgets.QMessageBox.StandardButton.NoButton,
+                )
+                # roll back previous steps
+                shutil.move(new_home_dir, str(old_conan_dir))
+                settings.home_dir = old_home_dir  # type: ignore
+                settings.short_home_dir = old_short_home_dir  # type: ignore
+                NamedLocalCacheSettingsWriter(self._context.cache_name).sync(settings)
+                return
         if cruiz.globals.CONAN_MAJOR_VERSION == 1:
             qdir = QtCore.QDir(old_home_dir)
             if qdir.isEmpty():

@@ -258,23 +258,23 @@ class CommonSettings:
         """Get the value from settings using meta data to determine types and settings key."""  # noqa: E501
         assert self.settings_reader
         property_name = inspect.getouterframes(inspect.currentframe())[1][3]
-        map = self._property_meta[property_name]  # type: ignore
+        mapped = self._property_meta[property_name]  # type: ignore
         settings = self.settings_reader.settings
         value = None
-        if settings.contains(map.settings_key):
-            if map.type == BoolSetting:
-                value = settings.value(map.settings_key, type=bool)
-            elif map.type in (IntSetting, WorkflowCwdSetting):
-                value = settings.value(map.settings_key, type=int)
+        if settings.contains(mapped.settings_key):
+            if mapped.type == BoolSetting:
+                value = settings.value(mapped.settings_key, type=bool)
+            elif mapped.type in (IntSetting, WorkflowCwdSetting):
+                value = settings.value(mapped.settings_key, type=int)
             else:
-                value = settings.value(map.settings_key)
-        return map.type(value, map.default_value)
+                value = settings.value(mapped.settings_key)
+        return mapped.type(value, mapped.default_value)
 
     def _set_value_via_meta(self, value: typing.Any) -> None:
         """Set the value into temporary storage before serialising, using meta data to know where to read and what to write."""  # noqa: E501
         property_name = inspect.getouterframes(inspect.currentframe())[1][3]
-        map = self._property_meta[property_name]  # type: ignore
-        value_to_store = map.save_type(value, property_name, map.settings_key)
+        mapped = self._property_meta[property_name]  # type: ignore
+        value_to_store = mapped.save_type(value, property_name, mapped.settings_key)
         attribute_to_store = f"__{property_name}"
         setattr(self, attribute_to_store, value_to_store)
 

@@ -13,7 +13,6 @@ from .text2html import text_to_html
 
 def convert_from_colorama_to_html(escaped_string: str) -> str:
     """Attempt to convert colorama escape sequences into something that HTML can use."""
-    # pylint: disable=anomalous-backslash-in-string,too-many-branches
     if escaped_string.endswith("\n"):
         # last new line is catered for by the HTML block
         escaped_string = escaped_string.rsplit("\n", 1)[0]

@@ -49,10 +49,9 @@ def _strtobool(val: str) -> bool:
         return True
     if val in ("n", "no", "f", "false", "off", "0"):
         return False
-    raise ValueError("invalid truth value %r" % (val,))
+    raise ValueError(f"Invalid truth value {val}")
 
 
-# pylint: disable=too-many-public-methods
 class ConanContext(QtCore.QObject):
     """
     Context for invoking Conan instances.
@@ -140,7 +139,7 @@ class ConanContext(QtCore.QObject):
             item = CommandListWidgetItem(parameters)
             # don't duplicate the most recent command
             history_count = self.command_history_widget.count()
-            if history_count == 0 or (
+            if not history_count or (
                 item.text()
                 != self.command_history_widget.item(history_count - 1).text()
             ):
@@ -193,7 +192,6 @@ class ConanContext(QtCore.QObject):
             enable_history=False,
         )
 
-    # pylint: disable=pointless-string-statement
     """
     def _make_symbolic_link(self, source: pathlib.Path, link: pathlib.Path) -> None:
         if link.exists():
@@ -351,7 +349,6 @@ class ConanContext(QtCore.QObject):
             self.cancelled.emit()
 
     def conan_version(self) -> str:
-        # pylint: disable=no-self-use
         """Get the Conan version."""
         version, exception = self._meta_invocation.request_data("version")
         if exception:
@@ -400,7 +397,7 @@ class ConanContext(QtCore.QObject):
         for profile in profiles_dir.entryList(filters=QtCore.QDir.Filter.Files):
             # local cache profiles are listed relative
             path = pathlib.Path(profiles_dir.filePath(profile))
-            text = path.read_text()
+            text = path.read_text(encoding="utf-8")
             profile_paths.append((pathlib.Path(path.name), text))
         # in Conan 2, there can be no profiles at this point
         with NamedLocalCacheSettingsReader(self.cache_name) as settings:
@@ -410,7 +407,7 @@ class ConanContext(QtCore.QObject):
             for profile in profiles_dir.entryList(filters=QtCore.QDir.Filter.Files):
                 # extra profiles are listed absolute
                 path = pathlib.Path(profiles_dir.filePath(profile))
-                text = path.read_text()
+                text = path.read_text(encoding="utf-8")
                 profile_paths.append((path, text))
         return profile_paths
 

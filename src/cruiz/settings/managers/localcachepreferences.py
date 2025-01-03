@@ -20,6 +20,7 @@ class LocalCacheSettings(ComparableCommonSettings):
 
     def __init__(self) -> None:
         """Initialise a LocalCacheSettings."""
+        super().__init__()
         self._property_meta = {
             "new_configuration_install": SettingMeta(
                 "NewConfigInstall", StringSetting, None, ScalarValue
@@ -86,11 +87,10 @@ class LocalCacheSettingsReader:
         self.settings.endGroup()
         self._settings_object.settings_reader = None
         del self._settings_object
-        if exc_type is None:
-            pass
-        else:
+        if exc_type is not None:
             # propagate exception
             return False
+        return True
 
 
 class LocalCacheSettingsWriter(_WriterMixin):

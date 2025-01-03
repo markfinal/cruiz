@@ -22,7 +22,7 @@ def _strtobool(val: str) -> bool:
         return True
     if val in ("n", "no", "f", "false", "off", "0"):
         return False
-    raise ValueError("invalid truth value %r" % (val,))
+    raise ValueError(f"Invalid truth value {val}")
 
 
 @dataclass(frozen=True)

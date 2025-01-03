@@ -19,6 +19,7 @@ class ConanSettings(ComparableCommonSettings):
 
     def __init__(self) -> None:
         """Initialise a ConanSettings."""
+        super().__init__()
         self._property_meta = {
             "log_level": SettingMeta(
                 "Log/Level", StringSetting, "CRITICAL", ScalarValue
@@ -72,11 +73,10 @@ class ConanSettingsReader:
         self.settings.endGroup()
         self._settings_object.settings_reader = None
         del self._settings_object
-        if exc_type is None:
-            pass
-        else:
+        if exc_type is not None:
             # propagate exception
             return False
+        return True
 
 
 class ConanSettingsWriter(_WriterMixin):

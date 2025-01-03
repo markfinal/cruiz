@@ -35,6 +35,7 @@ def _patch_conan_run(queue: multiprocessing.Queue[Message]) -> None:
     def new_conan_run(  # type: ignore[no-untyped-def]
         command, stdout=None, stderr=None, cwd=None, shell=True
     ):
+        # pylint: disable=unused-argument
         with conans.util.runners.pyinstaller_bundle_env_cleaned():
             with cruiz.runcommands.get_popen_for_capture(
                 command,
@@ -58,7 +59,6 @@ def _do_patching(queue: multiprocessing.Queue[Message]) -> None:
     _patch_conan_run(queue)
 
 
-# pylint: disable=too-few-public-methods
 class ConanWorker(Worker):
     """Conan specific context manager."""
 
@@ -67,7 +67,6 @@ class ConanWorker(Worker):
         super().__enter__()
         # import here because it can use the environment variables
         # set in the super class
-        # pylint: disable=import-outside-toplevel
         from conan.api.conan_api import ConanAPI
 
         _do_patching(self._queue)

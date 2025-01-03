@@ -189,11 +189,10 @@ class GeneralSettingsReader:
         self.settings.endGroup()
         self._settings_object.settings_reader = None
         del self._settings_object
-        if exc_type is None:
-            pass
-        else:
+        if exc_type is not None:
             # propagate exception
             return False
+        return True
 
 
 class GeneralSettingsWriter(_WriterMixin):

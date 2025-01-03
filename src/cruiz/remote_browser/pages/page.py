@@ -25,6 +25,8 @@ class Page(QtWidgets.QWidget):
         stacked_widget = self.parent()
         dock_contents = stacked_widget.parent()
         remote_browser = dock_contents.parent()
+        # pylint: disable=protected-access
+        # TODO: this is non-public access as is just forwarding the parent's details
         return remote_browser._log_details  # type: ignore[attr-defined]
 
     @property
@@ -32,6 +34,8 @@ class Page(QtWidgets.QWidget):
         stacked_widget = self.parent()
         dock_contents = stacked_widget.parent()
         remote_browser = dock_contents.parent()
+        # pylint: disable=protected-access
+        # TODO: this is non-public access as is just forwarding the parent's details
         return remote_browser._context  # type: ignore[attr-defined]
 
     @property
@@ -39,6 +43,8 @@ class Page(QtWidgets.QWidget):
         stacked_widget = self.parent()
         assert isinstance(stacked_widget, QtWidgets.QStackedWidget)
         pkgref_page = stacked_widget.widget(0)
+        # pylint: disable=protected-access
+        # TODO: this is non-public access as is just forwarding the parent's details
         return pkgref_page._revs_enabled  # type: ignore[attr-defined]
 
     def _on_pkgref_menu(self, position: QtCore.QPoint) -> None:

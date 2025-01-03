@@ -78,11 +78,9 @@ class MessageReplyProcessor(QtCore.QObject):
         self.critical_failure.emit("Conan has leaked into cruiz")
         return False
 
-    # pylint: disable=too-many-branches
     def process(self) -> None:
         """Process messages received from a child process."""
         try:
-            # pylint: disable=import-error,import-outside-toplevel
             # make any debugger aware of this thread
             import pydevd
 

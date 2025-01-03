@@ -36,7 +36,7 @@ def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> 
             run()
         except SystemExit as exc:
             try:
-                if exc.code != 0:
+                if exc.code:
                     raise RuntimeError(temp_err.getvalue())
                 queue.put(Success(temp_out.getvalue()))
             except RuntimeError as exc_inner:

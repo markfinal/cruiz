@@ -29,6 +29,7 @@ class NamedLocalCacheSettings(CommonSettings):
 
     def __init__(self) -> None:
         """Initialise a NamedLocalCacheSettings."""
+        super().__init__()
         self._property_meta = {
             "home_dir": SettingMeta("Dir", StringSetting, None, ScalarValue),
             "short_home_dir": SettingMeta("ShortDir", StringSetting, None, ScalarValue),
@@ -308,11 +309,10 @@ class NamedLocalCacheSettingsReader:
         self.settings.endGroup()
         self._settings_object.settings_reader = None
         del self._settings_object
-        if exc_type is None:
-            pass
-        else:
+        if exc_type is not None:
             # propagate exception
             return False
+        return True
 
 
 class NamedLocalCacheSettingsWriter(_WriterMixin):

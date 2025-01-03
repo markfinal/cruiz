@@ -19,6 +19,7 @@ class ShortcutSettings(ComparableCommonSettings):
 
     def __init__(self) -> None:
         """Initialise a ShortcutSettings."""
+        super().__init__()
         self._property_meta = {
             "conan_create": SettingMeta(
                 "Conan/Create", StringSetting, "Alt+C", ScalarValue
@@ -223,11 +224,10 @@ class ShortcutSettingsReader:
         self.settings.endGroup()
         self._settings_object.settings_reader = None
         del self._settings_object
-        if exc_type is None:
-            pass
-        else:
+        if exc_type is not None:
             # propagate exception
             return False
+        return True
 
 
 class ShortcutSettingsWriter(_WriterMixin):

@@ -34,6 +34,7 @@ class _PackageReferenceModel(QtCore.QAbstractListModel):
         self.endInsertRows()
 
     def rowCount(self, parent) -> int:  # type: ignore
+        """Get the number of rows in the model."""
         if parent.isValid():
             return 0
         if not self._list:
@@ -41,11 +42,13 @@ class _PackageReferenceModel(QtCore.QAbstractListModel):
         return len(self._list)
 
     def data(self, index, role) -> typing.Any:  # type: ignore
+        """Get data from the model."""
         if role == QtCore.Qt.ItemDataRole.DisplayRole:
             return self._list[index.row()]
         return None
 
     def flags(self, index):  # type: ignore
+        """Get flags from the specified model index."""
         default_flags = super().flags(index)
         if "->" in self._list[index.row()]:
             return default_flags & ~QtCore.Qt.ItemFlag.ItemIsEnabled
@@ -56,6 +59,7 @@ class _PackageSearchValidator(QtGui.QValidator):
     """Validate the input given to the package search."""
 
     def validate(self, input_to_validate: str, pos: int) -> QtGui.QValidator.State:
+        """Override the validate method of the validator."""
         # pylint: disable=unused-argument
         if not input_to_validate:
             return QtGui.QValidator.State.Invalid

@@ -8,7 +8,6 @@ import typing
 from cruiz.workers.utils.worker import Worker
 
 
-# pylint: disable=too-few-public-methods
 class ConanWorker(Worker):
     """Conan specific context manager."""
 
@@ -17,7 +16,6 @@ class ConanWorker(Worker):
         super().__enter__()
         # import here because it can use the environment variables set in the
         # super class
-        # pylint: disable=import-outside-toplevel
         from .conanapi import instance
 
         api = instance(self._queue, self._params)

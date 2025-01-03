@@ -18,8 +18,6 @@ from . import worker
 if typing.TYPE_CHECKING:
     from cruiz.interop.commandparameters import CommandParameters
 
-# pylint: disable=protected-access, import-outside-toplevel
-
 
 # copied from distutils.url.strtobool and modified
 def _strtobool(val: str) -> bool:
@@ -34,7 +32,7 @@ def _strtobool(val: str) -> bool:
         return True
     if val in ("n", "no", "f", "false", "off", "0"):
         return False
-    raise ValueError("invalid truth value %r" % (val,))
+    raise ValueError(f"Invalid truth value {val}")
 
 
 def _remotes_list(api: typing.Any) -> typing.List[ConanRemote]:
@@ -60,7 +58,6 @@ def _remotes_sync(api: typing.Any, remotes: typing.List[str]) -> None:
 
 
 def _profiles_dir(api: typing.Any) -> pathlib.Path:
-    # pylint: disable=pointless-statement
     try:
         # Conan 1.18+
         profile_dir = pathlib.Path(api.app.cache.profiles_path)
@@ -68,6 +65,7 @@ def _profiles_dir(api: typing.Any) -> pathlib.Path:
             # this creates the default profile
             api.app.cache.default_profile
     except AttributeError:
+        # pylint: disable=protected-access
         profile_dir = pathlib.Path(api._cache.profiles_path)
         if not profile_dir.is_dir():
             # this creates the default profile
@@ -81,6 +79,7 @@ def _default_profile_path(api: typing.Any) -> str:
         api.create_app()
         default_profile_path = api.app.cache.default_profile_path
     except AttributeError:
+        # pylint: disable=protected-access
         api.invalidate_caches()
         default_profile_path = api._cache.default_profile_path
     return default_profile_path
@@ -112,6 +111,7 @@ def _get_package_layout(
         # Conan 1.18+
         layout = api.app.cache.package_layout(file_ref, short_paths=short_paths)
     except AttributeError:
+        # pylint: disable=protected-access
         layout = api._cache.package_layout(file_ref, short_paths=short_paths)
     return layout, file_ref
 
@@ -175,6 +175,7 @@ def _hook_path(api: typing.Any) -> str:
         # conan 1.18+
         result = api.app.cache.hooks_path
     except AttributeError:
+        # pylint: disable=protected-access
         result = api._cache.hooks_path
     return result
 
@@ -184,6 +185,7 @@ def _enabled_hooks(api: typing.Any) -> bool:
         # conan 1.18+
         result = api.app.cache.config.hooks
     except AttributeError:
+        # pylint: disable=protected-access
         result = api._cache.config.hooks
     return result
 
@@ -193,6 +195,7 @@ def _available_hooks(api: typing.Any) -> typing.List[pathlib.Path]:
         # conan 1.18+
         hooks_dir = pathlib.Path(api.app.cache.hooks_path)
     except AttributeError:
+        # pylint: disable=protected-access
         hooks_dir = pathlib.Path(api._cache.hooks_path)
     if not hooks_dir or not hooks_dir.is_dir():
         return []
@@ -215,6 +218,7 @@ def _hooks_get(api: typing.Any) -> typing.List[ConanHook]:
         hooks_dir = pathlib.Path(api.app.cache.hooks_path)
         enabled_hooks = api.app.cache.config.hooks
     except AttributeError:
+        # pylint: disable=protected-access
         hooks_dir = pathlib.Path(api._cache.hooks_path)
         enabled_hooks = api._cache.config.hooks
     if not hooks_dir or not hooks_dir.is_dir():
@@ -260,6 +264,8 @@ def _enable_hook(api: typing.Any, hook: str, hook_enabled: bool) -> None:
 
 
 def _get_conandata(api: typing.Any, recipe_path: str) -> typing.Dict[str, typing.Any]:
+    # pylint: disable=protected-access
+    # intentionally using non-public functions
     try:
         # conan 1.18+
         result = api.app.loader._load_data(recipe_path)
@@ -269,12 +275,12 @@ def _get_conandata(api: typing.Any, recipe_path: str) -> typing.Dict[str, typing
 
 
 def _get_config(api: typing.Any, key: str) -> typing.Optional[str]:
-    # pylint: disable=broad-except
     try:
         try:
             # conan 1.18+
             result = api.app.cache.config.get_item(key)
         except AttributeError:
+            # pylint: disable=protected-access
             result = api._cache.config.get_item(key)
         return result
     except Exception:
@@ -286,6 +292,7 @@ def _set_config(api: typing.Any, key: str, value: typing.Optional[str]) -> None:
         # conan 1.18+
         api.app.cache.config.set_item(key, value)
     except AttributeError:
+        # pylint: disable=protected-access
         api._cache.config.set_item(key, value)
 
 
@@ -294,6 +301,7 @@ def _rm_config(api: typing.Any, key: str) -> None:
         # conan 1.18+
         api.app.cache.config.rm_item(key)
     except AttributeError:
+        # pylint: disable=protected-access
         api._cache.config.rm_item(key)
 
 
@@ -302,6 +310,7 @@ def _has_config_option(api: typing.Any, key: str, value: str) -> bool:
         # conan 1.18+
         return api.app.cache.config.has_option(key, value)
     except AttributeError:
+        # pylint: disable=protected-access
         return api._cache.config.has_option(key, value)
 
 
@@ -310,6 +319,7 @@ def _get_config_envvars(api: typing.Any) -> typing.List[str]:
         # conan 1.18+
         return list(api.app.cache.config.env_vars.keys())
     except AttributeError:
+        # pylint: disable=protected-access
         return list(api._cache.config.env_vars.keys())
 
 
@@ -323,13 +333,11 @@ def _create_default_profile(api: typing.Any) -> None:
         api.create_profile("default", detect=True, force=True)
 
 
-# pylint: disable=too-many-statements
 def invoke(
     request_queue: multiprocessing.JoinableQueue[str],
     reply_queue: multiprocessing.Queue[Message],
     params: CommandParameters,
 ) -> None:
-    # pylint: disable=too-many-branches
     """Run continuous loop, waiting on requests from the main process."""
     with worker.ConanWorker(reply_queue, params) as api:
         while True:
@@ -342,6 +350,8 @@ def invoke(
                     split = request.split("?")
                     request = split[0]
                     request_params = urllib.parse.parse_qs(split[1])
+
+                # pylint: disable=possibly-used-before-assignment
                 if request == "remotes_list":
                     result = _remotes_list(api)
                 elif request == "remotes_sync":
@@ -436,7 +446,6 @@ def invoke(
                 # ensure that the result doesn't accidentally appear in
                 # subsequent loop iterations
                 del result
-            # pylint: disable=broad-except
             except Exception as exception:
                 reply_queue.put(Failure(Exception(str(exception))))
                 request_queue.task_done()

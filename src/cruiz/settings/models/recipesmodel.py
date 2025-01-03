@@ -48,7 +48,7 @@ class RecipesModel(QtCore.QAbstractTableModel):
             role == QtCore.Qt.ItemDataRole.DisplayRole
             and orientation == QtCore.Qt.Orientation.Horizontal
         ):
-            if section == 0:
+            if not section:
                 return "Path"
             if section == 1:
                 return "Version"
@@ -60,7 +60,7 @@ class RecipesModel(QtCore.QAbstractTableModel):
         """Get data from the model."""
         if role == QtCore.Qt.ItemDataRole.DisplayRole:
             assert self._uuids
-            if index.column() == 0:
+            if not index.column():
                 with RecipeSettingsReader.from_uuid(
                     self._uuids[index.row()]
                 ) as settings:

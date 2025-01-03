@@ -19,6 +19,7 @@ class CompilerCacheSettings(ComparableCommonSettings):
 
     def __init__(self) -> None:
         """Initialise a CompilerCacheSettings."""
+        super().__init__()
         self._property_meta = {
             "default": SettingMeta("Default", StringSetting, "None", ScalarValue),
             "ccache_bin_directory": SettingMeta(
@@ -91,11 +92,10 @@ class CompilerCacheSettingsReader:
         self.settings.endGroup()
         self._settings_object.settings_reader = None
         del self._settings_object
-        if exc_type is None:
-            pass
-        else:
+        if exc_type is not None:
             # propagate exception
             return False
+        return True
 
 
 class CompilerCacheSettingsWriter(_WriterMixin):

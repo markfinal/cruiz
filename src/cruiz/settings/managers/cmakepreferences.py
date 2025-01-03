@@ -19,6 +19,7 @@ class CMakeSettings(ComparableCommonSettings):
 
     def __init__(self) -> None:
         """Initialise a CMakeSettings."""
+        super().__init__()
         self._property_meta = {
             "bin_directory": SettingMeta("BinDir", StringSetting, None, ScalarValue),
         }
@@ -53,11 +54,10 @@ class CMakeSettingsReader:
     ) -> typing.Any:
         """Exit a context manager with a CMakeSettingsReader."""
         self.settings.endGroup()
-        if exc_type is None:
-            pass
-        else:
+        if exc_type is not None:
             # propagate exception
             return False
+        return True
 
 
 class CMakeSettingsWriter(_WriterMixin):

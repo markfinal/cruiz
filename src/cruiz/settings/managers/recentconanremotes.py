@@ -15,6 +15,7 @@ class RecentConanRemotesSettings(CommonSettings):
 
     def __init__(self) -> None:
         """Initialise a RecentConanRemotesSettings."""
+        super().__init__()
         self._property_meta = {
             "urls": SettingMeta("RecentConanRemotes", ListSetting, [], ListValue),
         }
@@ -68,11 +69,10 @@ class RecentConanRemotesSettingsReader:
         self.settings.endArray()
         self._settings_object.settings_reader = None
         del self._settings_object
-        if exc_type is None:
-            pass
-        else:
+        if exc_type is not None:
             # propagate exception
             return False
+        return True
 
 
 class RecentConanRemotesSettingsWriter(_WriterMixin):

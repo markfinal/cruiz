@@ -28,6 +28,7 @@ class FontSettings(ComparableCommonSettings):
 
     def __init__(self) -> None:
         """Initialise a FontSettings."""
+        super().__init__()
         self._property_meta = {
             "name": SettingMeta("FontName", StringSetting, None, ScalarValue),
             "size": SettingMeta("FontSize", IntSetting, None, ScalarValue),
@@ -74,11 +75,10 @@ class FontSettingsReader:
         self.settings.endGroup()
         self._settings_object.settings_reader = None
         del self._settings_object
-        if exc_type is None:
-            pass
-        else:
+        if exc_type is not None:
             # propagate exception
             return False
+        return True
 
 
 class FontSettingsWriter(_WriterMixin):

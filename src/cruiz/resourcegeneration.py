@@ -18,11 +18,11 @@ logger = logging.getLogger(__name__)
 
 
 def _run_command_if_out_of_date(
-    input: pathlib.Path, output: pathlib.Path, cmd_args: typing.List[str]
+    input_path: pathlib.Path, output_path: pathlib.Path, cmd_args: typing.List[str]
 ) -> bool:
-    if output.exists():
-        input_mtime = os.path.getmtime(input)
-        output_mtime = os.path.getmtime(output)
+    if output_path.exists():
+        input_mtime = os.path.getmtime(input_path)
+        output_mtime = os.path.getmtime(output_path)
         if input_mtime < output_mtime:
             return False
     # compile out of date resources

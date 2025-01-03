@@ -60,7 +60,7 @@ def _strtobool(val: str) -> bool:
         return True
     if val in ("n", "no", "f", "false", "off", "0"):
         return False
-    raise ValueError("invalid truth value %r" % (val,))
+    raise ValueError(f"Invalid truth value {val}")
 
 
 class RecipeWidget(QtWidgets.QMainWindow):
@@ -1131,6 +1131,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         dialog.exec_()
 
     def _generate_dependency_graph_from_profile_change(self, profile: str) -> None:
+        # pylint: disable=unused-argument
         attributes = self.get_recipe_attributes()
         self._generate_dependency_graph(attributes)
 
@@ -1169,8 +1170,8 @@ class RecipeWidget(QtWidgets.QMainWindow):
         self, payload: typing.Any, exception: typing.Any
     ) -> None:
         if payload:
-            self._dependency_graph = payload
-            self._ui.configurePackageId.setText(self._dependency_graph.root.package_id)
+            self.dependency_graph = payload
+            self._ui.configurePackageId.setText(self.dependency_graph.root.package_id)
             try:
                 self._visualise_dependencies(self._ui.dependency_rankdir.currentIndex())
             except FileNotFoundError as exc:
@@ -1179,7 +1180,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         if exception:
             if payload is None:
                 self._ui.configurePackageId.setText("Failed")
-                self._dependency_graph = None
+                self.dependency_graph = None
             lines = str(exception).splitlines()
             html = ""
             for line in lines:
@@ -1192,16 +1193,16 @@ class RecipeWidget(QtWidgets.QMainWindow):
             )
 
     def _visualise_dependencies(self, rank_dir_index: int) -> None:
-        if self._dependency_graph is None:
+        if self.dependency_graph is None:
             return
         # list visualisation of dependencies
-        self._dependencies_list_model = DependenciesListModel(self._dependency_graph)
+        self._dependencies_list_model = DependenciesListModel(self.dependency_graph)
         self._ui.dependenciesPackageList.setModel(self._dependencies_list_model)
         # tree visualisation of dependencies (DISABLED)
-        self._dependencies_tree_model = DependenciesTreeModel(self._dependency_graph)
+        self._dependencies_tree_model = DependenciesTreeModel(self.dependency_graph)
         self._ui.dependenciesPackageTree.setModel(self._dependencies_tree_model)
         # graphical visualisation of dependencies
-        self._ui.dependencyView.visualise(self._dependency_graph, rank_dir_index)
+        self._ui.dependencyView.visualise(self.dependency_graph, rank_dir_index)
 
     def _set_pane_font(self) -> None:
         with FontSettingsReader(FontUsage.OUTPUT) as settings:

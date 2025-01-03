@@ -1,10 +1,10 @@
 """Cruiz workers API."""
 
-import cruiz.globals as globals
+import cruiz.globals as cg
 
 from .common import endmessagethread
 
-if globals.CONAN_MAJOR_VERSION == 1:
+if cg.CONAN_MAJOR_VERSION == 1:
     from .v1 import (  # noqa: E402
         arbitrary,
         build,
