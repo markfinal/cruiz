@@ -16,7 +16,6 @@ if typing.TYPE_CHECKING:
 
 
 def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> None:
-    # pylint: disable=too-many-branches
     """Run CMake build tool."""
     assert params.cwd
     # generate build command

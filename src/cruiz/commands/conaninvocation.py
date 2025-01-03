@@ -41,8 +41,6 @@ logger = logging.getLogger(__name__)
 class ConanInvocation(QtCore.QObject):
     """Wrapper around invoking a conan child process."""
 
-    # pylint: disable=too-many-instance-attributes
-
     completed = QtCore.Signal(object, Exception)
     finished = QtCore.Signal()
     _begin_processing = QtCore.Signal()
@@ -167,7 +165,6 @@ class ConanInvocation(QtCore.QObject):
         logger.debug("Worker process: %i cancelled", pid)
         logger.debug("Had %i child processes", len(children))
         for i, child in enumerate(children):
-            # pylint: disable=broad-except
             try:
                 with child.oneshot():
                     logger.debug(

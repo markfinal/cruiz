@@ -14,7 +14,6 @@ from .monkeypatch import _do_monkey_patching
 
 _do_monkey_patching()
 
-# pylint: disable=wrong-import-order,wrong-import-position
 from conans.client import conan_api, output, runner  # noqa: E402, I100
 from conans.paths import get_conan_user_home  # noqa: E402
 
@@ -31,7 +30,6 @@ def instance(
     params: typing.Union[CommandParameters, CommonParameters],
 ) -> conan_api.ConanAPIV1:
     """Get a new instance of the Conan API object."""
-    # pylint: disable=no-member
     QtLogger().set_queue(queue)
     stdout = QueuedStreamSix(queue, Stdout)
     stderr = QueuedStreamSix(queue, Stderr)
@@ -59,6 +57,7 @@ def instance(
         cache = conan_api.ClientCache(local_cache_dir, stdout)
         print_commands_to_output = False
 
+    # pylint: disable=possibly-used-before-assignment
     newrunner = runner.ConanRunner(
         print_commands_to_output=print_commands_to_output, output=newoutputter
     )
@@ -75,9 +74,6 @@ def instance(
 def _create_old_conan_api(out: typing.Any, run: typing.Any) -> typing.Any:
     # This function is mostly copied from Conan 1.17.x Factory methood for ConanAPIV1,
     # but with edits for cruiz
-    # pylint: disable=logging-not-lazy,import-outside-toplevel,too-many-locals,
-    # pylint: disable=unexpected-keyword-arg,no-member,no-value-for-parameter,
-    # pylint: disable=too-many-function-args
     import sys
     from conans.client.userio import UserIO
     from conans.client.migrations import ClientMigrator

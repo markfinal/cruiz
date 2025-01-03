@@ -18,6 +18,7 @@ def _monkey_patch_logger() -> None:
     def qt_configure_logger(
         logging_level: int = logging.CRITICAL, logging_file: typing.Optional[str] = None
     ) -> logging.Logger:
+        # pylint: disable=unused-argument
         from .qtlogger import QtLogger
 
         logger = logging.getLogger("conans")
@@ -129,7 +130,7 @@ def _monkey_patch_autotools_helper() -> None:
         host: typing.Any = None,
         target: typing.Any = None,
         pkg_config_paths: typing.Any = None,
-        vars: typing.Any = None,
+        variables: typing.Any = None,
         use_default_install_dirs: typing.Any = True,
     ) -> None:
         args = args or []
@@ -163,10 +164,10 @@ def _monkey_patch_autotools_helper() -> None:
         if cache_executable:
             # if using autotools, GCC is almost implied
             # on macOSX, gcc/g++ do exist and do report being apple clang
-            vars = vars or {}
-            vars["CC"] = f"{cache_executable} gcc"
-            vars["CXX"] = f"{cache_executable} g++"
-            vars["PATH"] = [os.fspath(pathlib.Path(cache_executable).parent)]
+            variables = variables or {}
+            variables["CC"] = f"{cache_executable} gcc"
+            variables["CXX"] = f"{cache_executable} g++"
+            variables["PATH"] = [os.fspath(pathlib.Path(cache_executable).parent)]
 
         # now execute the old function
         original_autotools_build_helper_configure(
@@ -177,7 +178,7 @@ def _monkey_patch_autotools_helper() -> None:
             host,
             target,
             pkg_config_paths,
-            vars,
+            variables,
             use_default_install_dirs,
         )
 
@@ -193,7 +194,7 @@ def _monkey_patch_autotools_helper() -> None:
         args: str = "",
         make_program: typing.Optional[str] = None,
         target: typing.Optional[str] = None,
-        vars: typing.Any = None,
+        variables: typing.Any = None,
     ) -> None:
         cache_executable = os.environ.get(str(BuildFeatureConstants.CCACHEEXECUTABLE))
         if cache_executable is None:
@@ -205,10 +206,10 @@ def _monkey_patch_autotools_helper() -> None:
                 str(BuildFeatureConstants.BUILDCACHEEXECUTABLE)
             )
         if cache_executable:
-            vars = vars or {}
-            vars["CC"] = f"{cache_executable} gcc"
-            vars["CXX"] = f"{cache_executable} g++"
-            vars["PATH"] = [os.fspath(pathlib.Path(cache_executable).parent)]
+            variables = variables or {}
+            variables["CC"] = f"{cache_executable} gcc"
+            variables["CXX"] = f"{cache_executable} g++"
+            variables["PATH"] = [os.fspath(pathlib.Path(cache_executable).parent)]
 
         # now execute the old function
         original_autotools_build_helper_make(self, args, make_program, target, vars)

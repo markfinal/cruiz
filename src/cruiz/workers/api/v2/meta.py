@@ -107,10 +107,13 @@ def _interop_get_conandata(
     except TypeError:
         # older than v2.1.0
         app = ConanApp(api.cache_folder, api.config.global_conf)
+    # pylint: disable=protected-access
+    # TODO: call to non-public function
     return app.loader._load_data(recipe_path)
 
 
 def _interop_get_config_envvars(api: typing.Any) -> typing.List[str]:
+    # pylint: disable=unused-argument
     # no variable present listing the all in Conan 2
     # so use https://docs.conan.io/2/reference/environment.html
     envvar_list = [
@@ -133,7 +136,8 @@ def _interop_profile_meta(
         from conans.client.profile_loader import ProfileLoader
 
     loader = ProfileLoader(api.cache_folder)
-    # TODO: using internal method
+    # pylint: disable=protected-access
+    # TODO: call to non-public function
     profile = loader._load_profile(profile, os.getcwd())
     details: typing.Dict[str, typing.Dict[str, typing.Any]] = {"settings": {}}
     for key, value in profile.settings.items():  # type: ignore[attr-defined]
@@ -159,6 +163,7 @@ def invoke(
                     request = split[0]
                     request_params = urllib.parse.parse_qs(split[1])
 
+                # pylint: disable=possibly-used-before-assignment
                 result: typing.Any = None
                 if request == "remotes_list":
                     result = _interop_remote_list(api)
@@ -192,7 +197,6 @@ def invoke(
                 # ensure that the result doesn't accidentally appear in
                 # subsequent loop iterations
                 del result
-            # pylint: disable=broad-except
             except Exception as exception:
                 reply_queue.put(Failure(Exception(str(exception))))
                 request_queue.task_done()

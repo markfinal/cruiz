@@ -15,6 +15,7 @@ class RecentConanConfigSettings(CommonSettings):
 
     def __init__(self) -> None:
         """Initialise a RecentConanConfigSettings."""
+        super().__init__()
         self._property_meta = {
             "paths": SettingMeta("RecentConanConfigs", ListSetting, [], ListValue),
         }
@@ -68,11 +69,10 @@ class RecentConanConfigSettingsReader:
         self.settings.endArray()
         self._settings_object.settings_reader = None
         del self._settings_object
-        if exc_type is None:
-            pass
-        else:
+        if exc_type is not None:
             # propagate exception
             return False
+        return True
 
 
 class RecentConanConfigSettingsWriter(_WriterMixin):
@@ -100,6 +100,6 @@ class RecentConanConfigSettingsDeleter:
             with BaseSettings.WriteArray(
                 self._reader_for_deleter.array, replace=True
             ) as settings:
-                for i, path in enumerate(current_list):
+                for i, config_path in enumerate(current_list):
                     settings.setArrayIndex(i)
-                    settings.setValue("Path", path)
+                    settings.setValue("Path", config_path)

@@ -107,7 +107,10 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
 
         # shortcuts themselves are set elsewhere, as they can be dynamic
         # through the lifetime of the application
+        # TODO: the _ui is likely to be on the RecipeWidget
+        # pylint: disable=protected-access
         recipe_ui = self.parent()._ui  # type: ignore[attr-defined]
+
         _configure(recipe_ui.actionCreateCommand, self._conan_create)
         _configure(recipe_ui.actionCreateUpdateCommand, self._conan_create_update)
         _configure(recipe_ui.actionInstallCommand, self._conan_install)
@@ -174,6 +177,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
                 icon = QtGui.QIcon(f":/icons/{cruiz.globals.get_theme()}/{icon_path}")
             action.setIcon(icon)
 
+        # pylint: disable=protected-access
         recipe_ui = self.parent()._ui  # type: ignore[attr-defined]
         _configure_conan_action(
             recipe_ui.actionCreateCommand,
@@ -803,7 +807,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             common_subdir = settings.local_workflow_common_subdir.resolve()
             params.cwd = recipe_widget.get_working_dir(workflow_cwd, common_subdir)  # type: ignore[attr-defined] # noqa: E501
             layout_build_subdir = (
-                recipe_widget._dependency_graph.root.layout_build_subdir  # type: ignore[attr-defined] # noqa: E501
+                recipe_widget.dependency_graph.root.layout_build_subdir  # type: ignore[attr-defined] # noqa: E501
             )
             if layout_build_subdir:
                 params.build_folder = layout_build_subdir
@@ -833,7 +837,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             common_subdir = settings.local_workflow_common_subdir.resolve()
             params.cwd = recipe_widget.get_working_dir(workflow_cwd, common_subdir)  # type: ignore[attr-defined] # noqa: E501
             layout_build_subdir = (
-                recipe_widget._dependency_graph.root.layout_build_subdir  # type: ignore[attr-defined] # noqa: E501
+                recipe_widget.dependency_graph.root.layout_build_subdir  # type: ignore[attr-defined] # noqa: E501
             )
             if layout_build_subdir:
                 params.build_folder = layout_build_subdir

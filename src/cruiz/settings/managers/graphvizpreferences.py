@@ -19,6 +19,7 @@ class GraphVizSettings(ComparableCommonSettings):
 
     def __init__(self) -> None:
         """Initialise a GraphVizSettings."""
+        super().__init__()
         self._property_meta = {
             "bin_directory": SettingMeta("BinDir", StringSetting, None, ScalarValue),
         }
@@ -55,11 +56,10 @@ class GraphVizSettingsReader:
         self.settings.endGroup()
         self._settings_object.settings_reader = None
         del self._settings_object
-        if exc_type is None:
-            pass
-        else:
+        if exc_type is not None:
             # propagate exception
             return False
+        return True
 
 
 class GraphVizSettingsWriter(_WriterMixin):

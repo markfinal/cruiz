@@ -59,8 +59,6 @@ logger = logging.getLogger(__name__)
 class MainWindow(QtWidgets.QMainWindow):
     """The main window of the application."""
 
-    # pylint: disable=too-many-instance-attributes, too-many-locals
-
     profile_dirs_changed = QtCore.Signal()
     remote_added_to_cache = QtCore.Signal(str)
     preferences_updated = QtCore.Signal()
@@ -73,7 +71,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def __init__(self) -> None:
         """Initialise a MainWindow."""
-        # pylint: disable=too-many-statements, global-statement
         super().__init__()
         log_created_widget(self, logger)
 
@@ -369,7 +366,6 @@ class MainWindow(QtWidgets.QMainWindow):
         original_recipe: typing.Optional[RecipeWidget] = None,
     ) -> None:
         """Load the Conan recipe into a usable environment."""
-        # pylint: disable=too-many-branches, too-many-statements
         try:
             wizard = LoadRecipeWizard(
                 self,
@@ -475,8 +471,6 @@ Remove from the recent list?",
         self._refresh_status_bar()
 
     def _refresh_status_bar(self) -> None:
-        # pylint: disable=too-many-branches, too-many-statements
-
         # TODO: this is truly awful, but give a package manager a chance to delete and
         # rewrite upgrades to packages, otherwise this code might be run when at the
         # time when files don't exist temporarily
@@ -523,6 +517,8 @@ Remove from the recent list?",
                     [path, "--version"]
                 )
             )
+        else:
+            raise NotImplementedError(f"Platform '{system}' is not supported")
         compiler_path = QtCore.QStandardPaths.findExecutable(compiler_desc)
         statusbar_tool(
             compiler_desc,
@@ -630,6 +626,7 @@ Remove from the recent list?",
             return os.fspath(pathlib.Path(spec.origin).parent)
 
         def get_conan_version_output(path: str) -> str:
+            # pylint: disable=unused-argument
             return cruiz.globals.CONAN_FULL_VERSION
 
         statusbar_tool(
@@ -647,13 +644,13 @@ Remove from the recent list?",
             "iconlicense.pdf",
             "iconlicense_cruise.pdf",
         ]
-        for license in license_files:
+        for license_file in license_files:
             temp_dir = QtCore.QDir(
                 QtCore.QStandardPaths.writableLocation(
                     QtCore.QStandardPaths.StandardLocation.TempLocation
                 )
             )
-            temp_path = temp_dir.absoluteFilePath(license)
+            temp_path = temp_dir.absoluteFilePath(license_file)
             if QtCore.QFile.exists(temp_path):
                 # file may be read-only when copied from resources,
                 # so make writeable and remove it
@@ -662,11 +659,11 @@ Remove from the recent list?",
                     perms = perms | QtCore.QFileDevice.Permission.WriteOwner
                     QtCore.QFile.setPermissions(temp_path, perms)
                 QtCore.QFile.remove(temp_path)
-            if not QtCore.QFile.copy(f":/{license}", temp_path):
+            if not QtCore.QFile.copy(f":/{license_file}", temp_path):
                 QtWidgets.QMessageBox.critical(
                     self,
                     "Failed file copy",
-                    f"Unable to copy the {license} to a temporary location for viewing",
+                    f"Unable to copy the {license_file} to a temporary location for viewing",  # noqa: E501
                     button0=QtWidgets.QMessageBox.StandardButton.Ok,
                     button1=QtWidgets.QMessageBox.StandardButton.NoButton,
                 )

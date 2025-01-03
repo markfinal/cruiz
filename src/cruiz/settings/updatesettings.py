@@ -287,7 +287,6 @@ def _patch_settings_from_v1(settings: QtCore.QSettings) -> None:
 
 
 def _patch_settings_from_v0(settings: QtCore.QSettings) -> None:
-    # pylint: disable=too-many-locals, too-many-branches
     """
     Patch up settings.
 

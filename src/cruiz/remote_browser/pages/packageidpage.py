@@ -15,7 +15,7 @@ from .page import Page
 class _PackageIdModel(QtCore.QAbstractTableModel):
     def __init__(self) -> None:
         super().__init__()
-        self._pids: typing.Optional[
+        self.pids: typing.Optional[
             typing.List[
                 typing.Dict[
                     str,
@@ -23,10 +23,10 @@ class _PackageIdModel(QtCore.QAbstractTableModel):
                 ]
             ]
         ] = None
-        self._options: typing.Optional[typing.List[str]] = None
-        self._settings: typing.Optional[typing.List[str]] = None
-        self._options_values: typing.Optional[typing.Dict[str, typing.Set[str]]] = None
-        self._settings_values: typing.Optional[typing.Dict[str, typing.Set[str]]] = None
+        self.options: typing.Optional[typing.List[str]] = None
+        self.settings: typing.Optional[typing.List[str]] = None
+        self.options_values: typing.Optional[typing.Dict[str, typing.Set[str]]] = None
+        self.settings_values: typing.Optional[typing.Dict[str, typing.Set[str]]] = None
 
     def set(
         self,
@@ -41,7 +41,7 @@ class _PackageIdModel(QtCore.QAbstractTableModel):
     ) -> None:
         """Set the package ids into the model."""
         self.beginResetModel()
-        self._pids = results
+        self.pids = results
         if results is not None:
             options = set()
             option_values: typing.Dict[str, typing.Set[str]] = {}
@@ -62,62 +62,66 @@ class _PackageIdModel(QtCore.QAbstractTableModel):
                         if setting not in settings_values:
                             settings_values[setting] = set()
                         settings_values[setting].add(value)
-            self._options = sorted(list(options))
-            self._settings = sorted(list(settings))
-            self._options_values = option_values
-            self._settings_values = settings_values
+            self.options = sorted(list(options))
+            self.settings = sorted(list(settings))
+            self.options_values = option_values
+            self.settings_values = settings_values
         else:
-            self._options = None
-            self._settings = None
-            self._options_values = None
-            self._settings_values = None
+            self.options = None
+            self.settings = None
+            self.options_values = None
+            self.settings_values = None
         self.endResetModel()
 
     def rowCount(self, parent) -> int:  # type: ignore
+        """Get the number of rows in the model."""
         if parent.isValid():
             return 0
-        if self._pids is None:
+        if self.pids is None:
             return 0
-        return len(self._pids)
+        return len(self.pids)
 
     def columnCount(self, parent) -> int:  # type: ignore
+        """Get the number of columns in the model."""
         # pylint: disable=unused-argument
-        if self._pids is None:
+        if self.pids is None:
             return 0
         num_cols = 1  # the package id
-        if self._settings:
-            num_cols += len(self._settings)
-        if self._options:
-            num_cols += len(self._options)
-        if "requires" in self._pids[0]:
+        if self.settings:
+            num_cols += len(self.settings)
+        if self.options:
+            num_cols += len(self.options)
+        if "requires" in self.pids[0]:
             num_cols += 1
         return num_cols
 
     def headerData(self, section, orientation, role):  # type: ignore
+        """Get the header data of the model."""
         if (
             role == QtCore.Qt.ItemDataRole.DisplayRole
             and orientation == QtCore.Qt.Orientation.Horizontal
         ):
-            num_settings = len(self._settings) if self._settings else 0
-            num_options = len(self._options) if self._options else 0
-            if section == 0:
+            num_settings = len(self.settings) if self.settings else 0
+            num_options = len(self.options) if self.options else 0
+            if not section:
                 return "Package Id"
             if section >= 1 and section < 1 + num_settings:
-                return self._settings[section - 1]  # type: ignore[index]
+                return self.settings[section - 1]  # type: ignore[index]
             if section >= 1 + num_settings and section < 1 + num_settings + num_options:
                 index = section - 1 - num_settings
-                return self._options[index]  # type: ignore[index]
+                return self.options[index]  # type: ignore[index]
             return "Requires"
         return None
 
     def data(self, index, role):  # type: ignore
+        """Get data from the model."""
         if role == QtCore.Qt.ItemDataRole.DisplayRole:
-            num_settings = len(self._settings) if self._settings else 0
-            num_options = len(self._options) if self._options else 0
+            num_settings = len(self.settings) if self.settings else 0
+            num_options = len(self.options) if self.options else 0
             section = index.column()
-            assert self._pids
-            if section == 0:
-                return self._pids[index.row()]["id"]
+            assert self.pids
+            if not section:
+                return self.pids[index.row()]["id"]
             if section >= 1 and section < 1 + num_settings:
                 header = self.headerData(  # type: ignore[no-untyped-call]
                     section,
@@ -125,7 +129,7 @@ class _PackageIdModel(QtCore.QAbstractTableModel):
                     QtCore.Qt.ItemDataRole.DisplayRole,
                 )
                 try:
-                    return self._pids[index.row()]["settings"][header]
+                    return self.pids[index.row()]["settings"][header]
                 except KeyError:
                     return "-"
             if section >= 1 + num_settings and section < 1 + num_settings + num_options:
@@ -135,10 +139,10 @@ class _PackageIdModel(QtCore.QAbstractTableModel):
                     QtCore.Qt.ItemDataRole.DisplayRole,
                 )
                 try:
-                    return self._pids[index.row()]["options"][header]
+                    return self.pids[index.row()]["options"][header]
                 except KeyError:
                     return "-"
-            value = "\n".join(sorted(self._pids[index.row()]["requires"]))
+            value = "\n".join(sorted(self.pids[index.row()]["requires"]))
             return value
         return None
 
@@ -146,40 +150,49 @@ class _PackageIdModel(QtCore.QAbstractTableModel):
 class _FilteringModel(QtCore.QAbstractTableModel):
     def __init__(self) -> None:
         super().__init__()
-        self._filters: typing.List[typing.Tuple[int, str, str]] = []
+        self.filters: typing.List[typing.Tuple[int, str, str]] = []
 
     def add(self, index: int, key: str, value: str) -> None:
+        """Add a filter to the model."""
         self.beginResetModel()
-        self._filters.append((index, key, value))
+        self.filters.append((index, key, value))
         self.endResetModel()
 
     def remove(self, index: int) -> None:
+        """Remove a filter from the model."""
         self.beginResetModel()
-        del self._filters[index]
+        del self.filters[index]
         self.endResetModel()
 
     def invalidate(self) -> None:
+        """Remove all filters from the model."""
         self.beginResetModel()
-        self._filters = []
+        self.filters = []
         self.endResetModel()
 
     def rowCount(self, parent) -> int:  # type: ignore
-        return len(self._filters)
+        """Get the number of rows in the model."""
+        # pylint: disable=unused-argument
+        return len(self.filters)
 
     def columnCount(self, parent) -> int:  # type: ignore
+        """Get the number of columns in the model."""
+        # pylint: disable=unused-argument
         return 2
 
     def data(self, index, role):  # type: ignore
+        """Get data from the model."""
         if role == QtCore.Qt.ItemDataRole.DisplayRole:
-            return self._filters[index.row()][index.column() + 1]
+            return self.filters[index.row()][index.column() + 1]
         return None
 
     def headerData(self, section, orientation, role):  # type: ignore
+        """Get headers from the model."""
         if (
             role == QtCore.Qt.ItemDataRole.DisplayRole
             and orientation == QtCore.Qt.Orientation.Horizontal
         ):
-            if section == 0:
+            if not section:
                 return "Key"
             return "Value"
         return None
@@ -196,7 +209,8 @@ class _PackageIdSortFilterProxyModel(QtCore.QSortFilterProxyModel):
         source_row: int,
         source_parent: typing.Union[QtCore.QModelIndex, QtCore.QPersistentModelIndex],
     ) -> bool:
-        for column, _, value in self._filtering._filters:
+        """Override the model's filterAcceptRow method."""
+        for column, _, value in self._filtering.filters:
             index = self.sourceModel().index(source_row, column, source_parent)
             if value != self.sourceModel().data(
                 index, QtCore.Qt.ItemDataRole.DisplayRole
@@ -295,14 +309,14 @@ class PackageIdPage(Page):
             assert isinstance(blocked_widget, QtWidgets.QComboBox)
             blocked_widget.clear()
             blocked_widget.addItem("Package Id")
-            if self._model._settings:
-                blocked_widget.addItems(self._model._settings)
-            if self._model._options:
-                blocked_widget.addItems(self._model._options)
+            if self._model.settings:
+                blocked_widget.addItems(self._model.settings)
+            if self._model.options:
+                blocked_widget.addItems(self._model.options)
             blocked_widget.setCurrentIndex(-1)
         model = self._ui.pid_filter_key.model()
         # disable those with active filters
-        for index, _, _ in self._filtering_model._filters:
+        for index, _, _ in self._filtering_model.filters:
             item = model.item(index)
             item.setEnabled(False)
         with BlockSignals(self._ui.pid_filter_value) as blocked_widget:
@@ -363,8 +377,8 @@ class PackageIdPage(Page):
     def _on_package_id_header_menu(self, position: QtCore.QPoint) -> None:
         menu = QtWidgets.QMenu(self)
         offset = 1
-        assert self._model._settings
-        for i, s in enumerate(self._model._settings):
+        assert self._model.settings
+        for i, s in enumerate(self._model.settings):
             action = QtGui.QAction(s, self)
             action.setCheckable(True)
             action.setData(i + offset)
@@ -372,9 +386,9 @@ class PackageIdPage(Page):
             action.toggled.connect(self._on_toggle_hide_column)
             menu.addAction(action)
         menu.addSeparator()
-        offset = 1 + len(self._model._settings)
-        assert self._model._options
-        for i, o in enumerate(self._model._options):
+        offset = 1 + len(self._model.settings)
+        assert self._model.options
+        for i, o in enumerate(self._model.options):
             action = QtGui.QAction(o, self)
             action.setData(i + offset)
             action.setCheckable(True)
@@ -382,7 +396,7 @@ class PackageIdPage(Page):
             action.toggled.connect(self._on_toggle_hide_column)
             menu.addAction(action)
         menu.addSeparator()
-        offset = 1 + len(self._model._settings) + len(self._model._options)
+        offset = 1 + len(self._model.settings) + len(self._model.options)
         action = QtGui.QAction("Requires", self)
         action.setData(offset)
         action.setCheckable(True)
@@ -400,37 +414,38 @@ class PackageIdPage(Page):
 
     def _on_pid_filter_changed(self, text: str) -> None:
         self._ui.pid_filter_value.setEnabled(True)
-        assert self._model._settings
+        assert self._model.settings
         sender_combobox = self.sender()
         assert isinstance(sender_combobox, QtWidgets.QComboBox)
-        if sender_combobox.currentIndex() == 0:
+        if not sender_combobox.currentIndex():
             with BlockSignals(self._ui.pid_filter_value) as blocked_widget:
                 assert isinstance(blocked_widget, QtWidgets.QComboBox)
                 blocked_widget.clear()
-                assert self._model._pids
-                for pid in self._model._pids:
-                    id = pid["id"]
-                    assert isinstance(id, str)
-                    blocked_widget.addItem(id)
+                assert self._model.pids
+                for pid in self._model.pids:
+                    package_id = pid["id"]
+                    assert isinstance(package_id, str)
+                    blocked_widget.addItem(package_id)
                 blocked_widget.setCurrentIndex(-1)
-        elif sender_combobox.currentIndex() < len(self._model._settings) + 1:
+        elif sender_combobox.currentIndex() < len(self._model.settings) + 1:
             with BlockSignals(self._ui.pid_filter_value) as blocked_widget:
                 assert isinstance(blocked_widget, QtWidgets.QComboBox)
                 blocked_widget.clear()
-                assert self._model._settings_values
-                settings = list(self._model._settings_values[text])
+                assert self._model.settings_values
+                settings = list(self._model.settings_values[text])
                 blocked_widget.addItems(settings)
                 blocked_widget.setCurrentIndex(-1)
         else:
             with BlockSignals(self._ui.pid_filter_value) as blocked_widget:
                 assert isinstance(blocked_widget, QtWidgets.QComboBox)
                 blocked_widget.clear()
-                assert self._model._options_values
-                options = list(self._model._options_values[text])
+                assert self._model.options_values
+                options = list(self._model.options_values[text])
                 blocked_widget.addItems(options)
                 blocked_widget.setCurrentIndex(-1)
 
     def _on_pid_filter_value_changed(self, text: str) -> None:
+        # pylint: disable=unused-argument
         self._ui.pid_add_filter.setEnabled(True)
 
     def _on_add_pid_filter(self) -> None:

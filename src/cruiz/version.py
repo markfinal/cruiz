@@ -35,15 +35,15 @@ def get_version() -> str:
             ):
                 # during GitHub actions, prefer to use the ref pushed
                 return os.environ["GITHUB_REF_NAME"]
-            else:
-                # annotated tags only
-                return subprocess.run(
-                    ["git", "describe", "--tags"],
-                    cwd=cwd,
-                    capture_output=True,
-                    encoding="utf-8",
-                    errors="ignore",
-                ).stdout.rstrip()
+            # annotated tags only
+            return subprocess.run(
+                ["git", "describe", "--tags"],
+                check=True,
+                cwd=cwd,
+                capture_output=True,
+                encoding="utf-8",
+                errors="ignore",
+            ).stdout.rstrip()
 
         try:
             file_path = pathlib.Path(__file__)

@@ -48,11 +48,10 @@ class RecentRecipeSettingsReader:
         self.settings.endArray()
         self._settings_object.settings_reader = None
         del self._settings_object
-        if exc_type is None:
-            pass
-        else:
+        if exc_type is not None:
             # propagate exception
             return False
+        return True
 
 
 class RecentRecipeSettingsWriter:  # TODO: should this derive from _WriterMixin?
@@ -75,10 +74,11 @@ class RecentRecipeSettingsWriter:  # TODO: should this derive from _WriterMixin?
         with BaseSettings.WriteArray(
             self._array, replace=True
         ) as settings:  # TODO: can this use the reader's QSettings?
-            for i, uuid in enumerate(current_list):
+            for i, current_uuid in enumerate(current_list):
                 settings.setArrayIndex(i)
                 settings.setValue(
-                    "UUID", uuid.toString(QtCore.QUuid.StringFormat.WithoutBraces)
+                    "UUID",
+                    current_uuid.toString(QtCore.QUuid.StringFormat.WithoutBraces),
                 )
         return uuid_exists
 
@@ -99,8 +99,9 @@ class RecentRecipeSettingsDeleter:
         BaseSettings.make_settings().remove(self._array)
         if current_list:
             with BaseSettings.WriteArray(self._array) as settings:
-                for i, uuid in enumerate(current_list):
+                for i, current_uuid in enumerate(current_list):
                     settings.setArrayIndex(i)
                     settings.setValue(
-                        "UUID", uuid.toString(QtCore.QUuid.StringFormat.WithoutBraces)
+                        "UUID",
+                        current_uuid.toString(QtCore.QUuid.StringFormat.WithoutBraces),
                     )

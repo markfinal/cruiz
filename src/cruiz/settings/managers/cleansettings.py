@@ -52,8 +52,8 @@ def sanitise_settings(widget: QtWidgets.QWidget) -> bool:
     cleaned = False
     if incomplete_uuids:
         message = "Incomplete recipe settings:\n"
-        for uuid in incomplete_uuids:
-            message += f"{uuid}: {incomplete_uuids[uuid]}\n"
+        for uuid, reason in incomplete_uuids.items():
+            message += f"{uuid}: {reason}\n"
         message += "Clean?"
         response = QtWidgets.QMessageBox.question(
             widget,
@@ -90,8 +90,7 @@ def sanitise_settings(widget: QtWidgets.QWidget) -> bool:
             cleaned = True
     if recent_recipe_only:
         message = "Missing settings for UUIDs:\n"
-        for uuid in recent_recipe_only:
-            message += f"{uuid}\n"
+        message += "\n".join(recent_recipe_only)
         message += "Clean?"
         response = QtWidgets.QMessageBox.question(
             widget,
@@ -109,8 +108,7 @@ def sanitise_settings(widget: QtWidgets.QWidget) -> bool:
     if all_uuids:
         # all_uuids are now those recipe settings without a recent recipe UUID
         message = "Recent recipe UUIDs that don't have settings:\n"
-        for uuid in all_uuids:
-            message += f"{uuid}\n"
+        message += "\n".join(all_uuids)
         message += "Add?"
         response = QtWidgets.QMessageBox.question(
             widget,

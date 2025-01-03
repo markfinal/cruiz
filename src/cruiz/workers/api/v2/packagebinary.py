@@ -27,7 +27,6 @@ def invoke(
 
     PackageBinaryParameters has dynamic attributes.
     """
-    # pylint: disable=import-outside-toplevel, protected-access, no-member
     with worker.ConanWorker(queue, params) as api:
         from conan.internal.conan_app import ConanApp
         from conans.model.package_ref import PkgReference
@@ -43,8 +42,9 @@ def invoke(
             app = ConanApp(api.cache_folder, api.config.global_conf)
         metadata = None
 
-        # TODO: using non-public method
         assert hasattr(params, "where")
+        # pylint: disable=protected-access
+        # TODO: call to non-public function
         zipped_files = app.remote_manager._call_remote(
             remote,
             "get_package",

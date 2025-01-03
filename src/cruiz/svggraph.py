@@ -107,12 +107,14 @@ class _SVGDialog(QtWidgets.QDialog):
         layout.addWidget(self._view)
 
     def showEvent(self, event: QtGui.QShowEvent) -> None:
+        """Override the widget's showEvent."""
         super().showEvent(event)
         self._view.fitInView(
             self._scene.sceneRect(), QtCore.Qt.AspectRatioMode.KeepAspectRatio
         )
 
     def resizeEvent(self, event: QtGui.QResizeEvent) -> None:
+        """Override the widget's resizeEvent."""
         self._view.fitInView(
             self._scene.sceneRect(), QtCore.Qt.AspectRatioMode.KeepAspectRatio
         )

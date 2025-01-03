@@ -5,7 +5,6 @@
 import typing
 
 
-# pylint: disable=too-few-public-methods
 class Message:
     """Base class of all messages."""
 

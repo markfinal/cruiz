@@ -127,6 +127,8 @@ def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> 
                     interop_node.children.append(nodes[dep.dst])
                     nodes[dep.dst].parents.append(interop_node)
 
+            # pylint: disable=possibly-used-before-assignment
+            # if root_node is not defined, I would expect an exception to be raised
             new_graph = DependencyGraph(list(nodes.values()), root_node)
 
             queue.put(Success(new_graph))

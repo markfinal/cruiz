@@ -23,6 +23,7 @@ class _RecipeRevisionModel(QtCore.QAbstractTableModel):
         self.endResetModel()
 
     def rowCount(self, parent) -> int:  # type: ignore
+        """Get the number of rows in the model."""
         if parent.isValid():
             return 0
         if self._rrevs is None:
@@ -30,26 +31,29 @@ class _RecipeRevisionModel(QtCore.QAbstractTableModel):
         return len(self._rrevs)
 
     def columnCount(self, parent) -> int:  # type: ignore
+        """Get the number of columns in the model."""
         # pylint: disable=unused-argument
         if self._rrevs is None:
             return 0
         return 2
 
     def headerData(self, section, orientation, role):  # type: ignore
+        """Get headers from the model."""
         if (
             role == QtCore.Qt.ItemDataRole.DisplayRole
             and orientation == QtCore.Qt.Orientation.Horizontal
         ):
-            if section == 0:
+            if not section:
                 return "Revision"
             if section == 1:
                 return "Timestamp"
         return None
 
     def data(self, index, role) -> typing.Any:  # type: ignore
+        """Get data from the model."""
         if role == QtCore.Qt.ItemDataRole.DisplayRole:
             assert self._rrevs
-            if index.column() == 0:
+            if not index.column():
                 return self._rrevs[index.row()]["revision"]
             if index.column() == 1:
                 return self._rrevs[index.row()]["time"]

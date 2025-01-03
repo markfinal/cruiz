@@ -24,9 +24,10 @@ class DependencyView(QtWidgets.QGraphicsView):
 
     def visualise(self, depgraph: DependencyGraph, rankdir: int) -> None:
         """Visualise the dependency graph."""
-        if rankdir == 0:
+        if not rankdir:
             rank_dir = "LR"
-        elif rankdir == 1:
+        else:
+            assert rankdir == 1
             rank_dir = "TB"
         digraph = DependenciesToDigraph(depgraph, rank_dir)
         svg = DigraphToSVG(digraph)

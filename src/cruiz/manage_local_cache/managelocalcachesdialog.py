@@ -789,6 +789,7 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
         bottom_right: QtCore.QModelIndex,
         roles: typing.List[int],
     ) -> None:
+        # pylint: disable=unused-argument
         assert top_left == bottom_right
         row_index = top_left.row()
         new_value = top_left.data(0)
@@ -836,6 +837,7 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
         bottom_right: QtCore.QModelIndex,
         roles: typing.List[int],
     ) -> None:
+        # pylint: disable=unused-argument
         assert top_left == bottom_right
         row_index = top_left.row()
         new_value = top_left.data(0)

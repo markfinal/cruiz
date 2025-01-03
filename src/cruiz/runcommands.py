@@ -13,8 +13,7 @@ CREATION_FLAGS = (
 def run(*args: typing.Any, **kwargs: typing.Any) -> subprocess.CompletedProcess:  # type: ignore[type-arg]  # noqa: E501
     """Run a command, checking for failure."""
     kwargs["creationflags"] = CREATION_FLAGS
-    kwargs["check"] = True
-    return subprocess.run(*args, **kwargs)
+    return subprocess.run(*args, check=True, **kwargs)
 
 
 def run_get_output(*args: typing.Any, **kwargs: typing.Any) -> str:
@@ -24,11 +23,10 @@ def run_get_output(*args: typing.Any, **kwargs: typing.Any) -> str:
     Return the output.
     """
     kwargs["creationflags"] = CREATION_FLAGS
-    kwargs["check"] = True
     kwargs["capture_output"] = True
     kwargs["encoding"] = "utf-8"
     kwargs["errors"] = "ignore"
-    return subprocess.run(*args, **kwargs).stdout
+    return subprocess.run(*args, check=True, **kwargs).stdout
 
 
 def run_get_combined_output(*args: typing.Any, **kwargs: typing.Any) -> str:
@@ -38,12 +36,11 @@ def run_get_combined_output(*args: typing.Any, **kwargs: typing.Any) -> str:
     Return the output.
     """
     kwargs["creationflags"] = CREATION_FLAGS
-    kwargs["check"] = True
     kwargs["stdout"] = subprocess.PIPE
     kwargs["stderr"] = subprocess.STDOUT
     kwargs["encoding"] = "utf-8"
     kwargs["errors"] = "ignore"
-    return subprocess.run(*args, **kwargs).stdout
+    return subprocess.run(*args, check=True, **kwargs).stdout
 
 
 def get_popen_for_capture(*args: typing.Any, **kwargs: typing.Any) -> subprocess.Popen:  # type: ignore[type-arg]  # noqa: E501

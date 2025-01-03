@@ -55,7 +55,6 @@ class BlockSignals:
 
     def __enter__(self) -> QtCore.QObject:
         """Enter a context manager with a BlockSignals."""
-        # pylint: disable=attribute-defined-outside-init
         self._old_state = self._object.blockSignals(True)
         return self._object
 
