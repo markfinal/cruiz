@@ -18,11 +18,12 @@ _do_monkey_patching()
 from conans.client import conan_api, output, runner  # noqa: E402, I100
 from conans.paths import get_conan_user_home  # noqa: E402
 
-import cruiz.workers.utils.qtlogger  # noqa: E402
 from cruiz.interop.commandparameters import CommandParameters  # noqa: E402
 from cruiz.interop.commonparameters import CommonParameters  # noqa: E402
 from cruiz.interop.message import Message, Stderr, Stdout  # noqa: E402
 from cruiz.workers.utils.stream import QueuedStreamSix  # noqa: E402
+
+from .qtlogger import QtLogger  # noqa: E402
 
 
 def instance(
@@ -31,7 +32,7 @@ def instance(
 ) -> conan_api.ConanAPIV1:
     """Get a new instance of the Conan API object."""
     # pylint: disable=no-member
-    cruiz.workers.utils.qtlogger.QtLogger().set_queue(queue)
+    QtLogger().set_queue(queue)
     stdout = QueuedStreamSix(queue, Stdout)
     stderr = QueuedStreamSix(queue, Stderr)
     newoutputter = output.ConanOutput(stream=stdout, stream_err=stderr, color=True)

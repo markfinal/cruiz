@@ -18,12 +18,10 @@ def _monkey_patch_logger() -> None:
     def qt_configure_logger(
         logging_level: int = logging.CRITICAL, logging_file: typing.Optional[str] = None
     ) -> logging.Logger:
-        # pylint: disable=unused-argument
-        # pylint: disable=import-outside-toplevel
-        import cruiz.workers.utils.qtlogger
+        from .qtlogger import QtLogger
 
         logger = logging.getLogger("conans")
-        qt_logger = cruiz.workers.utils.qtlogger.QtLogger()
+        qt_logger = QtLogger()
         if qt_logger in logger.handlers:
             return logger
         for hand in logger.handlers:
