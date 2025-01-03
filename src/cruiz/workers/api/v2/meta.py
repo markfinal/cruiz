@@ -126,7 +126,11 @@ def _interop_get_config_envvars(api: typing.Any) -> typing.List[str]:
 def _interop_profile_meta(
     api: typing.Any, profile: str
 ) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
-    from conans.client.profile_loader import ProfileLoader
+    try:
+        from conan.internal.api.profile.profile_loader import ProfileLoader
+    except ImportError:
+        # older than v2.6.0
+        from conans.client.profile_loader import ProfileLoader
 
     loader = ProfileLoader(api.cache_folder)
     # TODO: using internal method
