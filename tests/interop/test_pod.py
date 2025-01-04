@@ -3,7 +3,7 @@
 import pathlib
 import urllib.parse
 
-from cruiz.interop.pod import ConanHook
+from cruizlib.interop.pod import ConanHook
 
 
 def test_pod_hook_invariant_after_serialization() -> None:

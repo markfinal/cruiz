@@ -15,7 +15,9 @@ import typing
 import urllib.parse
 
 from cruiz.interop.message import Failure, Message, Success
-from cruiz.interop.pod import ConanHook, ConanRemote
+from cruiz.interop.pod import ConanRemote
+
+from cruizlib.interop.pod import ConanHook
 
 from . import worker
 

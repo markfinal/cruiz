@@ -42,7 +42,7 @@ cruiz = "cruiz.__main__:main"
 
 [tool.setuptools]
 packages.find.where = ["src"]
-packages.find.include = ["cruiz", "cruiz.*"]
+packages.find.include = ["cruiz", "cruiz.*", "cruizlib", "cruizlib.*"]
 packages.find.exclude = ["cruiz.resources.*"]
 include-package-data = false
 
@@ -134,10 +134,13 @@ deps = [
 commands = [
     ["pip", "install", "-e", "."],
     ["flake8", "src/cruiz"],
+    ["flake8", "src/cruizlib"],
     ["flake8", "tests"],
     ["mypy", "src/cruiz"],
+    ["mypy", "--warn-return-any", "src/cruizlib"],
     ["mypy", "tests"],
     ["pylint", "src/cruiz"],
+    ["pylint", "--enable=all", "src/cruizlib"],
     ["pip", "install", "conan<2"],
     ["pylint", "--ignore-paths=^src/cruiz/pyside6/.*$,^src/cruiz/workers/api/v2/.*$", "src/cruiz"],  # assuming Conan1 APIs
 ]
