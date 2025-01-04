@@ -10,6 +10,8 @@ import typing
 
 from PySide6 import QtCore, QtGui, QtWidgets
 
+from attrs.converters import to_bool
+
 import cruiz.globals
 import cruiz.revealonfilesystem
 import cruiz.workers.api as workers_api
@@ -45,22 +47,6 @@ from .recipe import Recipe
 
 
 logger = logging.getLogger(__name__)
-
-
-# copied from distutils.url.strtobool and modified
-def _strtobool(val: str) -> bool:
-    """Convert a string representation of truth to true (1) or false (0).
-
-    True values are 'y', 'yes', 't', 'true', 'on', and '1'; false values
-    are 'n', 'no', 'f', 'false', 'off', and '0'.  Raises ValueError if
-    'val' is anything else.
-    """
-    val = val.lower()
-    if val in ("y", "yes", "t", "true", "on", "1"):
-        return True
-    if val in ("n", "no", "f", "false", "off", "0"):
-        return False
-    raise ValueError(f"Invalid truth value {val}")
 
 
 class RecipeWidget(QtWidgets.QMainWindow):
@@ -452,7 +438,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
                     default_value = str(default_options[key])
                 if isinstance(value, list):
                     if default_value not in value and isinstance(value[0], bool):
-                        default_value = _strtobool(default_value)
+                        default_value = to_bool(default_value)
                         assert default_value in value, (
                             f"Cannot find default value '{default_value}' in possible "
                             f"values {value}"

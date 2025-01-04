@@ -11,6 +11,8 @@ from contextlib import contextmanager
 
 from PySide6 import QtCore, QtWidgets
 
+from attr.converters import to_bool
+
 import cruiz.workers.api as workers_api
 from cruiz.constants import DEFAULT_CACHE_NAME
 from cruiz.exceptions import RecipeInspectionError
@@ -37,22 +39,6 @@ if typing.TYPE_CHECKING:
     from .logdetails import LogDetails
 
 logger = logging.getLogger(__name__)
-
-
-# copied from distutils.url.strtobool and modified
-def _strtobool(val: str) -> bool:
-    """Convert a string representation of truth to true (1) or false (0).
-
-    True values are 'y', 'yes', 't', 'true', 'on', and '1'; false values
-    are 'n', 'no', 'f', 'false', 'off', and '0'.  Raises ValueError if
-    'val' is anything else.
-    """
-    val = val.lower()
-    if val in ("y", "yes", "t", "true", "on", "1"):
-        return True
-    if val in ("n", "no", "f", "false", "off", "0"):
-        return False
-    raise ValueError(f"Invalid truth value {val}")
 
 
 class ConanContext(QtCore.QObject):
@@ -524,7 +510,7 @@ class ConanContext(QtCore.QObject):
             ) from exception
         if config_value is not None:
             assert isinstance(config_value, str)
-            config_value = _strtobool(config_value)
+            config_value = to_bool(config_value)
         return config_value or default_value
 
     def set_boolean_config(self, config: ConanConfigBoolean, value: bool) -> None:
