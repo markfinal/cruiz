@@ -10,6 +10,8 @@ import pathlib
 import typing
 import urllib.parse
 
+from attrs.converters import to_bool
+
 from cruiz.interop.message import Failure, Message, Success
 from cruiz.interop.pod import ConanRemote
 
@@ -19,22 +21,6 @@ from . import worker
 
 if typing.TYPE_CHECKING:
     from cruiz.interop.commandparameters import CommandParameters
-
-
-# copied from distutils.url.strtobool and modified
-def _strtobool(val: str) -> bool:
-    """Convert a string representation of truth to true (1) or false (0).
-
-    True values are 'y', 'yes', 't', 'true', 'on', and '1'; false values
-    are 'n', 'no', 'f', 'false', 'off', and '0'.  Raises ValueError if
-    'val' is anything else.
-    """
-    val = val.lower()
-    if val in ("y", "yes", "t", "true", "on", "1"):
-        return True
-    if val in ("n", "no", "f", "false", "off", "0"):
-        return False
-    raise ValueError(f"Invalid truth value {val}")
 
 
 def _remotes_list(api: typing.Any) -> typing.List[ConanRemote]:
@@ -375,19 +361,19 @@ def invoke(
                         request_params["ref"][0],
                         request_params["package_id"][0],
                         request_params["revision"][0],
-                        _strtobool(request_params["short_paths"][0]),
+                        to_bool(request_params["short_paths"][0]),
                     )
                 elif request == "package_export_dir":
                     result = _package_export_dir(  # type: ignore[assignment]
                         api,
                         request_params["ref"][0],
-                        _strtobool(request_params["short_paths"][0]),
+                        to_bool(request_params["short_paths"][0]),
                     )
                 elif request == "package_export_sources_dir":
                     result = _package_export_sources_dir(  # type: ignore[assignment]
                         api,
                         request_params["ref"][0],
-                        _strtobool(request_params["short_paths"][0]),
+                        to_bool(request_params["short_paths"][0]),
                     )
                 elif request == "editable_list":
                     result = _editable_list(api)  # type: ignore[assignment]
@@ -416,7 +402,7 @@ def invoke(
                     _enable_hook(
                         api,
                         request_params["hook"][0],
-                        _strtobool(request_params["hook_enabled"][0]),
+                        to_bool(request_params["hook_enabled"][0]),
                     )
                     result = None
                 elif request == "get_cmake_generator":

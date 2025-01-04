@@ -5,21 +5,7 @@ from __future__ import annotations
 import pathlib
 from dataclasses import dataclass
 
-
-# copied from distutils.url.strtobool and modified
-def _strtobool(val: str) -> bool:
-    """Convert a string representation of truth to true (1) or false (0).
-
-    True values are 'y', 'yes', 't', 'true', 'on', and '1'; false values
-    are 'n', 'no', 'f', 'false', 'off', and '0'.  Raises ValueError if
-    'val' is anything else.
-    """
-    val = val.lower()
-    if val in ("y", "yes", "t", "true", "on", "1"):
-        return True
-    if val in ("n", "no", "f", "false", "off", "0"):
-        return False
-    raise ValueError(f"Invalid truth value {val}")
+from attrs.converters import to_bool
 
 
 @dataclass(frozen=True)
@@ -49,5 +35,5 @@ class ConanHook:
         path_arg = path_arg[path_start:path_end][1:-1]
         path = pathlib.Path(path_arg)
         enabled_arg = args[1].strip().replace("enabled=", "")
-        enabled = _strtobool(enabled_arg)
+        enabled = to_bool(enabled_arg)
         return cls(path, enabled)

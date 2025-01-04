@@ -7,21 +7,7 @@ from __future__ import annotations
 import typing
 from dataclasses import dataclass, field
 
-
-# copied from distutils.url.strtobool and modified
-def _strtobool(val: str) -> bool:
-    """Convert a string representation of truth to true (1) or false (0).
-
-    True values are 'y', 'yes', 't', 'true', 'on', and '1'; false values
-    are 'n', 'no', 'f', 'false', 'off', and '0'.  Raises ValueError if
-    'val' is anything else.
-    """
-    val = val.lower()
-    if val in ("y", "yes", "t", "true", "on", "1"):
-        return True
-    if val in ("n", "no", "f", "false", "off", "0"):
-        return False
-    raise ValueError(f"Invalid truth value {val}")
+from attrs.converters import to_bool
 
 
 @dataclass(frozen=True)
@@ -61,7 +47,7 @@ class ConanRemote:
         enabled_arg = args[2].strip().split("=")
         name = name_arg[1][1:-1]
         url = url_arg[1][1:-1]
-        enabled = _strtobool(enabled_arg[1])
+        enabled = to_bool(enabled_arg[1])
         return cls(name, url, enabled)
 
 
