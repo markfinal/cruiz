@@ -25,14 +25,22 @@ More details can be found, for example, in the [tutorial](https://code.visualstu
 VisualStudio Code has been configured in the cruiz source workspace to format and lint code automatically.
 
 ## Tox
-Tox is used to run both flake8 and mypy for linting and static analysis. flake8 plugins are used to cover a number of areas.
+Running tox is as simple as
+```
+tox
+```
+
+### Linting
+Tox is used to run both flake8, mypy and pylint for linting and static analysis. flake8 plugins are used to cover a number of areas.
 
 Add the necessary tools to your Python 3 virtual environment using `pip install -r requirements_dev.txt`.
 
-Running tox is as simple as
-```
-tox -e lint
-```
+The `lint` tox environment contains all the commands.
+
+### Testing
+tox also manages running pytest for any tests to run.
+
+The `test` tox environment contains all the commands.
 
 ## Code format
 cruiz uses [black](https://pypi.org/project/black/) as a formatter.

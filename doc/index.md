@@ -3,7 +3,8 @@
 cruiz stands for Conan Recipe User Interface.
 
 At this time, only Conan 1.x is supported in versions 1.3.x.
-However, there are alpha releases of Cruiz 1.4.0 that dual support Conan 2.x (from v2.0.7), reusing most of the existing UI.
+
+Both Conan 1.x and 2.x (from v2.0.14) are supported in versions 1.4.x and in the latest development code. Most of the existing UI is reused, and cruiz will modify its UI based on the major version of Conan present in the Python environment.
 
 ## Goals
 The goals of cruiz are as follows:
@@ -162,10 +163,14 @@ Split into three sections, it shows:
 Modifying any input data to the lockfile generation will recompute the package_id.
 
 ### Local workflow dock
+*Not available when Conan 2.x is used.*
+
 Split into several sections, this allows the definition of paths used in Conan local workflows.
 
 ### Conan command dock
 Whenever a command is executed on a recipe, it is recorded in the command log. This is intended both as a learning mechanism by seeing what changes by modifying a recipe's configuration, but also as a reproducible mechanism as right clicking over a command allows exporting it to different shells.
 
 ### Conan log dock
+*Not available when Conan 2.x is used.*
+
 Running Conan commands captures logging from Conan itself, which is displayed in this dock. This is for diagnostic purposes only really.
