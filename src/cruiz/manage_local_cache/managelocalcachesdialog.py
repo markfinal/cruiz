@@ -11,6 +11,8 @@ import stat
 import typing
 from enum import IntEnum
 
+from PySide6 import QtCore, QtGui, QtWidgets
+
 import cruiz.globals
 from cruiz.commands.conanconf import ConanConfigBoolean
 from cruiz.commands.context import ConanContext
@@ -32,8 +34,6 @@ from cruiz.settings.managers.recentconanremotes import (
     RecentConanRemotesSettingsWriter,
 )
 from cruiz.widgets.util import BlockSignals
-
-from qtpy import QtCore, QtGui, QtWidgets
 
 from .widgets import (
     AddEnvironmentDialog,

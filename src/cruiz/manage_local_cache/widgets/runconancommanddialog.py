@@ -4,14 +4,14 @@
 
 import typing
 
+from PySide6 import QtCore, QtWidgets
+
 import cruiz.globals
 import cruiz.workers.api as workers_api
 from cruiz.commands.context import ConanContext
 from cruiz.commands.logdetails import LogDetails
 from cruiz.interop.commandparameters import CommandParameters
 from cruiz.pyside6.local_cache_run_command_dialog import Ui_RunConanCommandDialog
-
-from qtpy import QtCore, QtWidgets
 
 
 class RunConanCommandDialog(QtWidgets.QDialog):

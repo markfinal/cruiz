@@ -2,9 +2,9 @@
 
 """Dialog for removing an environment variable."""
 
-from cruiz.pyside6.local_cache_remove_environment import Ui_RemoveEnvironmentDialog
+from PySide6 import QtCore, QtWidgets
 
-from qtpy import QtCore, QtWidgets
+from cruiz.pyside6.local_cache_remove_environment import Ui_RemoveEnvironmentDialog
 
 
 class RemoveEnvironmentDialog(QtWidgets.QDialog):

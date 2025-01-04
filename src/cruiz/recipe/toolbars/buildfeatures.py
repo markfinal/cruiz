@@ -4,6 +4,8 @@
 
 import typing
 
+from PySide6 import QtCore, QtGui, QtWidgets
+
 from cruiz.constants import CompilerCacheTypes
 from cruiz.pyside6.recipe_cmake_features_frame import Ui_cmakeFeaturesFrame
 from cruiz.pyside6.recipe_compiler_cache_configuration_dialog import (
@@ -19,8 +21,6 @@ from cruiz.settings.managers.recipe import (
     RecipeSettingsWriter,
 )
 from cruiz.widgets.util import BlockSignals
-
-from qtpy import QtCore, QtGui, QtWidgets
 
 
 class _CMakeFeaturesFrame(QtWidgets.QFrame):

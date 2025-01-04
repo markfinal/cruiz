@@ -9,7 +9,7 @@ import typing
 from dataclasses import dataclass
 from enum import IntEnum
 
-from qtpy import QtCore, QtGui
+from PySide6 import QtCore, QtGui
 
 
 @dataclass

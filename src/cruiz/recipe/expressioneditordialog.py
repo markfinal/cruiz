@@ -2,11 +2,11 @@
 
 """Local workflow folder expression editor dialog."""
 
+from PySide6 import QtWidgets
+
 from cruiz.pyside6.recipe_local_workflow_expression_editor import (
     Ui_ExpressionEditor,
 )
-
-from qtpy import QtWidgets
 
 
 class ExpressionEditorDialog(QtWidgets.QDialog):

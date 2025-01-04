@@ -5,6 +5,8 @@
 import os
 import pathlib
 
+from PySide6 import QtCore, QtWidgets
+
 import cruiz.globals
 from cruiz.pyside6.recipe_cpucores_frame import Ui_cpuCoresFrame
 from cruiz.pyside6.recipe_profile_frame import Ui_profileFrame
@@ -16,8 +18,6 @@ from cruiz.settings.managers.recipe import (
     RecipeSettingsWriter,
 )
 from cruiz.widgets.util import BlockSignals
-
-from qtpy import QtCore, QtWidgets
 
 
 class _ProfileFrame(QtWidgets.QFrame):

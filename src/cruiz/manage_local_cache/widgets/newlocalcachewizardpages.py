@@ -5,9 +5,9 @@
 import platform
 import typing
 
-from cruiz.settings.managers.namedlocalcache import AllNamedLocalCacheSettingsReader
+from PySide6 import QtWidgets
 
-from qtpy import QtWidgets
+from cruiz.settings.managers.namedlocalcache import AllNamedLocalCacheSettingsReader
 
 
 class NewLocalCacheNamePage(QtWidgets.QWizardPage):

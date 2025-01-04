@@ -8,6 +8,8 @@ import pathlib
 import re
 import typing
 
+from PySide6 import QtCore, QtGui, QtWidgets
+
 import cruiz.globals
 import cruiz.revealonfilesystem
 import cruiz.workers.api as workers_api
@@ -30,8 +32,6 @@ from cruiz.settings.managers.recipe import (
     RecipeSettingsWriter,
 )
 from cruiz.widgets.util import BlockSignals, clear_widgets_from_layout
-
-from qtpy import QtCore, QtGui, QtWidgets
 
 try:
     import git

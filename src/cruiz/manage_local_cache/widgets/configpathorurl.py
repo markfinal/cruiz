@@ -4,7 +4,7 @@
 
 import typing
 
-from qtpy import QtGui, QtWidgets
+from PySide6 import QtGui, QtWidgets
 
 
 class LineEditWithCustomContextMenu(QtWidgets.QLineEdit):

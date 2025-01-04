@@ -9,7 +9,7 @@ import pathlib
 import platform
 import sys
 
-from qtpy import QtCore, QtWidgets
+from PySide6 import QtCore, QtWidgets
 
 
 CONAN_SPEC = importlib.util.find_spec("conans")

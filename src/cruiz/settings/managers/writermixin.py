@@ -5,7 +5,7 @@
 import typing
 from enum import Enum
 
-from qtpy import QtGui
+from PySide6 import QtGui
 
 from .basesettings import BaseSettings
 

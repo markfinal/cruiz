@@ -6,9 +6,9 @@ from __future__ import annotations
 
 import typing
 
-from cruiz.commands.context import ConanContext
+from PySide6 import QtCore
 
-from qtpy import QtCore
+from cruiz.commands.context import ConanContext
 
 if typing.TYPE_CHECKING:
     import pathlib

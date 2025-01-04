@@ -2,7 +2,7 @@
 
 """Wizard introduction page."""
 
-from qtpy import QtWidgets
+from PySide6 import QtWidgets
 
 
 class LoadRecipeIntroPage(QtWidgets.QWizardPage):

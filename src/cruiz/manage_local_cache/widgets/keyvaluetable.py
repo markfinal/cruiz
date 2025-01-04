@@ -4,9 +4,9 @@
 
 from enum import IntEnum
 
-from cruiz.widgets.util import BlockSignals
+from PySide6 import QtCore, QtWidgets
 
-from qtpy import QtCore, QtWidgets
+from cruiz.widgets.util import BlockSignals
 
 
 class KeyValueTable(QtWidgets.QTableWidget):

@@ -2,7 +2,7 @@
 
 """Restart the whole application."""
 
-from qtpy import QtCore
+from PySide6 import QtCore
 
 
 def restart_cruiz() -> None:

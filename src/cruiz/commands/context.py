@@ -9,14 +9,14 @@ import pathlib
 import typing
 from contextlib import contextmanager
 
+from PySide6 import QtCore, QtWidgets
+
 import cruiz.workers.api as workers_api
 from cruiz.constants import DEFAULT_CACHE_NAME
 from cruiz.exceptions import RecipeInspectionError
 from cruiz.interop.commandparameters import CommandParameters
 from cruiz.recipe.logs.command import CommandListWidgetItem, RecipeCommandHistoryWidget
 from cruiz.settings.managers.namedlocalcache import NamedLocalCacheSettingsReader
-
-from qtpy import QtCore, QtWidgets
 
 from .conanenv import get_conan_env
 from .conaninvocation import ConanInvocation

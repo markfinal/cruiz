@@ -4,9 +4,9 @@
 
 import typing
 
-from cruiz.interop.reciperevisionsparameters import RecipeRevisionsParameters
+from PySide6 import QtCore, QtGui, QtWidgets
 
-from qtpy import QtCore, QtGui, QtWidgets
+from cruiz.interop.reciperevisionsparameters import RecipeRevisionsParameters
 
 from .page import Page
 

@@ -14,6 +14,8 @@ import time
 import typing
 from functools import partial
 
+from PySide6 import QtCore, QtGui, QtWidgets
+
 import cruiz.config
 import cruiz.globals
 import cruiz.runcommands
@@ -49,9 +51,9 @@ from cruiz.widgets import (
     log_created_widget,
 )
 
+
 import psutil
 
-from qtpy import QtCore, QtGui, QtWidgets
 
 logger = logging.getLogger(__name__)
 

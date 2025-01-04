@@ -6,10 +6,9 @@ from __future__ import annotations
 
 import typing
 
-from cruiz.svggraph import DependenciesToDigraph, DigraphToSVG, SVGScene
+from PySide6 import QtSvg, QtSvgWidgets, QtWidgets
 
-# TODO: note, change, as QtSvgWidgets wasn't available here previously
-from qtpy import QtSvg, QtSvgWidgets, QtWidgets
+from cruiz.svggraph import DependenciesToDigraph, DigraphToSVG, SVGScene
 
 if typing.TYPE_CHECKING:
     from cruiz.interop.dependencygraph import DependencyGraph

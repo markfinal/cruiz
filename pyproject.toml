@@ -56,10 +56,6 @@ readme = {file = "README.md", content-type = "text/markdown"}
 [tool.mypy]
 python_version = "3.10"
 
-# configure variables so that QtPy is used correctly during analysis
-always_true = "PYSIDE6"
-always_false = ["PYQT5", "PYSIDE2", "PYQT6"]
-
 # exclude generated files
 exclude = "/pyside6/"
 

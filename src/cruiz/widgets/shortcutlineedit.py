@@ -2,7 +2,7 @@
 
 """QLineEdit that can capture keyboard shortcuts."""
 
-from qtpy import QtCore, QtGui, QtWidgets
+from PySide6 import QtCore, QtGui, QtWidgets
 
 
 class ShortcutLineEdit(QtWidgets.QLineEdit):

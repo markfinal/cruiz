@@ -4,7 +4,7 @@
 
 import typing
 
-from qtpy import QtCore, QtWidgets
+from PySide6 import QtCore, QtWidgets
 
 
 class GuardedListToFlush(QtCore.QObject):

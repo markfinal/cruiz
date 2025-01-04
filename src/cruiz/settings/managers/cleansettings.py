@@ -4,7 +4,7 @@
 
 import pathlib
 
-from qtpy import QtCore, QtWidgets
+from PySide6 import QtCore, QtWidgets
 
 from .basesettings import BaseSettings
 from .recentrecipes import RecentRecipeSettingsDeleter, RecentRecipeSettingsWriter

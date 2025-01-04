@@ -5,10 +5,10 @@
 import typing
 from enum import IntEnum
 
+from PySide6 import QtCore, QtGui, QtWidgets
+
 from cruiz.interop.pod import ConanRemote
 from cruiz.widgets.util import BlockSignals
-
-from qtpy import QtCore, QtGui, QtWidgets
 
 
 class RemotesTable(QtWidgets.QTableWidget):

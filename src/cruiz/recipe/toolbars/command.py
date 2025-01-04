@@ -6,6 +6,8 @@ import os
 import typing
 from io import StringIO
 
+from PySide6 import QtCore, QtGui, QtWidgets
+
 import cruiz.globals
 import cruiz.workers.api as workers_api
 from cruiz.constants import BuildFeatureConstants, CompilerCacheTypes
@@ -16,8 +18,6 @@ from cruiz.settings.managers.compilercachepreferences import CompilerCacheSettin
 from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
 from cruiz.settings.managers.recipe import RecipeSettings, RecipeSettingsReader
 from cruiz.settings.managers.shortcuts import ShortcutSettingsReader
-
-from qtpy import QtCore, QtGui, QtWidgets
 
 
 IS_CONAN_V1 = cruiz.globals.CONAN_MAJOR_VERSION == 1
