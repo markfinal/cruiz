@@ -18,7 +18,6 @@ from cruiz.commands.conanconf import ConanConfigBoolean
 from cruiz.commands.context import ConanContext
 from cruiz.commands.logdetails import LogDetails
 from cruiz.constants import DEFAULT_CACHE_NAME
-from cruiz.interop.pod import ConanHook
 from cruiz.pyside6.local_cache_manage import Ui_ManageLocalCaches
 from cruiz.revealonfilesystem import reveal_on_filesystem
 from cruiz.settings.managers.namedlocalcache import (
@@ -34,6 +33,8 @@ from cruiz.settings.managers.recentconanremotes import (
     RecentConanRemotesSettingsWriter,
 )
 from cruiz.widgets.util import BlockSignals
+
+from cruizlib.interop.pod import ConanHook
 
 from .widgets import (
     AddEnvironmentDialog,
