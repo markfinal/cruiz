@@ -5,7 +5,7 @@ Conan recipe user interface
 Written by Mark Final.
 
 ![main action workflow](https://github.com/markfinal/cruiz/actions/workflows/main.yml/badge.svg)
-
+![Latest documentation](https://img.shields.io/readthedocs/cruiz)
 
 ## Documentation
 See the documentation at [Read The Docs](https://cruiz.readthedocs.io/).
