@@ -5,10 +5,10 @@
 import sys
 import typing
 
+from PySide6 import QtCore, QtGui, QtWidgets
+
 from cruiz.pyside6.about_dialog import Ui_AboutCruiz
 from cruiz.version import get_version
-
-from qtpy import QtCore, QtGui, QtWidgets
 
 
 class AboutDialog(QtWidgets.QDialog):
@@ -27,4 +27,4 @@ class AboutDialog(QtWidgets.QDialog):
         self._ui.version.setText(f"Version: {get_version()}")
         self._ui.python.setText(f"Python executable: {sys.executable}")
         self._ui.python_version.setText(f"Python version: {sys.version}")
-        self._ui.pyside_version.setText(f"PySide version: {QtCore.__version__}")
+        self._ui.pyside_version.setText(f"PySide version: {QtCore.qVersion()}")

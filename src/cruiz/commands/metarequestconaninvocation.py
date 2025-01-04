@@ -15,6 +15,8 @@ import sys
 import typing
 import urllib.parse
 
+from PySide6 import QtCore
+
 import cruiz.workers.api as workers_api
 from cruiz.dumpobjecttypes import dump_object_types
 from cruiz.interop.commandparameters import CommandParameters
@@ -25,8 +27,6 @@ from cruiz.interop.message import (
     Stdout,
     Success,
 )
-
-from qtpy import QtCore
 
 from .conanenv import get_conan_env
 

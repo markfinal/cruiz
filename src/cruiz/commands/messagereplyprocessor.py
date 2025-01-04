@@ -13,6 +13,8 @@ import multiprocessing
 import sys
 import typing
 
+from PySide6 import QtCore
+
 import cruiz.workers.api as workers_api
 from cruiz.dumpobjecttypes import dump_object_types
 from cruiz.interop.message import (
@@ -24,8 +26,6 @@ from cruiz.interop.message import (
     Stdout,
     Success,
 )
-
-from qtpy import QtCore
 
 logger = logging.getLogger(__name__)
 

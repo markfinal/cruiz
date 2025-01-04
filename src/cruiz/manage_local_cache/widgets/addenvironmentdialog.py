@@ -7,10 +7,10 @@ from __future__ import annotations
 import typing
 from dataclasses import dataclass
 
+from PySide6 import QtCore, QtGui, QtWidgets
+
 import cruiz.globals
 from cruiz.pyside6.local_cache_add_environment import Ui_AddEnvironmentDialog
-
-from qtpy import QtCore, QtGui, QtWidgets
 
 if typing.TYPE_CHECKING:
     from cruiz.commands.context import ConanContext

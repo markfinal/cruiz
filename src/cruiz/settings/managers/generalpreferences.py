@@ -5,7 +5,7 @@
 import platform
 import typing
 
-from qtpy import QtCore, QtGui
+from PySide6 import QtCore, QtGui
 
 from .basesettings import (
     BaseSettings,

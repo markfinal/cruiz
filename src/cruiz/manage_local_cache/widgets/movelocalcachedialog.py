@@ -9,6 +9,8 @@ import platform
 import shutil
 import typing
 
+from PySide6 import QtCore, QtGui, QtWidgets
+
 import cruiz.globals
 from cruiz.pyside6.local_cache_move import Ui_LocalCacheMove
 from cruiz.settings.managers.namedlocalcache import (
@@ -17,8 +19,6 @@ from cruiz.settings.managers.namedlocalcache import (
     NamedLocalCacheSettingsWriter,
 )
 from cruiz.widgets.util import search_for_dir_options
-
-from qtpy import QtCore, QtGui, QtWidgets
 
 if typing.TYPE_CHECKING:
     from cruiz.commands.context import ConanContext

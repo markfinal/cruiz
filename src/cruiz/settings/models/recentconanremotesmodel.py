@@ -4,7 +4,7 @@
 
 import typing
 
-from qtpy import QtCore
+from PySide6 import QtCore
 
 
 class RecentConanRemotesModel(QtCore.QAbstractListModel):

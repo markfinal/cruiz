@@ -4,10 +4,10 @@
 
 import typing
 
+from PySide6 import QtCore, QtGui, QtWidgets
+
 from cruiz.interop.packageidparameters import PackageIdParameters
 from cruiz.widgets.util import BlockSignals
-
-from qtpy import QtCore, QtGui, QtWidgets
 
 from .page import Page
 

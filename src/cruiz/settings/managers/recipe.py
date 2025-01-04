@@ -8,9 +8,9 @@ import pathlib
 import typing
 from multiprocessing import cpu_count
 
-from cruiz.exceptions import InconsistentSettingsError
+from PySide6 import QtCore
 
-from qtpy import QtCore
+from cruiz.exceptions import InconsistentSettingsError
 
 from .basesettings import (
     BaseSettings,

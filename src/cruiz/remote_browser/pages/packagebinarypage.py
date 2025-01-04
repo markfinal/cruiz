@@ -11,11 +11,11 @@ import tarfile
 import tempfile
 import typing
 
+from PySide6 import QtCore, QtGui, QtWebEngineCore, QtWidgets
+
 import cruiz.globals
 from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
 from cruiz.pyside6.remote_browser_fileview import Ui_remote_browser_fileview
-
-from qtpy import QtCore, QtGui, QtWebEngineCore, QtWidgets
 
 from .page import Page
 

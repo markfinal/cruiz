@@ -4,9 +4,9 @@
 
 import typing
 
-from cruiz.interop.packagerevisionsparameters import PackageRevisionsParameters
+from PySide6 import QtCore, QtGui, QtWidgets
 
-from qtpy import QtCore, QtGui, QtWidgets
+from cruiz.interop.packagerevisionsparameters import PackageRevisionsParameters
 
 from .page import Page
 

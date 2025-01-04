@@ -4,12 +4,12 @@
 
 import typing
 
+from PySide6 import QtCore, QtGui, QtWidgets
+
 import cruiz.globals
 from cruiz.settings.managers.conanpreferences import ConanSettingsReader
 from cruiz.settings.managers.recipe import RecipeSettingsReader
 from cruiz.widgets.util import BlockSignals
-
-from qtpy import QtCore, QtGui, QtWidgets
 
 
 class LoadRecipePackageVersionPage(QtWidgets.QWizardPage):

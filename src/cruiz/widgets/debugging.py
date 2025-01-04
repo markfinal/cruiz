@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import typing
 
-from qtpy import QtCore, QtWidgets
+from PySide6 import QtCore, QtWidgets
 
 if typing.TYPE_CHECKING:
     import logging

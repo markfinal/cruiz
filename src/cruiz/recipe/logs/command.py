@@ -8,7 +8,7 @@ import pathlib
 import stat
 import typing
 
-from qtpy import QtCore, QtGui, QtWidgets
+from PySide6 import QtCore, QtGui, QtWidgets
 
 if typing.TYPE_CHECKING:
     from cruiz.interop.commandparameters import CommandParameters

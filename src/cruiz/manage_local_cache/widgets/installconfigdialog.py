@@ -7,6 +7,8 @@ from __future__ import annotations
 import typing
 from functools import partial
 
+from PySide6 import QtCore, QtGui, QtWidgets
+
 import cruiz.workers.api as workers_api
 from cruiz.interop.commandparameters import CommandParameters
 from cruiz.pyside6.local_cache_install_config import Ui_InstallConfigDialog
@@ -15,8 +17,6 @@ from cruiz.settings.managers.recentconanconfigs import (
     RecentConanConfigSettingsReader,
     RecentConanConfigSettingsWriter,
 )
-
-from qtpy import QtCore, QtGui, QtWidgets
 
 if typing.TYPE_CHECKING:
     from cruiz.commands.context import ConanContext

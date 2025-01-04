@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import typing
 
-from qtpy import QtCore, QtGui
+from PySide6 import QtCore, QtGui
 
 if typing.TYPE_CHECKING:
     from cruiz.interop.dependencygraph import DependencyGraph

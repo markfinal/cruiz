@@ -12,7 +12,7 @@ import os
 import pathlib
 import platform
 
-from qtpy import QtCore, QtWidgets
+from PySide6 import QtCore, QtWidgets
 
 
 def _run_apple_script(command: str) -> None:

@@ -4,10 +4,10 @@
 
 import typing
 
+from PySide6 import QtCore
+
 import cruiz.globals
 from cruiz.settings.managers.recipe import RecipeSettingsReader
-
-from qtpy import QtCore
 
 
 class RecipesModel(QtCore.QAbstractTableModel):

@@ -17,11 +17,11 @@ import sys
 import threading
 import typing
 
+from PySide6 import QtCore, QtWidgets
+
 from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
 
 import psutil
-
-from qtpy import QtCore, QtWidgets
 
 from .messagereplyprocessor import MessageReplyProcessor
 

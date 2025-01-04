@@ -9,7 +9,7 @@ import shutil
 import time
 import typing
 
-from qtpy import QtCore
+from PySide6 import QtCore
 
 from .managers.basesettings import BaseSettings
 

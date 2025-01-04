@@ -4,12 +4,12 @@
 
 import typing
 
+from PySide6 import QtWidgets
+
 from cruiz.manage_local_cache import ManageLocalCachesDialog
 from cruiz.settings.managers.namedlocalcache import AllNamedLocalCacheSettingsReader
 from cruiz.settings.managers.recipe import RecipeSettingsReader
 from cruiz.widgets.util import BlockSignals
-
-from qtpy import QtWidgets
 
 
 class LoadRecipeLocalCachePage(QtWidgets.QWizardPage):
