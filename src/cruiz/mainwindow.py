@@ -281,7 +281,6 @@ class MainWindow(QtWidgets.QMainWindow):
             try:
                 ssh_add_list_capture = cruiz.runcommands.run_get_combined_output(
                     ["ssh-add", "-l"],
-                    check=True,
                     timeout=3,
                 )
                 identities = ssh_add_list_capture.splitlines()
