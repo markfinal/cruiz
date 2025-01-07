@@ -20,8 +20,8 @@ if CONAN_SPEC is None:
         "Conan unavailable",
         "Unable to locate the conan Python package in the current environment.\n"
         "Use pip install conan[==version].",
-        button0=QtWidgets.QMessageBox.StandardButton.Ok,
-        button1=QtWidgets.QMessageBox.StandardButton.NoButton,
+        QtWidgets.QMessageBox.StandardButton.Ok,
+        QtWidgets.QMessageBox.StandardButton.NoButton,
     )
     sys.exit(-1)
 
@@ -72,8 +72,8 @@ if _are_resources_out_of_date():
         None,  # type: ignore[arg-type]
         "Resources",
         "Resources are out of date.\n" "Please build with python3 setup.py build",
-        button0=QtWidgets.QMessageBox.StandardButton.Ok,
-        button1=QtWidgets.QMessageBox.StandardButton.NoButton,
+        QtWidgets.QMessageBox.StandardButton.Ok,
+        QtWidgets.QMessageBox.StandardButton.NoButton,
     )
     sys.exit(-1)
 

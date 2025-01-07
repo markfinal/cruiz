@@ -90,8 +90,8 @@ class ConanInvocation(QtCore.QObject):
             None,  # type: ignore[arg-type]
             "System failure",
             message,
-            button0=QtWidgets.QMessageBox.StandardButton.Ok,
-            button1=QtWidgets.QMessageBox.StandardButton.NoButton,
+            QtWidgets.QMessageBox.StandardButton.Ok,
+            QtWidgets.QMessageBox.StandardButton.NoButton,
         )
         sys.exit(1)
 

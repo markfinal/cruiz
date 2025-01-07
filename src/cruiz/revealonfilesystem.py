@@ -46,8 +46,8 @@ def _use_xdg_open(file_info: QtCore.QFileInfo) -> None:
             None,  # type: ignore[arg-type]
             "Cannot reveal path",
             "Unable to find the path to xdg-open",
-            button0=QtWidgets.QMessageBox.StandardButton.Ok,
-            button1=QtWidgets.QMessageBox.StandardButton.NoButton,
+            QtWidgets.QMessageBox.StandardButton.Ok,
+            QtWidgets.QMessageBox.StandardButton.NoButton,
         )
         return
     script_args = [file_info.canonicalFilePath()]
@@ -61,8 +61,8 @@ def reveal_on_filesystem(path: pathlib.Path) -> None:
             None,  # type: ignore[arg-type]
             "Cannot reveal path",
             f"Path '{path}' does not exist",
-            button0=QtWidgets.QMessageBox.StandardButton.Ok,
-            button1=QtWidgets.QMessageBox.StandardButton.NoButton,
+            QtWidgets.QMessageBox.StandardButton.Ok,
+            QtWidgets.QMessageBox.StandardButton.NoButton,
         )
         return
     file_info = QtCore.QFileInfo(path)
@@ -86,8 +86,8 @@ def open_terminal_at(path: str) -> None:
             None,  # type: ignore[arg-type]
             "Cannot open terminal at path",
             f"Path '{path}' does not exist",
-            button0=QtWidgets.QMessageBox.StandardButton.Ok,
-            button1=QtWidgets.QMessageBox.StandardButton.NoButton,
+            QtWidgets.QMessageBox.StandardButton.Ok,
+            QtWidgets.QMessageBox.StandardButton.NoButton,
         )
         return
     if platform.system() == "Darwin":
@@ -116,8 +116,8 @@ def open_terminal_at(path: str) -> None:
                 None,  # type: ignore[arg-type]
                 "Cannot open terminal at path",
                 "Unable to detect window manager",
-                button0=QtWidgets.QMessageBox.StandardButton.Ok,
-                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
+                QtWidgets.QMessageBox.StandardButton.Ok,
+                QtWidgets.QMessageBox.StandardButton.NoButton,
             )
     else:
         raise RuntimeError(f"Unrecognised platform {platform.system()}")

@@ -171,8 +171,8 @@ class NewLocalCacheWizard(QtWidgets.QWizard):
                 self,
                 "New local cache configuration install failure",
                 str(exception),
-                button0=QtWidgets.QMessageBox.StandardButton.Ok,
-                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
+                QtWidgets.QMessageBox.StandardButton.Ok,
+                QtWidgets.QMessageBox.StandardButton.NoButton,
             )
 
     @property

@@ -136,9 +136,9 @@ class _CompilerCacheConfigurationDialog(QtWidgets.QDialog):
                 self,
                 "Unsaved compiler cache arguments",
                 "Modifications are unsaved. Do you want to discard them?",
-                button0=QtWidgets.QMessageBox.StandardButton.Yes
+                QtWidgets.QMessageBox.StandardButton.Yes
                 | QtWidgets.QMessageBox.StandardButton.No,
-                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
+                QtWidgets.QMessageBox.StandardButton.NoButton,
             )
             if response == QtWidgets.QMessageBox.StandardButton.No:
                 return

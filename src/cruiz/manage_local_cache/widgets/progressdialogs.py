@@ -33,8 +33,8 @@ class _ContextProgressDialog(QtWidgets.QProgressDialog):
                 self,
                 f"{self._title} failed",
                 str(exception),
-                button0=QtWidgets.QMessageBox.StandardButton.Ok,
-                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
+                QtWidgets.QMessageBox.StandardButton.Ok,
+                QtWidgets.QMessageBox.StandardButton.NoButton,
             )
             return
         self.reset()

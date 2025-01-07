@@ -59,9 +59,9 @@ def sanitise_settings(widget: QtWidgets.QWidget) -> bool:
             widget,
             "Inconsistent recipe settings",
             message,
-            button0=QtWidgets.QMessageBox.StandardButton.Yes
+            QtWidgets.QMessageBox.StandardButton.Yes
             | QtWidgets.QMessageBox.StandardButton.No,
-            button1=QtWidgets.QMessageBox.StandardButton.Yes,
+            QtWidgets.QMessageBox.StandardButton.Yes,
         )
         if response == QtWidgets.QMessageBox.StandardButton.Yes:
             for uuid in incomplete_uuids:
@@ -78,9 +78,9 @@ def sanitise_settings(widget: QtWidgets.QWidget) -> bool:
             widget,
             "Inconsistent recipe settings",
             message,
-            button0=QtWidgets.QMessageBox.StandardButton.Yes
+            QtWidgets.QMessageBox.StandardButton.Yes
             | QtWidgets.QMessageBox.StandardButton.No,
-            button1=QtWidgets.QMessageBox.StandardButton.Yes,
+            QtWidgets.QMessageBox.StandardButton.Yes,
         )
         if response == QtWidgets.QMessageBox.StandardButton.Yes:
             for uuid, _ in recipe_no_longer_exists_uuid.items():
@@ -96,9 +96,9 @@ def sanitise_settings(widget: QtWidgets.QWidget) -> bool:
             widget,
             "Inconsistent recipe settings",
             message,
-            button0=QtWidgets.QMessageBox.StandardButton.Yes
+            QtWidgets.QMessageBox.StandardButton.Yes
             | QtWidgets.QMessageBox.StandardButton.No,
-            button1=QtWidgets.QMessageBox.StandardButton.Yes,
+            QtWidgets.QMessageBox.StandardButton.Yes,
         )
         if response == QtWidgets.QMessageBox.StandardButton.Yes:
             for uuid in recent_recipe_only:
@@ -114,9 +114,9 @@ def sanitise_settings(widget: QtWidgets.QWidget) -> bool:
             widget,
             "Inconsistent recipe settings",
             message,
-            button0=QtWidgets.QMessageBox.StandardButton.Yes
+            QtWidgets.QMessageBox.StandardButton.Yes
             | QtWidgets.QMessageBox.StandardButton.No,
-            button1=QtWidgets.QMessageBox.StandardButton.Yes,
+            QtWidgets.QMessageBox.StandardButton.Yes,
         )
         if response == QtWidgets.QMessageBox.StandardButton.Yes:
             for uuid in all_uuids:

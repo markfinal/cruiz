@@ -237,9 +237,9 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
                 self,
                 "Local cache modifications",
                 "Do you want to lose unsaved changes to the local cache?",
-                button0=QtWidgets.QMessageBox.StandardButton.Yes
+                QtWidgets.QMessageBox.StandardButton.Yes
                 | QtWidgets.QMessageBox.StandardButton.No,
-                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
+                QtWidgets.QMessageBox.StandardButton.NoButton,
             )
             == QtWidgets.QMessageBox.StandardButton.No
         ):
@@ -611,9 +611,9 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
             self,
             "Package deletion",
             "Are you sure you want to delete all packages from this local cache?",
-            button0=QtWidgets.QMessageBox.StandardButton.Yes
+            QtWidgets.QMessageBox.StandardButton.Yes
             | QtWidgets.QMessageBox.StandardButton.No,
-            button1=QtWidgets.QMessageBox.StandardButton.NoButton,
+            QtWidgets.QMessageBox.StandardButton.NoButton,
         )
         if result == QtWidgets.QMessageBox.StandardButton.Yes:
             RemoveAllPackagesDialog(self._context, self).exec_()
@@ -647,9 +647,9 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
             self,
             "Local cache deletion",
             f"Are you sure you want to delete the local cache {cache_name}?",
-            button0=QtWidgets.QMessageBox.StandardButton.Yes
+            QtWidgets.QMessageBox.StandardButton.Yes
             | QtWidgets.QMessageBox.StandardButton.No,
-            button1=QtWidgets.QMessageBox.StandardButton.NoButton,
+            QtWidgets.QMessageBox.StandardButton.NoButton,
         )
         if result == QtWidgets.QMessageBox.StandardButton.No:
             return
@@ -675,9 +675,9 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
                 if short_home_dir
                 else f"Please confirm deletion of the directory {conan_home_dir}?"
             ),
-            button0=QtWidgets.QMessageBox.StandardButton.Yes
+            QtWidgets.QMessageBox.StandardButton.Yes
             | QtWidgets.QMessageBox.StandardButton.No,
-            button1=QtWidgets.QMessageBox.StandardButton.NoButton,
+            QtWidgets.QMessageBox.StandardButton.NoButton,
         )
         if result == QtWidgets.QMessageBox.StandardButton.No:
             return
