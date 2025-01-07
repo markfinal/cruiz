@@ -379,8 +379,8 @@ class RecipeWidget(QtWidgets.QMainWindow):
                 self,
                 "Recipe cannot be closed",
                 "Commands are still running. Cannot close recipe.",
-                button0=QtWidgets.QMessageBox.StandardButton.Ok,
-                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
+                QtWidgets.QMessageBox.StandardButton.Ok,
+                QtWidgets.QMessageBox.StandardButton.NoButton,
             )
             event.ignore()
             return
@@ -964,9 +964,9 @@ class RecipeWidget(QtWidgets.QMainWindow):
             self,
             "Delete directory",
             f"Delete the directory '{resolved_working_dir}'?",
-            button0=QtWidgets.QMessageBox.StandardButton.Yes
+            QtWidgets.QMessageBox.StandardButton.Yes
             | QtWidgets.QMessageBox.StandardButton.No,
-            button1=QtWidgets.QMessageBox.StandardButton.NoButton,
+            QtWidgets.QMessageBox.StandardButton.NoButton,
         )
         if result == QtWidgets.QMessageBox.StandardButton.No:
             return
@@ -990,9 +990,9 @@ class RecipeWidget(QtWidgets.QMainWindow):
             self,
             "Delete directory",
             f"Delete the directory '{command_dir}'?",
-            button0=QtWidgets.QMessageBox.StandardButton.Yes
+            QtWidgets.QMessageBox.StandardButton.Yes
             | QtWidgets.QMessageBox.StandardButton.No,
-            button1=QtWidgets.QMessageBox.StandardButton.NoButton,
+            QtWidgets.QMessageBox.StandardButton.NoButton,
         )
         if result == QtWidgets.QMessageBox.StandardButton.No:
             return
@@ -1344,8 +1344,8 @@ class RecipeWidget(QtWidgets.QMainWindow):
                 self,
                 "No such package directory",
                 f"Package directory '{directory}' does not exist",
-                button0=QtWidgets.QMessageBox.StandardButton.Ok,
-                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
+                QtWidgets.QMessageBox.StandardButton.Ok,
+                QtWidgets.QMessageBox.StandardButton.NoButton,
             )
 
     def _copy_package_directory(self) -> None:

@@ -336,8 +336,8 @@ class PackageBinaryPage(Page):
                 self,
                 "Cannot view file contents",
                 f"Unable to interpret file {path} in archive {container} " "as text",
-                button0=QtWidgets.QMessageBox.StandardButton.Ok,
-                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
+                QtWidgets.QMessageBox.StandardButton.Ok,
+                QtWidgets.QMessageBox.StandardButton.NoButton,
             )
 
     def on_cancel(self) -> None:

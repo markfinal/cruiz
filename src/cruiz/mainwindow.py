@@ -389,9 +389,9 @@ class MainWindow(QtWidgets.QMainWindow):
                 "Recipe does not exist",
                 f"The recipe at {str(recipe_path)} no longer exists. \
 Remove from the recent list?",
-                button0=QtWidgets.QMessageBox.StandardButton.Yes
+                QtWidgets.QMessageBox.StandardButton.Yes
                 | QtWidgets.QMessageBox.StandardButton.No,
-                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
+                QtWidgets.QMessageBox.StandardButton.NoButton,
             )
             if result == QtWidgets.QMessageBox.StandardButton.Yes:
                 # TODO: this is not ideal, as it's not atomic
@@ -665,8 +665,8 @@ Remove from the recent list?",
                     self,
                     "Failed file copy",
                     f"Unable to copy the {license_file} to a temporary location for viewing",  # noqa: E501
-                    button0=QtWidgets.QMessageBox.StandardButton.Ok,
-                    button1=QtWidgets.QMessageBox.StandardButton.NoButton,
+                    QtWidgets.QMessageBox.StandardButton.Ok,
+                    QtWidgets.QMessageBox.StandardButton.NoButton,
                 )
                 return
             QtGui.QDesktopServices.openUrl(

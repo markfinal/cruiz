@@ -488,9 +488,9 @@ class PreferencesDialog(QtWidgets.QDialog):
                 self,
                 "Unsaved preferences",
                 "Modifications are unsaved. Do you want to discard them?",
-                button0=QtWidgets.QMessageBox.StandardButton.Yes
+                QtWidgets.QMessageBox.StandardButton.Yes
                 | QtWidgets.QMessageBox.StandardButton.No,
-                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
+                QtWidgets.QMessageBox.StandardButton.NoButton,
             )
             if response == QtWidgets.QMessageBox.StandardButton.No:
                 return
@@ -1157,9 +1157,9 @@ class PreferencesDialog(QtWidgets.QDialog):
             "Change local cache for recipe",
             "Are you sure you want to change the local cache for recipe "
             f"'{path_itemdata[0]}' to '{cache_menu_action.text()}'",
-            button0=QtWidgets.QMessageBox.StandardButton.Yes
+            QtWidgets.QMessageBox.StandardButton.Yes
             | QtWidgets.QMessageBox.StandardButton.No,
-            button1=QtWidgets.QMessageBox.StandardButton.NoButton,
+            QtWidgets.QMessageBox.StandardButton.NoButton,
         )
         if result == QtWidgets.QMessageBox.StandardButton.No:
             return
@@ -1181,8 +1181,8 @@ class PreferencesDialog(QtWidgets.QDialog):
                 "Recipe still has editables",
                 f"Recipe {recipe_path} still has editable dependencies. "
                 "Cannot forget until they are removed.",
-                button0=QtWidgets.QMessageBox.StandardButton.Ok,
-                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
+                QtWidgets.QMessageBox.StandardButton.Ok,
+                QtWidgets.QMessageBox.StandardButton.NoButton,
             )
             return
         # TODO: this is not ideal, as it's not atomic
@@ -1272,8 +1272,8 @@ class PreferencesDialog(QtWidgets.QDialog):
                 "Preference presets",
                 f"{prefix_path} is an invalid preference presets file. "
                 "Aborting import.",
-                button0=QtWidgets.QMessageBox.StandardButton.Ok,
-                button1=QtWidgets.QMessageBox.StandardButton.NoButton,
+                QtWidgets.QMessageBox.StandardButton.Ok,
+                QtWidgets.QMessageBox.StandardButton.NoButton,
             )
             return
         LocalCacheSettingsWriter().presets(presets["cruiz_presets"])
@@ -1304,9 +1304,9 @@ class PreferencesDialog(QtWidgets.QDialog):
                 "Performing a factory reset will clear all settings and restart cruiz. "
                 "Do you want to continue?"
             ),
-            button0=QtWidgets.QMessageBox.StandardButton.Yes
+            QtWidgets.QMessageBox.StandardButton.Yes
             | QtWidgets.QMessageBox.StandardButton.No,
-            button1=QtWidgets.QMessageBox.StandardButton.NoButton,
+            QtWidgets.QMessageBox.StandardButton.NoButton,
         )
         if result == QtWidgets.QMessageBox.StandardButton.Yes:
             factory_reset()
