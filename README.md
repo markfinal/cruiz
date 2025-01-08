@@ -89,6 +89,7 @@ Windows ARM is currently not supported, as there are missing PyPi package wheels
 `cruiz` is runnable on Ubuntu 24.04 ARM, after the following steps are executed to satisfy using features of PySide 6:
 * Run `sudo apt install libdouble-conversion3`
 * Run `sudo apt install libminizip1t64`
+* Run `sudo apt install libsnappy1v5`
 * Run `cd /usr/lib/aarch64-linux-gnu && sudo ln -s libwebp.so.7 libwebp.so.6`
 * Run `cd /usr/lib/aarch64-linux-gnu && sudo ln -s libtiff.so.6 libtiff.so.5`
 
