@@ -15,13 +15,14 @@ from cruiz.widgets.util import BlockSignals
 
 if typing.TYPE_CHECKING:
     import pathlib
+    from cruiz.pyside6.load_recipe_wizard import Ui_LoadRecipeWizard
 
 
 class LoadRecipeInitialProfilePage(QtWidgets.QWizardPage):
     """Wizard page allowing selection of an initial profile to apply to the recipe."""
 
     @property
-    def _ui(self) -> typing.Any:
+    def _ui(self) -> Ui_LoadRecipeWizard:
         return self.wizard().ui  # type: ignore[attr-defined]
 
     def nextId(self) -> int:

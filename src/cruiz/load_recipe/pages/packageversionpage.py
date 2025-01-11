@@ -2,6 +2,8 @@
 
 """Wizard page for selecting the version of the package."""
 
+from __future__ import annotations
+
 import typing
 
 from PySide6 import QtCore, QtGui, QtWidgets
@@ -11,12 +13,15 @@ from cruiz.settings.managers.conanpreferences import ConanSettingsReader
 from cruiz.settings.managers.recipe import RecipeSettingsReader
 from cruiz.widgets.util import BlockSignals
 
+if typing.TYPE_CHECKING:
+    from cruiz.pyside6.load_recipe_wizard import Ui_LoadRecipeWizard
+
 
 class LoadRecipePackageVersionPage(QtWidgets.QWizardPage):
     """Wizard page for selecting the recipe version to bind to."""
 
     @property
-    def _ui(self) -> typing.Any:
+    def _ui(self) -> Ui_LoadRecipeWizard:
         return self.wizard().ui  # type: ignore[attr-defined]
 
     def nextId(self) -> int:
@@ -87,9 +92,9 @@ class LoadRecipePackageVersionPage(QtWidgets.QWizardPage):
             else:
                 # if the conandata.yml is not available, manually specify a version
                 self._ui.version.setEditable(True)
-                self._ui.version.lineEdit().setPlaceholderText(
-                    "Package version to use, e.g. 1.2.3"
-                )
+                line_edit = self._ui.version.lineEdit()
+                if line_edit is not None:
+                    line_edit.setPlaceholderText("Package version to use, e.g. 1.2.3")
         else:
             with BlockSignals(self._ui.version) as blocked_widget:
                 assert isinstance(blocked_widget, QtWidgets.QComboBox)

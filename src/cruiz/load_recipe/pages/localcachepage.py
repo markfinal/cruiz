@@ -2,6 +2,8 @@
 
 """Wizard page for selecting a local cache."""
 
+from __future__ import annotations
+
 import typing
 
 from PySide6 import QtWidgets
@@ -11,12 +13,15 @@ from cruiz.settings.managers.namedlocalcache import AllNamedLocalCacheSettingsRe
 from cruiz.settings.managers.recipe import RecipeSettingsReader
 from cruiz.widgets.util import BlockSignals
 
+if typing.TYPE_CHECKING:
+    from cruiz.pyside6.load_recipe_wizard import Ui_LoadRecipeWizard
+
 
 class LoadRecipeLocalCachePage(QtWidgets.QWizardPage):
     """Wizard page for selecting the local cache to associate with the recipe instance."""  # noqa: E501
 
     @property
-    def _ui(self) -> typing.Any:
+    def _ui(self) -> Ui_LoadRecipeWizard:
         return self.wizard().ui  # type: ignore[attr-defined]
 
     def nextId(self) -> int:
