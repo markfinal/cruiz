@@ -19,6 +19,9 @@ from cruiz.pyside6.remote_browser_fileview import Ui_remote_browser_fileview
 
 from .page import Page
 
+if typing.TYPE_CHECKING:
+    from cruiz.pyside6.remote_browser import Ui_remotebrowser
+
 
 class _FileNode:
     def __init__(self, path: str, parent: typing.Optional[_FileNode]):
@@ -264,7 +267,7 @@ class _FileViewer(QtWidgets.QDialog):
 class PackageBinaryPage(Page):
     """Remote browser page for displaying package binaries."""
 
-    def setup(self, self_ui: typing.Any) -> None:
+    def setup(self, self_ui: Ui_remotebrowser) -> None:
         """Set up the UI for the page."""
         self._base_setup(self_ui, 4)
         self._current_pkgref: typing.Optional[str] = None
@@ -315,12 +318,9 @@ class PackageBinaryPage(Page):
 
     def _on_back(self) -> None:
         if self._revisions_enabled:
-            self._open_previous_page()
+            self._ui.stackedWidget.setCurrentWidget(self._ui.prev)
         else:
-            # skip package revisions
-            parent_stackedwidget = self.parent()
-            assert isinstance(parent_stackedwidget, QtWidgets.QStackedWidget)
-            parent_stackedwidget.setCurrentIndex(self.page_index - 2)
+            self._ui.stackedWidget.setCurrentWidget(self._ui.package_id)
 
     def _on_prev_dclicked(self, index: QtCore.QModelIndex) -> None:
         node = index.internalPointer()

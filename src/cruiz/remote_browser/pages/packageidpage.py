@@ -2,6 +2,8 @@
 
 """Remote browser page."""
 
+from __future__ import annotations
+
 import typing
 
 from PySide6 import QtCore, QtGui, QtWidgets
@@ -10,6 +12,9 @@ from cruiz.interop.packageidparameters import PackageIdParameters
 from cruiz.widgets.util import BlockSignals
 
 from .page import Page
+
+if typing.TYPE_CHECKING:
+    from cruiz.pyside6.remote_browser import Ui_remotebrowser
 
 
 class _PackageIdModel(QtCore.QAbstractTableModel):
@@ -222,7 +227,7 @@ class _PackageIdSortFilterProxyModel(QtCore.QSortFilterProxyModel):
 class PackageIdPage(Page):
     """Remote browser page for displaying package ids."""
 
-    def setup(self, self_ui: typing.Any) -> None:
+    def setup(self, self_ui: Ui_remotebrowser) -> None:
         """Set up the UI for the page."""
         self._base_setup(self_ui, 2)
         self._current_pkgref: typing.Optional[str] = None
@@ -276,6 +281,9 @@ class PackageIdPage(Page):
         )
         return f"{self._previous_pkgref}:{package_id}"
 
+    def _on_copy_pkgref_to_clip(self) -> None:
+        QtWidgets.QApplication.clipboard().setText(self._ui.pid_pkgref.text())
+
     def _enable_progress(self, enable: bool) -> None:
         self._ui.pid_progress.setMaximum(0 if enable else 1)
         self._ui.pid_buttons.setEnabled(not enable)
@@ -315,6 +323,7 @@ class PackageIdPage(Page):
                 blocked_widget.addItems(self._model.options)
             blocked_widget.setCurrentIndex(-1)
         model = self._ui.pid_filter_key.model()
+        assert isinstance(model, QtGui.QStandardItemModel)
         # disable those with active filters
         for index, _, _ in self._filtering_model.filters:
             item = model.item(index)
@@ -326,22 +335,16 @@ class PackageIdPage(Page):
 
     def _on_back(self) -> None:
         if self._revisions_enabled:
-            self._open_previous_page()
+            self._ui.stackedWidget.setCurrentWidget(self._ui.rrev)
         else:
-            # skip recipe revisions
-            parent_stackedwidget = self.parent()
-            assert isinstance(parent_stackedwidget, QtWidgets.QStackedWidget)
-            parent_stackedwidget.setCurrentIndex(self.page_index - 2)
+            self._ui.stackedWidget.setCurrentWidget(self._ui.pkgref)
 
     def _on_pid_dclicked(self, index: QtCore.QModelIndex) -> None:
         # pylint: disable=unused-argument
         if self._revisions_enabled:
-            self._open_next_page()
+            self._ui.stackedWidget.setCurrentWidget(self._ui.prev)
         else:
-            # skip package revisions
-            parent_stackedwidget = self.parent()
-            assert isinstance(parent_stackedwidget, QtWidgets.QStackedWidget)
-            parent_stackedwidget.setCurrentIndex(self.page_index + 2)
+            self._ui.stackedWidget.setCurrentWidget(self._ui.pbinary)
 
     def on_cancel(self) -> None:
         """Call when the user cancels the operation."""
@@ -370,9 +373,6 @@ class PackageIdPage(Page):
         self._filtering_model.invalidate()
         self._sorting_model.invalidateFilter()
         self._open_start()
-
-    def _on_copy_pkgref_to_clip(self) -> None:
-        QtWidgets.QApplication.clipboard().setText(self._ui.pid_pkgref.text())
 
     def _on_package_id_header_menu(self, position: QtCore.QPoint) -> None:
         menu = QtWidgets.QMenu(self)

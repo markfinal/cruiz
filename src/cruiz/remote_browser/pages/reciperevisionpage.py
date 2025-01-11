@@ -2,6 +2,8 @@
 
 """Remote browser page."""
 
+from __future__ import annotations
+
 import typing
 
 from PySide6 import QtCore, QtGui, QtWidgets
@@ -9,6 +11,9 @@ from PySide6 import QtCore, QtGui, QtWidgets
 from cruiz.interop.reciperevisionsparameters import RecipeRevisionsParameters
 
 from .page import Page
+
+if typing.TYPE_CHECKING:
+    from cruiz.pyside6.remote_browser import Ui_remotebrowser
 
 
 class _RecipeRevisionModel(QtCore.QAbstractTableModel):
@@ -63,7 +68,7 @@ class _RecipeRevisionModel(QtCore.QAbstractTableModel):
 class RecipeRevisionPage(Page):
     """Remote browser page for recipe revisions."""
 
-    def setup(self, self_ui: typing.Any) -> None:
+    def setup(self, self_ui: Ui_remotebrowser) -> None:
         """Set up the UI for the page."""
         self._base_setup(self_ui, 1)
         self._current_pkgref: typing.Optional[str] = None
@@ -90,6 +95,9 @@ class RecipeRevisionPage(Page):
         rrev = self._model.data(selection[0], QtCore.Qt.ItemDataRole.DisplayRole)
         return f"{self._previous_pkgref}#{rrev}"
 
+    def _on_copy_pkgref_to_clip(self) -> None:
+        QtWidgets.QApplication.clipboard().setText(self._ui.rrev_pkgref.text())
+
     def _enable_progress(self, enable: bool) -> None:
         self._ui.rrev_progress.setMaximum(0 if enable else 1)
         self._ui.rrev_buttons.setEnabled(not enable)
@@ -114,11 +122,11 @@ class RecipeRevisionPage(Page):
             self._current_pkgref = self._previous_pkgref
 
     def _on_back(self) -> None:
-        self._open_previous_page()
+        self._ui.stackedWidget.setCurrentWidget(self._ui.pkgref)
 
     def _on_rrev_dclicked(self, index: QtCore.QModelIndex) -> None:
         # pylint: disable=unused-argument
-        self._open_next_page()
+        self._ui.stackedWidget.setCurrentWidget(self._ui.package_id)
 
     def on_cancel(self) -> None:
         """Call when the user cancels the operation."""
@@ -141,6 +149,3 @@ class RecipeRevisionPage(Page):
                 remote_name=self._ui.remote.currentText(),
             )
             self._context.get_package_details(params, self._complete)
-
-    def _on_copy_pkgref_to_clip(self) -> None:
-        QtWidgets.QApplication.clipboard().setText(self._ui.rrev_pkgref.text())
