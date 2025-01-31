@@ -644,7 +644,7 @@ class PreferencesDialog(QtWidgets.QDialog):
     # -- font --
     @staticmethod
     def _font_from_details(
-        details: typing.Tuple[typing.Optional[str], typing.Optional[int]]
+        details: typing.Tuple[typing.Optional[str], typing.Optional[int]],
     ) -> typing.Optional[QtGui.QFont]:
         font = QtGui.QFont(*details) if details[0] else None  # type: ignore
         return font
