@@ -14,10 +14,10 @@
    <string>Load recipe wizard</string>
   </property>
   <property name="wizardStyle">
-   <enum>QWizard::ClassicStyle</enum>
+   <enum>QWizard::WizardStyle::ClassicStyle</enum>
   </property>
   <property name="options">
-   <set>QWizard::CancelButtonOnLeft|QWizard::HaveFinishButtonOnEarlyPages|QWizard::NoDefaultButton</set>
+   <set>QWizard::WizardOption::CancelButtonOnLeft|QWizard::WizardOption::HaveFinishButtonOnEarlyPages|QWizard::WizardOption::NoDefaultButton</set>
   </property>
   <widget class="LoadRecipeIntroPage" name="intro">
    <property name="title">
@@ -33,7 +33,7 @@
     <item>
      <widget class="QPlainTextEdit" name="intro_message">
       <property name="sizeAdjustPolicy">
-       <enum>QAbstractScrollArea::AdjustToContents</enum>
+       <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
       </property>
      </widget>
     </item>
@@ -58,7 +58,7 @@
       <item>
        <spacer name="horizontalSpacer">
         <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+         <enum>Qt::Orientation::Horizontal</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -112,7 +112,7 @@
     <item>
      <widget class="QPlainTextEdit" name="initial_profile_log">
       <property name="sizeAdjustPolicy">
-       <enum>QAbstractScrollArea::AdjustToContents</enum>
+       <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
       </property>
       <property name="readOnly">
        <bool>true</bool>
