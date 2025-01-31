@@ -23,7 +23,7 @@ class ConanWorker(Worker):
 
 
 def replace_conan_version_struct_with_string(
-    result: typing.Dict[typing.Any, typing.Any]
+    result: typing.Dict[typing.Any, typing.Any],
 ) -> None:
     """
     Results have ConanVersion structs.
