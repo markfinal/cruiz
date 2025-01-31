@@ -3,7 +3,7 @@
  <class>NewLocalCacheWizard</class>
  <widget class="QWizard" name="NewLocalCacheWizard">
   <property name="windowModality">
-   <enum>Qt::ApplicationModal</enum>
+   <enum>Qt::WindowModality::ApplicationModal</enum>
   </property>
   <property name="geometry">
    <rect>
@@ -23,10 +23,10 @@
    <string>New Local Cache</string>
   </property>
   <property name="wizardStyle">
-   <enum>QWizard::ClassicStyle</enum>
+   <enum>QWizard::WizardStyle::ClassicStyle</enum>
   </property>
   <property name="options">
-   <set>QWizard::CancelButtonOnLeft</set>
+   <set>QWizard::WizardOption::CancelButtonOnLeft</set>
   </property>
   <widget class="QWizardPage" name="preamblePage">
    <layout class="QGridLayout" name="gridLayout">
@@ -43,7 +43,7 @@ The default local cache is in your home directory.
 Multiple local caches may exist though, and can switch Conan between them via environment variables.</string>
       </property>
       <property name="textFormat">
-       <enum>Qt::MarkdownText</enum>
+       <enum>Qt::TextFormat::MarkdownText</enum>
       </property>
       <property name="wordWrap">
        <bool>true</bool>
@@ -58,7 +58,7 @@ Conan itself does not do this.
 cruiz manages the local caches it is made aware of.</string>
       </property>
       <property name="textFormat">
-       <enum>Qt::MarkdownText</enum>
+       <enum>Qt::TextFormat::MarkdownText</enum>
       </property>
       <property name="wordWrap">
        <bool>true</bool>
@@ -71,7 +71,7 @@ cruiz manages the local caches it is made aware of.</string>
        <string>This wizard allows the user to create new local caches, or make cruiz aware of existing local caches.</string>
       </property>
       <property name="textFormat">
-       <enum>Qt::MarkdownText</enum>
+       <enum>Qt::TextFormat::MarkdownText</enum>
       </property>
       <property name="wordWrap">
        <bool>true</bool>
@@ -88,7 +88,7 @@ cruiz manages the local caches it is made aware of.</string>
        <string>cruiz requires a name to associate with a local cache</string>
       </property>
       <property name="textFormat">
-       <enum>Qt::MarkdownText</enum>
+       <enum>Qt::TextFormat::MarkdownText</enum>
       </property>
       <property name="wordWrap">
        <bool>true</bool>
@@ -112,7 +112,7 @@ cruiz manages the local caches it is made aware of.</string>
        <string>Each local cache exists in a .conan folder in the specified directory.</string>
       </property>
       <property name="textFormat">
-       <enum>Qt::MarkdownText</enum>
+       <enum>Qt::TextFormat::MarkdownText</enum>
       </property>
       <property name="wordWrap">
        <bool>true</bool>
@@ -141,7 +141,7 @@ cruiz manages the local caches it is made aware of.</string>
 On Windows, a path to where 'short' package paths are stored is also required.</string>
       </property>
       <property name="textFormat">
-       <enum>Qt::MarkdownText</enum>
+       <enum>Qt::TextFormat::MarkdownText</enum>
       </property>
       <property name="wordWrap">
        <bool>true</bool>
@@ -287,7 +287,7 @@ On Windows, a path to where 'short' package paths are stored is also required.</
     <item>
      <widget class="QPlainTextEdit" name="summary_log">
       <property name="sizeAdjustPolicy">
-       <enum>QAbstractScrollArea::AdjustToContents</enum>
+       <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
       </property>
       <property name="undoRedoEnabled">
        <bool>false</bool>

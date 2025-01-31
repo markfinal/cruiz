@@ -49,7 +49,7 @@
    <item>
     <widget class="QPlainTextEdit" name="log">
      <property name="sizeAdjustPolicy">
-      <enum>QAbstractScrollArea::AdjustToContents</enum>
+      <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
      </property>
      <property name="undoRedoEnabled">
       <bool>false</bool>

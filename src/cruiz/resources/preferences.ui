@@ -24,7 +24,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>639</width>
+        <width>654</width>
         <height>252</height>
        </rect>
       </property>
@@ -35,7 +35,7 @@
        <item row="15" column="2">
         <spacer name="verticalSpacer">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -85,7 +85,7 @@
        <item row="15" column="0">
         <spacer name="verticalSpacer_3">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -276,7 +276,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <item>
         <spacer name="verticalSpacer_2">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -386,7 +386,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <item>
         <spacer name="verticalSpacer_4">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -469,7 +469,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <item>
         <spacer name="verticalSpacer_5">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -497,7 +497,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <item row="2" column="1">
         <spacer name="verticalSpacer_8">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -565,7 +565,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <item row="2" column="0">
         <spacer name="verticalSpacer_6">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -578,7 +578,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <item row="2" column="1">
         <spacer name="verticalSpacer_7">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -729,7 +729,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <item>
         <spacer name="verticalSpacer_13">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -760,7 +760,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <item row="15" column="3">
         <spacer name="verticalSpacer_12">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -779,10 +779,10 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>Cancel current command</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -795,10 +795,10 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>conan install (update binaries)</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -811,10 +811,10 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>conan imports</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -827,10 +827,10 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>conan package</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -840,10 +840,10 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>conan build</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -856,10 +856,10 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>conan test</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -869,10 +869,10 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>conan source</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -882,10 +882,10 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>CMake Build Tool (verbose)</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -898,10 +898,10 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>conan remove</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -914,10 +914,10 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>CMake Build Tool</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -927,7 +927,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;conan create&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::RichText</enum>
+          <enum>Qt::TextFormat::RichText</enum>
          </property>
         </widget>
        </item>
@@ -937,10 +937,10 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>Delete CMakeCache</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -959,10 +959,10 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>conan install</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -978,13 +978,13 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>conan create (update binaries)</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
          <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -1000,10 +1000,10 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>conan export-pkg</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -1013,7 +1013,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>TextLabel</string>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -1023,7 +1023,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>TextLabel</string>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -1040,10 +1040,10 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>TextLabel</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -1053,10 +1053,10 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>TextLabel</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -1066,10 +1066,10 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>TextLabel</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -1079,10 +1079,10 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>TextLabel</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -1092,10 +1092,10 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>TextLabel</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -1105,10 +1105,10 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>TextLabel</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -1118,10 +1118,10 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>TextLabel</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -1131,10 +1131,10 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>TextLabel</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -1144,10 +1144,10 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>TextLabel</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -1157,10 +1157,10 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>TextLabel</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -1170,10 +1170,10 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>TextLabel</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -1183,10 +1183,10 @@ However, help stop loading recipes if they have mixed versions of dependent pack
           <string>TextLabel</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
+          <set>Qt::TextInteractionFlag::NoTextInteraction</set>
          </property>
         </widget>
        </item>
@@ -1198,7 +1198,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
         <x>0</x>
         <y>0</y>
         <width>98</width>
-        <height>105</height>
+        <height>108</height>
        </rect>
       </property>
       <attribute name="label">
@@ -1208,22 +1208,22 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <item>
         <widget class="QTableView" name="prefs_recipes_table">
          <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
+          <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
          </property>
          <property name="sizeAdjustPolicy">
-          <enum>QAbstractScrollArea::AdjustToContents</enum>
+          <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
          </property>
          <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
+          <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
          </property>
          <property name="alternatingRowColors">
           <bool>true</bool>
          </property>
          <property name="selectionMode">
-          <enum>QAbstractItemView::SingleSelection</enum>
+          <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
          </property>
          <property name="selectionBehavior">
-          <enum>QAbstractItemView::SelectRows</enum>
+          <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
          </property>
          <attribute name="horizontalHeaderStretchLastSection">
           <bool>true</bool>
@@ -1236,7 +1236,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <item>
         <spacer name="verticalSpacer_9">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -1254,7 +1254,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
         <x>0</x>
         <y>0</y>
         <width>98</width>
-        <height>105</height>
+        <height>108</height>
        </rect>
       </property>
       <attribute name="label">
@@ -1264,26 +1264,26 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <item>
         <widget class="QListView" name="prefs_recentconfigs_list">
          <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
+          <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
          </property>
          <property name="sizeAdjustPolicy">
-          <enum>QAbstractScrollArea::AdjustToContents</enum>
+          <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
          </property>
          <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
+          <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
          </property>
          <property name="alternatingRowColors">
           <bool>true</bool>
          </property>
          <property name="selectionBehavior">
-          <enum>QAbstractItemView::SelectRows</enum>
+          <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
          </property>
         </widget>
        </item>
        <item>
         <spacer name="verticalSpacer_10">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -1301,7 +1301,7 @@ However, help stop loading recipes if they have mixed versions of dependent pack
         <x>0</x>
         <y>0</y>
         <width>98</width>
-        <height>105</height>
+        <height>108</height>
        </rect>
       </property>
       <attribute name="label">
@@ -1311,26 +1311,26 @@ However, help stop loading recipes if they have mixed versions of dependent pack
        <item>
         <widget class="QListView" name="prefs_recentremotes_list">
          <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
+          <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
          </property>
          <property name="sizeAdjustPolicy">
-          <enum>QAbstractScrollArea::AdjustToContents</enum>
+          <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
          </property>
          <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
+          <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
          </property>
          <property name="alternatingRowColors">
           <bool>true</bool>
          </property>
          <property name="selectionBehavior">
-          <enum>QAbstractItemView::SelectRows</enum>
+          <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
          </property>
         </widget>
        </item>
        <item>
         <spacer name="verticalSpacer_11">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -1347,10 +1347,10 @@ However, help stop loading recipes if they have mixed versions of dependent pack
    <item>
     <widget class="QDialogButtonBox" name="prefs_buttons">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::StandardButton::Apply|QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
      </property>
     </widget>
    </item>
