@@ -14,5 +14,6 @@ types-colorama
 types-six
 types-psutil
 pytest
+pytest-cov
 adr-tools-python
 pylint
