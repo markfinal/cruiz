@@ -151,7 +151,7 @@ deps = [
 ]
 commands = [
     ["pip", "install", "-e", "."],
-    ["pytest"],
+    ["pytest", "--cache-clear", "--cov=cruizlib", "--cov-report", "xml"],
 ]
 
 [tool.pylint.main]

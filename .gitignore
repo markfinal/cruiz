@@ -10,3 +10,5 @@ src/cruiz/pyside6/*
 .tox
 src/cruiz/RELEASE_VERSION.py
 *.whl
+.coverage
+coverage.xml
