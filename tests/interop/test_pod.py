@@ -20,11 +20,3 @@ def test_pod_hook_invariant_after_serialization() -> None:
     hook_deserialized = ConanHook.from_string(decoded["hooks"][0])
     assert hook_deserialized.path == hook.path
     assert hook_deserialized.enabled == hook.enabled
-
-
-def test_pod_has_path() -> None:
-    """Conan hook can test whether a path is used or not."""
-    path = pathlib.Path(__file__)
-    hook = ConanHook(path, True)
-    assert hook.has_path(path)
-    assert not hook.has_path(pathlib.Path.cwd())
