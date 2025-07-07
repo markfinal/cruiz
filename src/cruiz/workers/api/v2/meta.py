@@ -142,9 +142,7 @@ def _interop_profile_meta(
         from conans.client.profile_loader import ProfileLoader
 
     loader = ProfileLoader(api.cache_folder)
-    # pylint: disable=protected-access
-    # TODO: call to non-public function
-    profile = loader._load_profile(profile, os.getcwd())
+    profile = loader.load_profile(profile)
     details: typing.Dict[str, typing.Dict[str, typing.Any]] = {"settings": {}}
     for key, value in profile.settings.items():  # type: ignore[attr-defined]
         details["settings"][key] = value
