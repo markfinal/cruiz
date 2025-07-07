@@ -93,7 +93,11 @@ def _interop_inspect_recipe(
 
 
 def _interop_create_default_profile(api: typing.Any) -> None:
-    from conans.util.files import save
+    try:
+        from conan.internal.util.files import save
+    except ImportError:
+        # older than Conan 2.17.0
+        from conans.util.files import save
 
     profile_pathname = api.profiles.get_path("default", os.getcwd(), exists=False)
     save(profile_pathname, api.profiles.detect().dumps())
