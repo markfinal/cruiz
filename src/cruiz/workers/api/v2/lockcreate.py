@@ -25,10 +25,17 @@ def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> 
             import dataclasses
             import os
 
-            from conans.client.graph.graph import (
-                RECIPE_CONSUMER,
-                RECIPE_VIRTUAL,
-            )
+            try:
+                from conan.internal.graph.graph import (
+                    RECIPE_CONSUMER,
+                    RECIPE_VIRTUAL,
+                )
+            except ImportError:
+                # older than Conan 2.17.0
+                from conans.client.graph.graph import (
+                    RECIPE_CONSUMER,
+                    RECIPE_VIRTUAL,
+                )
 
             remotes = api.remotes.list()
 
