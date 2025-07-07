@@ -9,7 +9,6 @@ import typing
 
 from PySide6 import QtCore, QtGui, QtWidgets
 
-
 if typing.TYPE_CHECKING:
     from cruiz.commands.context import ConanContext
     from cruiz.commands.logdetails import LogDetails

@@ -12,6 +12,7 @@ from cruiz.commands.context import ConanContext
 
 if typing.TYPE_CHECKING:
     import pathlib
+
     from cruiz.commands.logdetails import LogDetails
 
 

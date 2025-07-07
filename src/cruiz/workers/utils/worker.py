@@ -20,11 +20,11 @@ from cruiz.workers.utils.env import clear_conan_env, set_env
 from cruiz.workers.utils.text2html import text_to_html
 
 if typing.TYPE_CHECKING:
-    from cruiz.interop.searchrecipesparameters import SearchRecipesParameters
-    from cruiz.interop.reciperevisionsparameters import RecipeRevisionsParameters
-    from cruiz.interop.packagerevisionsparameters import PackageRevisionsParameters
-    from cruiz.interop.packageidparameters import PackageIdParameters
     from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
+    from cruiz.interop.packageidparameters import PackageIdParameters
+    from cruiz.interop.packagerevisionsparameters import PackageRevisionsParameters
+    from cruiz.interop.reciperevisionsparameters import RecipeRevisionsParameters
+    from cruiz.interop.searchrecipesparameters import SearchRecipesParameters
 
 
 class Worker:
