@@ -48,7 +48,7 @@ class _CMakeFeaturesFrame(QtWidgets.QFrame):
     def _toggle_cmake_find_debug_mode(self, state: int) -> None:
         settings = RecipeSettings()
         settings.cmake_find_debug = (
-            QtCore.Qt.CheckState(state) == QtCore.Qt.CheckState.Checked  # type: ignore[assignment] # noqa: E501
+            QtCore.Qt.CheckState(state) == QtCore.Qt.CheckState.Checked
         )
         assert self._uuid
         RecipeSettingsWriter.from_uuid(self._uuid).sync(settings)
@@ -56,7 +56,7 @@ class _CMakeFeaturesFrame(QtWidgets.QFrame):
     def _toggle_cmake_verbose(self, state: int) -> None:
         settings = RecipeSettings()
         settings.cmake_verbose = (
-            QtCore.Qt.CheckState(state) == QtCore.Qt.CheckState.Checked  # type: ignore[assignment] # noqa: E501
+            QtCore.Qt.CheckState(state) == QtCore.Qt.CheckState.Checked
         )
         assert self._uuid
         RecipeSettingsWriter.from_uuid(self._uuid).sync(settings)

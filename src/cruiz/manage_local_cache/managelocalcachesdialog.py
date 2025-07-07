@@ -448,7 +448,7 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
                 for remote in self._modifications["Remotes"]["Add"]:
                     if remote.url not in urls:
                         urls.append(remote.url)
-                settings_remotes.urls = urls  # type: ignore[assignment]
+                settings_remotes.urls = urls
                 RecentConanRemotesSettingsWriter().sync(settings_remotes)
             del self._modifications["Remotes"]
         if "Hooks" in self._modifications:

@@ -552,33 +552,33 @@ class PreferencesDialog(QtWidgets.QDialog):
 
     def _general_clearplanes(self, state: int) -> None:
         self._prefs_general.clear_panes = (
-            QtCore.Qt.CheckState(state) == QtCore.Qt.CheckState.Checked  # type: ignore[assignment] # noqa: E501
+            QtCore.Qt.CheckState(state) == QtCore.Qt.CheckState.Checked
         )
         self.modified.emit()
 
     def _general_combinepanes(self, state: int) -> None:
         self._prefs_general.combine_panes = (
-            QtCore.Qt.CheckState(state) == QtCore.Qt.CheckState.Checked  # type: ignore[assignment] # noqa: E501
+            QtCore.Qt.CheckState(state) == QtCore.Qt.CheckState.Checked
         )
         self.modified.emit()
         self._requires_restart()
 
     def _general_usebatching(self, state: int) -> None:
         self._prefs_general.use_stdout_batching = (
-            QtCore.Qt.CheckState(state) == QtCore.Qt.CheckState.Checked  # type: ignore[assignment] # noqa: E501
+            QtCore.Qt.CheckState(state) == QtCore.Qt.CheckState.Checked
         )
         self.modified.emit()
         self._requires_restart()
 
     def _general_wallclock(self, state: int) -> None:
         self._prefs_general.enable_command_timing = (
-            QtCore.Qt.CheckState(state) == QtCore.Qt.CheckState.Checked  # type: ignore[assignment] # noqa: E501
+            QtCore.Qt.CheckState(state) == QtCore.Qt.CheckState.Checked
         )
         self.modified.emit()
 
     def _general_compactlook(self, state: int) -> None:
         self._prefs_general.use_compact_look = (
-            QtCore.Qt.CheckState(state) == QtCore.Qt.CheckState.Checked  # type: ignore[assignment] # noqa: E501
+            QtCore.Qt.CheckState(state) == QtCore.Qt.CheckState.Checked
         )
         self.modified.emit()
 
@@ -702,8 +702,8 @@ class PreferencesDialog(QtWidgets.QDialog):
                 self._font_load_defaults()
             """
             assert isinstance(font, QtGui.QFont)
-            self._prefs_font[usage].name = font.family()  # type: ignore
-            self._prefs_font[usage].size = font.pointSize()  # type: ignore
+            self._prefs_font[usage].name = font.family()
+            self._prefs_font[usage].size = font.pointSize()
             if usage == FontUsage.UI:
                 self._font_set_ui_preview(font)
             elif usage == FontUsage.OUTPUT:
@@ -761,12 +761,12 @@ class PreferencesDialog(QtWidgets.QDialog):
             blocked_widget.setText(conandata_version_yaml_pathsegment)
 
     def _conan_change_log_level(self, text: str) -> None:
-        self._prefs_conan.log_level = text  # type: ignore
+        self._prefs_conan.log_level = text
         self.modified.emit()
 
     def _conan_version_list_path_segment_changed(self, text: str) -> None:
-        value = text or None
-        self._prefs_conan.conandata_version_yaml_pathsegment = value  # type: ignore
+        value = text or ""
+        self._prefs_conan.conandata_version_yaml_pathsegment = value
         self.modified.emit()
 
     # -- local cache --
@@ -907,7 +907,7 @@ class PreferencesDialog(QtWidgets.QDialog):
             blocked_widget.setText(buildcache_bin_dir)
 
     def _compilercache_default_changed(self, text: str) -> None:
-        self._prefs_compilercache.default = text  # type: ignore
+        self._prefs_compilercache.default = text
         self.modified.emit()
 
     def _compilercache_ccache_bin_directory_changed(self, text: str) -> None:
@@ -1164,7 +1164,7 @@ class PreferencesDialog(QtWidgets.QDialog):
         if result == QtWidgets.QMessageBox.StandardButton.No:
             return
         settings = RecipeSettings()
-        settings.local_cache_name = cache_menu_action.text()  # type: ignore[assignment]
+        settings.local_cache_name = cache_menu_action.text()
         RecipeSettingsWriter.from_uuid(cache_menu_action.data()).sync(settings)
         self._recipes_load_defaults()
 

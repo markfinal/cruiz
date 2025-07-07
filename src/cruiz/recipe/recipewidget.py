@@ -838,7 +838,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         sender_lineedit = self.sender()
         assert isinstance(sender_lineedit, QtWidgets.QLineEdit)
         sender_text = sender_lineedit.text()
-        settings.local_workflow_common_subdir = sender_text  # type: ignore[assignment]
+        settings.local_workflow_common_subdir = sender_text
         RecipeSettingsWriter.from_recipe(self.recipe).sync(settings)
         self.local_workflow_changed.emit()
         self._local_workflow_common_subdir_trash_action.setEnabled(bool(sender_text))
@@ -848,7 +848,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         sender_lineedit = self.sender()
         assert isinstance(sender_lineedit, QtWidgets.QLineEdit)
         sender_text = sender_lineedit.text()
-        settings.local_workflow_install_folder = sender_text  # type: ignore[assignment]
+        settings.local_workflow_install_folder = sender_text
         RecipeSettingsWriter.from_recipe(self.recipe).sync(settings)
         self.local_workflow_changed.emit()
         self._local_workflow_install_folder_trash_action.setEnabled(bool(sender_text))
@@ -858,7 +858,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         sender_lineedit = self.sender()
         assert isinstance(sender_lineedit, QtWidgets.QLineEdit)
         sender_text = sender_lineedit.text()
-        settings.local_workflow_imports_folder = sender_text  # type: ignore[assignment]
+        settings.local_workflow_imports_folder = sender_text
         RecipeSettingsWriter.from_recipe(self.recipe).sync(settings)
         self.local_workflow_changed.emit()
         self._local_workflow_imports_folder_trash_action.setEnabled(bool(sender_text))
@@ -868,7 +868,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         sender_lineedit = self.sender()
         assert isinstance(sender_lineedit, QtWidgets.QLineEdit)
         sender_text = sender_lineedit.text()
-        settings.local_workflow_source_folder = sender_text  # type: ignore[assignment]
+        settings.local_workflow_source_folder = sender_text
         RecipeSettingsWriter.from_recipe(self.recipe).sync(settings)
         self.local_workflow_changed.emit()
         self._local_workflow_source_folder_trash_action.setEnabled(bool(sender_text))
@@ -878,7 +878,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         sender_lineedit = self.sender()
         assert isinstance(sender_lineedit, QtWidgets.QLineEdit)
         sender_text = sender_lineedit.text()
-        settings.local_workflow_build_folder = sender_text  # type: ignore[assignment]
+        settings.local_workflow_build_folder = sender_text
         RecipeSettingsWriter.from_recipe(self.recipe).sync(settings)
         self.local_workflow_changed.emit()
         self._local_workflow_build_folder_trash_action.setEnabled(bool(sender_text))
@@ -888,7 +888,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         sender_lineedit = self.sender()
         assert isinstance(sender_lineedit, QtWidgets.QLineEdit)
         sender_text = sender_lineedit.text()
-        settings.local_workflow_package_folder = sender_text  # type: ignore[assignment]
+        settings.local_workflow_package_folder = sender_text
         RecipeSettingsWriter.from_recipe(self.recipe).sync(settings)
         self.local_workflow_changed.emit()
         self._local_workflow_package_folder_trash_action.setEnabled(bool(sender_text))
@@ -898,7 +898,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         sender_lineedit = self.sender()
         assert isinstance(sender_lineedit, QtWidgets.QLineEdit)
         sender_text = sender_lineedit.text()
-        settings.local_workflow_test_folder = sender_text  # type: ignore[assignment]
+        settings.local_workflow_test_folder = sender_text
         RecipeSettingsWriter.from_recipe(self.recipe).sync(settings)
         self.local_workflow_changed.emit()
         self._local_workflow_test_folder_trash_action.setEnabled(bool(sender_text))
@@ -908,44 +908,40 @@ class RecipeWidget(QtWidgets.QMainWindow):
         # QLineEdit.textChanged signal due to significant overhead
         settings = RecipeSettings()
         settings.local_workflow_common_subdir = (
-            self._ui.localWorkflowCommonSubdir.text()  # type: ignore[assignment]
+            self._ui.localWorkflowCommonSubdir.text()
         )
         self._local_workflow_common_subdir_trash_action.setEnabled(
             bool(self._ui.localWorkflowCommonSubdir)
         )
         settings.local_workflow_install_folder = (
-            self._ui.localWorkflowInstallFolder.text()  # type: ignore[assignment]
+            self._ui.localWorkflowInstallFolder.text()
         )
         self._local_workflow_install_folder_trash_action.setEnabled(
             bool(self._ui.localWorkflowInstallFolder)
         )
         settings.local_workflow_imports_folder = (
-            self._ui.localWorkflowImportsFolder.text()  # type: ignore[assignment]
+            self._ui.localWorkflowImportsFolder.text()
         )
         self._local_workflow_imports_folder_trash_action.setEnabled(
             bool(self._ui.localWorkflowImportsFolder)
         )
         settings.local_workflow_source_folder = (
-            self._ui.localWorkflowSourceFolder.text()  # type: ignore[assignment]
+            self._ui.localWorkflowSourceFolder.text()
         )
         self._local_workflow_source_folder_trash_action.setEnabled(
             bool(self._ui.localWorkflowSourceFolder)
         )
-        settings.local_workflow_build_folder = (
-            self._ui.localWorkflowBuildFolder.text()  # type: ignore[assignment]
-        )
+        settings.local_workflow_build_folder = self._ui.localWorkflowBuildFolder.text()
         self._local_workflow_build_folder_trash_action.setEnabled(
             bool(self._ui.localWorkflowBuildFolder)
         )
         settings.local_workflow_package_folder = (
-            self._ui.localWorkflowPackageFolder.text()  # type: ignore[assignment]
+            self._ui.localWorkflowPackageFolder.text()
         )
         self._local_workflow_package_folder_trash_action.setEnabled(
             bool(self._ui.localWorkflowPackageFolder)
         )
-        settings.local_workflow_test_folder = (
-            self._ui.localWorkflowTestFolder.text()  # type: ignore[assignment]
-        )
+        settings.local_workflow_test_folder = self._ui.localWorkflowTestFolder.text()
         self._local_workflow_test_folder_trash_action.setEnabled(
             bool(self._ui.localWorkflowTestFolder)
         )
@@ -983,20 +979,20 @@ class RecipeWidget(QtWidgets.QMainWindow):
             command_dir = command_subdir
         else:
             working_dir = self.get_working_dir(workflow_cwd, common_subdir)
-            command_dir = working_dir / command_subdir
+            command_dir = pathlib.Path(working_dir) / command_subdir
         # command_dir may be an expression so...
-        command_dir = self.resolve_expression(str(command_dir))
+        command_dir_str = self.resolve_expression(os.fspath(command_dir))
         result = QtWidgets.QMessageBox.question(
             self,
             "Delete directory",
-            f"Delete the directory '{command_dir}'?",
+            f"Delete the directory '{command_dir_str}'?",
             QtWidgets.QMessageBox.StandardButton.Yes
             | QtWidgets.QMessageBox.StandardButton.No,
             QtWidgets.QMessageBox.StandardButton.NoButton,
         )
         if result == QtWidgets.QMessageBox.StandardButton.No:
             return
-        QtCore.QDir(command_dir).removeRecursively()
+        QtCore.QDir(command_dir_str).removeRecursively()
 
     def _local_workflow_on_delete_install_folder(self) -> None:
         self._local_workflow_on_delete_command_folder("local_workflow_install_folder")
