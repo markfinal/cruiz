@@ -28,7 +28,11 @@ def _patch_conan_output_initialiser(queue: multiprocessing.Queue[Message]) -> No
 
 def _patch_conan_run(queue: multiprocessing.Queue[Message]) -> None:
     # this has to be the first import of conan_run
-    import conans
+    try:
+        import conan
+    except ImportError:
+        # older than Conan 2.17.0
+        import conans
 
     # entirely replacing the vanilla conan_run, because it uses subprocess communicate
     # which does not stream the output, but waits for the end of the process
@@ -51,7 +55,10 @@ def _patch_conan_run(queue: multiprocessing.Queue[Message]) -> None:
 
             return process.returncode
 
-    conans.util.runners.conan_run = new_conan_run
+    try:
+        conan.internal.util.runners.conan_run = new_conan_run
+    except AttributeError:
+        conans.util.runners.conan_run = new_conan_run
 
 
 def _do_patching(queue: multiprocessing.Queue[Message]) -> None:
