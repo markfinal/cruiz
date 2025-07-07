@@ -419,9 +419,9 @@ Remove from the recent list?",
         exists = RecentRecipeSettingsWriter().make_current(recipe_uuid)
         if not exists:
             settings = RecipeSettings()
-            settings.path = str(recipe_path)  # type: ignore
-            settings.local_cache_name = wizard.local_cache  # type: ignore
-            settings.profile = wizard.initial_profile  # type: ignore
+            settings.path = str(recipe_path)
+            settings.local_cache_name = wizard.local_cache
+            settings.profile = wizard.initial_profile
             if wizard.recipe_version:
                 settings.append_attribute(
                     {"version": wizard.recipe_version}  # type: ignore

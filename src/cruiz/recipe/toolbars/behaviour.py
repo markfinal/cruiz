@@ -83,9 +83,7 @@ class _ProfileFrame(QtWidgets.QFrame):
                     blocked_widget.setCurrentIndex(0)
                     # sync that the first profile in the list is now current
                     updated_profile_settings = RecipeSettings()
-                    updated_profile_settings.profile = str(
-                        profile_list[0][0]
-                    )  # type: ignore
+                    updated_profile_settings.profile = str(profile_list[0][0])
                     RecipeSettingsWriter().from_recipe(recipe).sync(
                         updated_profile_settings
                     )
@@ -96,7 +94,7 @@ class _ProfileFrame(QtWidgets.QFrame):
     def _changed_profile(self, text: str) -> None:
         recipe = self._recipe
         settings = RecipeSettings.from_recipe(recipe)
-        settings.profile = text  # type: ignore
+        settings.profile = text
         # note: has to be from recipe, as the profile setter needs
         # the ConanContext to check the default profile name
         RecipeSettingsWriter.from_recipe(recipe).sync(settings)

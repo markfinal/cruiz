@@ -175,8 +175,9 @@ class MoveLocalCacheDialog(QtWidgets.QDialog):
     ) -> None:
         assert old_home_dir  # since it's non-default
         # update settings
-        settings.home_dir = new_home_dir  # type: ignore
-        settings.short_home_dir = new_short_home_dir  # type: ignore
+        settings.home_dir = new_home_dir
+        if new_short_home_dir:
+            settings.short_home_dir = new_short_home_dir
         NamedLocalCacheSettingsWriter(self._context.cache_name).sync(settings)
         try:
             old_conan_dir = pathlib.Path(old_home_dir)
@@ -195,8 +196,8 @@ class MoveLocalCacheDialog(QtWidgets.QDialog):
                 QtWidgets.QMessageBox.StandardButton.NoButton,
             )
             # roll back previous steps
-            settings.home_dir = old_home_dir  # type: ignore
-            settings.short_home_dir = old_short_home_dir  # type: ignore
+            settings.home_dir = old_home_dir
+            settings.short_home_dir = old_short_home_dir
             NamedLocalCacheSettingsWriter(self._context.cache_name).sync(settings)
             return
         if old_short_home_dir:
@@ -214,8 +215,8 @@ class MoveLocalCacheDialog(QtWidgets.QDialog):
                 )
                 # roll back previous steps
                 shutil.move(new_home_dir, str(old_conan_dir))
-                settings.home_dir = old_home_dir  # type: ignore
-                settings.short_home_dir = old_short_home_dir  # type: ignore
+                settings.home_dir = old_home_dir
+                settings.short_home_dir = old_short_home_dir
                 NamedLocalCacheSettingsWriter(self._context.cache_name).sync(settings)
                 return
         if cruiz.globals.CONAN_MAJOR_VERSION == 1:

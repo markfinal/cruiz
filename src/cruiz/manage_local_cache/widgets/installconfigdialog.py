@@ -86,7 +86,7 @@ class InstallConfigDialog(QtWidgets.QDialog):
         if self._ui.pathOrUrl.text() not in config_paths:
             settings = RecentConanConfigSettings()
             new_paths = config_paths + [self._ui.pathOrUrl.text()]
-            settings.paths = new_paths  # type: ignore[assignment]
+            settings.paths = new_paths
             RecentConanConfigSettingsWriter().sync(settings)
         self.accept()
 
