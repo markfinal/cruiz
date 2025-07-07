@@ -25,14 +25,14 @@ import psutil
 
 from .messagereplyprocessor import MessageReplyProcessor
 
-
 if typing.TYPE_CHECKING:
     from cruiz.interop.commandparameters import CommandParameters
-    from cruiz.interop.searchrecipesparameters import SearchRecipesParameters
-    from cruiz.interop.reciperevisionsparameters import RecipeRevisionsParameters
+    from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
     from cruiz.interop.packageidparameters import PackageIdParameters
     from cruiz.interop.packagerevisionsparameters import PackageRevisionsParameters
-    from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
+    from cruiz.interop.reciperevisionsparameters import RecipeRevisionsParameters
+    from cruiz.interop.searchrecipesparameters import SearchRecipesParameters
+
     from .logdetails import LogDetails
 
 logger = logging.getLogger(__name__)

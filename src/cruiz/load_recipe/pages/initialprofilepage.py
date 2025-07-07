@@ -15,6 +15,7 @@ from cruiz.widgets.util import BlockSignals
 
 if typing.TYPE_CHECKING:
     import pathlib
+
     from cruiz.pyside6.load_recipe_wizard import Ui_LoadRecipeWizard
 
 

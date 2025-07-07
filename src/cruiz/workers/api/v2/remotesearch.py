@@ -12,6 +12,7 @@ from . import worker
 
 if typing.TYPE_CHECKING:
     import multiprocessing
+
     from cruiz.interop.searchrecipesparameters import SearchRecipesParameters
 
 

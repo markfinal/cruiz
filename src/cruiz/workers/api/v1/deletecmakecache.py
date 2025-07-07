@@ -12,6 +12,7 @@ from cruiz.workers.utils.worker import Worker
 
 if typing.TYPE_CHECKING:
     import multiprocessing
+
     from cruiz.interop.commandparameters import CommandParameters
 
 

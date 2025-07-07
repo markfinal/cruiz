@@ -25,13 +25,13 @@ from .conaninvocation import ConanInvocation
 from .metarequestconaninvocation import MetaRequestConanInvocation
 
 if typing.TYPE_CHECKING:
-    from cruiz.interop.packagenode import PackageNode
-    from cruiz.interop.pod import ConanRemote
-    from cruiz.interop.searchrecipesparameters import SearchRecipesParameters
-    from cruiz.interop.reciperevisionsparameters import RecipeRevisionsParameters
-    from cruiz.interop.packageidparameters import PackageIdParameters
-    from cruiz.interop.packagerevisionsparameters import PackageRevisionsParameters
     from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
+    from cruiz.interop.packageidparameters import PackageIdParameters
+    from cruiz.interop.packagenode import PackageNode
+    from cruiz.interop.packagerevisionsparameters import PackageRevisionsParameters
+    from cruiz.interop.pod import ConanRemote
+    from cruiz.interop.reciperevisionsparameters import RecipeRevisionsParameters
+    from cruiz.interop.searchrecipesparameters import SearchRecipesParameters
 
     from cruizlib.interop.pod import ConanHook
 

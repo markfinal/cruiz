@@ -48,7 +48,7 @@ class _FileNode:
     def add_tarball(
         self, directory: pathlib.Path, tarball_basename: str, parent: _FileNode
     ) -> None:
-        """Adding a tarball containing many children."""
+        """Add a tarball containing many children."""
         tar_node = parent.add_child(tarball_basename)
         tar_node.is_container = True
         tarball_path = directory / tarball_basename
