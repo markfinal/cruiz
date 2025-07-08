@@ -8,9 +8,10 @@ import multiprocessing
 import typing
 
 import cruiz.runcommands
-from cruiz.interop.message import Message, Stderr, Stdout
 from cruiz.workers.utils.stream import QueuedStreamSix
 from cruiz.workers.utils.worker import Worker
+
+from cruizlib.interop.message import Message, Stderr, Stdout
 
 
 def _patch_conan_output_initialiser(queue: multiprocessing.Queue[Message]) -> None:

@@ -8,7 +8,7 @@ import multiprocessing
 import re
 import typing
 
-from cruiz.interop.message import Message, Success
+from cruizlib.interop.message import Message, Success
 
 from . import worker
 

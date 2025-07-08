@@ -7,8 +7,9 @@ from __future__ import annotations
 import typing
 from pathlib import Path
 
-from cruiz.interop.message import Message, Stdout, Success
 from cruiz.workers.utils.worker import Worker
+
+from cruizlib.interop.message import Message, Stdout, Success
 
 if typing.TYPE_CHECKING:
     import multiprocessing
