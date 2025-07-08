@@ -7,7 +7,7 @@ from __future__ import annotations
 import typing
 from io import StringIO
 
-from cruiz.interop.message import Message, Stdout, Success
+from cruizlib.interop.message import Message, Stdout, Success
 
 from . import worker
 

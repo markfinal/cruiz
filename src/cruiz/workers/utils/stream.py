@@ -12,7 +12,7 @@ import six
 from .colorarma_conversion import convert_from_colorama_to_html
 
 if typing.TYPE_CHECKING:
-    from cruiz.interop.message import Message
+    from cruizlib.interop.message import Message
 
 
 class QueuedStreamSix(six.StringIO):

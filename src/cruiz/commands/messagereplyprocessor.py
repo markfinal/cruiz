@@ -17,7 +17,8 @@ from PySide6 import QtCore
 
 import cruiz.workers.api as workers_api
 from cruiz.dumpobjecttypes import dump_object_types
-from cruiz.interop.message import (
+
+from cruizlib.interop.message import (
     ConanLogMessage,
     End,
     Failure,

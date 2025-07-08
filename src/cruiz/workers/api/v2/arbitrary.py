@@ -11,7 +11,7 @@ from __future__ import annotations
 import multiprocessing
 import typing
 
-from cruiz.interop.message import Failure, Message, Success
+from cruizlib.interop.message import Failure, Message, Success
 
 from . import worker
 
