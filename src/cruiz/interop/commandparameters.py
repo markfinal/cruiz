@@ -10,7 +10,7 @@ from io import StringIO
 
 import cruiz.globals
 
-from .commonparameters import CommonParameters
+from cruizlib.interop.commonparameters import CommonParameters
 
 if typing.TYPE_CHECKING:
     from cruiz.constants import BuildFeatureConstants

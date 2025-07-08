@@ -14,10 +14,11 @@ import typing
 from PySide6 import QtCore
 
 from cruiz.interop.commandparameters import CommandParameters
-from cruiz.interop.commonparameters import CommonParameters
 from cruiz.interop.message import Failure, Message, Stdout
 from cruiz.workers.utils.env import clear_conan_env, set_env
 from cruiz.workers.utils.text2html import text_to_html
+
+from cruizlib.interop.commonparameters import CommonParameters
 
 if typing.TYPE_CHECKING:
     from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
