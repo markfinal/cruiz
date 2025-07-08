@@ -23,6 +23,7 @@ class Stdout(Message):
         super().__init__()
         self._message = message
 
+    @property
     def message(self) -> str:
         """Get the message."""
         return self._message
@@ -36,6 +37,7 @@ class Stderr(Message):
         super().__init__()
         self._message = message
 
+    @property
     def message(self) -> str:
         """Get the message."""
         return self._message
@@ -49,6 +51,7 @@ class ConanLogMessage(Message):
         super().__init__()
         self._message = message
 
+    @property
     def message(self) -> str:
         """Get the message."""
         return self._message
@@ -62,6 +65,7 @@ class Success(Message):
         super().__init__()
         self._data = data
 
+    @property
     def payload(self) -> typing.Any:
         """Get the successful result."""
         return self._data
@@ -75,6 +79,7 @@ class Failure(Message):
         super().__init__()
         self._exception = exception
 
+    @property
     def exception(self) -> Exception:
         """Get the exception."""
         return self._exception
