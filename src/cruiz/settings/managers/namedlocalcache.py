@@ -18,7 +18,7 @@ from .valueclasses import DictValue, ListValue, ScalarValue
 from .writermixin import _WriterMixin
 
 if typing.TYPE_CHECKING:
-    from cruiz.interop.pod import ExtraProfileDirectory
+    from cruizlib.interop.pod import ExtraProfileDirectory
 
 
 # TODO: this needs some work as there is a lot of repetition
