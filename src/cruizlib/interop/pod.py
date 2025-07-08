@@ -37,3 +37,11 @@ class ConanHook:
         enabled_arg = args[1].strip().replace("enabled=", "")
         enabled = to_bool(enabled_arg)
         return cls(path, enabled)
+
+
+@dataclass(frozen=True)
+class ExtraProfileDirectory:
+    """Plain old data class representing an additional profile directory."""
+
+    name: str
+    directory: str

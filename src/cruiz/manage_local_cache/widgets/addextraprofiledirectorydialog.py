@@ -6,11 +6,12 @@ import typing
 
 from PySide6 import QtCore, QtGui, QtWidgets
 
-from cruiz.interop.pod import ExtraProfileDirectory
 from cruiz.pyside6.local_cache_add_profile_directory import (
     Ui_AddExtraProfileDirectoryDialog,
 )
 from cruiz.widgets.util import search_for_dir_options
+
+from cruizlib.interop.pod import ExtraProfileDirectory
 
 
 class AddExtraProfileDirectoryDialog(QtWidgets.QDialog):
