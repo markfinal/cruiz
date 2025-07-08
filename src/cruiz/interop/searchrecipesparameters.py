@@ -4,7 +4,7 @@
 
 import typing
 
-from .commonparameters import CommonParameters
+from cruizlib.interop.commonparameters import CommonParameters
 
 
 class SearchRecipesParameters(CommonParameters):

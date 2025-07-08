@@ -3,7 +3,10 @@
 import importlib
 import sys
 
-MODULES_TO_IMPORT = ("cruizlib.interop.pod",)
+MODULES_TO_IMPORT = (
+    "cruizlib.interop.commonparameters",
+    "cruizlib.interop.pod",
+)
 
 
 def test_no_gui_imports() -> None:

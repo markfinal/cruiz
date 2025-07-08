@@ -18,9 +18,10 @@ from conans.client import conan_api, output, runner  # noqa: E402, I100
 from conans.paths import get_conan_user_home  # noqa: E402
 
 from cruiz.interop.commandparameters import CommandParameters  # noqa: E402
-from cruiz.interop.commonparameters import CommonParameters  # noqa: E402
 from cruiz.interop.message import Message, Stderr, Stdout  # noqa: E402
 from cruiz.workers.utils.stream import QueuedStreamSix  # noqa: E402
+
+from cruizlib.interop.commonparameters import CommonParameters  # noqa: E402
 
 from .qtlogger import QtLogger  # noqa: E402
 
