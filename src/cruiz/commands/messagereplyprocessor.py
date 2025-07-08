@@ -99,18 +99,18 @@ class MessageReplyProcessor(QtCore.QObject):
                 if isinstance(entry, End):
                     break
                 if isinstance(entry, Stdout):
-                    self.stdout_message.emit(entry.message())
+                    self.stdout_message.emit(entry.message)
                 elif isinstance(entry, Stderr):
-                    self.stderr_message.emit(entry.message())
+                    self.stderr_message.emit(entry.message)
                 elif isinstance(entry, ConanLogMessage):
-                    self.conan_log_message.emit(entry.message())
+                    self.conan_log_message.emit(entry.message)
                 elif isinstance(entry, Success):
-                    self.completed.emit(entry.payload(), None)
+                    self.completed.emit(entry.payload, None)
                 elif isinstance(entry, Failure):
                     # TODO: temporary, at least always record the exception
                     # in the error log
-                    self.stderr_message.emit(str(entry.exception()))
-                    self.completed.emit(None, entry.exception())
+                    self.stderr_message.emit(str(entry.exception))
+                    self.completed.emit(None, entry.exception)
                 else:
                     logger.error("Unknown message type: '%s'", entry)
             except EOFError as exception:
