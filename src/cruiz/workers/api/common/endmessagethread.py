@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import typing
 
-from cruiz.interop.message import End, Message
+from cruizlib.interop.message import End, Message
 
 if typing.TYPE_CHECKING:
     import multiprocessing

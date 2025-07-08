@@ -12,9 +12,9 @@ import urllib.parse
 
 from attrs.converters import to_bool
 
-from cruiz.interop.message import Failure, Message, Success
 from cruiz.interop.pod import ConanRemote
 
+from cruizlib.interop.message import Failure, Message, Success
 from cruizlib.interop.pod import ConanHook
 
 from . import worker
