@@ -8,8 +8,7 @@ import pathlib
 import typing
 from io import StringIO
 
-import cruiz.globals
-
+import cruizlib.globals
 from cruizlib.interop.commonparameters import CommonParameters
 
 if typing.TYPE_CHECKING:
@@ -72,7 +71,7 @@ class CommandParameters(CommonParameters):
         if self._args:
             # e.g. things like update
             components.extend(self._args)
-        if cruiz.globals.CONAN_MAJOR_VERSION == 2:
+        if cruizlib.globals.CONAN_MAJOR_VERSION == 2:
             for key, value in self._options.items():
                 key_split = key.split(":")
                 name = key_split[0]
@@ -101,7 +100,7 @@ class CommandParameters(CommonParameters):
                 components.append(str(self._recipe_path))
             if self._v2_needs_reference and self._package_reference:
                 components.append(self._package_reference)
-        elif cruiz.globals.CONAN_MAJOR_VERSION == 1:
+        elif cruizlib.globals.CONAN_MAJOR_VERSION == 1:
             if self._install_folder:
                 components.extend(["-if", str(self._install_folder)])
             if self._imports_folder:

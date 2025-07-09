@@ -51,6 +51,8 @@ from cruiz.widgets import (
     log_created_widget,
 )
 
+import cruizlib.globals
+
 
 import psutil
 
@@ -628,7 +630,7 @@ Remove from the recent list?",
 
         def get_conan_version_output(path: str) -> str:
             # pylint: disable=unused-argument
-            return cruiz.globals.CONAN_FULL_VERSION
+            return cruizlib.globals.CONAN_FULL_VERSION
 
         statusbar_tool(
             "conan",

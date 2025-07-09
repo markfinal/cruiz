@@ -1,6 +1,6 @@
 """Cruiz workers API."""
 
-import cruiz.globals as cg
+import cruizlib.globals as cg
 
 from .common import endmessagethread
 

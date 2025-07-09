@@ -6,12 +6,13 @@ import typing
 
 from PySide6 import QtCore, QtWidgets
 
-import cruiz.globals
 import cruiz.workers.api as workers_api
 from cruiz.commands.context import ConanContext
 from cruiz.commands.logdetails import LogDetails
 from cruiz.interop.commandparameters import CommandParameters
 from cruiz.pyside6.local_cache_run_command_dialog import Ui_RunConanCommandDialog
+
+import cruizlib.globals
 
 
 class RunConanCommandDialog(QtWidgets.QDialog):
@@ -48,7 +49,7 @@ class RunConanCommandDialog(QtWidgets.QDialog):
     def _on_run_complete(self, payload: typing.Any, exception: typing.Any) -> None:
         self._ui.arguments.setEnabled(True)
         self._ui.run.setEnabled(True)
-        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+        if cruizlib.globals.CONAN_MAJOR_VERSION == 1:
             # payload is always None
             pass
         else:
