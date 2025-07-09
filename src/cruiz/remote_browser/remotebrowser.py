@@ -9,8 +9,9 @@ from PySide6 import QtCore, QtGui, QtWidgets
 
 from cruiz.commands.context import ConanContext
 from cruiz.commands.logdetails import LogDetails
-from cruiz.constants import DEFAULT_CACHE_NAME
 from cruiz.pyside6.remote_browser import Ui_remotebrowser
+
+from cruizlib.constants import DEFAULT_CACHE_NAME
 
 logger = logging.getLogger(__name__)
 

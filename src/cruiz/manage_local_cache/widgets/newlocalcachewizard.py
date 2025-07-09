@@ -11,12 +11,13 @@ import cruiz.globals
 import cruiz.workers.api as workers_api
 from cruiz.commands.context import ConanContext
 from cruiz.commands.logdetails import LogDetails
-from cruiz.constants import DEFAULT_CACHE_NAME
 from cruiz.interop.commandparameters import CommandParameters
 from cruiz.pyside6.local_cache_new_wizard import Ui_NewLocalCacheWizard
 from cruiz.settings.managers.localcachepreferences import LocalCacheSettingsReader
 from cruiz.settings.managers.namedlocalcache import NamedLocalCacheCreator
 from cruiz.widgets.util import search_for_dir_options
+
+from cruizlib.constants import DEFAULT_CACHE_NAME
 
 
 class NewLocalCacheWizard(QtWidgets.QWizard):
