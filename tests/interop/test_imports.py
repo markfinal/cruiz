@@ -4,6 +4,7 @@ import importlib
 import sys
 
 MODULES_TO_IMPORT = (
+    "cruizlib.constants",
     "cruizlib.interop.commonparameters",
     "cruizlib.interop.message",
     "cruizlib.interop.pod",

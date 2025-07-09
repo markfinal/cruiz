@@ -9,7 +9,6 @@ import typing
 from PySide6 import QtCore, QtGui, QtWidgets
 
 import cruiz.globals
-from cruiz.constants import DEFAULT_CACHE_NAME
 from cruiz.pyside6.preferences import Ui_PreferencesDialog
 from cruiz.settings.managers.cleansettings import sanitise_settings
 from cruiz.settings.managers.cmakepreferences import (
@@ -86,6 +85,8 @@ from cruiz.settings.models.recentconanconfigmodel import RecentConanConfigModel
 from cruiz.settings.models.recentconanremotesmodel import RecentConanRemotesModel
 from cruiz.settings.models.recipesmodel import RecipesModel
 from cruiz.widgets.util import BlockSignals, search_for_file_options
+
+from cruizlib.constants import DEFAULT_CACHE_NAME
 
 
 class PreferencesDialog(QtWidgets.QDialog):

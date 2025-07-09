@@ -10,7 +10,6 @@ from PySide6 import QtCore, QtGui, QtWidgets
 
 import cruiz.globals
 import cruiz.workers.api as workers_api
-from cruiz.constants import BuildFeatureConstants, CompilerCacheTypes
 from cruiz.environ import EnvironSaver
 from cruiz.exceptions import RecipeInspectionError
 from cruiz.interop.commandparameters import CommandParameters
@@ -19,6 +18,7 @@ from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
 from cruiz.settings.managers.recipe import RecipeSettings, RecipeSettingsReader
 from cruiz.settings.managers.shortcuts import ShortcutSettingsReader
 
+from cruizlib.constants import BuildFeatureConstants, CompilerCacheTypes
 
 IS_CONAN_V1 = cruiz.globals.CONAN_MAJOR_VERSION == 1
 
