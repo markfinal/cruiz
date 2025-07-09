@@ -9,6 +9,8 @@ import cruiz.globals
 from cruiz.settings.managers.conanpreferences import ConanSettingsReader
 from cruiz.settings.managers.namedlocalcache import NamedLocalCacheSettingsReader
 
+import cruizlib.globals
+
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +32,7 @@ def get_conan_env(
         added_environment = settings.environment_added.resolve()
         removed_environment = settings.environment_removed.resolve()
     env: typing.Dict[str, str] = {}
-    if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+    if cruizlib.globals.CONAN_MAJOR_VERSION == 1:
         if home_dir:
             env["CONAN_USER_HOME"] = home_dir
         if short_home_dir:
@@ -40,7 +42,7 @@ def get_conan_env(
             env["CONAN_HOME"] = home_dir
         # short home no longer needed
     env["CONAN_COLOR_DARK"] = "0" if cruiz.globals.is_dark_theme() else "1"
-    if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+    if cruizlib.globals.CONAN_MAJOR_VERSION == 1:
         with ConanSettingsReader() as settings:
             log_level = settings.log_level.resolve()
             env["CONAN_LOGGING_LEVEL"] = log_level

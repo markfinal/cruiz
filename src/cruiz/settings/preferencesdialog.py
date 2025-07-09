@@ -86,6 +86,7 @@ from cruiz.settings.models.recentconanremotesmodel import RecentConanRemotesMode
 from cruiz.settings.models.recipesmodel import RecipesModel
 from cruiz.widgets.util import BlockSignals, search_for_file_options
 
+import cruizlib.globals
 from cruizlib.constants import DEFAULT_CACHE_NAME
 
 
@@ -367,7 +368,7 @@ class PreferencesDialog(QtWidgets.QDialog):
         self._ui.prefs_shortcuts_create_edit.textChanged.connect(
             self._shortcuts_change_create
         )
-        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+        if cruizlib.globals.CONAN_MAJOR_VERSION == 1:
             self._ui.prefs_shortcuts_imports_edit.textChanged.connect(
                 self._shortcuts_change_imports
             )
@@ -386,7 +387,7 @@ class PreferencesDialog(QtWidgets.QDialog):
         self._ui.prefs_shortcuts_build_edit.textChanged.connect(
             self._shortcuts_change_build
         )
-        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+        if cruizlib.globals.CONAN_MAJOR_VERSION == 1:
             self._ui.prefs_shortcuts_package_edit.textChanged.connect(
                 self._shortcuts_change_package
             )
@@ -405,7 +406,7 @@ class PreferencesDialog(QtWidgets.QDialog):
         self._ui.prefs_shortcuts_cancel_edit.textChanged.connect(
             self._shortcuts_change_cancel
         )
-        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+        if cruizlib.globals.CONAN_MAJOR_VERSION == 1:
             self._ui.prefs_shortcuts_cmakebuildtool_edit.textChanged.connect(
                 self._shortcuts_change_cmakebuildtool
             )
@@ -1331,7 +1332,7 @@ class PreferencesDialog(QtWidgets.QDialog):
         _set_pixmap(self._ui.shortcut_conan_test, "testpackage.svg")
         _set_pixmap(self._ui.shortcut_conan_remove, "removepackage.svg")
         _set_pixmap(self._ui.shortcut_cancel_command, ":/cancel.svg")
-        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+        if cruizlib.globals.CONAN_MAJOR_VERSION == 1:
             _set_pixmap(self._ui.shortcut_conan_imports, "imports.svg")
             _set_pixmap(self._ui.shortcut_conan_package, "package.svg")
             _set_pixmap(self._ui.shortcut_cmake_build_tool, ":/cmakebuildtool.svg")

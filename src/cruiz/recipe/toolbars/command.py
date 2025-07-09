@@ -18,9 +18,10 @@ from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
 from cruiz.settings.managers.recipe import RecipeSettings, RecipeSettingsReader
 from cruiz.settings.managers.shortcuts import ShortcutSettingsReader
 
+import cruizlib.globals
 from cruizlib.constants import BuildFeatureConstants, CompilerCacheTypes
 
-IS_CONAN_V1 = cruiz.globals.CONAN_MAJOR_VERSION == 1
+IS_CONAN_V1 = cruizlib.globals.CONAN_MAJOR_VERSION == 1
 
 
 class RecipeCommandToolbar(QtWidgets.QToolBar):
@@ -409,11 +410,11 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             params.make_package_reference()  # only needed for the exported string
         if with_force:
             params.force = True
-        if cruiz.globals.CONAN_MAJOR_VERSION > 1:
+        if cruizlib.globals.CONAN_MAJOR_VERSION > 1:
             params.v2_need_reference = v2_need_reference
         self._append_general_prefs(params)
         with RecipeSettingsReader.from_recipe(recipe) as settings:
-            if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+            if cruizlib.globals.CONAN_MAJOR_VERSION == 1:
                 num_cores = settings.num_cpu_cores
                 if num_cores.value is not None:
                     params.added_environment.update(
@@ -479,7 +480,7 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             if with_test_build_folder:
                 test_folder = settings.local_workflow_test_folder.resolve()
                 params.test_build_folder = recipe_widget.resolve_expression(test_folder)  # type: ignore[attr-defined] # noqa: E501
-            if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+            if cruizlib.globals.CONAN_MAJOR_VERSION == 1:
                 pass
             else:
                 params.v2_omit_test_folder = v2_omit_test_folder

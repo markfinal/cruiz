@@ -8,11 +8,12 @@ import typing
 
 from PySide6 import QtCore, QtGui, QtWidgets
 
-import cruiz.globals
 from cruiz.commands.conanconf import ConanConfigBoolean
 from cruiz.interop.searchrecipesparameters import SearchRecipesParameters
 from cruiz.settings.managers.namedlocalcache import AllNamedLocalCacheSettingsReader
 from cruiz.widgets.util import BlockSignals
+
+import cruizlib.globals
 
 from .page import Page
 
@@ -140,7 +141,7 @@ class PackageReferencePage(Page):
             blocked_widget.setCurrentIndex(-1)
         if index_of_first_enabled_remote is not None:
             self._ui.remote.setCurrentIndex(index_of_first_enabled_remote)
-        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+        if cruizlib.globals.CONAN_MAJOR_VERSION == 1:
             self._revs_enabled = self._context.get_boolean_config(
                 ConanConfigBoolean.REVISIONS, False
             )

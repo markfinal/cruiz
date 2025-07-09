@@ -12,7 +12,6 @@ from PySide6 import QtCore, QtGui, QtWidgets
 
 from attrs.converters import to_bool
 
-import cruiz.globals
 import cruiz.revealonfilesystem
 import cruiz.workers.api as workers_api
 from cruiz.commands.context import ConanContext
@@ -34,6 +33,8 @@ from cruiz.settings.managers.recipe import (
     RecipeSettingsWriter,
 )
 from cruiz.widgets.util import BlockSignals, clear_widgets_from_layout
+
+import cruizlib.globals
 
 try:
     import git
@@ -278,7 +279,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         )
         # tabify the docks on the bottom side
         self.tabifyDockWidget(self._ui.conanLogDock, self._ui.conanCommandsDock)
-        if cruiz.globals.CONAN_MAJOR_VERSION > 1:
+        if cruizlib.globals.CONAN_MAJOR_VERSION > 1:
             self._ui.conanLogDock.hide()
             self._ui.conanLocalWorkflowDock.hide()
 
@@ -329,7 +330,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
             self._generate_dependency_graph_from_profile_change
         )
 
-        if cruiz.globals.CONAN_MAJOR_VERSION > 1:
+        if cruizlib.globals.CONAN_MAJOR_VERSION > 1:
             self._ui.buildFeaturesToolbar.hide()
 
         # associate with local caches
@@ -407,7 +408,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         # in Conan 2, don't use the 'options' key, as that has been assigned the value
         options: typing.Optional[typing.Dict[str, typing.Any]] = (
             attrs.get("options")
-            if cruiz.globals.CONAN_MAJOR_VERSION == 1
+            if cruizlib.globals.CONAN_MAJOR_VERSION == 1
             else attrs.get("options_definitions")
         )
         if not options:
@@ -428,7 +429,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
         assert isinstance(options, dict)
         for key, value in options.items():
             if default_options:
-                if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+                if cruizlib.globals.CONAN_MAJOR_VERSION == 1:
                     default_value = default_options[key]
                 else:
                     # when the recipe is serialised,
