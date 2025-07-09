@@ -7,7 +7,6 @@ import pathlib
 
 from PySide6 import QtCore, QtWidgets
 
-import cruiz.globals
 from cruiz.pyside6.recipe_cpucores_frame import Ui_cpuCoresFrame
 from cruiz.pyside6.recipe_profile_frame import Ui_profileFrame
 from cruiz.recipe.recipe import Recipe
@@ -18,6 +17,8 @@ from cruiz.settings.managers.recipe import (
     RecipeSettingsWriter,
 )
 from cruiz.widgets.util import BlockSignals
+
+import cruizlib.globals
 
 
 class _ProfileFrame(QtWidgets.QFrame):
@@ -46,7 +47,7 @@ class _ProfileFrame(QtWidgets.QFrame):
         )
         local_cache_envvar = (
             "<CONAN_USER_HOME>"
-            if cruiz.globals.CONAN_MAJOR_VERSION == 1
+            if cruizlib.globals.CONAN_MAJOR_VERSION == 1
             else "<CONAN_HOME>"
         )
         parameterised_profile_dirs = profile_dirs.replace(home_dir, local_cache_envvar)
@@ -152,7 +153,7 @@ class RecipeBehaviourToolbar(QtWidgets.QToolBar):
         super().__init__(parent)
         self._profile = _ProfileFrame(self)
         self.addWidget(self._profile)
-        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+        if cruizlib.globals.CONAN_MAJOR_VERSION == 1:
             self._cpu_cores = _CPUCoresFrame(self)
             self.addSeparator()
             self.addWidget(self._cpu_cores)
@@ -168,5 +169,5 @@ class RecipeBehaviourToolbar(QtWidgets.QToolBar):
         """Refresh the content of the toolbar."""
         recipe = self._recipe
         self._profile.refresh_content(recipe)
-        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+        if cruizlib.globals.CONAN_MAJOR_VERSION == 1:
             self._cpu_cores.refresh_content(recipe)

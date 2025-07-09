@@ -11,7 +11,6 @@ import typing
 
 from PySide6 import QtCore, QtGui, QtWidgets
 
-import cruiz.globals
 from cruiz.pyside6.local_cache_move import Ui_LocalCacheMove
 from cruiz.settings.managers.namedlocalcache import (
     NamedLocalCacheSettings,
@@ -19,6 +18,8 @@ from cruiz.settings.managers.namedlocalcache import (
     NamedLocalCacheSettingsWriter,
 )
 from cruiz.widgets.util import search_for_dir_options
+
+import cruizlib.globals
 
 if typing.TYPE_CHECKING:
     from cruiz.commands.context import ConanContext
@@ -54,7 +55,7 @@ class MoveLocalCacheDialog(QtWidgets.QDialog):
         self._ui.buttonBox.button(
             QtWidgets.QDialogButtonBox.StandardButton.Ok
         ).setEnabled(False)
-        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+        if cruizlib.globals.CONAN_MAJOR_VERSION == 1:
             if platform.system() == "Windows":
                 pass
             else:
@@ -107,7 +108,7 @@ class MoveLocalCacheDialog(QtWidgets.QDialog):
             )
             return
         qdir = QtCore.QDir(new_home_dir)
-        if cruiz.globals.CONAN_MAJOR_VERSION == 1 and qdir.exists():
+        if cruizlib.globals.CONAN_MAJOR_VERSION == 1 and qdir.exists():
             QtWidgets.QMessageBox.critical(
                 self,
                 "Conan local cache home directory",
@@ -182,7 +183,7 @@ class MoveLocalCacheDialog(QtWidgets.QDialog):
         try:
             old_conan_dir = pathlib.Path(old_home_dir)
             new_conan_dir = pathlib.Path(new_home_dir)
-            if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+            if cruizlib.globals.CONAN_MAJOR_VERSION == 1:
                 # move <old>/.conan to <new>/.conan
                 old_conan_dir /= ".conan"
                 new_conan_dir /= ".conan"
@@ -219,7 +220,7 @@ class MoveLocalCacheDialog(QtWidgets.QDialog):
                 settings.short_home_dir = old_short_home_dir
                 NamedLocalCacheSettingsWriter(self._context.cache_name).sync(settings)
                 return
-        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+        if cruizlib.globals.CONAN_MAJOR_VERSION == 1:
             qdir = QtCore.QDir(old_home_dir)
             if qdir.isEmpty():
                 qdir.removeRecursively()

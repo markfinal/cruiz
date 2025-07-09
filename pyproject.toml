@@ -144,7 +144,7 @@ commands = [
     ["mypy", "--warn-return-any", "src/cruizlib"],
     ["mypy", "tests"],
     ["pylint", "src/cruiz"],
-    ["pylint", "--enable=all", "--disable=too-few-public-methods", "src/cruizlib"],
+    ["pylint", "--enable=all", "--disable=too-few-public-methods,global-statement,import-outside-toplevel", "src/cruizlib"],
     ["pip", "install", "conan<2"],
     ["pylint", "--ignore-paths=^src/cruiz/pyside6/.*$,^src/cruiz/workers/api/v2/.*$", "src/cruiz"],  # assuming Conan1 APIs
 ]

@@ -9,8 +9,9 @@ from dataclasses import dataclass
 
 from PySide6 import QtCore, QtGui, QtWidgets
 
-import cruiz.globals
 from cruiz.pyside6.local_cache_add_environment import Ui_AddEnvironmentDialog
+
+import cruizlib.globals
 
 if typing.TYPE_CHECKING:
     from cruiz.commands.context import ConanContext
@@ -38,7 +39,7 @@ class AddEnvironmentDialog(QtWidgets.QDialog):
             key_action = QtGui.QAction(key, self)
             key_action.triggered.connect(self._set_name)
             conan_environment_actions.append(key_action)
-        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+        if cruizlib.globals.CONAN_MAJOR_VERSION == 1:
             # TODO: CONAN_V2_MODE is obsolete
             conan_v2_mode_action = QtGui.QAction("CONAN_V2_MODE", self)
             conan_v2_mode_action.triggered.connect(self._set_name)

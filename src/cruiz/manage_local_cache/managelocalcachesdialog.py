@@ -13,7 +13,6 @@ from enum import IntEnum
 
 from PySide6 import QtCore, QtGui, QtWidgets
 
-import cruiz.globals
 from cruiz.commands.conanconf import ConanConfigBoolean
 from cruiz.commands.context import ConanContext
 from cruiz.commands.logdetails import LogDetails
@@ -33,6 +32,7 @@ from cruiz.settings.managers.recentconanremotes import (
 )
 from cruiz.widgets.util import BlockSignals
 
+import cruizlib.globals
 from cruizlib.constants import DEFAULT_CACHE_NAME
 from cruizlib.interop.pod import ConanHook
 
@@ -115,7 +115,7 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
         ).setEnabled(False)
         self._ui.profilesTable.itemSelectionChanged.connect(self._profiles_selection)
         # config
-        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+        if cruizlib.globals.CONAN_MAJOR_VERSION == 1:
             self._ui.configPrintRunCommands.toggled.connect(
                 self._config_toggle_printruncommands
             )
@@ -185,7 +185,7 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
         self._ui.operations_installConfigButton.clicked.connect(
             self._operations_install_config
         )
-        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+        if cruizlib.globals.CONAN_MAJOR_VERSION == 1:
             self._ui.operations_removeLocksButton.clicked.connect(
                 self._operations_remove_locks
             )
@@ -318,7 +318,7 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
             item.setData(QtCore.Qt.ItemDataRole.ToolTipRole, profile_text)
 
     def _update_cache_config(self) -> None:
-        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+        if cruizlib.globals.CONAN_MAJOR_VERSION == 1:
             with BlockSignals(self._ui.configPrintRunCommands) as blocked_widget:
                 assert isinstance(blocked_widget, QtWidgets.QCheckBox)
                 blocked_widget.setCheckState(
@@ -358,7 +358,7 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
         self._ui.hooksTable.setRowCount(0)
         hooks = self._context.get_hooks_list()
         self._ui.hooksTable.setRowCount(len(hooks))
-        if cruiz.globals.CONAN_MAJOR_VERSION > 1:
+        if cruizlib.globals.CONAN_MAJOR_VERSION > 1:
             # in Conan 2, hooks are enabled when they are are present in the cache
             self._ui.hooksTable.setColumnHidden(
                 ManageLocalCachesDialog._HooksTableColumnIndex.ENABLED, True
@@ -663,7 +663,7 @@ class ManageLocalCachesDialog(QtWidgets.QDialog):
             pathlib.Path(short_home_dir_raw) if short_home_dir_raw else None
         )
         conan_home_dir = home_dir
-        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+        if cruizlib.globals.CONAN_MAJOR_VERSION == 1:
             conan_home_dir /= ".conan"
         # since this is destructive, check again
         result = QtWidgets.QMessageBox.question(

@@ -7,7 +7,6 @@ import typing
 
 from PySide6 import QtGui, QtWidgets
 
-import cruiz.globals
 import cruiz.workers.api as workers_api
 from cruiz.commands.context import ConanContext
 from cruiz.commands.logdetails import LogDetails
@@ -17,6 +16,7 @@ from cruiz.settings.managers.localcachepreferences import LocalCacheSettingsRead
 from cruiz.settings.managers.namedlocalcache import NamedLocalCacheCreator
 from cruiz.widgets.util import search_for_dir_options
 
+import cruizlib.globals
 from cruizlib.constants import DEFAULT_CACHE_NAME
 
 
@@ -62,7 +62,7 @@ class NewLocalCacheWizard(QtWidgets.QWizard):
         self._ui.createProgress.setMinimum(0)
         self._ui.createProgress.setMaximum(1)
         self._ui.createProgress.setValue(0)
-        if cruiz.globals.CONAN_MAJOR_VERSION == 1:
+        if cruizlib.globals.CONAN_MAJOR_VERSION == 1:
             if platform.system() == "Windows":
                 pass
             else:
