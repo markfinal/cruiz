@@ -12,10 +12,11 @@ from PySide6 import QtCore, QtWidgets
 import cruiz.globals
 from cruiz.commands.context import managed_conan_context
 from cruiz.commands.logdetails import LogDetails
-from cruiz.constants import DEFAULT_CACHE_NAME
 from cruiz.exceptions import RecipeAlreadyOpenError, RecipeDoesNotExistError
 from cruiz.pyside6.load_recipe_wizard import Ui_LoadRecipeWizard
 from cruiz.settings.managers.recipe import RecipeSettings, RecipeSettingsReader
+
+from cruizlib.constants import DEFAULT_CACHE_NAME
 
 if typing.TYPE_CHECKING:
     from cruiz.recipe.recipe import Recipe

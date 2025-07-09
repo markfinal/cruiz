@@ -13,7 +13,7 @@ import cruiz.globals
 from cruizlib.interop.commonparameters import CommonParameters
 
 if typing.TYPE_CHECKING:
-    from cruiz.constants import BuildFeatureConstants
+    from cruizlib.constants import BuildFeatureConstants
 
 
 # TODO: should a recipe be in here? it is quite a heavyweight Context object though

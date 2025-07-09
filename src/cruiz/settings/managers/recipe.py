@@ -27,8 +27,9 @@ from .valueclasses import DictValue, ScalarValue
 from .writermixin import _WriterMixin
 
 if typing.TYPE_CHECKING:
-    from cruiz.constants import CompilerCacheTypes
     from cruiz.recipe.recipe import Recipe
+
+    from cruizlib.constants import CompilerCacheTypes
 
 
 class RecipeSettings(ComparableCommonSettings):

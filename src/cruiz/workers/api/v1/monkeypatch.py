@@ -9,7 +9,7 @@ import typing
 
 import conans
 
-from cruiz.constants import BuildFeatureConstants
+from cruizlib.constants import BuildFeatureConstants
 
 
 def _monkey_patch_logger() -> None:
