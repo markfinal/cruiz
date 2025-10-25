@@ -11,4 +11,5 @@ src/cruiz/pyside6/*
 src/cruiz/RELEASE_VERSION.py
 *.whl
 .coverage
-coverage.xml
+pytest-coverage.xml
+pytest.xml
