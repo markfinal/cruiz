@@ -126,11 +126,6 @@ envlist = [
     "test",
 ]
 
-[tool.tox.pytest]
-testpaths = [
-    "tests",
-]
-
 [tool.tox.env.lint]
 deps = [
     "-r{toxinidir}/requirements_dev.txt",
@@ -149,14 +144,20 @@ commands = [
     ["pylint", "--ignore-paths=^src/cruiz/pyside6/.*$,^src/cruiz/workers/api/v2/.*$", "src/cruiz"],  # assuming Conan1 APIs
 ]
 
+[tool.tox.pytest]
+testpaths = [
+    "tests",
+]
+
+[tool.pytest.ini_options]
+addopts = "--cache-clear --junitxml=pytest.xml --cov=cruizlib --cov-report=xml:pytest-coverage.xml"
+
 [tool.tox.env.test]
 deps = [
     "-r{toxinidir}/requirements_dev.txt",
 ]
-commands = [
-    ["pip", "install", "-e", "."],
-    ["pytest", "--cache-clear", "--cov=cruizlib", "--cov-report", "xml"],
-]
+commands_pre = [["pip", "install", "-e", "."]]
+commands = [["pytest"]]
 
 [tool.pylint.main]
 ignore-paths = [

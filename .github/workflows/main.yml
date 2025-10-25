@@ -35,8 +35,11 @@ jobs:
       run: tox run -e lint
     - name: Test with tox
       run: tox run -e test
-    - name: Comment coverage
-      uses: highspeedoffice/pytest-cov-xml-parser@v1
+    - name: Pytest coverage comment
+      uses: MishaKav/pytest-coverage-comment@v1.1.57
+      with:
+        pytest-xml-coverage-path: ./pytest-coverage.xml
+        junitxml-path: ./pytest.xml
   pypi-build:
     strategy:
       matrix:
