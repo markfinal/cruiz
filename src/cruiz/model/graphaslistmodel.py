@@ -9,7 +9,7 @@ import typing
 from PySide6 import QtCore, QtGui
 
 if typing.TYPE_CHECKING:
-    from cruiz.interop.dependencygraph import DependencyGraph
+    from cruizlib.interop.dependencygraph import DependencyGraph
 
 
 class DependenciesListModel(QtGui.QStandardItemModel):
