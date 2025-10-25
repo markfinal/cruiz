@@ -28,7 +28,12 @@ def invoke(
     """
     with worker.ConanWorker(queue, params) as api:
         from conan.internal.conan_app import ConanApp
-        from conans.model.recipe_ref import RecipeReference
+
+        try:
+            from conan.api.model.refs import RecipeReference
+        except ImportError:
+            # older than v2.12.0
+            from conans.model.package_ref import RecipeReference
 
         assert hasattr(params, "remote_name")
         remote = api.remotes.get(params.remote_name)
