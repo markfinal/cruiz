@@ -583,17 +583,19 @@ class RecipeWidget(QtWidgets.QMainWindow):
                 head_sha = self._git_repository.head.object.hexsha
                 try:
                     branch = self._git_repository.active_branch
+                    branch_name = branch.name
                     tracking_branch = branch.tracking_branch()
                     if tracking_branch is None:
                         tooltip = "Untracked branch"
+                    del branch
                 except TypeError:
-                    branch = head_sha
+                    branch_name = head_sha
                     tracking_branch = None
                     tooltip = "Detached head"
-                message = f"{self._git_repository.working_tree_dir} " f"({branch})"
+                message = f"{self._git_repository.working_tree_dir} " f"({branch_name})"
                 if tracking_branch:
                     commits_behind = self._git_repository.iter_commits(
-                        f"{branch}..{tracking_branch}"
+                        f"{branch_name}..{tracking_branch}"
                     )
                     num_commits_behind = sum(1 for _ in commits_behind)
                     tooltip = f"Tracking {tracking_branch}"
@@ -601,7 +603,7 @@ class RecipeWidget(QtWidgets.QMainWindow):
                         message += f" \u2193{num_commits_behind}"
                         tooltip += f" {num_commits_behind} commits behind"
                     commits_ahead = self._git_repository.iter_commits(
-                        f"{tracking_branch}..{branch}"
+                        f"{tracking_branch}..{branch_name}"
                     )
                     num_commits_ahead = sum(1 for _ in commits_ahead)
                     if num_commits_ahead > 0:
