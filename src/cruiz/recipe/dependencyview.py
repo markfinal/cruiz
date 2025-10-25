@@ -11,7 +11,7 @@ from PySide6 import QtSvg, QtSvgWidgets, QtWidgets
 from cruiz.svggraph import DependenciesToDigraph, DigraphToSVG, SVGScene
 
 if typing.TYPE_CHECKING:
-    from cruiz.interop.dependencygraph import DependencyGraph
+    from cruizlib.interop.dependencygraph import DependencyGraph
 
 
 class DependencyView(QtWidgets.QGraphicsView):

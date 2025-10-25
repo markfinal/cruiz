@@ -12,6 +12,7 @@ from dataclasses import dataclass, field
 class PackageNode:
     """Representation of a node in the Conan dependency graph."""
 
+    # pylint: disable=too-many-instance-attributes
     name: str
     reference: str
     package_id: str

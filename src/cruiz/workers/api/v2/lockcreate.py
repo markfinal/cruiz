@@ -7,11 +7,11 @@ from __future__ import annotations
 import multiprocessing
 import typing
 
-from cruiz.interop.dependencygraph import DependencyGraph
-from cruiz.interop.packagenode import PackageNode
 from cruiz.workers.utils.formatoptions import format_options_v2
 
+from cruizlib.interop.dependencygraph import DependencyGraph
 from cruizlib.interop.message import Message, Success
+from cruizlib.interop.packagenode import PackageNode
 
 from . import worker
 

@@ -15,8 +15,8 @@ from cruiz.settings.managers.graphvizpreferences import GraphVizSettingsReader
 import graphviz
 
 if typing.TYPE_CHECKING:
-    from cruiz.interop.dependencygraph import DependencyGraph
-    from cruiz.interop.packagenode import PackageNode
+    from cruizlib.interop.dependencygraph import DependencyGraph
+    from cruizlib.interop.packagenode import PackageNode
 
 
 class DependenciesToDigraph:

@@ -18,7 +18,6 @@ from cruiz.commands.context import ConanContext
 from cruiz.commands.logdetails import LogDetails
 from cruiz.exceptions import RecipeInspectionError
 from cruiz.interop.commandparameters import CommandParameters
-from cruiz.interop.dependencygraph import dependencygraph_from_node_dependees
 from cruiz.manage_local_cache import ManageLocalCachesDialog
 from cruiz.model.graphaslistmodel import DependenciesListModel, DependenciesTreeModel
 from cruiz.pyside6.recipe_window import Ui_RecipeWindow
@@ -35,6 +34,7 @@ from cruiz.settings.managers.recipe import (
 from cruiz.widgets.util import BlockSignals, clear_widgets_from_layout
 
 import cruizlib.globals
+from cruizlib.interop.dependencygraph import dependencygraph_from_node_dependees
 
 try:
     import git
