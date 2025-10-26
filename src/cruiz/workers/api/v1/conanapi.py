@@ -17,9 +17,9 @@ _do_monkey_patching()
 from conans.client import conan_api, output, runner  # noqa: E402, I100
 from conans.paths import get_conan_user_home  # noqa: E402
 
-from cruiz.interop.commandparameters import CommandParameters  # noqa: E402
 from cruiz.workers.utils.stream import QueuedStreamSix  # noqa: E402
 
+from cruizlib.interop.commandparameters import CommandParameters  # noqa: E402
 from cruizlib.interop.commonparameters import CommonParameters  # noqa: E402
 from cruizlib.interop.message import Message, Stderr, Stdout  # noqa: E402
 
@@ -44,9 +44,8 @@ def instance(
         print_commands_to_output = cache.config.print_commands_to_output
         if params.cwd:
             # TODO: this has some broken assumptions about pure paths
-            if isinstance(params.cwd, pathlib.PurePosixPath):
-                path = pathlib.Path(params.cwd)
-                path.mkdir(parents=True, exist_ok=True)
+            if isinstance(params.cwd, pathlib.PurePath):
+                pathlib.Path(params.cwd).mkdir(parents=True, exist_ok=True)
             else:
                 params.cwd.mkdir(parents=True, exist_ok=True)
             os.chdir(params.cwd)

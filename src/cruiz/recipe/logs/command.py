@@ -11,7 +11,7 @@ import typing
 from PySide6 import QtCore, QtGui, QtWidgets
 
 if typing.TYPE_CHECKING:
-    from cruiz.interop.commandparameters import CommandParameters
+    from cruizlib.interop.commandparameters import CommandParameters
 
 
 class CommandListWidgetItem(QtWidgets.QListWidgetItem):
