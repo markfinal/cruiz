@@ -29,7 +29,8 @@ classifiers = [
 dynamic = [
     "version",
     "dependencies",
-    "readme"
+    "optional-dependencies",
+    "readme",
 ]
 
 [project.urls]
@@ -51,6 +52,7 @@ include-package-data = false
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
+optional-dependencies = {dev = { file = ["requirements_dev.txt"] }}
 readme = {file = "README.md", content-type = "text/markdown"}
 
 [tool.mypy]
@@ -127,11 +129,8 @@ envlist = [
 ]
 
 [tool.tox.env.lint]
-deps = [
-    "-r{toxinidir}/requirements_dev.txt",
-]
 commands = [
-    ["pip", "install", "-e", "."],
+    ["pip", "install", "-e", ".[dev]"],
     ["flake8", "src/cruiz"],
     ["flake8", "src/cruizlib"],
     ["flake8", "tests"],
@@ -153,10 +152,7 @@ testpaths = [
 addopts = "--cache-clear --junitxml=pytest.xml --cov=cruizlib --cov-report=xml:pytest-coverage.xml"
 
 [tool.tox.env.test]
-deps = [
-    "-r{toxinidir}/requirements_dev.txt",
-]
-commands_pre = [["pip", "install", "-e", "."]]
+commands_pre = [["pip", "install", "-e", ".[dev]"]]
 commands = [["pytest"]]
 
 [tool.pylint.main]
