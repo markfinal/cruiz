@@ -7,9 +7,9 @@ from __future__ import annotations
 import multiprocessing
 import typing
 
-import cruiz.runcommands
 from cruiz.workers.utils.worker import Worker
 
+import cruizlib.runcommands
 from cruizlib.interop.message import Message, Stderr, Stdout, Success
 
 if typing.TYPE_CHECKING:
@@ -50,7 +50,7 @@ def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> 
         )  # suitable for both Make and Ninja
     with (
         Worker(queue, params),
-        cruiz.runcommands.get_popen_for_capture(
+        cruizlib.runcommands.get_popen_for_capture(
             build_cmd,
             cwd=params.cwd,
         ) as process,

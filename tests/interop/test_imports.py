@@ -6,6 +6,7 @@ import sys
 MODULES_TO_IMPORT = (
     "cruizlib.constants",
     "cruizlib.globals",
+    "cruizlib.runcommands",
     "cruizlib.interop.commandparameters",
     "cruizlib.interop.commonparameters",
     "cruizlib.interop.dependencygraph",

@@ -7,7 +7,7 @@ import os
 import pathlib
 import typing
 
-import cruiz.runcommands
+import cruizlib.runcommands
 
 SUBDIR = "pyside6"
 RCC = "pyside6-rcc"
@@ -27,7 +27,7 @@ def _run_command_if_out_of_date(
             return False
     # compile out of date resources
     logger.debug("Running: '%s'", " ".join(cmd_args))
-    cruiz.runcommands.run(cmd_args)
+    cruizlib.runcommands.run(cmd_args)
     return True
 
 

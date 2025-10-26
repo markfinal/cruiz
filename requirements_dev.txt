@@ -15,5 +15,6 @@ types-six
 types-psutil
 pytest
 pytest-cov
+pytest-subprocess
 adr-tools-python
 pylint
