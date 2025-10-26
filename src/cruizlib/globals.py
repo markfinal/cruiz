@@ -6,19 +6,17 @@ Global non-GUI variables.
 (could do without these)
 """
 
-CONAN_FULL_VERSION: str = "undetermined"
-CONAN_MAJOR_VERSION: int = 0  # pylint: disable=invalid-name
+import importlib.metadata
+import typing
 
 
-def __capture_conan_version() -> None:
-    global CONAN_FULL_VERSION, CONAN_MAJOR_VERSION  # pylint: disable=global-statement
+def __capture_conan_version() -> typing.Tuple[str, int]:
+    full_version = importlib.metadata.version("conan")
 
-    import importlib.metadata  # pylint: disable=import-outside-toplevel
+    version_components = full_version.split(".")
+    major_version = int(version_components[0])
 
-    CONAN_FULL_VERSION = importlib.metadata.version("conan")
-
-    version_components = CONAN_FULL_VERSION.split(".")
-    CONAN_MAJOR_VERSION = int(version_components[0])
+    return full_version, major_version
 
 
-__capture_conan_version()
+CONAN_FULL_VERSION, CONAN_MAJOR_VERSION = __capture_conan_version()
