@@ -149,7 +149,7 @@ testpaths = [
 ]
 
 [tool.pytest.ini_options]
-addopts = "--cache-clear --junitxml=pytest.xml --cov=cruizlib --cov-report=xml:pytest-coverage.xml"
+addopts = "--cache-clear --junitxml=pytest.xml --cov=cruizlib --cov-report=xml:pytest-coverage.xml --cov-fail-under=100"
 
 [tool.tox.env.test]
 commands_pre = [["pip", "install", "-e", ".[dev]"]]
