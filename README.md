@@ -54,14 +54,16 @@ If you have cloned this repository, you will need:
 
 Step 3 will need to be re-run when the Python dependencies, or the resource files used, change.
 
-## Linting
-Install linting dependencies with `pip install -r requirements_dev.txt`.
+## Linting and testing
+Install cruiz with linting and teseting dependencies with `pip install -e .[dev]`. Additional quotes may be required around `[dev]` depending on the shell in use.
 
-cruiz uses [tox](https://tox.wiki/en/latest/) to automate linting. Use `tox -e lint`.
+cruiz uses [tox](https://tox.wiki/en/latest/) to automate linting and testing. Use `tox -e lint`, `tox -e test` or `tox` for everything.
 
 [flake8](https://flake8.pycqa.org/en/latest/) is used for lint checks, specifically using [black](https://black.readthedocs.io/en/stable/) as the formatter.
 
 [mypy](https://mypy.readthedocs.io/en/stable/) is used for static type checking and validating type annotations.
+
+[pytest](https://docs.pytest.org/en/stable/) is used for testing.
 
 Python 3.10+ is highly recommended to run the linting steps.
 
