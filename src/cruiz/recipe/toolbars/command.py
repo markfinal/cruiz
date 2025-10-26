@@ -12,7 +12,6 @@ import cruiz.globals
 import cruiz.workers.api as workers_api
 from cruiz.environ import EnvironSaver
 from cruiz.exceptions import RecipeInspectionError
-from cruiz.interop.commandparameters import CommandParameters
 from cruiz.settings.managers.compilercachepreferences import CompilerCacheSettingsReader
 from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
 from cruiz.settings.managers.recipe import RecipeSettings, RecipeSettingsReader
@@ -20,6 +19,7 @@ from cruiz.settings.managers.shortcuts import ShortcutSettingsReader
 
 import cruizlib.globals
 from cruizlib.constants import BuildFeatureConstants, CompilerCacheTypes
+from cruizlib.interop.commandparameters import CommandParameters
 
 IS_CONAN_V1 = cruizlib.globals.CONAN_MAJOR_VERSION == 1
 

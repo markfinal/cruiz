@@ -17,7 +17,6 @@ import cruiz.workers.api as workers_api
 from cruiz.commands.context import ConanContext
 from cruiz.commands.logdetails import LogDetails
 from cruiz.exceptions import RecipeInspectionError
-from cruiz.interop.commandparameters import CommandParameters
 from cruiz.manage_local_cache import ManageLocalCachesDialog
 from cruiz.model.graphaslistmodel import DependenciesListModel, DependenciesTreeModel
 from cruiz.pyside6.recipe_window import Ui_RecipeWindow
@@ -34,6 +33,7 @@ from cruiz.settings.managers.recipe import (
 from cruiz.widgets.util import BlockSignals, clear_widgets_from_layout
 
 import cruizlib.globals
+from cruizlib.interop.commandparameters import CommandParameters
 from cruizlib.interop.dependencygraph import dependencygraph_from_node_dependees
 
 try:
@@ -458,24 +458,24 @@ class RecipeWidget(QtWidgets.QMainWindow):
                 values.append((key, value, None))
         return values
 
-    # TODO: why does this have to be PurePosixPath? to create such a path,
+    # TODO: why does this have to be PurePath? to create such a path,
     # it cannot be pure
     def get_working_dir(
         self,
         workflow_cwd: WorkflowCwd,
         common_subdir: typing.Optional[str],
-    ) -> pathlib.PurePosixPath:
+    ) -> pathlib.PurePath:
         """Get the working directory for the recipe."""
         if common_subdir is not None:
             common_subdir_path = pathlib.Path(common_subdir)
             if common_subdir_path.is_absolute():
-                return pathlib.PurePosixPath(common_subdir_path)
+                return pathlib.PurePath(common_subdir_path)
         if workflow_cwd == WorkflowCwd.RELATIVE_TO_RECIPE:
-            cwd = pathlib.PurePosixPath(self.recipe.folder)
+            cwd = pathlib.PurePath(self.recipe.folder)
         elif workflow_cwd == WorkflowCwd.RELATIVE_TO_GIT:
             assert self._git_repository
             assert self._git_repository.working_tree_dir
-            cwd = pathlib.PurePosixPath(self._git_repository.working_tree_dir)
+            cwd = pathlib.PurePath(self._git_repository.working_tree_dir)
         if common_subdir is not None:
             cwd /= common_subdir
         return cwd

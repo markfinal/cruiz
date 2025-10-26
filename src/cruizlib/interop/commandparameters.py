@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+# pylint: disable=fixme
 """Conan command parameters."""
 
 from __future__ import annotations
@@ -9,7 +10,8 @@ import typing
 from io import StringIO
 
 import cruizlib.globals
-from cruizlib.interop.commonparameters import CommonParameters
+
+from .commonparameters import CommonParameters
 
 if typing.TYPE_CHECKING:
     from cruizlib.constants import BuildFeatureConstants
@@ -17,6 +19,7 @@ if typing.TYPE_CHECKING:
 
 # TODO: should a recipe be in here? it is quite a heavyweight Context object though
 class CommandParameters(CommonParameters):
+    # pylint: disable=too-many-instance-attributes, too-many-public-methods
     """Representation of all the arguments to a command."""
 
     def __init__(
@@ -30,18 +33,18 @@ class CommandParameters(CommonParameters):
         """Initialise a CommandParameters."""
         super().__init__(worker)
         self.verb = verb
-        self._recipe_path: typing.Optional[pathlib.Path] = (
+        self._recipe_path: typing.Optional[pathlib.PurePath] = (
             None  # TODO: aliased with the recipe, so should we store it?
         )
-        self._cwd: typing.Optional[pathlib.Path] = None
+        self._cwd: typing.Optional[pathlib.PurePath] = None
         self._profile: typing.Optional[str] = None
-        self._common_subdir: typing.Optional[pathlib.PurePosixPath] = None
-        self._install_folder: typing.Optional[pathlib.PurePosixPath] = None
-        self._imports_folder: typing.Optional[pathlib.PurePosixPath] = None
-        self._source_folder: typing.Optional[pathlib.PurePosixPath] = None
-        self._build_folder: typing.Optional[pathlib.PurePosixPath] = None
-        self._package_folder: typing.Optional[pathlib.PurePosixPath] = None
-        self._test_build_folder: typing.Optional[pathlib.PurePosixPath] = None
+        self._common_subdir: typing.Optional[pathlib.PurePath] = None
+        self._install_folder: typing.Optional[pathlib.PurePath] = None
+        self._imports_folder: typing.Optional[pathlib.PurePath] = None
+        self._source_folder: typing.Optional[pathlib.PurePath] = None
+        self._build_folder: typing.Optional[pathlib.PurePath] = None
+        self._package_folder: typing.Optional[pathlib.PurePath] = None
+        self._test_build_folder: typing.Optional[pathlib.PurePath] = None
         self._name: typing.Optional[str] = None
         self._version: typing.Optional[str] = (
             None  # TODO: these are aliased with the recipe, so should we store it?
@@ -55,17 +58,18 @@ class CommandParameters(CommonParameters):
         self._named_args: typing.Dict[str, str] = {}
         self._time_commands: typing.Optional[bool] = None
         self._v2_omit_test_folder: typing.Optional[bool] = None
-        self._v2_needs_reference: typing.Optional[bool] = None
+        self._v2_need_reference: typing.Optional[bool] = None
         self._extra_options: typing.Optional[str] = None
 
     def to_args(self) -> typing.List[str]:
+        # pylint: disable=too-many-branches
         """Get the argument list corresponding to these command parameters."""
         components = [self.verb]
-        if self._profile:
+        if self.profile:
             components.extend(
                 [
                     "-pr",
-                    self._profile,
+                    self.profile,
                 ]
             )
         if self._args:
@@ -82,37 +86,37 @@ class CommandParameters(CommonParameters):
                         f"{name}/*:{option_name}={value}",
                     ]
                 )
-            if not self._v2_needs_reference:
-                if self._name:
-                    components.extend(["--name", self._name])
-                if self._version:
-                    components.extend(["--version", self._version])
-                if self._user:
-                    components.extend(["--user", self._user])
-                if self._channel:
-                    components.extend(["--channel", self._channel])
+            if not self.v2_need_reference:
+                if self.name:
+                    components.extend(["--name", self.name])
+                if self.version:
+                    components.extend(["--version", self.version])
+                if self.user:
+                    components.extend(["--user", self.user])
+                if self.channel:
+                    components.extend(["--channel", self.channel])
             if self.v2_omit_test_folder:
                 components.extend(["-tf", ""])
-            if self._force:
+            if self.force:
                 components.append("-c")
             # no named args
-            if self._recipe_path:
-                components.append(str(self._recipe_path))
-            if self._v2_needs_reference and self._package_reference:
-                components.append(self._package_reference)
+            if self.recipe_path:
+                components.append(str(self.recipe_path))
+            if self.v2_need_reference and self.package_reference:
+                components.append(self.package_reference)
         elif cruizlib.globals.CONAN_MAJOR_VERSION == 1:
-            if self._install_folder:
-                components.extend(["-if", str(self._install_folder)])
-            if self._imports_folder:
-                components.extend(["-imf", str(self._imports_folder)])
-            if self._source_folder:
-                components.extend(["-sf", str(self._source_folder)])
-            if self._build_folder:
-                components.extend(["-bf", str(self._build_folder)])
-            if self._package_folder:
-                components.extend(["-pf", str(self._package_folder)])
-            if self._test_build_folder:
-                components.extend(["-tbf", str(self._test_build_folder)])
+            if self.install_folder:
+                components.extend(["-if", str(self.install_folder)])
+            if self.imports_folder:
+                components.extend(["-imf", str(self.imports_folder)])
+            if self.source_folder:
+                components.extend(["-sf", str(self.source_folder)])
+            if self.build_folder:
+                components.extend(["-bf", str(self.build_folder)])
+            if self.package_folder:
+                components.extend(["-pf", str(self.package_folder)])
+            if self.test_build_folder:
+                components.extend(["-tbf", str(self.test_build_folder)])
             for key, value in self._options.items():
                 components.extend(
                     [
@@ -120,13 +124,13 @@ class CommandParameters(CommonParameters):
                         f"{key}={value}",
                     ]
                 )
-            if self._force:
+            if self.force:
                 components.append("-f")
             # no named args
-            if self._recipe_path:
-                components.append(str(self._recipe_path))
-            if self._package_reference:
-                components.append(self._package_reference)
+            if self.recipe_path:
+                components.append(str(self.recipe_path))
+            if self.package_reference:
+                components.append(self.package_reference)
         return components
 
     def __str__(self) -> str:
@@ -212,7 +216,7 @@ class CommandParameters(CommonParameters):
         return expression
 
     @property
-    def recipe_path(self) -> typing.Optional[pathlib.Path]:
+    def recipe_path(self) -> typing.Optional[pathlib.PurePath]:
         """
         Get the path of the recipe used in this command.
 
@@ -221,11 +225,11 @@ class CommandParameters(CommonParameters):
         return self._recipe_path
 
     @recipe_path.setter
-    def recipe_path(self, value: typing.Optional[pathlib.Path]) -> None:
+    def recipe_path(self, value: typing.Optional[pathlib.PurePath]) -> None:
         self._recipe_path = value
 
     @property
-    def cwd(self) -> typing.Optional[pathlib.Path]:
+    def cwd(self) -> typing.Optional[pathlib.PurePath]:
         """
         Get the current directory used in this command.
 
@@ -234,7 +238,7 @@ class CommandParameters(CommonParameters):
         return self._cwd
 
     @cwd.setter
-    def cwd(self, value: pathlib.Path) -> None:
+    def cwd(self, value: pathlib.PurePath) -> None:
         self._cwd = value
 
     @property
@@ -252,7 +256,7 @@ class CommandParameters(CommonParameters):
         self._profile = value
 
     @property
-    def common_subdir(self) -> typing.Optional[pathlib.PurePosixPath]:
+    def common_subdir(self) -> typing.Optional[pathlib.PurePath]:
         """
         Get the common subdirectory to apply atop of the current working directory.
 
@@ -261,11 +265,11 @@ class CommandParameters(CommonParameters):
         return self._common_subdir
 
     @common_subdir.setter
-    def common_subdir(self, value: typing.Optional[pathlib.PurePosixPath]) -> None:
+    def common_subdir(self, value: typing.Optional[pathlib.PurePath]) -> None:
         self._common_subdir = value
 
     @property
-    def install_folder(self) -> typing.Optional[pathlib.PurePosixPath]:
+    def install_folder(self) -> typing.Optional[pathlib.PurePath]:
         """
         Get the install folder to use in the command against this recipe.
 
@@ -275,11 +279,11 @@ class CommandParameters(CommonParameters):
         return self._install_folder
 
     @install_folder.setter
-    def install_folder(self, value: typing.Optional[pathlib.PurePosixPath]) -> None:
+    def install_folder(self, value: typing.Optional[pathlib.PurePath]) -> None:
         self._install_folder = value
 
     @property
-    def imports_folder(self) -> typing.Optional[pathlib.PurePosixPath]:
+    def imports_folder(self) -> typing.Optional[pathlib.PurePath]:
         """
         Get the imports folder to use in the command against this recipe.
 
@@ -289,11 +293,11 @@ class CommandParameters(CommonParameters):
         return self._imports_folder
 
     @imports_folder.setter
-    def imports_folder(self, value: typing.Optional[pathlib.PurePosixPath]) -> None:
+    def imports_folder(self, value: typing.Optional[pathlib.PurePath]) -> None:
         self._imports_folder = value
 
     @property
-    def source_folder(self) -> typing.Optional[pathlib.PurePosixPath]:
+    def source_folder(self) -> typing.Optional[pathlib.PurePath]:
         """
         Get the source folder to use in the command against this recipe.
 
@@ -303,11 +307,11 @@ class CommandParameters(CommonParameters):
         return self._source_folder
 
     @source_folder.setter
-    def source_folder(self, value: typing.Optional[pathlib.PurePosixPath]) -> None:
+    def source_folder(self, value: typing.Optional[pathlib.PurePath]) -> None:
         self._source_folder = value
 
     @property
-    def build_folder(self) -> typing.Optional[pathlib.PurePosixPath]:
+    def build_folder(self) -> typing.Optional[pathlib.PurePath]:
         """
         Get the build folder to use in the command against this recipe.
 
@@ -317,11 +321,11 @@ class CommandParameters(CommonParameters):
         return self._build_folder
 
     @build_folder.setter
-    def build_folder(self, value: typing.Optional[pathlib.PurePosixPath]) -> None:
+    def build_folder(self, value: typing.Optional[pathlib.PurePath]) -> None:
         self._build_folder = value
 
     @property
-    def package_folder(self) -> typing.Optional[pathlib.PurePosixPath]:
+    def package_folder(self) -> typing.Optional[pathlib.PurePath]:
         """
         Get the package folder to use in the command against this recipe.
 
@@ -331,11 +335,11 @@ class CommandParameters(CommonParameters):
         return self._package_folder
 
     @package_folder.setter
-    def package_folder(self, value: typing.Optional[pathlib.PurePosixPath]) -> None:
+    def package_folder(self, value: typing.Optional[pathlib.PurePath]) -> None:
         self._package_folder = value
 
     @property
-    def test_build_folder(self) -> typing.Optional[pathlib.PurePosixPath]:
+    def test_build_folder(self) -> typing.Optional[pathlib.PurePath]:
         """
         Get the test build folder to use in the command against this recipe.
 
@@ -345,7 +349,7 @@ class CommandParameters(CommonParameters):
         return self._test_build_folder
 
     @test_build_folder.setter
-    def test_build_folder(self, value: typing.Optional[pathlib.PurePosixPath]) -> None:
+    def test_build_folder(self, value: typing.Optional[pathlib.PurePath]) -> None:
         self._test_build_folder = value
 
     @property
@@ -442,16 +446,20 @@ class CommandParameters(CommonParameters):
         return self._package_reference
 
     def make_package_reference(self) -> None:
-        """Make the package reference given name, version, user and channel already set."""  # noqa: E501
+        """
+        Make a Conan package reference.
+
+        Uses the name, version, user and channel already set.
+        """
         package_reference = StringIO()
-        if self._name:
-            package_reference.write(f"{self._name}/")
-        if self._version:
-            package_reference.write(f"{self._version}@")
-        if self._user:
-            package_reference.write(self._user)
-        if self._channel:
-            package_reference.write(f"/{self._channel}")
+        if self.name:
+            package_reference.write(f"{self.name}/")
+        if self.version:
+            package_reference.write(f"{self.version}@")
+        if self.user:
+            package_reference.write(self.user)
+        if self.channel:
+            package_reference.write(f"/{self.channel}")
         # in some cases, this can be empty (e.g. export-pkg)
         # but not in others (e.g. test)
         self._package_reference = package_reference.getvalue()
@@ -499,11 +507,11 @@ class CommandParameters(CommonParameters):
     @property
     def v2_need_reference(self) -> typing.Optional[bool]:
         """Whether a package reference is actually needed in Conan v2+."""
-        return self._v2_needs_reference
+        return self._v2_need_reference
 
     @v2_need_reference.setter
     def v2_need_reference(self, value: typing.Optional[bool]) -> None:
-        self._v2_needs_reference = value
+        self._v2_need_reference = value
 
     @property
     def extra_options(self) -> typing.Optional[str]:

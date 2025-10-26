@@ -16,7 +16,7 @@ from cruizlib.interop.packagenode import PackageNode
 from . import worker
 
 if typing.TYPE_CHECKING:
-    from cruiz.interop.commandparameters import CommandParameters
+    from cruizlib.interop.commandparameters import CommandParameters
 
 
 def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> None:
