@@ -10,13 +10,13 @@ CREATION_FLAGS = (
 )
 
 
-def run(*args: typing.Any, **kwargs: typing.Any) -> subprocess.CompletedProcess:  # type: ignore[type-arg]  # noqa: E501
+def run(*args: typing.Any, **kwargs: typing.Any) -> subprocess.CompletedProcess[str]:
     """Run a command, checking for failure."""
     kwargs["creationflags"] = CREATION_FLAGS
-    return subprocess.run(*args, check=True, **kwargs)
+    return subprocess.run(*args, check=True, encoding="utf-8", **kwargs)
 
 
-def run_get_output(*args: typing.Any, **kwargs: typing.Any) -> str:
+def run_get_output(*args: typing.Any, **kwargs: typing.Any) -> typing.Any:
     """
     Run a command, to capture stdout.
 
@@ -29,7 +29,7 @@ def run_get_output(*args: typing.Any, **kwargs: typing.Any) -> str:
     return subprocess.run(*args, check=True, **kwargs).stdout
 
 
-def run_get_combined_output(*args: typing.Any, **kwargs: typing.Any) -> str:
+def run_get_combined_output(*args: typing.Any, **kwargs: typing.Any) -> typing.Any:
     """
     Run a command, combining and capturing stdout and stderr together.
 
@@ -43,7 +43,9 @@ def run_get_combined_output(*args: typing.Any, **kwargs: typing.Any) -> str:
     return subprocess.run(*args, check=True, **kwargs).stdout
 
 
-def get_popen_for_capture(*args: typing.Any, **kwargs: typing.Any) -> subprocess.Popen:  # type: ignore[type-arg]  # noqa: E501
+def get_popen_for_capture(
+    *args: typing.Any, **kwargs: typing.Any
+) -> subprocess.Popen[str]:
     """
     Get the Popen object, while capturing both stdout and stderr as separate pipes.
 

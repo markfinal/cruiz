@@ -7,10 +7,10 @@ from __future__ import annotations
 import multiprocessing
 import typing
 
-import cruiz.runcommands
 from cruiz.workers.utils.stream import QueuedStreamSix
 from cruiz.workers.utils.worker import Worker
 
+import cruizlib.runcommands
 from cruizlib.interop.message import Message, Stderr, Stdout
 
 
@@ -42,7 +42,7 @@ def _patch_conan_run(queue: multiprocessing.Queue[Message]) -> None:
     ):
         # pylint: disable=unused-argument
         with conans.util.runners.pyinstaller_bundle_env_cleaned():
-            with cruiz.runcommands.get_popen_for_capture(
+            with cruizlib.runcommands.get_popen_for_capture(
                 command,
                 shell=shell,
                 cwd=cwd,

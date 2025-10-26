@@ -18,7 +18,6 @@ from PySide6 import QtCore, QtGui, QtWidgets
 
 import cruiz.config
 import cruiz.globals
-import cruiz.runcommands
 from cruiz.environ import EnvironSaver
 from cruiz.exceptions import (
     InconsistentSettingsError,
@@ -52,6 +51,7 @@ from cruiz.widgets import (
 )
 
 import cruizlib.globals
+import cruizlib.runcommands
 
 
 import psutil
@@ -281,7 +281,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 continue
         if ssh_agent_pid:
             try:
-                ssh_add_list_capture = cruiz.runcommands.run_get_combined_output(
+                ssh_add_list_capture = cruizlib.runcommands.run_get_combined_output(
                     ["ssh-add", "-l"],
                     timeout=3,
                 )
@@ -504,19 +504,19 @@ Remove from the recent list?",
         if system == "Windows":
             compiler_desc = "cl.exe"
             compiler_version_query = (
-                lambda path: cruiz.runcommands.run_get_combined_output([path])
+                lambda path: cruizlib.runcommands.run_get_combined_output([path])
             )
         elif system == "Linux":
             compiler_desc = "gcc"
             compiler_version_query = (
-                lambda path: cruiz.runcommands.run_get_combined_output(
+                lambda path: cruizlib.runcommands.run_get_combined_output(
                     [path, "--version"]
                 )
             )
         elif system == "Darwin":
             compiler_desc = "clang"
             compiler_version_query = (
-                lambda path: cruiz.runcommands.run_get_combined_output(
+                lambda path: cruizlib.runcommands.run_get_combined_output(
                     [path, "--version"]
                 )
             )
@@ -543,7 +543,7 @@ Remove from the recent list?",
             statusbar_tool(
                 "cmake",
                 cmake_exe_path,
-                lambda path: cruiz.runcommands.run_get_combined_output(
+                lambda path: cruizlib.runcommands.run_get_combined_output(
                     [path, "--version"]
                 ),
                 self._cmake_label,
@@ -561,7 +561,7 @@ Remove from the recent list?",
             statusbar_tool(
                 "ninja",
                 ninja_exe_path,
-                lambda path: cruiz.runcommands.run_get_combined_output(
+                lambda path: cruizlib.runcommands.run_get_combined_output(
                     [path, "--version"]
                 ),
                 self._ninja_label,
@@ -584,7 +584,7 @@ Remove from the recent list?",
             statusbar_tool(
                 "ccache",
                 ccache_exe_path,
-                lambda path: cruiz.runcommands.run_get_combined_output(
+                lambda path: cruizlib.runcommands.run_get_combined_output(
                     [path, "--version"]
                 ),
                 self._ccache_label,
@@ -600,7 +600,7 @@ Remove from the recent list?",
             statusbar_tool(
                 "sccache",
                 sccache_exe_path,
-                lambda path: cruiz.runcommands.run_get_combined_output(
+                lambda path: cruizlib.runcommands.run_get_combined_output(
                     [path, "--version"]
                 ),
                 self._sccache_label,
@@ -616,7 +616,7 @@ Remove from the recent list?",
             statusbar_tool(
                 "buildcache",
                 buildcache_exe_path,
-                lambda path: cruiz.runcommands.run_get_combined_output(
+                lambda path: cruizlib.runcommands.run_get_combined_output(
                     [path, "--version"]
                 ),
                 self._buildcache_label,
