@@ -153,7 +153,11 @@ addopts = "--cache-clear --junitxml=pytest.xml --cov=cruizlib --cov-report=xml:p
 
 [tool.tox.env.test]
 commands_pre = [["pip", "install", "-e", ".[dev]"]]
-commands = [["pytest"]]
+commands = [
+    ["pytest"],
+    ["pip", "install", "conan<2"],
+    ["pytest", "--cov-append"],
+]
 
 [tool.pylint.main]
 ignore-paths = [
