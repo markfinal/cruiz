@@ -45,3 +45,29 @@ class ExtraProfileDirectory:
 
     name: str
     directory: str
+
+
+@dataclass(frozen=True)
+class ConanRemote:
+    """Plain old data class representing a Conan remote."""
+
+    name: str
+    url: str
+    enabled: bool
+
+    @classmethod
+    def from_string(cls, string: str) -> ConanRemote:
+        """Convert a string into a ConanRemote."""
+        assert string.startswith("ConanRemote("), "Incorrect prefix"
+        assert string.endswith(")"), "Incorrect suffix"
+        string = string.replace("ConanRemote(", "")
+        string = string.replace(")", "")
+        args = string.split(",")
+        assert len(args) == 3, "Incorrect ConanRemote argument count"
+        name_arg = args[0].strip().split("=")
+        url_arg = args[1].strip().split("=")
+        enabled_arg = args[2].strip().split("=")
+        name = name_arg[1][1:-1]
+        url = url_arg[1][1:-1]
+        enabled = to_bool(enabled_arg[1])
+        return cls(name, url, enabled)

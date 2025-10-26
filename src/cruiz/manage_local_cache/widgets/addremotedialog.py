@@ -7,9 +7,10 @@ from functools import partial
 
 from PySide6 import QtCore, QtGui, QtWidgets
 
-from cruiz.interop.pod import ConanRemote
 from cruiz.pyside6.local_cache_add_remote import Ui_AddRemoteDialog
 from cruiz.settings.managers.recentconanremotes import RecentConanRemotesSettingsReader
+
+from cruizlib.interop.pod import ConanRemote
 
 import validators
 

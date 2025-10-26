@@ -7,8 +7,9 @@ from enum import IntEnum
 
 from PySide6 import QtCore, QtGui, QtWidgets
 
-from cruiz.interop.pod import ConanRemote
 from cruiz.widgets.util import BlockSignals
+
+from cruizlib.interop.pod import ConanRemote
 
 
 class RemotesTable(QtWidgets.QTableWidget):
