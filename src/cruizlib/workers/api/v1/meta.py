@@ -68,7 +68,7 @@ def _default_profile_path(api: typing.Any) -> str:
         # pylint: disable=protected-access
         api.invalidate_caches()
         default_profile_path = api._cache.default_profile_path
-    return default_profile_path
+    return str(default_profile_path)
 
 
 def _profile_meta(
@@ -84,7 +84,7 @@ def _profile_meta(
 def _conan_version() -> str:
     import conans
 
-    return conans.__version__
+    return str(conans.__version__)
 
 
 def _get_package_layout(
@@ -120,7 +120,7 @@ def _package_dir(
 def _package_export_dir(api: typing.Any, reference: str, short_paths: bool) -> str:
     layout, _ = _get_package_layout(api, reference, short_paths)
     package_export_dir = layout.export()
-    return package_export_dir
+    return str(package_export_dir)
 
 
 def _package_export_sources_dir(
@@ -128,12 +128,12 @@ def _package_export_sources_dir(
 ) -> str:
     layout, _ = _get_package_layout(api, reference, short_paths)
     package_export_sources_dir = layout.export_sources()
-    return package_export_sources_dir
+    return str(package_export_sources_dir)
 
 
 def _editable_list(api: typing.Any) -> typing.List[str]:
     result = api.editable_list()
-    return result
+    return list(result)
 
 
 def _editable_add(api: typing.Any, ref: str, path: str) -> typing.Any:
@@ -153,7 +153,7 @@ def _editable_remove(api: typing.Any, ref: str) -> typing.Any:
 
 def _inspect_recipe(api: typing.Any, recipe_path: str) -> typing.Dict[str, typing.Any]:
     result = api.inspect(recipe_path, None)  # get all attributes
-    return result
+    return dict(result)
 
 
 def _hook_path(api: typing.Any) -> str:
@@ -163,7 +163,7 @@ def _hook_path(api: typing.Any) -> str:
     except AttributeError:
         # pylint: disable=protected-access
         result = api._cache.hooks_path
-    return result
+    return str(result)
 
 
 def _enabled_hooks(api: typing.Any) -> bool:
@@ -173,7 +173,8 @@ def _enabled_hooks(api: typing.Any) -> bool:
     except AttributeError:
         # pylint: disable=protected-access
         result = api._cache.config.hooks
-    return result
+    # TODO: should this be converting any other type to a bool?
+    return bool(result)
 
 
 def _available_hooks(api: typing.Any) -> typing.List[pathlib.Path]:
@@ -257,7 +258,7 @@ def _get_conandata(api: typing.Any, recipe_path: str) -> typing.Dict[str, typing
         result = api.app.loader._load_data(recipe_path)
     except AttributeError:
         result = api._cache.loader._load_data(recipe_path)
-    return result
+    return dict(result)
 
 
 def _get_config(api: typing.Any, key: str) -> typing.Optional[str]:
@@ -268,7 +269,7 @@ def _get_config(api: typing.Any, key: str) -> typing.Optional[str]:
         except AttributeError:
             # pylint: disable=protected-access
             result = api._cache.config.get_item(key)
-        return result
+        return str(result)
     except Exception:
         return None
 
@@ -294,10 +295,10 @@ def _rm_config(api: typing.Any, key: str) -> None:
 def _has_config_option(api: typing.Any, key: str, value: str) -> bool:
     try:
         # conan 1.18+
-        return api.app.cache.config.has_option(key, value)
+        return bool(api.app.cache.config.has_option(key, value))
     except AttributeError:
         # pylint: disable=protected-access
-        return api._cache.config.has_option(key, value)
+        return bool(api._cache.config.has_option(key, value))
 
 
 def _get_config_envvars(api: typing.Any) -> typing.List[str]:

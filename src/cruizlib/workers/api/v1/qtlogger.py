@@ -16,7 +16,7 @@ from cruizlib.interop.message import ConanLogMessage, Message
 class _Singleton(type):
     """Base class for all singletons."""
 
-    _instances: typing.Dict[typing.Any, typing.Any] = {}
+    _instances: typing.Dict[typing.Any, _Singleton] = {}
 
     def __call__(cls, *args: typing.Any, **kwargs: typing.Any) -> _Singleton:
         if cls not in cls._instances:
