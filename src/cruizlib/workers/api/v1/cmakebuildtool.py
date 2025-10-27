@@ -7,10 +7,10 @@ from __future__ import annotations
 import multiprocessing
 import typing
 
-from cruiz.workers.utils.worker import Worker
 
 import cruizlib.runcommands
 from cruizlib.interop.message import Message, Stderr, Stdout, Success
+from cruizlib.workers.utils.worker import Worker
 
 if typing.TYPE_CHECKING:
     from cruizlib.interop.commandparameters import CommandParameters

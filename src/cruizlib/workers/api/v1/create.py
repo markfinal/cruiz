@@ -6,9 +6,8 @@ from __future__ import annotations
 
 import typing
 
-from cruiz.workers.utils.formatoptions import format_options
-
 from cruizlib.interop.message import Message, Success
+from cruizlib.workers.utils.formatoptions import format_options
 
 from . import worker
 

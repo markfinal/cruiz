@@ -17,9 +17,9 @@ import urllib.parse
 
 from PySide6 import QtCore
 
-import cruiz.workers.api as workers_api
 from cruiz.dumpobjecttypes import dump_object_types
 
+import cruizlib.workers.api as workers_api
 from cruizlib.interop.commandparameters import CommandParameters
 from cruizlib.interop.message import (
     ConanLogMessage,

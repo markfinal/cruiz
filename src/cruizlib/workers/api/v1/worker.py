@@ -5,7 +5,7 @@
 import contextlib
 import typing
 
-from cruiz.workers.utils.worker import Worker
+from cruizlib.workers.utils.worker import Worker
 
 
 class ConanWorker(Worker):

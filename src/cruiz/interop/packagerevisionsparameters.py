@@ -12,7 +12,7 @@ class PackageRevisionsParameters(CommonParameters):
 
     def __init__(self, **args: typing.Any) -> None:
         """Initialise a PackageRevisionsParameters."""
-        import cruiz.workers.api as workers_api
+        import cruizlib.workers.api as workers_api
 
         super().__init__(workers_api.packagerevisions.invoke)
         for k, v in args.items():
