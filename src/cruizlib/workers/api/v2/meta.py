@@ -50,7 +50,8 @@ def _interop_remotes_sync(api: typing.Any, remotes: typing.List[str]) -> None:
 
 
 def _interop_get_config(api: typing.Any, key: str) -> typing.Optional[str]:
-    return api.config.get(key)
+    config = api.config.get(key)
+    return str(config) if config else None
 
 
 def _interop_profiles_dir(api: typing.Any) -> pathlib.Path:
@@ -87,7 +88,7 @@ def _interop_inspect_recipe(
 ) -> typing.Dict[str, typing.Any]:
     conanfile = api.local.inspect(recipe_path, None, None)
     result = conanfile.serialize()
-    return result
+    return dict(result)
 
 
 def _interop_create_default_profile(api: typing.Any) -> None:
@@ -113,7 +114,7 @@ def _interop_get_conandata(
         app = ConanApp(api.cache_folder, api.config.global_conf)
     # pylint: disable=protected-access
     # TODO: call to non-public function
-    return app.loader._load_data(recipe_path)
+    return dict(app.loader._load_data(recipe_path))
 
 
 def _interop_get_config_envvars(api: typing.Any) -> typing.List[str]:
