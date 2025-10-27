@@ -13,11 +13,11 @@ from PySide6 import QtCore, QtWidgets
 
 from attr.converters import to_bool
 
-import cruiz.workers.api as workers_api
 from cruiz.exceptions import RecipeInspectionError
 from cruiz.recipe.logs.command import CommandListWidgetItem, RecipeCommandHistoryWidget
 from cruiz.settings.managers.namedlocalcache import NamedLocalCacheSettingsReader
 
+import cruizlib.workers.api as workers_api
 from cruizlib.constants import DEFAULT_CACHE_NAME
 from cruizlib.interop.commandparameters import CommandParameters
 

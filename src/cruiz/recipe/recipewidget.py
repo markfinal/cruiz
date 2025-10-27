@@ -13,7 +13,6 @@ from PySide6 import QtCore, QtGui, QtWidgets
 from attrs.converters import to_bool
 
 import cruiz.revealonfilesystem
-import cruiz.workers.api as workers_api
 from cruiz.commands.context import ConanContext
 from cruiz.commands.logdetails import LogDetails
 from cruiz.exceptions import RecipeInspectionError
@@ -33,6 +32,7 @@ from cruiz.settings.managers.recipe import (
 from cruiz.widgets.util import BlockSignals, clear_widgets_from_layout
 
 import cruizlib.globals
+import cruizlib.workers.api as workers_api
 from cruizlib.interop.commandparameters import CommandParameters
 from cruizlib.interop.dependencygraph import dependencygraph_from_node_dependees
 

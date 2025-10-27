@@ -7,11 +7,10 @@ from __future__ import annotations
 import multiprocessing
 import typing
 
-from cruiz.workers.utils.stream import QueuedStreamSix
-from cruiz.workers.utils.worker import Worker
-
 import cruizlib.runcommands
 from cruizlib.interop.message import Message, Stderr, Stdout
+from cruizlib.workers.utils.stream import QueuedStreamSix
+from cruizlib.workers.utils.worker import Worker
 
 
 def _patch_conan_output_initialiser(queue: multiprocessing.Queue[Message]) -> None:

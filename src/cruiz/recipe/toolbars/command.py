@@ -9,7 +9,6 @@ from io import StringIO
 from PySide6 import QtCore, QtGui, QtWidgets
 
 import cruiz.globals
-import cruiz.workers.api as workers_api
 from cruiz.environ import EnvironSaver
 from cruiz.exceptions import RecipeInspectionError
 from cruiz.settings.managers.compilercachepreferences import CompilerCacheSettingsReader
@@ -18,6 +17,7 @@ from cruiz.settings.managers.recipe import RecipeSettings, RecipeSettingsReader
 from cruiz.settings.managers.shortcuts import ShortcutSettingsReader
 
 import cruizlib.globals
+import cruizlib.workers.api as workers_api
 from cruizlib.constants import BuildFeatureConstants, CompilerCacheTypes
 from cruizlib.interop.commandparameters import CommandParameters
 
