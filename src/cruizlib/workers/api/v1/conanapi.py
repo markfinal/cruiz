@@ -13,6 +13,7 @@ from .monkeypatch import _do_monkey_patching
 
 _do_monkey_patching()
 
+# pylint: disable=wrong-import-position, wrong-import-order
 from conans.client import conan_api, output, runner  # noqa: E402, I100
 from conans.paths import get_conan_user_home  # noqa: E402
 
@@ -68,13 +69,16 @@ def instance(
         api.create_app()
     except TypeError:
         api = _create_old_conan_api(newoutputter, newrunner)
+        # pylint: disable=no-member
         api.invalidate_caches()
     return api
 
 
+# pylint: disable=too-many-locals
 def _create_old_conan_api(out: typing.Any, run: typing.Any) -> typing.Any:
     # This function is mostly copied from Conan 1.17.x Factory methood for ConanAPIV1,
     # but with edits for cruiz
+    # pylint: disable=import-outside-toplevel
     import sys
     from conans.client.userio import UserIO
     from conans.client.migrations import ClientMigrator
@@ -90,7 +94,6 @@ def _create_old_conan_api(out: typing.Any, run: typing.Any) -> typing.Any:
     from conans.client.remote_manager import RemoteManager
     from conans.tools import set_global_instances
     from conans.client.conan_api import ConanAPIV1
-    from conans.paths import get_conan_user_home
     import conans
 
     user_io = UserIO(out=out)
@@ -115,7 +118,9 @@ def _create_old_conan_api(out: typing.Any, run: typing.Any) -> typing.Any:
     # Wraps an http_requester to inject proxies, certs, etc
     requester = ConanRequester(config)
     # To handle remote connections
+    # pylint: disable=no-member
     put_headers = cache.read_put_headers()
+    # pylint: disable=unexpected-keyword-arg, no-value-for-parameter
     rest_api_client = RestApiClient(
         user_io.out,
         requester,
@@ -135,6 +140,7 @@ def _create_old_conan_api(out: typing.Any, run: typing.Any) -> typing.Any:
     # Settings preprocessor
     interactive = False
 
+    # pylint: disable=too-many-function-args
     return ConanAPIV1(
         cache,
         user_io,

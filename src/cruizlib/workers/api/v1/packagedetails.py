@@ -31,6 +31,7 @@ def invoke(queue: MultiProcessingMessageQueueType, params: PackageIdParameters) 
         )
         results_list = result["results"][0]["items"][0]["packages"]
 
+        # pylint: disable=import-outside-toplevel
         import conans
 
         for entry in results_list:

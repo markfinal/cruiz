@@ -52,12 +52,14 @@ def _profiles_dir(api: typing.Any) -> pathlib.Path:
         profile_dir = pathlib.Path(api.app.cache.profiles_path)
         if not profile_dir.is_dir():
             # this creates the default profile
+            # pylint: disable=pointless-statement
             api.app.cache.default_profile
     except AttributeError:
         # pylint: disable=protected-access
         profile_dir = pathlib.Path(api._cache.profiles_path)
         if not profile_dir.is_dir():
             # this creates the default profile
+            # pylint: disable=pointless-statement
             api._cache.default_profile
     return profile_dir
 
@@ -85,6 +87,7 @@ def _profile_meta(
 
 
 def _conan_version() -> str:
+    # pylint: disable=import-outside-toplevel
     import conans
 
     return str(conans.__version__)
@@ -93,6 +96,7 @@ def _conan_version() -> str:
 def _get_package_layout(
     api: typing.Any, reference: str, short_paths: bool
 ) -> typing.Tuple[typing.Any, typing.Any]:
+    # pylint: disable=import-outside-toplevel
     from conans.model.ref import ConanFileReference
 
     file_ref = ConanFileReference.loads(reference)
@@ -112,6 +116,7 @@ def _package_dir(
     package_revision: str,
     short_paths: bool,
 ) -> pathlib.Path:
+    # pylint: disable=import-outside-toplevel
     from conans.model.ref import PackageReference
 
     layout, file_ref = _get_package_layout(api, reference, short_paths)
@@ -273,7 +278,7 @@ def _get_config(api: typing.Any, key: str) -> typing.Optional[str]:
             # pylint: disable=protected-access
             result = api._cache.config.get_item(key)
         return str(result)
-    except Exception:
+    except Exception:  # pylint: disable=broad-exception-caught
         return None
 
 
@@ -328,6 +333,7 @@ def invoke(
     reply_queue: MultiProcessingMessageQueueType,
     params: CommandParameters,
 ) -> None:
+    # pylint: disable=too-many-branches, too-many-statements
     """Run continuous loop, waiting on requests from the main process."""
     with worker.ConanWorker(reply_queue, params) as api:
         while True:
@@ -431,12 +437,14 @@ def invoke(
                 elif request == "create_default_profile":
                     _create_default_profile(api)
                     result = None
+                else:
+                    raise ValueError(f"Unknown request: '{request}'")
                 reply_queue.put(Success(result))
                 request_queue.task_done()
                 # ensure that the result doesn't accidentally appear in
                 # subsequent loop iterations
                 del result
-            except Exception as exception:
+            except Exception as exception:  # pylint: disable=broad-exception-caught
                 reply_queue.put(Failure(Exception(str(exception))))
                 request_queue.task_done()
     request_queue.join()

@@ -27,10 +27,11 @@ def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) ->
         if "targetFolder" in params.named_arguments:
             args["target_folder"] = params.named_arguments["targetFolder"]
 
-        verifySsl = False
-        result = api.config.install(
-            params.named_arguments["pathOrUrl"], verifySsl, **args
-        )
+        verify_ssl = False
+        # return value of api.config.install removed in v2.1.0
+        # https://github.com/conan-io/conan/commit/243e2e7877f831ff9715041802857eb5c319bc06
+        api.config.install(params.named_arguments["pathOrUrl"], verify_ssl, **args)
+        result = True
 
         message = StringIO()
         message.write(

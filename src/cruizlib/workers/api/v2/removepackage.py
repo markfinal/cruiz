@@ -18,6 +18,7 @@ if typing.TYPE_CHECKING:
 def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) -> None:
     """Run 'conan remove [-c] ref'."""
     with worker.ConanWorker(queue, params) as api:
+        # pylint: disable=import-outside-toplevel
         from conan.api.model import ListPattern
 
         assert params.package_reference

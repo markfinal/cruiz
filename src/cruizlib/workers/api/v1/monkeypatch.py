@@ -18,7 +18,7 @@ def _monkey_patch_logger() -> None:
     def qt_configure_logger(
         logging_level: int = logging.CRITICAL, logging_file: typing.Optional[str] = None
     ) -> logging.Logger:
-        # pylint: disable=unused-argument
+        # pylint: disable=unused-argument, import-outside-toplevel
         from .qtlogger import QtLogger
 
         logger = logging.getLogger("conans")
@@ -50,6 +50,7 @@ except AttributeError:
 
 
 def _monkey_patch_cmake_helper() -> None:
+    # pylint: disable=too-many-arguments, too-many-positional-arguments
     def new_configure(
         self: typing.Any,
         args: typing.Any = None,
@@ -122,6 +123,7 @@ except AttributeError:
 
 
 def _monkey_patch_autotools_helper() -> None:
+    # pylint: disable=too-many-arguments, too-many-positional-arguments
     def new_configure(
         self: typing.Any,
         configure_dir: typing.Any = None,
@@ -183,9 +185,8 @@ def _monkey_patch_autotools_helper() -> None:
         )
 
     try:
-        conans.client.build.autotools_environment.AutoToolsBuildEnvironment.configure = (  # noqa: E501
-            new_configure
-        )
+        autotools_env = conans.client.build.autotools_environment
+        autotools_env.AutoToolsBuildEnvironment.configure = new_configure
     except AttributeError:
         print("CONAN 2: Fix up Autotools monkey patch")
 

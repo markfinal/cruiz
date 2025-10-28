@@ -34,9 +34,16 @@ def invoke(
         refs: typing.List[typing.Tuple[str, typing.Optional[str]]] = []
 
         assert hasattr(params, "pattern")
-        for ref in api.search.recipes(query=params.pattern, remote=remote):
-            # returns a list of conans.model.recipe_ref.RecipeReference
-            refs.append((str(ref), None))
+        try:
+            for ref in api.search.recipes(query=params.pattern, remote=remote):
+                # returns a list of conans.model.recipe_ref.RecipeReference
+                refs.append((str(ref), None))
+        except AttributeError:
+            # api.search removed in v2.20.0
+            # https://github.com/conan-io/conan/pull/18726
+            for ref in list(api.list.select(pattern=params.pattern, remote=remote)):
+                # returns a list of conans.model.recipe_ref.RecipeReference
+                refs.append((str(ref), None))
 
         # TODO: alias aware
 

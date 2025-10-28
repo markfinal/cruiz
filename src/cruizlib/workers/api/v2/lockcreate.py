@@ -18,10 +18,12 @@ if typing.TYPE_CHECKING:
     from cruizlib.multiprocessingmessagequeuetype import MultiProcessingMessageQueueType
 
 
+# pylint: disable=too-many-locals, too-many-statements
 def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) -> None:
     """Run 'conan lock create'."""
     with worker.ConanWorker(queue, params) as api:
         try:
+            # pylint: disable=import-outside-toplevel
             import dataclasses
             import os
 
@@ -41,7 +43,8 @@ def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) ->
 
             # fake command line arguments
             @dataclasses.dataclass
-            class FakeCLIArguments:
+            class _FakeCLIArguments:
+                # pylint: disable=too-many-instance-attributes, too-few-public-methods
                 name = params.name
                 version = params.version
                 user = params.user
@@ -58,7 +61,7 @@ def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) ->
                 options_host = format_options_v2(params.options)
                 conf_host: None = None
 
-            args = FakeCLIArguments()
+            args = _FakeCLIArguments()
 
             profile_host, profile_build = api.profiles.get_profiles_from_args(args)
 
@@ -91,7 +94,12 @@ def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) ->
 
             # create nodes (derived from conan.graph.printer.print_graph)
             # continuing to use this in Conan 2
+
+            # TODO there is a bug here, as build_time_nodes has been removed
+            # see https://github.com/markfinal/cruiz/issues/279
+            # pylint: disable=no-member
             build_time_nodes = deps_graph.build_time_nodes()
+
             nodes = {}
             for node in sorted(deps_graph.nodes):
                 info = node.conanfile.original_info.dumps()

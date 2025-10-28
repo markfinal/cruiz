@@ -18,6 +18,7 @@ if typing.TYPE_CHECKING:
 def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) -> None:
     """Run 'conan create'."""
     with worker.ConanWorker(queue, params) as api:
+        # pylint: disable=import-outside-toplevel
         import importlib
 
         # no Python API for create, so reach for the CLI method
