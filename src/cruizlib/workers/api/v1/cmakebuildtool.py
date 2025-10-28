@@ -4,19 +4,18 @@
 
 from __future__ import annotations
 
-import multiprocessing
 import typing
 
-
 import cruizlib.runcommands
-from cruizlib.interop.message import Message, Stderr, Stdout, Success
+from cruizlib.interop.message import Stderr, Stdout, Success
 from cruizlib.workers.utils.worker import Worker
 
 if typing.TYPE_CHECKING:
     from cruizlib.interop.commandparameters import CommandParameters
+    from cruizlib.multiprocessingmessagequeuetype import MultiProcessingMessageQueueType
 
 
-def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> None:
+def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) -> None:
     """Run CMake build tool."""
     assert params.cwd
     # generate build command

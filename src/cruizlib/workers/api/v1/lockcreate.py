@@ -7,19 +7,18 @@ from __future__ import annotations
 import typing
 
 from cruizlib.interop.dependencygraph import DependencyGraph
-from cruizlib.interop.message import Message, Success
+from cruizlib.interop.message import Success
 from cruizlib.interop.packagenode import PackageNode
 from cruizlib.workers.utils.formatoptions import format_options
 
 from . import worker
 
 if typing.TYPE_CHECKING:
-    import multiprocessing
-
     from cruizlib.interop.commandparameters import CommandParameters
+    from cruizlib.multiprocessingmessagequeuetype import MultiProcessingMessageQueueType
 
 
-def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> None:
+def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) -> None:
     """Run 'conan lock create'."""
     with worker.ConanWorker(queue, params) as api:
         # code derived from "conan lock create" command,

@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-import multiprocessing
 import typing
 
 import six
@@ -12,7 +11,7 @@ import six
 from .colorarma_conversion import convert_from_colorama_to_html
 
 if typing.TYPE_CHECKING:
-    from cruizlib.interop.message import Message
+    from cruizlib.multiprocessingmessagequeuetype import MultiProcessingMessageQueueType
 
 
 class QueuedStreamSix(six.StringIO):
@@ -25,7 +24,7 @@ class QueuedStreamSix(six.StringIO):
     """
 
     def __init__(
-        self, queue: multiprocessing.Queue[Message], message_type: typing.Any
+        self, queue: MultiProcessingMessageQueueType, message_type: typing.Any
     ) -> None:
         """Initialise a QueuedStreamSix."""
         super().__init__()

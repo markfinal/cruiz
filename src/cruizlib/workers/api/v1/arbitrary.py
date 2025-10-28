@@ -6,17 +6,16 @@ from __future__ import annotations
 
 import typing
 
-from cruizlib.interop.message import Message, Success
+from cruizlib.interop.message import Success
 
 from . import worker
 
 if typing.TYPE_CHECKING:
-    import multiprocessing
-
     from cruizlib.interop.commandparameters import CommandParameters
+    from cruizlib.multiprocessingmessagequeuetype import MultiProcessingMessageQueueType
 
 
-def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> None:
+def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) -> None:
     """Run an arbitrary command."""
     with worker.ConanWorker(queue, params) as api:
         from conans.client.command import Command

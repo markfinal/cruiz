@@ -6,17 +6,17 @@ from __future__ import annotations
 
 import typing
 
-from cruizlib.interop.message import Message, Success
+from cruizlib.interop.message import Success
 
 from . import worker
 
 if typing.TYPE_CHECKING:
-    import multiprocessing
-
     from cruiz.interop.packageidparameters import PackageIdParameters
 
+    from cruizlib.multiprocessingmessagequeuetype import MultiProcessingMessageQueueType
 
-def invoke(queue: multiprocessing.Queue[Message], params: PackageIdParameters) -> None:
+
+def invoke(queue: MultiProcessingMessageQueueType, params: PackageIdParameters) -> None:
     """
     Equivalent to.
 

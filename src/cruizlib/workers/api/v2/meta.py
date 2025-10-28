@@ -14,13 +14,14 @@ import pathlib
 import typing
 import urllib.parse
 
-from cruizlib.interop.message import Failure, Message, Success
+from cruizlib.interop.message import Failure, Success
 from cruizlib.interop.pod import ConanHook, ConanRemote
 
 from . import worker
 
 if typing.TYPE_CHECKING:
     from cruizlib.interop.commandparameters import CommandParameters
+    from cruizlib.multiprocessingmessagequeuetype import MultiProcessingMessageQueueType
 
 
 def _interop_remote_list(api: typing.Any) -> typing.List[ConanRemote]:
@@ -150,7 +151,7 @@ def _interop_profile_meta(
 
 def invoke(
     request_queue: multiprocessing.JoinableQueue[str],
-    reply_queue: multiprocessing.Queue[Message],
+    reply_queue: MultiProcessingMessageQueueType,
     params: CommandParameters,
 ) -> None:
     """Run continuous loop, waiting on requests from the main process."""

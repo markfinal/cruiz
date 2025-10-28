@@ -5,19 +5,20 @@
 from __future__ import annotations
 
 import datetime
-import multiprocessing
 import typing
 
-from cruizlib.interop.message import Message, Success
+from cruizlib.interop.message import Success
 
 from . import worker
 
 if typing.TYPE_CHECKING:
     from cruiz.interop.reciperevisionsparameters import RecipeRevisionsParameters
 
+    from cruizlib.multiprocessingmessagequeuetype import MultiProcessingMessageQueueType
+
 
 def invoke(
-    queue: multiprocessing.Queue[Message], params: RecipeRevisionsParameters
+    queue: MultiProcessingMessageQueueType, params: RecipeRevisionsParameters
 ) -> None:
     """
     Equivalent to:.

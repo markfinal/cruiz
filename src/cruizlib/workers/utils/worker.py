@@ -15,7 +15,7 @@ from PySide6 import QtCore
 
 from cruizlib.interop.commandparameters import CommandParameters
 from cruizlib.interop.commonparameters import CommonParameters
-from cruizlib.interop.message import Failure, Message, Stdout
+from cruizlib.interop.message import Failure, Stdout
 from cruizlib.workers.utils.env import clear_conan_env, set_env
 from cruizlib.workers.utils.text2html import text_to_html
 
@@ -26,6 +26,8 @@ if typing.TYPE_CHECKING:
     from cruiz.interop.reciperevisionsparameters import RecipeRevisionsParameters
     from cruiz.interop.searchrecipesparameters import SearchRecipesParameters
 
+    from cruizlib.multiprocessingmessagequeuetype import MultiProcessingMessageQueueType
+
 
 class Worker:
     """Non-Conan specific worker context manager."""
@@ -33,7 +35,7 @@ class Worker:
     # TODO: tried to use typing.Type[CommonParameters] here but mypy didn't like it
     def __init__(
         self,
-        queue: multiprocessing.Queue[Message],
+        queue: MultiProcessingMessageQueueType,
         params: typing.Union[
             CommandParameters,
             SearchRecipesParameters,

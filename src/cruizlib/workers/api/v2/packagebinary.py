@@ -10,18 +10,18 @@ from __future__ import annotations
 
 import typing
 
-from cruizlib.interop.message import Message, Success
+from cruizlib.interop.message import Success
 
 from . import worker
 
 if typing.TYPE_CHECKING:
-    import multiprocessing
-
     from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
+
+    from cruizlib.multiprocessingmessagequeuetype import MultiProcessingMessageQueueType
 
 
 def invoke(
-    queue: multiprocessing.Queue[Message], params: PackageBinaryParameters
+    queue: MultiProcessingMessageQueueType, params: PackageBinaryParameters
 ) -> None:
     """
     Similar to 'conan download' but the download folder is custom.

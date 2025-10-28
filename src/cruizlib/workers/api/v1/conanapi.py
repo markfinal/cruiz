@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-import multiprocessing
 import os
 import pathlib
 import typing
@@ -19,14 +18,17 @@ from conans.paths import get_conan_user_home  # noqa: E402
 
 from cruizlib.interop.commandparameters import CommandParameters  # noqa: E402
 from cruizlib.interop.commonparameters import CommonParameters  # noqa: E402
-from cruizlib.interop.message import Message, Stderr, Stdout  # noqa: E402
+from cruizlib.interop.message import Stderr, Stdout  # noqa: E402
 from cruizlib.workers.utils.stream import QueuedStreamSix  # noqa: E402
 
 from .qtlogger import QtLogger  # noqa: E402
 
+if typing.TYPE_CHECKING:
+    from cruizlib.multiprocessingmessagequeuetype import MultiProcessingMessageQueueType
+
 
 def instance(
-    queue: multiprocessing.Queue[Message],
+    queue: MultiProcessingMessageQueueType,
     params: typing.Union[CommandParameters, CommonParameters],
 ) -> conan_api.ConanAPIV1:
     """Get a new instance of the Conan API object."""

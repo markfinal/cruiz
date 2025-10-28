@@ -8,18 +8,18 @@ It must match one of the Conan verbs though.
 
 from __future__ import annotations
 
-import multiprocessing
 import typing
 
-from cruizlib.interop.message import Failure, Message, Success
+from cruizlib.interop.message import Failure, Success
 
 from . import worker
 
 if typing.TYPE_CHECKING:
     from cruizlib.interop.commandparameters import CommandParameters
+    from cruizlib.multiprocessingmessagequeuetype import MultiProcessingMessageQueueType
 
 
-def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> None:
+def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) -> None:
     """Run an arbitrary command."""
     with worker.ConanWorker(queue, params):
         from conans.conan import run
