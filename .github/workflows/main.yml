@@ -17,7 +17,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  pypi-lint:
+  pypi-lint-conan1:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -32,7 +32,23 @@ jobs:
         python -m pip install --upgrade pip wheel setuptools
         pip install tox tox-gh-actions
     - name: Lint with tox
-      run: tox run -e lint
+      run: tox run -e lint_conan1
+  pypi-lint-conan2:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Set up Python 3.13
+      uses: actions/setup-python@v5
+      with:
+        python-version: 3.13
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip wheel setuptools
+        pip install tox tox-gh-actions
+    - name: Lint with tox
+      run: tox run -e lint_conan2
   pypi-test:
     runs-on: ubuntu-latest
     steps:
