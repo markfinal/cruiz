@@ -8,7 +8,6 @@ One long-lived meta process runs continually to service these.
 
 from __future__ import annotations
 
-import multiprocessing
 import os
 import pathlib
 import typing
@@ -21,7 +20,10 @@ from . import worker
 
 if typing.TYPE_CHECKING:
     from cruizlib.interop.commandparameters import CommandParameters
-    from cruizlib.multiprocessingmessagequeuetype import MultiProcessingMessageQueueType
+    from cruizlib.multiprocessingmessagequeuetype import (
+        MultiProcessingMessageQueueType,
+        MultiProcessingStringJoinableQueueType,
+    )
 
 
 def _interop_remote_list(api: typing.Any) -> typing.List[ConanRemote]:
@@ -150,7 +152,7 @@ def _interop_profile_meta(
 
 
 def invoke(
-    request_queue: multiprocessing.JoinableQueue[str],
+    request_queue: MultiProcessingStringJoinableQueueType,
     reply_queue: MultiProcessingMessageQueueType,
     params: CommandParameters,
 ) -> None:
