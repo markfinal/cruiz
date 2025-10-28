@@ -11,6 +11,7 @@ import colorama
 from .text2html import text_to_html
 
 
+# pylint: disable=too-many-branches
 def convert_from_colorama_to_html(escaped_string: str) -> str:
     """Attempt to convert colorama escape sequences into something that HTML can use."""
     if escaped_string.endswith("\n"):

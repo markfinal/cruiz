@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 """
-Meta commands are short lived queries that do not warrant having their own process spun up to resolve.
+Meta commands are short lived queries that do not warrant having their own process.
 
 One long-lived meta process runs continually to service these.
-"""  # noqa: E501
+"""
 
 from __future__ import annotations
 
@@ -34,6 +34,7 @@ def _interop_remote_list(api: typing.Any) -> typing.List[ConanRemote]:
 
 
 def _interop_remotes_sync(api: typing.Any, remotes: typing.List[str]) -> None:
+    # pylint: disable=import-outside-toplevel
     try:
         from conan.api.model import Remote
     except ImportError:
@@ -58,14 +59,15 @@ def _interop_get_config(api: typing.Any, key: str) -> typing.Optional[str]:
 
 
 def _interop_profiles_dir(api: typing.Any) -> pathlib.Path:
+    # pylint: disable=import-outside-toplevel
     from conan.internal.cache.home_paths import HomePaths
 
     paths = HomePaths(api.cache_folder)
-    pass
     return pathlib.Path(paths.profiles_path)
 
 
 def _interop_get_hooks(api: typing.Any) -> typing.List[ConanHook]:
+    # pylint: disable=import-outside-toplevel
     from conan.internal.cache.home_paths import HomePaths
 
     paths = HomePaths(api.cache_folder)
@@ -95,6 +97,7 @@ def _interop_inspect_recipe(
 
 
 def _interop_create_default_profile(api: typing.Any) -> None:
+    # pylint: disable=import-outside-toplevel
     try:
         from conan.internal.util.files import save
     except ImportError:
@@ -108,15 +111,16 @@ def _interop_create_default_profile(api: typing.Any) -> None:
 def _interop_get_conandata(
     api: typing.Any, recipe_path: str
 ) -> typing.Dict[str, typing.Any]:
+    # pylint: disable=import-outside-toplevel
     from conan.internal.conan_app import ConanApp
 
     try:
         app = ConanApp(api)
     except TypeError:
         # older than v2.1.0
+        # pylint: disable=too-many-function-args
         app = ConanApp(api.cache_folder, api.config.global_conf)
     # pylint: disable=protected-access
-    # TODO: call to non-public function
     return dict(app.loader._load_data(recipe_path))
 
 
@@ -137,6 +141,7 @@ def _interop_get_config_envvars(api: typing.Any) -> typing.List[str]:
 def _interop_profile_meta(
     api: typing.Any, profile: str
 ) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
+    # pylint: disable=import-outside-toplevel
     try:
         from conan.internal.api.profile.profile_loader import ProfileLoader
     except ImportError:
@@ -151,6 +156,7 @@ def _interop_profile_meta(
     return details
 
 
+# pylint: disable=too-many-branches
 def invoke(
     request_queue: MultiProcessingStringJoinableQueueType,
     reply_queue: MultiProcessingMessageQueueType,
@@ -203,7 +209,7 @@ def invoke(
                 # ensure that the result doesn't accidentally appear in
                 # subsequent loop iterations
                 del result
-            except Exception as exception:
+            except Exception as exception:  # pylint: disable=broad-exception-caught
                 reply_queue.put(Failure(Exception(str(exception))))
                 request_queue.task_done()
     request_queue.join()

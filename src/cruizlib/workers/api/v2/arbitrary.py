@@ -22,6 +22,7 @@ if typing.TYPE_CHECKING:
 def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) -> None:
     """Run an arbitrary command."""
     with worker.ConanWorker(queue, params):
+        # pylint: disable=import-outside-toplevel
         from conans.conan import run
         from io import StringIO
         import sys
@@ -36,8 +37,9 @@ def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) ->
             run()
         except SystemExit as exc:
             try:
+                # pylint: disable=using-constant-test
                 if exc.code:
-                    raise RuntimeError(temp_err.getvalue())
+                    raise RuntimeError(temp_err.getvalue()) from exc
                 queue.put(Success(temp_out.getvalue()))
             except RuntimeError as exc_inner:
                 queue.put(Failure(exc_inner))

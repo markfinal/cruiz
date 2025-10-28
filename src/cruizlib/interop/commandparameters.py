@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-# pylint: disable=fixme
 """Conan command parameters."""
 
 from __future__ import annotations

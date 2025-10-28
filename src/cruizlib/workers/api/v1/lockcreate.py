@@ -20,7 +20,9 @@ if typing.TYPE_CHECKING:
 
 def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) -> None:
     """Run 'conan lock create'."""
+    # pylint: disable=too-many-locals
     with worker.ConanWorker(queue, params) as api:
+        # pylint: disable=import-outside-toplevel
         # code derived from "conan lock create" command,
         # but aborting before writing a lock file to disk
         from conans.client.profile_loader import profile_from_args
@@ -49,6 +51,7 @@ def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) ->
             )
         except TypeError:
             # no conf and build_profile parameters in older Conans
+            # pylint: disable=no-value-for-parameter
             phost = profile_from_args(
                 [params.profile],
                 None,

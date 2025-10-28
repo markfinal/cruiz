@@ -18,6 +18,7 @@ if typing.TYPE_CHECKING:
 def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) -> None:
     """Run 'conan test'."""
     with worker.ConanWorker(queue, params) as api:
+        # pylint: disable=import-outside-toplevel
         import importlib
 
         # although there is a Python API for test, it works via a dependency

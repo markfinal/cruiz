@@ -18,6 +18,7 @@ if typing.TYPE_CHECKING:
 def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) -> None:
     """Run an arbitrary command."""
     with worker.ConanWorker(queue, params) as api:
+        # pylint: disable=import-outside-toplevel
         from conans.client.command import Command
 
         command = Command(api)

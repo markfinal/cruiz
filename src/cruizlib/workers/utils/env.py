@@ -8,7 +8,11 @@ import typing
 
 
 def clear_conan_env() -> None:
-    """Cruiz needs to control all Conan environments, so ignore everything from the calling environment."""  # noqa: E501
+    """
+    Cruiz must control all Conan environments.
+
+    So ignore everything from the calling environment.
+    """
     external_conan_envvar_names = [
         key for key, _ in os.environ.items() if key.startswith("CONAN_")
     ]

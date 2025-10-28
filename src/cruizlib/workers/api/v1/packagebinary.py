@@ -24,6 +24,7 @@ def invoke(
 
     PackageBinaryParameters has dynamic attributes.
     """
+    # pylint: disable=import-outside-toplevel
     from conans.model.ref import PackageReference
 
     with worker.ConanWorker(queue, params) as api:
@@ -31,7 +32,7 @@ def invoke(
             # Conan 1.18+
             remote_manager = api.app.remote_manager
         except AttributeError:
-            # pylint: disable=protected-access
+            # pylint: disable=protected-access, no-member
             remote_manager = api._remote_manager
 
         remote_name = params.remote_name  # type: ignore
@@ -46,7 +47,7 @@ def invoke(
                 # Conan 1.18.x
                 remotes = api.app.cache.registry.load_remotes()
             except AttributeError:
-                # pylint: disable=protected-access
+                # pylint: disable=protected-access, no-member
                 remotes = api._cache.registry.load_remotes()
         remote = remotes.get_remote(remote_name)
         pref_str = pkgref

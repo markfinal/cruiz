@@ -28,6 +28,7 @@ def invoke(
     RecipeRevisionsParameters has dynamic attributes.
     """
     with worker.ConanWorker(queue, params) as api:
+        # pylint: disable=import-outside-toplevel
         from conan.internal.conan_app import ConanApp
 
         try:
@@ -44,6 +45,7 @@ def invoke(
             app = ConanApp(api)
         except TypeError:
             # older than v2.1.0
+            # pylint: disable=too-many-function-args, no-member
             app = ConanApp(api.cache_folder, api.config.global_conf)
 
         rrevs_and_timestamps: typing.List[typing.Dict[str, str]] = []
