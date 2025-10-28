@@ -8,3 +8,4 @@ from cruizlib.interop.message import Message
 
 # pylint: disable=unsubscriptable-object
 MultiProcessingMessageQueueType = multiprocessing.Queue[Message]
+MultiProcessingStringJoinableQueueType = multiprocessing.JoinableQueue[str]
