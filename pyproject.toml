@@ -124,23 +124,38 @@ extend-select = ["TC", "TC1"] # flake8-type-checking prefer __future__ annotatio
 [tool.tox]
 skipsdist = true
 envlist = [
-    "lint",
+    "lint_conan1",
+    "lint_conan2",
     "test",
 ]
 
-[tool.tox.env.lint]
+[tool.tox.env.lint_conan1]
+deps = "conan < 2"
 commands = [
     ["pip", "install", "-e", ".[dev]"],
+    ["pip", "show", "conan"],
     ["flake8", "src/cruiz"],
     ["flake8", "src/cruizlib"],
     ["flake8", "tests"],
     ["mypy", "src/cruiz"],
     ["mypy", "--warn-return-any", "src/cruizlib"],
     ["mypy", "tests"],
-    ["pylint", "src/cruiz"],
-    ["pylint", "--enable=all", "--disable=locally-disabled,suppressed-message,fixme", "src/cruizlib"],
-    ["pip", "install", "conan<2"],
-    ["pylint", "--ignore-paths=^src/cruiz/pyside6/.*$,^src/cruiz/workers/api/v2/.*$", "src/cruiz"],  # assuming Conan1 APIs
+    ["pylint", "--ignore-paths=^src/cruiz/pyside6/.*$", "src/cruiz"],
+    ["pylint", "--ignore-paths=^src/cruizlib/workers/api/v2/.*$", "--enable=all", "--disable=locally-disabled,suppressed-message,fixme", "src/cruizlib"],
+]
+
+[tool.tox.env.lint_conan2]
+commands = [
+    ["pip", "install", "-e", ".[dev]"],
+    ["pip", "show", "conan"],
+    ["flake8", "src/cruiz"],
+    ["flake8", "src/cruizlib"],
+    ["flake8", "tests"],
+    ["mypy", "src/cruiz"],
+    ["mypy", "--warn-return-any", "src/cruizlib"],
+    ["mypy", "tests"],
+    ["pylint", "--ignore-paths=^src/cruiz/pyside6/.*$", "src/cruiz"],
+    ["pylint", "--ignore-paths=^src/cruizlib/workers/api/v1/.*$", "--enable=all", "--disable=locally-disabled,suppressed-message,fixme", "src/cruizlib"],
 ]
 
 [tool.tox.pytest]
