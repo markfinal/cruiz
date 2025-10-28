@@ -10,13 +10,13 @@ from __future__ import annotations
 
 import typing
 
-from cruizlib.interop.message import End, Message
+from cruizlib.interop.message import End
 
 if typing.TYPE_CHECKING:
-    import multiprocessing
+    from cruizlib.multiprocessingmessagequeuetype import MultiProcessingMessageQueueType
 
 
-def invoke(queue: multiprocessing.Queue[Message]) -> None:
+def invoke(queue: MultiProcessingMessageQueueType) -> None:
     """Run an arbitrary command."""
     queue.put(End())
     queue.close()

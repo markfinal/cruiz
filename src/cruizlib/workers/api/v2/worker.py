@@ -4,16 +4,18 @@
 
 from __future__ import annotations
 
-import multiprocessing
 import typing
 
 import cruizlib.runcommands
-from cruizlib.interop.message import Message, Stderr, Stdout
+from cruizlib.interop.message import Stderr, Stdout
 from cruizlib.workers.utils.stream import QueuedStreamSix
 from cruizlib.workers.utils.worker import Worker
 
+if typing.TYPE_CHECKING:
+    from cruizlib.multiprocessingmessagequeuetype import MultiProcessingMessageQueueType
 
-def _patch_conan_output_initialiser(queue: multiprocessing.Queue[Message]) -> None:
+
+def _patch_conan_output_initialiser(queue: MultiProcessingMessageQueueType) -> None:
     # this has to be the first import of ConanOutput
     from conan.api.output import ConanOutput
 
@@ -26,7 +28,7 @@ def _patch_conan_output_initialiser(queue: multiprocessing.Queue[Message]) -> No
     ConanOutput.__init__ = new_init
 
 
-def _patch_conan_run(queue: multiprocessing.Queue[Message]) -> None:
+def _patch_conan_run(queue: MultiProcessingMessageQueueType) -> None:
     # this has to be the first import of conan_run
     try:
         import conan
@@ -61,7 +63,7 @@ def _patch_conan_run(queue: multiprocessing.Queue[Message]) -> None:
         conans.util.runners.conan_run = new_conan_run
 
 
-def _do_patching(queue: multiprocessing.Queue[Message]) -> None:
+def _do_patching(queue: MultiProcessingMessageQueueType) -> None:
     _patch_conan_output_initialiser(queue)
     _patch_conan_run(queue)
 

@@ -22,11 +22,13 @@ from cruizlib.interop.message import (
     ConanLogMessage,
     End,
     Failure,
-    Message,
     Stderr,
     Stdout,
     Success,
 )
+
+if typing.TYPE_CHECKING:
+    from cruizlib.multiprocessingmessagequeuetype import MultiProcessingMessageQueueType
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +53,7 @@ class MessageReplyProcessor(QtCore.QObject):
 
     def __init__(
         self,
-        queue: multiprocessing.Queue[Message],
+        queue: MultiProcessingMessageQueueType,
     ):
         """Initialise a MessageReplyProcessor."""
         logger.debug("+=%d", id(self))

@@ -7,17 +7,16 @@ from __future__ import annotations
 import typing
 from io import StringIO
 
-from cruizlib.interop.message import Message, Stdout, Success
+from cruizlib.interop.message import Stdout, Success
 
 from . import worker
 
 if typing.TYPE_CHECKING:
-    import multiprocessing
-
     from cruizlib.interop.commandparameters import CommandParameters
+    from cruizlib.multiprocessingmessagequeuetype import MultiProcessingMessageQueueType
 
 
-def invoke(queue: multiprocessing.Queue[Message], params: CommandParameters) -> None:
+def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) -> None:
     """Run 'conan config install'."""
     with worker.ConanWorker(queue, params) as api:
         args = {}
