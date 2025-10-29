@@ -23,6 +23,7 @@ import cruizlib.workers.api as workers_api
 from cruizlib.interop.commandparameters import CommandParameters
 from cruizlib.interop.message import (
     ConanLogMessage,
+    End,
     Failure,
     Stderr,
     Stdout,
@@ -72,7 +73,7 @@ class MetaRequestConanInvocation(QtCore.QObject):
     def close(self) -> None:
         """Close all resources associated with the invocation."""
         logger.debug("(%d) closing request queue...", id(self))
-        self._request_queue.put("end")
+        self._request_queue.put(End())
         self._request_queue.join()
         self._request_queue.close()
         self._request_queue.join_thread()
