@@ -174,8 +174,9 @@ def invoke(
                     split = request.split("?")
                     request = split[0]
                     request_params = urllib.parse.parse_qs(split[1])
+                else:
+                    request_params = {}
 
-                # pylint: disable=possibly-used-before-assignment
                 result: typing.Any = None
                 if request == "remotes_list":
                     result = _interop_remote_list(api)
