@@ -166,6 +166,9 @@ testpaths = [
 [tool.pytest.ini_options]
 addopts = "--cache-clear --junitxml=pytest.xml --cov=cruizlib --cov-report=term-missing:skip-covered --cov-report=xml:pytest-coverage.xml"
 
+[tool.coverage.run]
+patch = ["subprocess"]
+
 [tool.tox.env.test]
 commands_pre = [["pip", "install", "-e", ".[dev]"]]
 commands = [
