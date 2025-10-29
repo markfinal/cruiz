@@ -49,9 +49,8 @@ def invoke(
             app = ConanApp(api.cache_folder, api.config.global_conf)
 
         prevs_and_timestamps: typing.List[typing.Dict[str, str]] = []
-        for new_ref in app.remote_manager.get_package_revisions_references(
-            pref, remote
-        ):
+        try:
+            new_ref = app.remote_manager.get_recipe_revision(pref, remote)
             prevs_and_timestamps.append(
                 {
                     "revision": new_ref.revision,
@@ -60,5 +59,20 @@ def invoke(
                     ).strftime("%Y-%m-%dT%H:%M:%S%Z"),
                 }
             )
+        except AttributeError:
+            # older than v2.22.0
+            # https://github.com/conan-io/conan/commit/aa1f137d546a0c646eaeb29d7637e88c162ead83
+            # pylint: disable=no-member
+            for new_ref in app.remote_manager.get_package_revisions_references(
+                pref, remote
+            ):
+                prevs_and_timestamps.append(
+                    {
+                        "revision": new_ref.revision,
+                        "time": datetime.datetime.utcfromtimestamp(
+                            new_ref.timestamp
+                        ).strftime("%Y-%m-%dT%H:%M:%S%Z"),
+                    }
+                )
 
         queue.put(Success(prevs_and_timestamps))
