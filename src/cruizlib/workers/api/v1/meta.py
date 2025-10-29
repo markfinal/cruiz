@@ -11,7 +11,7 @@ import urllib.parse
 
 from attrs.converters import to_bool
 
-from cruizlib.interop.message import Failure, Success
+from cruizlib.interop.message import End, Failure, Success
 from cruizlib.interop.pod import ConanHook, ConanRemote
 
 from . import worker
@@ -339,7 +339,7 @@ def invoke(
         while True:
             try:
                 request = request_queue.get()
-                if request == "end":
+                if isinstance(request, End):
                     request_queue.task_done()
                     break
                 if "?" in request:

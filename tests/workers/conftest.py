@@ -5,6 +5,7 @@ import typing
 
 import cruizlib.workers.api as workers_api
 from cruizlib.interop.commandparameters import CommandParameters
+from cruizlib.interop.message import End
 
 # pylint: disable=wrong-import-order
 import pytest
@@ -29,7 +30,7 @@ def meta() -> typing.Generator[typing.Tuple[typing.Any, typing.Any], None, None]
     yield request_queue, reply_queue
 
     # close down request
-    request_queue.put("end")
+    request_queue.put(End())
     request_queue.join()
 
     # wait for the requests to finish
