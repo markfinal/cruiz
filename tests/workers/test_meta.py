@@ -1,57 +1,52 @@
 """Test the meta worker functionality."""
 
-import multiprocessing
+from __future__ import annotations
+
+import logging
 import typing
 
-import cruizlib.workers.api as workers_api
 from cruizlib.globals import CONAN_FULL_VERSION, CONAN_MAJOR_VERSION
-from cruizlib.interop.commandparameters import CommandParameters
-from cruizlib.interop.message import Failure, Success
+from cruizlib.interop.message import (
+    ConanLogMessage,
+    Failure,
+    Message,
+    Stderr,
+    Stdout,
+    Success,
+)
 
-import pytest
-
-
-@pytest.fixture()
-def meta() -> typing.Any:
-    """Fixture for setup and teardown of meta processes and queues."""
-    params = CommandParameters("meta", workers_api.meta.invoke)
-    context = multiprocessing.get_context("spawn")
-    request_queue = context.JoinableQueue()
-    reply_queue = context.Queue()
-    process = context.Process(
-        target=params.worker,
-        args=(request_queue, reply_queue, params),
-        daemon=False,
+if typing.TYPE_CHECKING:
+    from cruizlib.multiprocessingmessagequeuetype import (
+        MultiProcessingMessageQueueType,
+        MultiProcessingStringJoinableQueueType,
     )
-    process.start()
 
-    yield request_queue, reply_queue
-
-    # close down request
-    request_queue.put("end")
-    request_queue.join()
-
-    # wait for the requests to finish
-    request_queue.close()
-    request_queue.join_thread()
-
-    # wait for the responses to finish
-    reply_queue.close()
-    reply_queue.join_thread()
-
-    # wait for the child process to finish
-    process.join()
-    process.close()
+LOGGER = logging.getLogger(__name__)
 
 
-def test_meta_get_version(meta: typing.Any) -> None:
+def _process_replies(reply_queue: MultiProcessingMessageQueueType) -> Message:
+    while True:
+        reply = reply_queue.get()
+        if isinstance(reply, (Success, Failure)):
+            return reply
+        if isinstance(reply, (ConanLogMessage, Stdout, Stderr)):
+            LOGGER.info("Message: '%s'", reply.message)
+            continue
+        raise ValueError(f"Unknown reply of type '{type(reply)}'")
+
+
+def test_meta_get_version(
+    meta: typing.Tuple[
+        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
+    ],
+) -> None:
     """Via the meta worker: Get the version."""
-    request_queue = meta[0]
-    reply_queue = meta[1]
+    request_queue, reply_queue = meta
 
     request_queue.put("version")
     request_queue.join()
-    reply = reply_queue.get()
+
+    reply = _process_replies(reply_queue)
     assert reply_queue.empty()
 
     if CONAN_MAJOR_VERSION == 1:
@@ -62,3 +57,21 @@ def test_meta_get_version(meta: typing.Any) -> None:
         assert isinstance(reply, Failure)
         assert isinstance(reply.exception, Exception)
         assert str(reply.exception).startswith("Meta command request not implemented")
+
+
+def test_meta_get_remotes_list(
+    meta: typing.Tuple[
+        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
+    ],
+) -> None:
+    """Via the meta worker: Get the remotes list."""
+    request_queue, reply_queue = meta
+
+    request_queue.put("remotes_list")
+    request_queue.join()
+
+    reply = _process_replies(reply_queue)
+    assert reply_queue.empty()
+
+    assert isinstance(reply, Success)
+    assert isinstance(reply.payload, list)
