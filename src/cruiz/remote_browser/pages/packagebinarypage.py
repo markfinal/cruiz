@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import html
 import pathlib
 import shutil
@@ -11,11 +12,18 @@ import tarfile
 import tempfile
 import typing
 
-from PySide6 import QtCore, QtGui, QtWebEngineCore, QtWidgets
+from PySide6 import QtCore, QtGui, QtWidgets
+
+try:
+    from PySide6 import QtWebEngineCore
+except ImportError:
+    print("No WebEngine available. File viewer is disabled")
 
 import cruiz.globals
 from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
-from cruiz.pyside6.remote_browser_fileview import Ui_remote_browser_fileview
+
+with contextlib.suppress(ImportError):
+    from cruiz.pyside6.remote_browser_fileview import Ui_remote_browser_fileview
 
 from .page import Page
 
