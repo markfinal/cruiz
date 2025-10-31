@@ -28,11 +28,14 @@ def _process_replies(reply_queue: MultiProcessingMessageQueueType) -> Message:
     while True:
         reply = reply_queue.get()
         if isinstance(reply, (Success, Failure)):
-            return reply
+            break
         if isinstance(reply, (ConanLogMessage, Stdout, Stderr)):
             LOGGER.info("Message: '%s'", reply.message)
             continue
         raise ValueError(f"Unknown reply of type '{type(reply)}'")
+    reply_queue.close()
+    reply_queue.join_thread()
+    return reply
 
 
 def test_meta_get_version(
