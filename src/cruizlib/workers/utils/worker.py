@@ -8,6 +8,7 @@ import contextlib
 import datetime
 import multiprocessing
 import os
+import queue
 import traceback
 import typing
 
@@ -35,7 +36,7 @@ class Worker:
     # TODO: tried to use typing.Type[CommonParameters] here but mypy didn't like it
     def __init__(
         self,
-        queue: MultiProcessingMessageQueueType,
+        reply_queue: MultiProcessingMessageQueueType,
         params: typing.Union[
             CommandParameters,
             SearchRecipesParameters,
@@ -46,7 +47,7 @@ class Worker:
         ],
     ):
         """Initialise a Worker."""
-        self._queue = queue
+        self._queue = reply_queue
         self._params = params
         if isinstance(params, CommandParameters):
             self._wall_clock = QtCore.QElapsedTimer() if params.time_commands else None
@@ -109,6 +110,7 @@ class Worker:
                 )
             )
             self._queue.put(Stdout("-" * 64))
-        self._queue.close()
-        self._queue.join_thread()
+        if not isinstance(self._queue, queue.Queue):
+            self._queue.close()
+            self._queue.join_thread()
         return True  # suppress further exception propogation
