@@ -10,5 +10,6 @@ def test_conan_install() -> None:
     """Test: running conan install."""
     context = multiprocessing.get_context("spawn")
     reply_queue = context.Queue()
-    params = CommandParameters("install", workers_api.install.invoke)
-    params.worker(reply_queue, params)
+    worker = workers_api.install.invoke
+    params = CommandParameters("install", worker)
+    worker(reply_queue, params)
