@@ -4,8 +4,10 @@ from __future__ import annotations
 
 import logging
 import multiprocessing
+import os
 import pathlib
 import queue
+import subprocess
 import threading
 import typing
 
@@ -198,3 +200,20 @@ def conan_recipe(tmp_path: pathlib.Path) -> pathlib.Path:
             conanfile.write("class TestConanFile(ConanFile):\n")
             conanfile.write("  name = 'test'\n")
     return recipe_path
+
+
+@pytest.fixture()
+def conan_local_cache(
+    tmp_path: pathlib.Path,
+) -> typing.Dict[str, str]:
+    """Refer to a temporary Conan local cache."""
+    if CONAN_MAJOR_VERSION == 1:
+        env = {"CONAN_USER_HOME": os.fspath(tmp_path)}
+    else:
+        env = {"CONAN_HOME": os.fspath(tmp_path / ".conan2")}
+
+        # Conan 2 does not create a default profile automatically
+        real_env_copy = os.environ.copy()
+        real_env_copy.update(env)
+        subprocess.run(["conan", "profile", "detect"], env=real_env_copy, check=True)
+    return env

@@ -51,10 +51,12 @@ def test_conan_install(
         queue.Queue[Message], typing.List[Message], threading.Thread
     ],
     conan_recipe: pathlib.Path,
+    conan_local_cache: typing.Dict[str, str],
 ) -> None:
     """Test: running conan install."""
     worker = workers_api.install.invoke
     params = CommandParameters("install", worker)
+    params.added_environment = conan_local_cache
     params.recipe_path = conan_recipe
     params.cwd = conan_recipe.parent
     params.profile = "default"
