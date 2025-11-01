@@ -7,26 +7,35 @@ added complexity.
 """
 
 import logging
+import pathlib
+import queue
+import threading
 import typing
 
 import cruizlib.workers.api as workers_api
-from cruizlib.interop.message import Failure, Message
-
-import pytest
+from cruizlib.interop.commandparameters import CommandParameters
+from cruizlib.interop.message import (
+    Failure,
+    Message,
+)
 
 
 LOGGER = logging.getLogger(__name__)
 
 
-@pytest.mark.parametrize(
-    "single_process_command_runner",
-    [("install", workers_api.install.invoke)],
-    indirect=["single_process_command_runner"],
-)
 def test_expected_failure(
-    single_process_command_runner: typing.List[Message],
+    reply_queue_fixture: typing.Tuple[
+        queue.Queue[Message], typing.List[Message], threading.Thread
+    ],
 ) -> None:
     """Test: running conan install incorrect setup, so has an expected failure."""
-    replies = single_process_command_runner
+    worker = workers_api.install.invoke
+    params = CommandParameters("install", worker)
+    reply_queue, replies, watcher_thread = reply_queue_fixture
+    # abusing the type system, as the API used for queue.Queue is the same
+    # as for multiprocessing.Queue
+    worker(reply_queue, params)  # type: ignore[arg-type]
+    watcher_thread.join()
+
     assert replies
     assert isinstance(replies[0], Failure)
