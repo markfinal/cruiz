@@ -194,11 +194,12 @@ def conan_recipe(tmp_path: pathlib.Path) -> pathlib.Path:
         if CONAN_MAJOR_VERSION == 1:
             conanfile.write("from conans import ConanFile\n")
             conanfile.write("class TestConanFile(ConanFile):\n")
-            conanfile.write("  name = 'test'\n")
         else:
             conanfile.write("from conan import ConanFile\n")
             conanfile.write("class TestConanFile(ConanFile):\n")
-            conanfile.write("  name = 'test'\n")
+        conanfile.write("  name = 'test'\n")
+        conanfile.write("  options = {'shared': [True, False]}\n")
+        conanfile.write("  default_options = {'shared': True}\n")
     return recipe_path
 
 
