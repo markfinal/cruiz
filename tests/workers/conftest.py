@@ -1,5 +1,7 @@
 """Common fixtures for workers."""
 
+from __future__ import annotations
+
 import contextlib
 import logging
 import multiprocessing
@@ -18,6 +20,11 @@ from cruizlib.interop.message import (
     Stdout,
     Success,
 )
+
+if typing.TYPE_CHECKING:
+    from cruizlib.multiprocessingmessagequeuetype import (
+        MultiProcessingMessageQueueType,
+    )
 
 # pylint: disable=wrong-import-order
 import pytest
@@ -115,4 +122,59 @@ def single_process_command_runner(
         # abusing the type system, as the API used for queue.Queue is the same
         # as for multiprocessing.Queue
         worker(reply_queue, params)
+    yield replies
+
+
+@pytest.fixture()
+def multi_process_command_runner(
+    request: pytest.FixtureRequest,
+) -> typing.Generator[typing.List[Message], None, None]:
+    """
+    Fixture for running a command in multiple processes.
+
+    A queue is spawned on a thread.
+    A subprocess is created to run the worker.
+    Success/Fail responses are returned from the fixture.
+    Logging responses are sent to the logger.
+    """
+
+    def _reply_watcher(
+        reply_queue: MultiProcessingMessageQueueType, replies: typing.List[Message]
+    ) -> None:
+        try:
+            while True:
+                reply = reply_queue.get()
+                if isinstance(reply, (Success, Failure)):
+                    replies.append(reply)
+                    break
+                if isinstance(reply, (ConanLogMessage, Stdout, Stderr)):
+                    LOGGER.info("Message: '%s'", reply.message)
+                    continue
+                raise ValueError(f"Unknown reply of type '{type(reply)}'")
+        finally:
+            reply_queue.close()
+            reply_queue.join_thread()
+
+    @contextlib.contextmanager
+    def _reply_queue_manager(
+        reply_queue: MultiProcessingMessageQueueType,
+    ) -> typing.Generator[typing.List[Message], None, None]:
+        replies: typing.List[Message] = []
+        watcher_thread = threading.Thread(
+            target=_reply_watcher, args=(reply_queue, replies)
+        )
+        watcher_thread.start()
+        yield replies
+        watcher_thread.join()
+
+    cmd_name, worker = request.param
+    params = CommandParameters(cmd_name, worker)
+
+    context = multiprocessing.get_context("spawn")
+    reply_queue = context.Queue()
+
+    with _reply_queue_manager(reply_queue) as replies:
+        process = context.Process(target=worker, args=(reply_queue, params))
+        process.start()
+        process.join()
     yield replies

@@ -6,8 +6,6 @@ to isolate the Conan commands, but this test shows it still works without that
 added complexity.
 """
 
-from __future__ import annotations
-
 import logging
 import typing
 
