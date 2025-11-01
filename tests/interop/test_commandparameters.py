@@ -12,6 +12,7 @@ from cruizlib.interop.commandparameters import CommandParameters
 MOCKED_VERB = "mocked_verb"
 
 
+# pylint: disable=unused-argument
 def _mocked_worker(first: typing.Any, second: typing.Any) -> None:
     pass
 
@@ -255,7 +256,7 @@ def test_cmdparams_v2_omit_test_folder() -> None:
     if cruizlib.globals.CONAN_MAJOR_VERSION == 1:
         pass
     else:
-        assert cp.to_args()[-1] == ""
+        assert not cp.to_args()[-1]
         assert cp.to_args()[-2] == "-tf"
 
 

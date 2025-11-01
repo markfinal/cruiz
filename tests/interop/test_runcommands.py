@@ -23,7 +23,7 @@ def test_run(fake_process: pytest_subprocess.FakeProcess) -> None:
     """Exercise the run function."""
     fake_process.register(["git", "branch"], stdout=["* fake_branch", "  main"])
     process = run(["git", "branch"], capture_output=True)
-    assert process.returncode == 0
+    assert not process.returncode
     assert process.stdout == f"* fake_branch{EOL}  main{EOL}"
 
 

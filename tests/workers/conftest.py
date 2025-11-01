@@ -26,7 +26,7 @@ if typing.TYPE_CHECKING:
         MultiProcessingMessageQueueType,
     )
 
-# pylint: disable=wrong-import-order
+# pylint: disable=wrong-import-order, wrong-import-position
 import pytest
 
 LOGGER = logging.getLogger(__name__)
