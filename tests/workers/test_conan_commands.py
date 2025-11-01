@@ -7,9 +7,15 @@ import typing
 
 import cruizlib.workers.api as workers_api
 from cruizlib.interop.commandparameters import CommandParameters
-from cruizlib.interop.message import Failure, Message
+
+# pylint: disable=wrong-import-order
+import pytest
+
+# pylint: disable=import-error
+import testexceptions
 
 if typing.TYPE_CHECKING:
+    from cruizlib.interop.message import Message
     from cruizlib.multiprocessingmessagequeuetype import (
         MultiProcessingMessageQueueType,
     )
@@ -26,12 +32,10 @@ def test_expected_failure(
     """Test: running conan install incorrect setup, so has an expected failure."""
     worker = workers_api.install.invoke
     params = CommandParameters("install", worker)
-    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture
+    reply_queue, _, watcher_thread, context = multiprocess_reply_queue_fixture
 
     process = context.Process(target=worker, args=(reply_queue, params))
     process.start()
     process.join()
-    watcher_thread.join()
-
-    assert replies
-    assert isinstance(replies[0], Failure)
+    with pytest.raises(testexceptions.FailedMessageTestError):
+        watcher_thread.join()

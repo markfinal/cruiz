@@ -21,6 +21,9 @@ from cruizlib.interop.message import (
     Success,
 )
 
+# pylint: disable=import-error,wrong-import-order
+import testexceptions
+
 if typing.TYPE_CHECKING:
     from cruizlib.multiprocessingmessagequeuetype import (
         MultiProcessingMessageQueueType,
@@ -77,9 +80,36 @@ def meta() -> typing.Generator[typing.Tuple[typing.Any, typing.Any], None, None]
     process.close()
 
 
+class TestableThread(threading.Thread):
+    """
+    Wrapper around `threading.Thread` that propagates exceptions.
+
+    REF: https://gist.github.com/sbrugman/59b3535ebcd5aa0e2598293cfa58b6ab
+    """
+
+    def __init__(self, *args: typing.Any, **kwargs: typing.Any) -> None:
+        """Subclassed from threading.Thread."""
+        super().__init__(*args, **kwargs)
+        self.exc: typing.Optional[BaseException] = None
+
+    def run(self) -> None:
+        """Subclassed from threading.Thread."""
+        try:
+            super().run()
+        # pylint: disable=broad-exception-caught
+        except BaseException as e:  # noqa: B036
+            self.exc = e
+
+    def join(self, timeout: typing.Optional[float] = None) -> None:
+        """Subclassed from threading.Thread."""
+        super().join(timeout)
+        if self.exc:
+            raise self.exc
+
+
 @pytest.fixture()
 def reply_queue_fixture() -> (
-    typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
+    typing.Tuple[queue.Queue[Message], typing.List[Message], TestableThread]
 ):
     """
     Fixture to create a reply queue for a worker invocation on the same process.
@@ -94,9 +124,11 @@ def reply_queue_fixture() -> (
     ) -> None:
         while True:
             reply = reply_queue.get()
-            if isinstance(reply, (Success, Failure)):
+            if isinstance(reply, Success):
                 replies.append(reply)
                 break
+            if isinstance(reply, Failure):
+                raise testexceptions.FailedMessageTestError() from reply.exception
             if isinstance(reply, (ConanLogMessage, Stdout, Stderr)):
                 LOGGER.info("Message: '%s'", reply.message)
                 continue
@@ -104,9 +136,7 @@ def reply_queue_fixture() -> (
 
     reply_queue = queue.Queue[Message]()
     replies: typing.List[Message] = []
-    watcher_thread = threading.Thread(
-        target=_reply_watcher, args=(reply_queue, replies)
-    )
+    watcher_thread = TestableThread(target=_reply_watcher, args=(reply_queue, replies))
     watcher_thread.start()
     return reply_queue, replies, watcher_thread
 
@@ -115,7 +145,7 @@ def reply_queue_fixture() -> (
 def multiprocess_reply_queue_fixture() -> typing.Tuple[
     MultiProcessingMessageQueueType,
     typing.List[Message],
-    threading.Thread,
+    TestableThread,
     typing.Any,
 ]:
     """
@@ -132,9 +162,11 @@ def multiprocess_reply_queue_fixture() -> typing.Tuple[
         try:
             while True:
                 reply = reply_queue.get()
-                if isinstance(reply, (Success, Failure)):
+                if isinstance(reply, Success):
                     replies.append(reply)
                     break
+                if isinstance(reply, Failure):
+                    raise testexceptions.FailedMessageTestError() from reply.exception
                 if isinstance(reply, (ConanLogMessage, Stdout, Stderr)):
                     LOGGER.info("Message: '%s'", reply.message)
                     continue
@@ -146,9 +178,7 @@ def multiprocess_reply_queue_fixture() -> typing.Tuple[
     context = multiprocessing.get_context("spawn")
     reply_queue = context.Queue()
     replies: typing.List[Message] = []
-    watcher_thread = threading.Thread(
-        target=_reply_watcher, args=(reply_queue, replies)
-    )
+    watcher_thread = TestableThread(target=_reply_watcher, args=(reply_queue, replies))
     watcher_thread.start()
     return reply_queue, replies, watcher_thread, context
 
