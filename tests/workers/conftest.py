@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 import multiprocessing
+import pathlib
 import queue
 import threading
 import typing
@@ -150,3 +151,14 @@ def multiprocess_reply_queue_fixture() -> typing.Tuple[
     )
     watcher_thread.start()
     return reply_queue, replies, watcher_thread, context
+
+
+@pytest.fixture()
+def conan1_recipe(tmp_path: pathlib.Path) -> pathlib.Path:
+    """Create and return path to a Conan 1 recipe."""
+    recipe_path = tmp_path / "conanfile.py"
+    with open(recipe_path, "wt", encoding="utf-8") as conanfile:
+        conanfile.write("from conans import ConanFile\n")
+        conanfile.write("class TestConanFile(ConanFile):\n")
+        conanfile.write("  name = 'test'\n")
+    return recipe_path
