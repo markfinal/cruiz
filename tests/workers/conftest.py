@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import contextlib
 import logging
 import multiprocessing
 import queue
@@ -112,16 +111,18 @@ def reply_queue_fixture() -> (
 
 
 @pytest.fixture()
-def multi_process_command_runner(
-    request: pytest.FixtureRequest,
-) -> typing.Generator[typing.List[Message], None, None]:
+def multiprocess_reply_queue_fixture() -> typing.Tuple[
+    MultiProcessingMessageQueueType,
+    typing.List[Message],
+    threading.Thread,
+    typing.Any,
+]:
     """
-    Fixture for running a command in multiple processes.
+    Fixture to create a reply queue for a worker invocation on a child process.
 
-    A queue is spawned on a thread.
-    A subprocess is created to run the worker.
-    Success/Fail responses are returned from the fixture.
-    Logging responses are sent to the logger.
+    Uses a thread for message processing.
+    The calling test must join the thread, before making any assertions on the
+    responses.
     """
 
     def _reply_watcher(
@@ -141,26 +142,11 @@ def multi_process_command_runner(
             reply_queue.close()
             reply_queue.join_thread()
 
-    @contextlib.contextmanager
-    def _reply_queue_manager(
-        reply_queue: MultiProcessingMessageQueueType,
-    ) -> typing.Generator[typing.List[Message], None, None]:
-        replies: typing.List[Message] = []
-        watcher_thread = threading.Thread(
-            target=_reply_watcher, args=(reply_queue, replies)
-        )
-        watcher_thread.start()
-        yield replies
-        watcher_thread.join()
-
-    cmd_name, worker = request.param
-    params = CommandParameters(cmd_name, worker)
-
     context = multiprocessing.get_context("spawn")
     reply_queue = context.Queue()
-
-    with _reply_queue_manager(reply_queue) as replies:
-        process = context.Process(target=worker, args=(reply_queue, params))
-        process.start()
-        process.join()
-    yield replies
+    replies: typing.List[Message] = []
+    watcher_thread = threading.Thread(
+        target=_reply_watcher, args=(reply_queue, replies)
+    )
+    watcher_thread.start()
+    return reply_queue, replies, watcher_thread, context
