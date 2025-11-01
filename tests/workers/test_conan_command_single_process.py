@@ -17,6 +17,7 @@ from cruizlib.interop.commandparameters import CommandParameters
 from cruizlib.interop.message import (
     Failure,
     Message,
+    Success,
 )
 
 
@@ -45,13 +46,13 @@ def test_conan_install(
     reply_queue_fixture: typing.Tuple[
         queue.Queue[Message], typing.List[Message], threading.Thread
     ],
-    tmp_path: pathlib.Path,
+    conan1_recipe: pathlib.Path,
 ) -> None:
     """Test: running conan install."""
     worker = workers_api.install.invoke
     params = CommandParameters("install", worker)
-    params.recipe_path = tmp_path
-    params.cwd = tmp_path
+    params.recipe_path = conan1_recipe
+    params.cwd = conan1_recipe.parent
     params.profile = "default"
     reply_queue, replies, watcher_thread = reply_queue_fixture
     # abusing the type system, as the API used for queue.Queue is the same
@@ -60,4 +61,5 @@ def test_conan_install(
     watcher_thread.join()
 
     assert replies
-    assert isinstance(replies[0], Failure)
+    assert isinstance(replies[0], Success)
+    assert (conan1_recipe.parent / "conan.lock").exists()
