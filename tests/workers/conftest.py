@@ -10,6 +10,7 @@ import threading
 import typing
 
 import cruizlib.workers.api as workers_api
+from cruizlib.globals import CONAN_MAJOR_VERSION
 from cruizlib.interop.commandparameters import CommandParameters
 from cruizlib.interop.message import (
     ConanLogMessage,
@@ -184,11 +185,16 @@ def multiprocess_reply_queue_fixture() -> typing.Tuple[
 
 
 @pytest.fixture()
-def conan1_recipe(tmp_path: pathlib.Path) -> pathlib.Path:
-    """Create and return path to a Conan 1 recipe."""
+def conan_recipe(tmp_path: pathlib.Path) -> pathlib.Path:
+    """Create and return path to a Conan recipe."""
     recipe_path = tmp_path / "conanfile.py"
     with open(recipe_path, "wt", encoding="utf-8") as conanfile:
-        conanfile.write("from conans import ConanFile\n")
-        conanfile.write("class TestConanFile(ConanFile):\n")
-        conanfile.write("  name = 'test'\n")
+        if CONAN_MAJOR_VERSION == 1:
+            conanfile.write("from conans import ConanFile\n")
+            conanfile.write("class TestConanFile(ConanFile):\n")
+            conanfile.write("  name = 'test'\n")
+        else:
+            conanfile.write("from conan import ConanFile\n")
+            conanfile.write("class TestConanFile(ConanFile):\n")
+            conanfile.write("  name = 'test'\n")
     return recipe_path
