@@ -5,7 +5,7 @@ import urllib.parse
 
 from cruizlib.interop.pod import ConanHook, ConanRemote
 
-import pytest
+import pytest  # pylint: disable=wrong-import-order
 
 
 def test_pod_hook_invariant_after_serialization() -> None:

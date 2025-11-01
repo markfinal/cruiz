@@ -7,42 +7,42 @@ from cruizlib.interop.packagenode import PackageNode
 
 def test_packagenode() -> None:
     """Test manipulating packagenodes."""
-    pkgA = PackageNode(
+    pkg_a = PackageNode(
         "PkgA", "PkgA/1.0", "1234", "ABCD", True, "InfoA", True, "LayoutA"
     )
-    pkgB = PackageNode(
+    pkg_b = PackageNode(
         "PkgB", "PkgB/2.0", "5678", "EFGH", True, "InfoB", True, "LayoutB"
     )
-    pkgC = PackageNode(
+    pkg_c = PackageNode(
         "PkgC", "PkgC/3.0", "91011", "IJKL", True, "InfoC", True, "LayoutC"
     )
 
     # C depends on B depends on A
-    pkgC.children = [pkgB]
-    pkgB.parents = [pkgC]
-    pkgB.children = [pkgA]
-    pkgA.parents = [pkgB]
+    pkg_c.children = [pkg_b]
+    pkg_b.parents = [pkg_c]
+    pkg_b.children = [pkg_a]
+    pkg_a.parents = [pkg_b]
 
     # get all the fields of the PackageNode of interest to check
-    fields = dataclasses.fields(pkgA)
+    fields = dataclasses.fields(pkg_a)
     fields = tuple(
         field for field in fields if field.name not in ("children", "parents")
     )
 
-    pkgA_s = pkgA.clone_standalone()
+    pkg_a_s = pkg_a.clone_standalone()
     for field in fields:
-        assert getattr(pkgA_s, field.name) == getattr(pkgA, field.name)
-    assert isinstance(pkgA_s.parents, list) and not pkgA_s.parents
-    assert isinstance(pkgA_s.children, list) and not pkgA_s.children
+        assert getattr(pkg_a_s, field.name) == getattr(pkg_a, field.name)
+    assert isinstance(pkg_a_s.parents, list) and not pkg_a_s.parents
+    assert isinstance(pkg_a_s.children, list) and not pkg_a_s.children
 
-    pkgB_s = pkgB.clone_standalone()
+    pkg_b_s = pkg_b.clone_standalone()
     for field in fields:
-        assert getattr(pkgB_s, field.name) == getattr(pkgB, field.name)
-    assert isinstance(pkgB_s.parents, list) and not pkgB_s.parents
-    assert isinstance(pkgB_s.children, list) and not pkgB_s.children
+        assert getattr(pkg_b_s, field.name) == getattr(pkg_b, field.name)
+    assert isinstance(pkg_b_s.parents, list) and not pkg_b_s.parents
+    assert isinstance(pkg_b_s.children, list) and not pkg_b_s.children
 
-    pkgC_s = pkgC.clone_standalone()
+    pkg_c_s = pkg_c.clone_standalone()
     for field in fields:
-        assert getattr(pkgC_s, field.name) == getattr(pkgC, field.name)
-    assert isinstance(pkgC_s.parents, list) and not pkgC_s.parents
-    assert isinstance(pkgC_s.children, list) and not pkgC_s.children
+        assert getattr(pkg_c_s, field.name) == getattr(pkg_c, field.name)
+    assert isinstance(pkg_c_s.parents, list) and not pkg_c_s.parents
+    assert isinstance(pkg_c_s.children, list) and not pkg_c_s.children

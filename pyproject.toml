@@ -142,6 +142,7 @@ commands = [
     ["mypy", "tests"],
     ["pylint", "--ignore-paths=^src/cruiz/pyside6/.*$", "src/cruiz"],
     ["pylint", "--extension-pkg-allow-list=PySide6.QtCore", "--ignore-paths=^src/cruizlib/workers/api/v2/.*$", "--enable=all", "--disable=locally-disabled,suppressed-message,fixme,duplicate-code", "src/cruizlib"],
+    ["pylint", "--enable=all", "--disable=locally-disabled,suppressed-message,fixme,duplicate-code", "tests"],
 ]
 
 [tool.tox.env.lint_conan2]
@@ -156,6 +157,7 @@ commands = [
     ["mypy", "tests"],
     ["pylint", "--ignore-paths=^src/cruiz/pyside6/.*$", "src/cruiz"],
     ["pylint", "--extension-pkg-allow-list=PySide6.QtCore", "--ignore-paths=^src/cruizlib/workers/api/v1/.*$", "--enable=all", "--disable=locally-disabled,suppressed-message,fixme,duplicate-code", "src/cruizlib"],
+    ["pylint", "--enable=all", "--disable=locally-disabled,suppressed-message,fixme,duplicate-code", "tests"],
 ]
 
 [tool.tox.pytest]
