@@ -78,16 +78,15 @@ def meta() -> typing.Generator[typing.Tuple[typing.Any, typing.Any], None, None]
 
 
 @pytest.fixture()
-def single_process_command_runner(
-    request: pytest.FixtureRequest,
-) -> typing.Generator[typing.List[Message], None, None]:
+def reply_queue_fixture() -> (
+    typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
+):
     """
-    Fixture for running a command in the current process.
+    Fixture to create a reply queue for a worker invocation on the same process.
 
-    A queue is spawned on a thread.
-    The worker is executed on the test thread.
-    Success/Fail responses are returned from the fixture.
-    Logging responses are sent to the logger.
+    Uses a thread for message processing.
+    The calling test must join the thread, before making any assertions on the
+    responses.
     """
 
     def _reply_watcher(
@@ -103,26 +102,13 @@ def single_process_command_runner(
                 continue
             raise ValueError(f"Unknown reply of type '{type(reply)}'")
 
-    @contextlib.contextmanager
-    def _reply_queue_manager(
-        reply_queue: queue.Queue[Message],
-    ) -> typing.Generator[typing.List[Message], None, None]:
-        replies: typing.List[Message] = []
-        watcher_thread = threading.Thread(
-            target=_reply_watcher, args=(reply_queue, replies)
-        )
-        watcher_thread.start()
-        yield replies
-        watcher_thread.join()
-
-    cmd_name, worker = request.param
-    params = CommandParameters(cmd_name, worker)
     reply_queue = queue.Queue[Message]()
-    with _reply_queue_manager(reply_queue) as replies:
-        # abusing the type system, as the API used for queue.Queue is the same
-        # as for multiprocessing.Queue
-        worker(reply_queue, params)
-    yield replies
+    replies: typing.List[Message] = []
+    watcher_thread = threading.Thread(
+        target=_reply_watcher, args=(reply_queue, replies)
+    )
+    watcher_thread.start()
+    return reply_queue, replies, watcher_thread
 
 
 @pytest.fixture()
