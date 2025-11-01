@@ -209,6 +209,14 @@ def conan_local_cache(
     """Refer to a temporary Conan local cache."""
     if CONAN_MAJOR_VERSION == 1:
         env = {"CONAN_USER_HOME": os.fspath(tmp_path)}
+
+        # create a dummy default profile
+        profile_dir = tmp_path / ".conan" / "profiles"
+        profile_dir.mkdir(parents=True)
+        with open(profile_dir / "default", "wt", encoding="utf-8") as profile:
+            profile.write("[settings]\n")
+            profile.write("[options]\n")
+            profile.write("[env]\n")
     else:
         env = {"CONAN_HOME": os.fspath(tmp_path / ".conan2")}
 
