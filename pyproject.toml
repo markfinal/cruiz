@@ -171,6 +171,9 @@ testpaths = [
 [tool.pytest.ini_options]
 addopts = "--cache-clear --junitxml=pytest.xml --cov=cruizlib --cov-report=term-missing:skip-covered"
 
+[tool.coverage.run]
+patch = ["subprocess"]
+
 [tool.tox.env.test-latest1]
 description = "Run pytest targeting latest Conan 1"
 commands_pre = [["pip", "install", "-qe", ".[dev]"]]
