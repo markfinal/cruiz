@@ -174,6 +174,18 @@ addopts = "--cache-clear --junitxml=pytest.xml --cov=cruizlib --cov-report=term-
 [tool.coverage.run]
 patch = ["subprocess"]
 
+[tool.tox.env.test-1_17_1]
+description = "Run pytest targeting latest Conan 1.17.1 (oldest version developed against)"
+commands_pre = [["pip", "install", "-qe", ".[dev]"]]
+deps = [
+    "conan==1.17.1",
+    "markupsafe<2.1",  # workaround for https://github.com/yaml/pyyaml/issues/724, see https://github.com/conan-io/conan/issues/10611
+]
+commands = [
+    ["pip", "show", "conan"],
+    ["pytest"],
+]
+
 [tool.tox.env.test-latest1]
 description = "Run pytest targeting latest Conan 1"
 commands_pre = [["pip", "install", "-qe", ".[dev]"]]

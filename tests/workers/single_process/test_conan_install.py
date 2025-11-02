@@ -51,7 +51,7 @@ LOGGER = logging.getLogger(__name__)
         ),
     ],
 )
-# pylint: disable=too-many-arguments, too-many-positional-arguments
+# pylint: disable=too-many-arguments, too-many-positional-arguments, too-many-branches
 def test_conan_install(
     reply_queue_fixture: typing.Tuple[
         queue.Queue[Message], typing.List[Message], threading.Thread
