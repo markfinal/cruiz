@@ -83,7 +83,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: pytest-coverage-${{ join(matrix.*, '-') }}-${{ github.event_name }}
-        path: .coverage
+        path: .coverage*
         if-no-files-found: error
         include-hidden-files: true
   report-coverage:
@@ -104,7 +104,7 @@ jobs:
         python -m pip install --upgrade pip wheel setuptools coverage
     - name: Combine Pytest coverage reports
       run: |
-        find . -name '.coverage' -maxdepth 2 -type f -exec python -m coverage combine --keep {} +
+        find . -name '.coverage*' -maxdepth 2 -type f -exec python -m coverage combine --keep {} +
         python -m coverage report --show-missing --skip-covered
         python -m coverage xml -o pytest-coverage.xml
     - name: Pytest coverage comment
