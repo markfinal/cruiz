@@ -1,4 +1,4 @@
-"""Test the Conan command functionality, using multiple processes."""
+"""Test the Conan command functionality, using multiple processes, for failure."""
 
 from __future__ import annotations
 
