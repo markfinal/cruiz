@@ -8,7 +8,6 @@ import contextlib
 import datetime
 import multiprocessing
 import os
-import queue
 import traceback
 import typing
 
@@ -110,7 +109,9 @@ class Worker:
                 )
             )
             self._queue.put(Stdout("-" * 64))
-        if not isinstance(self._queue, queue.Queue):
+        with contextlib.suppress(AttributeError):
+            # in single process tests, self._queue is not a multiprocessing.Queue
+            # and does not have these methods
             self._queue.close()
             self._queue.join_thread()
         return True  # suppress further exception propogation

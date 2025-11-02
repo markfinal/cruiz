@@ -126,10 +126,12 @@ skipsdist = true
 envlist = [
     "lint_conan1",
     "lint_conan2",
-    "test",
+    "test-latest1",
+    "test-latest2",
 ]
 
 [tool.tox.env.lint_conan1]
+description = "Run linting targeting Conan 1"
 deps = "conan < 2"
 commands = [
     ["pip", "install", "-e", ".[dev]"],
@@ -146,6 +148,7 @@ commands = [
 ]
 
 [tool.tox.env.lint_conan2]
+description = "Run linting targeting Conan 2"
 commands = [
     ["pip", "install", "-e", ".[dev]"],
     ["pip", "show", "conan"],
@@ -166,17 +169,25 @@ testpaths = [
 ]
 
 [tool.pytest.ini_options]
-addopts = "--cache-clear --junitxml=pytest.xml --cov=cruizlib --cov-report=term-missing:skip-covered --cov-report=xml:pytest-coverage.xml"
+addopts = "--cache-clear --junitxml=pytest.xml --cov=cruizlib --cov-report=term-missing:skip-covered"
 
-[tool.coverage.run]
-patch = ["subprocess"]
-
-[tool.tox.env.test]
-commands_pre = [["pip", "install", "-e", ".[dev]"]]
+[tool.tox.env.test-latest1]
+description = "Run pytest targeting latest Conan 1"
+commands_pre = [["pip", "install", "-qe", ".[dev]"]]
+deps = [
+    "conan<2"
+]
 commands = [
+    ["pip", "show", "conan"],
     ["pytest"],
-    ["pip", "install", "conan<2"],
-    ["pytest", "--cov-append"],
+]
+
+[tool.tox.env.test-latest2]
+description = "Run pytest targeting latest Conan 2"
+commands_pre = [["pip", "install", "-qe", ".[dev]"]]
+commands = [
+    ["pip", "show", "conan"],
+    ["pytest"],
 ]
 
 [tool.pylint.main]
