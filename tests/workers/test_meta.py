@@ -15,6 +15,12 @@ from cruizlib.interop.message import (
     Success,
 )
 
+# pylint: disable=wrong-import-order
+import pytest
+
+# pylint: disable=import-error,wrong-import-order
+import testexceptions
+
 if typing.TYPE_CHECKING:
     from cruizlib.multiprocessingmessagequeuetype import (
         MultiProcessingMessageQueueType,
@@ -27,8 +33,10 @@ LOGGER = logging.getLogger(__name__)
 def _process_replies(reply_queue: MultiProcessingMessageQueueType) -> Message:
     while True:
         reply = reply_queue.get()
-        if isinstance(reply, (Success, Failure)):
+        if isinstance(reply, Success):
             break
+        if isinstance(reply, Failure):
+            raise testexceptions.FailedMessageTestError() from reply.exception
         if isinstance(reply, (ConanLogMessage, Stdout, Stderr)):
             LOGGER.info("Message: '%s'", reply.message)
             continue
@@ -49,17 +57,19 @@ def test_meta_get_version(
     request_queue.put("version")
     request_queue.join()
 
-    reply = _process_replies(reply_queue)
-    assert reply_queue.empty()
-
     if CONAN_MAJOR_VERSION == 1:
+        reply = _process_replies(reply_queue)
+        assert reply_queue.empty()
         assert isinstance(reply, Success)
         assert isinstance(reply.payload, str)
         assert reply.payload == CONAN_FULL_VERSION
     else:
-        assert isinstance(reply, Failure)
-        assert isinstance(reply.exception, Exception)
-        assert str(reply.exception).startswith("Meta command request not implemented")
+        with pytest.raises(testexceptions.FailedMessageTestError) as exc_info:
+            _process_replies(reply_queue)
+        assert isinstance(exc_info.value.__cause__, Exception)
+        assert str(exc_info.value.__cause__).startswith(
+            "Meta command request not implemented"
+        )
 
 
 def test_meta_get_remotes_list(
