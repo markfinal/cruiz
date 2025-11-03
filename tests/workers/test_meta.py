@@ -41,9 +41,16 @@ def _process_replies(reply_queue: MultiProcessingMessageQueueType) -> Message:
             LOGGER.info("Message: '%s'", reply.message)
             continue
         raise ValueError(f"Unknown reply of type '{type(reply)}'")
+    return reply
+
+
+def _meta_done(
+    request_queue: MultiProcessingStringJoinableQueueType,
+    reply_queue: MultiProcessingMessageQueueType,
+) -> None:
+    request_queue.join()
     reply_queue.close()
     reply_queue.join_thread()
-    return reply
 
 
 def test_meta_get_version(
@@ -55,7 +62,6 @@ def test_meta_get_version(
     request_queue, reply_queue = meta
 
     request_queue.put("version")
-    request_queue.join()
 
     if CONAN_MAJOR_VERSION == 1:
         reply = _process_replies(reply_queue)
@@ -71,6 +77,8 @@ def test_meta_get_version(
             "Meta command request not implemented"
         )
 
+    _meta_done(request_queue, reply_queue)
+
 
 def test_meta_get_remotes_list(
     meta: typing.Tuple[
@@ -81,10 +89,11 @@ def test_meta_get_remotes_list(
     request_queue, reply_queue = meta
 
     request_queue.put("remotes_list")
-    request_queue.join()
 
     reply = _process_replies(reply_queue)
     assert reply_queue.empty()
 
     assert isinstance(reply, Success)
     assert isinstance(reply.payload, list)
+
+    _meta_done(request_queue, reply_queue)
