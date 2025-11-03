@@ -38,10 +38,37 @@ import pytest
 LOGGER = logging.getLogger(__name__)
 
 
+@pytest.fixture(name="conan_local_cache")
+def fixture_conan_local_cache(
+    tmp_path: pathlib.Path,
+) -> typing.Dict[str, str]:
+    """Refer to a temporary Conan local cache."""
+    if CONAN_MAJOR_VERSION == 1:
+        env = {"CONAN_USER_HOME": os.fspath(tmp_path)}
+
+        # create a dummy default profile
+        profile_dir = tmp_path / ".conan" / "profiles"
+        profile_dir.mkdir(parents=True)
+        with open(profile_dir / "default", "wt", encoding="utf-8") as profile:
+            profile.write("[settings]\n")
+            profile.write("[options]\n")
+            profile.write("[env]\n")
+    else:
+        env = {"CONAN_HOME": os.fspath(tmp_path / ".conan2")}
+
+        # Conan 2 does not create a default profile automatically
+        real_env_copy = os.environ.copy()
+        real_env_copy.update(env)
+        subprocess.run(["conan", "profile", "detect"], env=real_env_copy, check=True)
+    return env
+
+
 # TODO: unable to write the return type I'm interested in, as Python keeps erroring
 # see where this fixture is used for the type intented
 @pytest.fixture()
-def meta() -> typing.Generator[typing.Tuple[typing.Any, typing.Any], None, None]:
+def meta(
+    conan_local_cache: typing.Dict[str, str],
+) -> typing.Generator[typing.Tuple[typing.Any, typing.Any], None, None]:
     """
     Fixture for setup and teardown of meta processes and queues.
 
@@ -54,6 +81,7 @@ def meta() -> typing.Generator[typing.Tuple[typing.Any, typing.Any], None, None]
     Finally the subprocess is joined.
     """
     params = CommandParameters("meta", workers_api.meta.invoke)
+    params.added_environment = conan_local_cache
     context = multiprocessing.get_context("spawn")
     request_queue = context.JoinableQueue()
     reply_queue = context.Queue()
@@ -201,28 +229,3 @@ def conan_recipe(tmp_path: pathlib.Path) -> pathlib.Path:
         conanfile.write("  options = {'shared': [True, False]}\n")
         conanfile.write("  default_options = {'shared': True}\n")
     return recipe_path
-
-
-@pytest.fixture()
-def conan_local_cache(
-    tmp_path: pathlib.Path,
-) -> typing.Dict[str, str]:
-    """Refer to a temporary Conan local cache."""
-    if CONAN_MAJOR_VERSION == 1:
-        env = {"CONAN_USER_HOME": os.fspath(tmp_path)}
-
-        # create a dummy default profile
-        profile_dir = tmp_path / ".conan" / "profiles"
-        profile_dir.mkdir(parents=True)
-        with open(profile_dir / "default", "wt", encoding="utf-8") as profile:
-            profile.write("[settings]\n")
-            profile.write("[options]\n")
-            profile.write("[env]\n")
-    else:
-        env = {"CONAN_HOME": os.fspath(tmp_path / ".conan2")}
-
-        # Conan 2 does not create a default profile automatically
-        real_env_copy = os.environ.copy()
-        real_env_copy.update(env)
-        subprocess.run(["conan", "profile", "detect"], env=real_env_copy, check=True)
-    return env
