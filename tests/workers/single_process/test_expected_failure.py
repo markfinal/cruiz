@@ -38,4 +38,6 @@ def test_expected_failure(
     # as for multiprocessing.Queue
     worker(reply_queue, params)  # type: ignore[arg-type]
     with pytest.raises(testexceptions.FailedMessageTestError):
-        watcher_thread.join()
+        watcher_thread.join(timeout=5.0)
+        if watcher_thread.is_alive():
+            raise testexceptions.WatcherThreadTimeoutError()
