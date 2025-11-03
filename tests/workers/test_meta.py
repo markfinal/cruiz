@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import pathlib
 import typing
 import urllib.parse
 
@@ -139,5 +140,24 @@ def test_meta_remotes_sync(
 
     syncd_remotes = _get_remotes()
     assert len(syncd_remotes) == 2
+
+    _meta_done(request_queue, reply_queue)
+
+
+def test_meta_get_profiles_dir(
+    meta: typing.Tuple[
+        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
+    ],
+) -> None:
+    """Via the meta worker: Get the profiles directory."""
+    request_queue, reply_queue = meta
+
+    request_queue.put("profiles_dir")
+
+    reply = _process_replies(reply_queue)
+    assert reply_queue.empty()
+
+    assert isinstance(reply, Success)
+    assert isinstance(reply.payload, pathlib.Path)
 
     _meta_done(request_queue, reply_queue)
