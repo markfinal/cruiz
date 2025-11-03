@@ -11,7 +11,7 @@ import urllib.parse
 
 from attrs.converters import to_bool
 
-from cruizlib.interop.message import End, Failure, Success
+from cruizlib.interop.message import End, Failure, Stderr, Success
 from cruizlib.interop.pod import ConanHook, ConanRemote
 
 from . import worker
@@ -22,6 +22,10 @@ if typing.TYPE_CHECKING:
         MultiProcessingMessageQueueType,
         MultiProcessingStringJoinableQueueType,
     )
+
+
+class DisableRemoteUnimplementedError(Exception):
+    """Exception to identify disabling a Conan remote not yet implemented."""
 
 
 def _remotes_list(api: typing.Any) -> typing.List[ConanRemote]:
@@ -40,10 +44,18 @@ def _remotes_list(api: typing.Any) -> typing.List[ConanRemote]:
 def _remotes_sync(api: typing.Any, remotes: typing.List[str]) -> None:
     for remote in _remotes_list(api):
         api.remote_remove(remote.name)
+
+    disable_remotes_unimplemented = False
     for remote_str in remotes:
         remote = ConanRemote.from_string(remote_str)
         api.remote_add(remote.name, remote.url)
-        api.remote_set_disabled_state(remote.name, not remote.enabled)
+        try:
+            # Conan 1.19.0+
+            api.remote_set_disabled_state(remote.name, not remote.enabled)
+        except AttributeError:
+            disable_remotes_unimplemented = True
+    if disable_remotes_unimplemented:
+        raise DisableRemoteUnimplementedError()
 
 
 def _profiles_dir(api: typing.Any) -> pathlib.Path:
@@ -351,7 +363,12 @@ def invoke(
                 if request == "remotes_list":
                     result = _remotes_list(api)
                 elif request == "remotes_sync":
-                    _remotes_sync(api, request_params["remotes"])
+                    try:
+                        _remotes_sync(api, request_params["remotes"])
+                    except DisableRemoteUnimplementedError:
+                        reply_queue.put(
+                            Stderr("Disabling remotes not implemented in Conan")
+                        )
                     result = None
                 elif request == "profiles_dir":
                     result = _profiles_dir(api)  # type: ignore[assignment]
