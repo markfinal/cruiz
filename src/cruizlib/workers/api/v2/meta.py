@@ -35,11 +35,7 @@ def _interop_remote_list(api: typing.Any) -> typing.List[ConanRemote]:
 
 def _interop_remotes_sync(api: typing.Any, remotes: typing.List[str]) -> None:
     # pylint: disable=import-outside-toplevel
-    try:
-        from conan.api.model import Remote
-    except ImportError:
-        # older than v2.1.0
-        from conans.client.cache.remote_registry import Remote
+    from conan.api.model import Remote
 
     for remote in _interop_remote_list(api):
         api.remotes.remove(remote.name)
