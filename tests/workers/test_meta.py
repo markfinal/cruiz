@@ -203,3 +203,28 @@ def test_meta_get_default_profile_path(
     assert isinstance(reply.payload, str)
 
     _meta_done(request_queue, reply_queue)
+
+
+def test_meta_get_profile_meta(
+    meta: typing.Tuple[
+        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
+    ],
+    conanised_os: str,
+) -> None:
+    """Via the meta worker: Get profile meta."""
+    request_queue, reply_queue = meta
+
+    payload = {"name": "default"}
+    get_profile_meta_request = (
+        f"profile_meta?{urllib.parse.urlencode(payload, doseq=True)}"
+    )
+    request_queue.put(get_profile_meta_request)
+
+    reply = _process_replies(reply_queue)
+    _meta_done(request_queue, reply_queue)
+    assert reply_queue.empty()
+    assert isinstance(reply, Success)
+    assert isinstance(reply.payload, dict)
+    settings_meta = reply.payload["settings"]
+    assert "os" in settings_meta
+    assert settings_meta["os"] == conanised_os
