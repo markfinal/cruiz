@@ -368,3 +368,62 @@ def test_meta_get_package_export_dir(
         assert os.fspath(reply.payload).endswith(
             f".conan/data/{name}/{version}/{user}/{channel}/export"
         )
+
+
+@pytest.mark.xfail(
+    CONAN_MAJOR_VERSION == 2,
+    reason="Meta get export sources dir not implemented in Conan 2",
+)
+@pytest.mark.parametrize(
+    "pkgref,short_paths",
+    [
+        pytest.param(
+            "mypackage/1.0.0",
+            False,
+            marks=pytest.mark.xfail(
+                CONAN_FULL_VERSION == "1.17.1",
+                reason="Unexpected Conan 1.17.1 expects user and channel",
+            ),
+        ),
+        pytest.param(
+            "mypackage/1.0.0",
+            True,
+            marks=pytest.mark.xfail(
+                CONAN_FULL_VERSION == "1.17.1",
+                reason="Unexpected Conan 1.17.1 expects user and channel",
+            ),
+        ),
+        ("mypackage/1.0.0@cruiz/stable", False),
+        ("mypackage/1.0.0@cruiz/stable", True),
+    ],
+)
+def test_meta_get_package_export_sources_dir(
+    meta: typing.Tuple[
+        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
+    ],
+    pkgref: str,
+    short_paths: bool,
+) -> None:
+    """Via the meta worker: Get the export sources directory of a package."""
+    request_queue, reply_queue = meta
+
+    payload = {
+        "ref": pkgref,
+        "short_paths": short_paths,
+    }
+    get_profile_meta_request = (
+        f"package_export_sources_dir?{urllib.parse.urlencode(payload, doseq=True)}"
+    )
+    request_queue.put(get_profile_meta_request)
+
+    reply = _process_replies(reply_queue)
+    _meta_done(request_queue, reply_queue)
+    assert reply_queue.empty()
+    assert isinstance(reply, Success)
+    assert isinstance(reply.payload, str)
+
+    if CONAN_MAJOR_VERSION == 1:
+        name, version, user, channel = _pkgref_components(pkgref)
+        assert reply.payload.endswith(
+            f".conan/data/{name}/{version}/{user}/{channel}/export_source"
+        )
