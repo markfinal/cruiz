@@ -420,10 +420,10 @@ def test_meta_get_package_export_sources_dir(
     _meta_done(request_queue, reply_queue)
     assert reply_queue.empty()
     assert isinstance(reply, Success)
-    assert isinstance(reply.payload, str)
+    assert isinstance(reply.payload, pathlib.Path)
 
     if CONAN_MAJOR_VERSION == 1:
         name, version, user, channel = _pkgref_components(pkgref)
-        assert reply.payload.endswith(
+        assert os.fspath(reply.payload).endswith(
             f".conan/data/{name}/{version}/{user}/{channel}/export_source"
         )
