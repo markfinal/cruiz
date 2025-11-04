@@ -49,7 +49,7 @@ def fixture_conan_local_cache(
         # create a dummy default profile
         profile_dir = tmp_path / ".conan" / "profiles"
         profile_dir.mkdir(parents=True)
-        with open(profile_dir / "default", "wt", encoding="utf-8") as profile:
+        with (profile_dir / "default").open("wt", encoding="utf-8") as profile:
             profile.write("[settings]\n")
             profile.write("[options]\n")
             profile.write("[env]\n")
@@ -218,7 +218,7 @@ def multiprocess_reply_queue_fixture() -> typing.Tuple[
 def conan_recipe(tmp_path: pathlib.Path) -> pathlib.Path:
     """Create and return path to a Conan recipe."""
     recipe_path = tmp_path / "conanfile.py"
-    with open(recipe_path, "wt", encoding="utf-8") as conanfile:
+    with recipe_path.open("wt", encoding="utf-8") as conanfile:
         if CONAN_MAJOR_VERSION == 1:
             conanfile.write("from conans import ConanFile\n")
             conanfile.write("class TestConanFile(ConanFile):\n")

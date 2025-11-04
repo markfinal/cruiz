@@ -6,6 +6,8 @@ to isolate the Conan commands, but this test shows it still works without that
 added complexity.
 """
 
+from __future__ import annotations
+
 import logging
 import queue
 import threading
@@ -13,13 +15,15 @@ import typing
 
 import cruizlib.workers.api as workers_api
 from cruizlib.interop.commandparameters import CommandParameters
-from cruizlib.interop.message import Message  # noqa: TC002
 
 # pylint: disable=wrong-import-order
 import pytest
 
 # pylint: disable=import-error
 import testexceptions
+
+if typing.TYPE_CHECKING:
+    from cruizlib.interop.message import Message
 
 
 LOGGER = logging.getLogger(__name__)
