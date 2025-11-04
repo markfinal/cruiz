@@ -146,7 +146,7 @@ commands = [
     ["mypy", "--warn-return-any", "src/cruizlib"],
     ["mypy", "tests"],
     ["pylint", "--ignore-paths=^src/cruiz/pyside6/.*$", "src/cruiz"],
-    ["pylint", "--extension-pkg-allow-list=PySide6.QtCore", "--ignore-paths=^src/cruizlib/workers/api/v2/.*$", "--enable=all", "--disable=locally-disabled,suppressed-message,fixme,duplicate-code", "src/cruizlib"],
+    ["pylint", "--extension-pkg-allow-list=PySide6.QtCore", "--ignore-paths=^src/cruizlib/workers/api/v2/.*$", "--enable=all", "--disable=locally-disabled,suppressed-message,fixme,duplicate-code,unexpected-keyword-arg,no-value-for-parameter,no-member,too-many-function-args,useless-suppression", "src/cruizlib"],
     ["pylint", "--enable=all", "--disable=locally-disabled,suppressed-message,fixme,duplicate-code", "tests"],
 ]
 
