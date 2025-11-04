@@ -427,3 +427,24 @@ def test_meta_get_package_export_sources_dir(
         assert os.fspath(reply.payload).endswith(
             f".conan/data/{name}/{version}/{user}/{channel}/export_source"
         )
+
+
+@pytest.mark.xfail(
+    CONAN_MAJOR_VERSION == 2,
+    reason="Meta get editable list not implemented in Conan 2",
+)
+def test_meta_get_editable_list(
+    meta: typing.Tuple[
+        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
+    ],
+) -> None:
+    """Via the meta worker: Get editable list."""
+    request_queue, reply_queue = meta
+
+    request_queue.put("editable_list")
+
+    reply = _process_replies(reply_queue)
+    _meta_done(request_queue, reply_queue)
+    assert reply_queue.empty()
+    assert isinstance(reply, Success)
+    assert isinstance(reply.payload, list)
