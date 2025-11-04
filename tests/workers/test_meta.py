@@ -149,7 +149,15 @@ def test_meta_get_profiles_dir(
         MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
     ],
 ) -> None:
-    """Via the meta worker: Get the profiles directory."""
+    """
+    Via the meta worker: Get the profiles directory.
+
+    As this executes on an existing local cache, first get the existing profiles dir.
+
+    Then rename that profiles dir, and re-run the query, which will force the default
+    profile to be created. This emulates running this query referring to a local cache
+    directory that has yet to be populated.
+    """
     request_queue, reply_queue = meta
 
     request_queue.put("profiles_dir")
@@ -159,5 +167,16 @@ def test_meta_get_profiles_dir(
 
     assert isinstance(reply, Success)
     assert isinstance(reply.payload, pathlib.Path)
+
+    profile_dir = reply.payload
+    profile_dir.rename(profile_dir.parent / "_renamed_to_force_recreation")
+
+    request_queue.put("profiles_dir")
+
+    reply = _process_replies(reply_queue)
+    assert reply_queue.empty()
+
+    assert isinstance(reply, Success)
+    assert reply.payload == profile_dir
 
     _meta_done(request_queue, reply_queue)
