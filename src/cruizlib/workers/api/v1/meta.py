@@ -137,10 +137,12 @@ def _package_dir(
     return pathlib.Path(package_dir)
 
 
-def _package_export_dir(api: typing.Any, reference: str, short_paths: bool) -> str:
+def _package_export_dir(
+    api: typing.Any, reference: str, short_paths: bool
+) -> pathlib.Path:
     layout, _ = _get_package_layout(api, reference, short_paths)
     package_export_dir = layout.export()
-    return str(package_export_dir)
+    return pathlib.Path(package_export_dir)
 
 
 def _package_export_sources_dir(
