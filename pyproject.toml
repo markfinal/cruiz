@@ -217,6 +217,17 @@ commands = [
     ["pytest"],
 ]
 
+[tool.tox.env.test-2_0_14]
+description = "Run pytest targeting latest Conan 2.0.14 (oldest version developed against)"
+commands_pre = [["pip", "install", "-qe", ".[dev]"]]
+deps = [
+    "conan==2.0.14",
+]
+commands = [
+    ["pip", "show", "conan"],
+    ["pytest"],
+]
+
 [tool.tox.env.test-latest2]
 description = "Run pytest targeting latest Conan 2"
 commands_pre = [["pip", "install", "-qe", ".[dev]"]]

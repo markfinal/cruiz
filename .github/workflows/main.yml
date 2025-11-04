@@ -70,7 +70,7 @@ jobs:
       matrix:
         python-version: [ "3.9", "3.13" ]
         os: [ubuntu-latest, macos-latest, windows-latest]
-        conan-version: ["1_17_1", "latest1", "latest2"]
+        conan-version: ["1_17_1", "latest1", "2_0_14", "latest2"]
         exclude:
           # Conan loader uses 'imp' that was removed in Python 3.12
           - python-version: "3.13"
