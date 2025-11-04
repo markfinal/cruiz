@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import os
 import pathlib
 import typing
 import urllib.parse
@@ -228,3 +229,83 @@ def test_meta_get_profile_meta(
     settings_meta = reply.payload["settings"]
     assert "os" in settings_meta
     assert settings_meta["os"] == conanised_os
+
+
+@pytest.mark.xfail(
+    CONAN_MAJOR_VERSION == 2,
+    reason="Meta get default package dir not implemented in Conan 2",
+)
+@pytest.mark.parametrize(
+    "pkgref,package_id,rrev,short_paths",
+    [
+        pytest.param(
+            "mypackage/1.0.0",
+            "1234",
+            "5678",
+            False,
+            marks=pytest.mark.xfail(
+                CONAN_FULL_VERSION == "1.17.1",
+                reason="Unexpected Conan 1.17.1 expects user and channel",
+            ),
+        ),
+        pytest.param(
+            "mypackage/1.0.0",
+            "1234",
+            "5678",
+            True,
+            marks=pytest.mark.xfail(
+                CONAN_FULL_VERSION == "1.17.1",
+                reason="Unexpected Conan 1.17.1 expects user and channel",
+            ),
+        ),
+        ("mypackage/1.0.0@cruiz/stable", "1234", "5678", False),
+        ("mypackage/1.0.0@cruiz/stable", "1234", "5678", True),
+    ],
+)
+def test_meta_get_package_dir(
+    meta: typing.Tuple[
+        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
+    ],
+    pkgref: str,
+    package_id: str,
+    rrev: str,
+    short_paths: bool,
+) -> None:
+    """Via the meta worker: Get the directory of a package."""
+    request_queue, reply_queue = meta
+
+    payload = {
+        "ref": pkgref,
+        "package_id": package_id,
+        "revision": rrev,
+        "short_paths": short_paths,
+    }
+    get_profile_meta_request = (
+        f"package_dir?{urllib.parse.urlencode(payload, doseq=True)}"
+    )
+    request_queue.put(get_profile_meta_request)
+
+    reply = _process_replies(reply_queue)
+    _meta_done(request_queue, reply_queue)
+    assert reply_queue.empty()
+    assert isinstance(reply, Success)
+    assert isinstance(reply.payload, pathlib.Path)
+
+    if CONAN_MAJOR_VERSION == 1:
+
+        def _pkgref_components(
+            _pkgref: str,
+        ) -> typing.Tuple[str, str, typing.Optional[str], typing.Optional[str]]:
+            try:
+                nameversion, userchannel = _pkgref.split("@")
+                name, version = nameversion.split("/")
+                user, channel = userchannel.split("/")
+            except ValueError:
+                name, version = _pkgref.split("/")
+                user, channel = "_", "_"
+            return name, version, user, channel
+
+        name, version, user, channel = _pkgref_components(pkgref)
+        assert os.fspath(reply.payload).endswith(
+            f".conan/data/{name}/{version}/{user}/{channel}/package/{package_id}"
+        )
