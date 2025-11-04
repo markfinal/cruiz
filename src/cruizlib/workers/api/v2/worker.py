@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import typing
 
 import cruizlib.runcommands
@@ -32,10 +33,10 @@ def _patch_conan_output_initialiser(queue: MultiProcessingMessageQueueType) -> N
 def _patch_conan_run(queue: MultiProcessingMessageQueueType) -> None:
     # pylint: disable=import-outside-toplevel
     # this has to be the first import of conan_run
-    try:
-        import conan
-    except ImportError:
-        # older than Conan 2.17.0
+    import conan
+
+    with contextlib.suppress(ImportError):
+        # older than Conan 2.17.0 needs an additional import
         import conans
 
     # entirely replacing the vanilla conan_run, because it uses subprocess communicate
