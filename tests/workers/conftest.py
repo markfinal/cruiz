@@ -8,7 +8,6 @@ import os
 import pathlib
 import platform
 import queue
-import subprocess
 import threading
 import typing
 
@@ -55,22 +54,18 @@ def fixture_conan_local_cache(
     """Refer to a temporary Conan local cache."""
     if CONAN_MAJOR_VERSION == 1:
         env = {"CONAN_USER_HOME": os.fspath(tmp_path)}
-
-        # create a dummy default profile
         profile_dir = tmp_path / ".conan" / "profiles"
-        profile_dir.mkdir(parents=True)
-        with (profile_dir / "default").open("wt", encoding="utf-8") as profile:
-            profile.write("[settings]\n")
-            profile.write(f"os={conanised_os}\n")
-            profile.write("[options]\n")
-            profile.write("[env]\n")
     else:
         env = {"CONAN_HOME": os.fspath(tmp_path / ".conan2")}
+        profile_dir = tmp_path / ".conan2" / "profiles"
 
-        # Conan 2 does not create a default profile automatically
-        real_env_copy = os.environ.copy()
-        real_env_copy.update(env)
-        subprocess.run(["conan", "profile", "detect"], env=real_env_copy, check=True)
+    # create a dummy default profile
+    profile_dir.mkdir(parents=True)
+    with (profile_dir / "default").open("wt", encoding="utf-8") as profile:
+        profile.write("[settings]\n")
+        profile.write(f"os={conanised_os}\n")
+        profile.write("[options]\n")
+
     return env
 
 
