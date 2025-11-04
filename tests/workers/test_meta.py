@@ -180,3 +180,26 @@ def test_meta_get_profiles_dir(
     assert reply.payload == profile_dir
 
     _meta_done(request_queue, reply_queue)
+
+
+@pytest.mark.xfail(
+    CONAN_MAJOR_VERSION == 2,
+    reason="Meta get default profile path not implemented in Conan 2",
+)
+def test_meta_get_default_profile_path(
+    meta: typing.Tuple[
+        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
+    ],
+) -> None:
+    """Via the meta worker: Get the default profile path."""
+    request_queue, reply_queue = meta
+
+    request_queue.put("default_profile_path")
+
+    reply = _process_replies(reply_queue)
+    assert reply_queue.empty()
+
+    assert isinstance(reply, Success)
+    assert isinstance(reply.payload, str)
+
+    _meta_done(request_queue, reply_queue)
