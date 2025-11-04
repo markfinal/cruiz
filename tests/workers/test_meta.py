@@ -246,7 +246,7 @@ def _pkgref_components(
 
 @pytest.mark.xfail(
     CONAN_MAJOR_VERSION == 2,
-    reason="Meta get default package dir not implemented in Conan 2",
+    reason="Meta get package dir not implemented in Conan 2",
 )
 @pytest.mark.parametrize(
     "pkgref,package_id,rrev,short_paths",
@@ -313,7 +313,7 @@ def test_meta_get_package_dir(
 
 @pytest.mark.xfail(
     CONAN_MAJOR_VERSION == 2,
-    reason="Meta get default package dir not implemented in Conan 2",
+    reason="Meta get package export dir not implemented in Conan 2",
 )
 @pytest.mark.parametrize(
     "pkgref,short_paths",
