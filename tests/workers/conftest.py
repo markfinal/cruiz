@@ -6,6 +6,7 @@ import logging
 import multiprocessing
 import os
 import pathlib
+import platform
 import queue
 import subprocess
 import threading
@@ -38,9 +39,18 @@ import pytest
 LOGGER = logging.getLogger(__name__)
 
 
+@pytest.fixture(name="conanised_os")
+def fixture_connanised_os() -> str:
+    """Return the Conan terminology for the current OS."""
+    plat = platform.system()
+    if plat == "Darwin":
+        return "Macos"
+    return plat
+
+
 @pytest.fixture(name="conan_local_cache")
 def fixture_conan_local_cache(
-    tmp_path: pathlib.Path,
+    tmp_path: pathlib.Path, conanised_os: str
 ) -> typing.Dict[str, str]:
     """Refer to a temporary Conan local cache."""
     if CONAN_MAJOR_VERSION == 1:
@@ -51,6 +61,7 @@ def fixture_conan_local_cache(
         profile_dir.mkdir(parents=True)
         with (profile_dir / "default").open("wt", encoding="utf-8") as profile:
             profile.write("[settings]\n")
+            profile.write(f"os={conanised_os}\n")
             profile.write("[options]\n")
             profile.write("[env]\n")
     else:
