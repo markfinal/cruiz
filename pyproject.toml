@@ -130,11 +130,31 @@ envlist = [
     "test-latest2",
 ]
 
+[tool.tox.env.lint_conan1_17_1]
+description = "Run linting targeting Conan 1.17.1"
+commands_pre = [["pip", "install", "-qe", ".[dev]"]]
+deps = [
+    "conan==1.17.1",
+    "markupsafe<2.1",  # workaround for https://github.com/yaml/pyyaml/issues/724, see https://github.com/conan-io/conan/issues/10611
+]
+commands = [
+    ["pip", "show", "conan"],
+    ["flake8", "src/cruiz"],
+    ["flake8", "src/cruizlib"],
+    ["flake8", "tests"],
+    ["mypy", "src/cruiz"],
+    ["mypy", "--warn-return-any", "src/cruizlib"],
+    ["mypy", "tests"],
+    ["pylint", "--ignore-paths=^src/cruiz/pyside6/.*$", "src/cruiz"],
+    ["pylint", "--extension-pkg-allow-list=PySide6.QtCore", "--ignore-paths=^src/cruizlib/workers/api/v2/.*$", "--enable=all", "--disable=locally-disabled,suppressed-message,fixme,duplicate-code", "src/cruizlib"],
+    ["pylint", "--enable=all", "--disable=locally-disabled,suppressed-message,fixme,duplicate-code", "tests"],
+]
+
 [tool.tox.env.lint_conan1]
 description = "Run linting targeting Conan 1"
+commands_pre = [["pip", "install", "-qe", ".[dev]"]]
 deps = "conan < 2"
 commands = [
-    ["pip", "install", "-e", ".[dev]"],
     ["pip", "show", "conan"],
     ["flake8", "src/cruiz"],
     ["flake8", "src/cruizlib"],
@@ -149,8 +169,8 @@ commands = [
 
 [tool.tox.env.lint_conan2]
 description = "Run linting targeting Conan 2"
+commands_pre = [["pip", "install", "-qe", ".[dev]"]]
 commands = [
-    ["pip", "install", "-e", ".[dev]"],
     ["pip", "show", "conan"],
     ["flake8", "src/cruiz"],
     ["flake8", "src/cruizlib"],
