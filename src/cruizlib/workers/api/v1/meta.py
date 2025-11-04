@@ -147,10 +147,10 @@ def _package_export_dir(
 
 def _package_export_sources_dir(
     api: typing.Any, reference: str, short_paths: bool
-) -> str:
+) -> pathlib.Path:
     layout, _ = _get_package_layout(api, reference, short_paths)
     package_export_sources_dir = layout.export_sources()
-    return str(package_export_sources_dir)
+    return pathlib.Path(package_export_sources_dir)
 
 
 def _editable_list(api: typing.Any) -> typing.List[str]:
