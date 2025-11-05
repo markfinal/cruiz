@@ -200,6 +200,7 @@ commands_pre = [["pip", "install", "-qe", ".[dev]"]]
 deps = [
     "conan==1.17.1",
     "markupsafe<2.1",  # workaround for https://github.com/yaml/pyyaml/issues/724, see https://github.com/conan-io/conan/issues/10611
+    "pyyaml==5.3.1",  # only seem to need this locally
 ]
 commands = [
     ["pip", "show", "conan"],
