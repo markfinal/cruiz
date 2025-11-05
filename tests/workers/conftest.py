@@ -220,8 +220,44 @@ def multiprocess_reply_queue_fixture() -> typing.Tuple[
     return reply_queue, replies, watcher_thread, context
 
 
+@pytest.fixture(name="conan_recipe_name_invalid")
+def fixture_conan_recipe_name_invalid() -> str:
+    """Return an invalid recipe name."""
+    return "pkg_does_not_exist"
+
+
+@pytest.fixture(name="conan_recipe_name")
+def fixture_conan_recipe_name() -> str:
+    """Return the name of the conan recipe to use."""
+    return "test"
+
+
+@pytest.fixture(name="conan_recipe_version")
+def fixture_conan_recipe_version() -> str:
+    """Return the version of the conan recipe to use."""
+    return "3.4.5"
+
+
+@pytest.fixture(name="conan_recipe_pkgref")
+def fixture_conan_recipe_pkgref(
+    conan_recipe_name: str, conan_recipe_version: str
+) -> str:
+    """Return the package reference generated from the recipe."""
+    return f"{conan_recipe_name}/{conan_recipe_version}"
+
+
+@pytest.fixture(name="conan_recipe_pkgref_namespaced")
+def fixture_conan_recipe_pkgref_namespaced(
+    conan_recipe_name: str, conan_recipe_version: str
+) -> str:
+    """Return the package reference generated from the recipe with a user/channel."""
+    return f"{conan_recipe_name}/{conan_recipe_version}@cruiz/stable"
+
+
 @pytest.fixture()
-def conan_recipe(tmp_path: pathlib.Path) -> pathlib.Path:
+def conan_recipe(
+    tmp_path: pathlib.Path, conan_recipe_name: str, conan_recipe_version: str
+) -> pathlib.Path:
     """Create and return path to a Conan recipe."""
     recipe_path = tmp_path / "conanfile.py"
     with recipe_path.open("wt", encoding="utf-8") as conanfile:
@@ -231,7 +267,14 @@ def conan_recipe(tmp_path: pathlib.Path) -> pathlib.Path:
         else:
             conanfile.write("from conan import ConanFile\n")
             conanfile.write("class TestConanFile(ConanFile):\n")
-        conanfile.write("  name = 'test'\n")
+        conanfile.write(f"  name = '{conan_recipe_name}'\n")
+        conanfile.write(f"  version = '{conan_recipe_version}'\n")
         conanfile.write("  options = {'shared': [True, False]}\n")
         conanfile.write("  default_options = {'shared': True}\n")
     return recipe_path
+
+
+@pytest.fixture()
+def conan_recipe_invalid(tmp_path: pathlib.Path) -> pathlib.Path:
+    """Return an invalid path to a recipe."""
+    return tmp_path / "does_not_exist.py"

@@ -159,12 +159,34 @@ def _editable_list(api: typing.Any) -> typing.List[str]:
 
 
 def _editable_add(api: typing.Any, ref: str, path: str) -> typing.Any:
-    result = api.editable_add(
-        path,
-        ref,
-        None,  # standard layout - use recipe dir to write package to
-        None,  # cwd, fine to be None as the absolute path to the recipe is provided
-    )
+    try:
+        # >= 1.46.0: def editable_add(self, path, reference, layout, output_folder, cwd)
+        result = api.editable_add(
+            path,
+            ref,
+            None,  # standard layout - use recipe dir to write package to
+            None,  # output folder
+            None,  # cwd, fine to be None as the absolute path to the recipe is used
+        )
+    except TypeError:
+        try:
+            # >= 1.45.0: def editable_add(self, path, reference, layout, source_folder, output_folder, cwd)  # noqa; E501, pylint: disable=line-too-long
+            result = api.editable_add(
+                path,
+                ref,
+                None,  # standard layout - use recipe dir to write package to
+                None,  # source folder
+                None,  # output folder
+                None,  # cwd, fine to be None as the absolute path to the recipe is used
+            )
+        except TypeError:
+            # >= 1.13.0: def editable_add(self, path, reference, layout, cwd)
+            result = api.editable_add(
+                path,
+                ref,
+                None,  # standard layout - use recipe dir to write package to
+                None,  # cwd, fine to be None as the absolute path to the recipe is used
+            )
     return result
 
 
