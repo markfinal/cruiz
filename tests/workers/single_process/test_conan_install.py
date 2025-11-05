@@ -34,7 +34,7 @@ LOGGER = logging.getLogger(__name__)
     "arg,value",
     [
         (None, None),
-        ("version", "1.0"),
+        ("version", "conan_recipe_version"),
         ("install_folder", "install"),
         ("options", {"shared": "True"}),
         (("user", "channel"), ("user1", "channel1")),
@@ -51,7 +51,7 @@ LOGGER = logging.getLogger(__name__)
         ),
     ],
 )
-# pylint: disable=too-many-arguments, too-many-positional-arguments, too-many-branches
+# pylint: disable=too-many-arguments, too-many-positional-arguments, too-many-branches, too-many-locals  # noqa: E501
 def test_conan_install(
     reply_queue_fixture: typing.Tuple[
         queue.Queue[Message], typing.List[Message], threading.Thread
@@ -61,6 +61,7 @@ def test_conan_install(
     tmp_path: pathlib.Path,
     arg: typing.Optional[str],
     value: typing.Union[typing.Optional[str], typing.List[str], typing.Dict[str, str]],
+    request: pytest.FixtureRequest,
 ) -> None:
     """Test: running conan install."""
     worker = workers_api.install.invoke
@@ -82,7 +83,12 @@ def test_conan_install(
                 assert isinstance(value, str)
                 params.install_folder = tmp_path / value
             else:
-                setattr(params, arg, value)
+                assert isinstance(value, str)
+                try:
+                    true_value = request.getfixturevalue(value)
+                except pytest.FixtureLookupError:
+                    true_value = value
+                setattr(params, arg, true_value)
         else:
             assert isinstance(arg, tuple)
             for index, key in enumerate(arg):
