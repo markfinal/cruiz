@@ -7,6 +7,7 @@ import os
 import pathlib
 import typing
 import urllib.parse
+from contextlib import nullcontext as does_not_raise
 
 from cruizlib.globals import CONAN_FULL_VERSION, CONAN_MAJOR_VERSION
 from cruizlib.interop.message import (
@@ -448,3 +449,64 @@ def test_meta_get_editable_list(
     assert reply_queue.empty()
     assert isinstance(reply, Success)
     assert isinstance(reply.payload, list)
+
+
+@pytest.mark.xfail(
+    CONAN_MAJOR_VERSION == 2,
+    reason="Meta editable add not implemented in Conan 2",
+)
+@pytest.mark.parametrize(
+    "pkgref_fixture,path_fixture,expectation",
+    [
+        pytest.param(
+            "conan_recipe_pkgref_namespaced",
+            "conan_recipe_invalid",
+            pytest.raises(testexceptions.FailedMessageTestError),
+            marks=pytest.mark.xfail(
+                CONAN_FULL_VERSION == "1.17.1",
+                reason="Unexpected Conan 1.17.1 expects user and channel",
+            ),
+        ),
+        (
+            "conan_recipe_pkgref_namespaced",
+            "conan_recipe_invalid",
+            pytest.raises(testexceptions.FailedMessageTestError),
+        ),
+        (
+            "conan_recipe_pkgref_namespaced",
+            "conan_recipe",
+            does_not_raise(),
+        ),
+        (
+            "conan_recipe_pkgref_namespaced",
+            "conan_recipe_name_invalid",
+            pytest.raises(testexceptions.FailedMessageTestError),
+        ),
+    ],
+)
+def test_meta_editable_add(
+    meta: typing.Tuple[
+        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
+    ],
+    pkgref_fixture: str,
+    path_fixture: str,
+    expectation: typing.Iterator[None],
+    request: pytest.FixtureRequest,
+) -> None:
+    """Via the meta worker: Editable add."""
+    request_queue, reply_queue = meta
+
+    payload = {
+        "ref": request.getfixturevalue(pkgref_fixture),
+        "path": request.getfixturevalue(path_fixture),
+    }
+    meta_request = f"editable_add?{urllib.parse.urlencode(payload, doseq=True)}"
+    request_queue.put(meta_request)
+
+    # for nullcontext warning, see https://github.com/python/mypy/issues/10109
+    with expectation:  # type: ignore[attr-defined]
+        reply = _process_replies(reply_queue)
+        _meta_done(request_queue, reply_queue)
+        assert reply_queue.empty()
+        assert isinstance(reply, Success)
+        assert reply.payload is None
