@@ -278,3 +278,18 @@ def conan_recipe(
 def conan_recipe_invalid(tmp_path: pathlib.Path) -> pathlib.Path:
     """Return an invalid path to a recipe."""
     return tmp_path / "does_not_exist.py"
+
+
+@pytest.fixture(name="_installed_hook")
+def fixture_installed_hook(conan_local_cache: typing.Dict[str, str]) -> pathlib.Path:
+    """Fixture that installs a hook into the local cache."""
+    if CONAN_MAJOR_VERSION == 1:
+        conan_local_cache_dir = pathlib.Path(conan_local_cache["CONAN_USER_HOME"])
+    else:
+        conan_local_cache_dir = pathlib.Path(conan_local_cache["CONAN_HOME"])
+
+    hook_path = conan_local_cache_dir / "hooks" / "my_hook.py"
+    hook_path.parent.mkdir(parents=True)
+    with hook_path.open("wt", encoding="utf-8") as hook_file:
+        hook_file.write("# a hook\n")
+    return hook_path

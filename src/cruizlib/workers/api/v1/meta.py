@@ -221,12 +221,7 @@ def _enabled_hooks(api: typing.Any) -> bool:
 
 
 def _available_hooks(api: typing.Any) -> typing.List[pathlib.Path]:
-    try:
-        # conan 1.18+
-        hooks_dir = pathlib.Path(api.app.cache.hooks_path)
-    except AttributeError:
-        # pylint: disable=protected-access
-        hooks_dir = pathlib.Path(api._cache.hooks_path)
+    hooks_dir = pathlib.Path(_hook_path(api))
     if not hooks_dir or not hooks_dir.is_dir():
         return []
     hook_files: typing.List[pathlib.Path] = []
