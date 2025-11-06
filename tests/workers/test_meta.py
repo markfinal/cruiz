@@ -587,6 +587,33 @@ def test_meta_editable_remove(
     _meta_done(request_queue, reply_queue)
 
 
+def test_meta_inspect_recipe(
+    meta: typing.Tuple[
+        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
+    ],
+    conan_recipe: str,
+) -> None:
+    """Via the meta worker: Inspect a recipe."""
+    request_queue, reply_queue = meta
+
+    payload = {
+        "path": conan_recipe,
+    }
+    meta_request = f"inspect_recipe?{urllib.parse.urlencode(payload, doseq=True)}"
+    request_queue.put(meta_request)
+
+    reply = _process_replies(reply_queue)
+    _meta_done(request_queue, reply_queue)
+
+    assert reply_queue.empty()
+    assert isinstance(reply, Success)
+    assert isinstance(reply.payload, dict)
+    assert "name" in reply.payload
+    assert "version" in reply.payload
+    assert "options" in reply.payload
+    assert "default_options" in reply.payload
+
+
 @pytest.mark.xfail(
     CONAN_MAJOR_VERSION == 2,
     reason="Meta get hook path not implemented in Conan 2",
