@@ -585,3 +585,25 @@ def test_meta_editable_remove(
     assert reply.payload == expectation
 
     _meta_done(request_queue, reply_queue)
+
+
+@pytest.mark.xfail(
+    CONAN_MAJOR_VERSION == 2,
+    reason="Meta get hook path not implemented in Conan 2",
+)
+def test_meta_get_hook_path(
+    meta: typing.Tuple[
+        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
+    ],
+) -> None:
+    """Via the meta worker: Get the hook path."""
+    request_queue, reply_queue = meta
+
+    request_queue.put("hook_path")
+
+    reply = _process_replies(reply_queue)
+    _meta_done(request_queue, reply_queue)
+
+    assert reply_queue.empty()
+    assert isinstance(reply, Success)
+    assert isinstance(reply.payload, str)
