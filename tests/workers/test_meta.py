@@ -656,3 +656,26 @@ def test_meta_enabled_hooks(
     assert reply_queue.empty()
     assert isinstance(reply, Success)
     assert isinstance(reply.payload, bool)
+
+
+@pytest.mark.xfail(
+    CONAN_MAJOR_VERSION == 2,
+    reason="Meta available hooks not implemented in Conan 2",
+)
+def test_meta_available_hooks(
+    meta: typing.Tuple[
+        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
+    ],
+    _installed_hook: pathlib.Path,
+) -> None:
+    """Via the meta worker: Available hooks."""
+    request_queue, reply_queue = meta
+
+    request_queue.put("available_hooks")
+
+    reply = _process_replies(reply_queue)
+    _meta_done(request_queue, reply_queue)
+
+    assert reply_queue.empty()
+    assert isinstance(reply, Success)
+    assert isinstance(reply.payload, list)
