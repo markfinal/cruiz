@@ -189,9 +189,9 @@ def _editable_add(api: typing.Any, ref: str, path: str) -> None:
             )
 
 
-def _editable_remove(api: typing.Any, ref: str) -> typing.Any:
+def _editable_remove(api: typing.Any, ref: str) -> bool:
     result = api.editable_remove(ref)
-    return result
+    return bool(result)
 
 
 def _inspect_recipe(api: typing.Any, recipe_path: str) -> typing.Dict[str, typing.Any]:
@@ -431,7 +431,7 @@ def invoke(
                     )
                     result = None
                 elif request == "editable_remove":
-                    result = _editable_remove(api, request_params["ref"][0])
+                    result = _editable_remove(api, request_params["ref"][0])  # type: ignore[assignment]  # noqa: E501  # pylint: disable=line-too-long
                 elif request == "inspect_recipe":
                     result = _inspect_recipe(
                         api, request_params["path"][0]
