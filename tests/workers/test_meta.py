@@ -510,3 +510,78 @@ def test_meta_editable_add(
         assert reply_queue.empty()
         assert isinstance(reply, Success)
         assert reply.payload is None
+
+
+@pytest.mark.xfail(
+    CONAN_MAJOR_VERSION == 2,
+    reason="Meta editable remove not implemented in Conan 2",
+)
+@pytest.mark.parametrize(
+    "pkgref_to_add_fixture,pkgref_to_remove_fixture,path_fixture,expectation",
+    [
+        (
+            "conan_recipe_pkgref_namespaced",
+            "conan_recipe_pkgref_namespaced",
+            "conan_recipe",
+            True,
+        ),
+        (
+            None,
+            "conan_recipe_pkgref_namespaced",
+            None,
+            False,
+        ),
+        pytest.param(
+            "conan_recipe_pkgref_namespaced",
+            "conan_recipe_pkgref",
+            "conan_recipe",
+            False,
+            marks=pytest.mark.xfail(
+                CONAN_FULL_VERSION == "1.17.1",
+                reason="Unexpected Conan 1.17.1 expects user and channel",
+            ),
+        ),
+    ],
+)
+# pylint: disable=too-many-arguments,too-many-positional-arguments
+def test_meta_editable_remove(
+    meta: typing.Tuple[
+        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
+    ],
+    pkgref_to_add_fixture: typing.Optional[str],
+    pkgref_to_remove_fixture: str,
+    path_fixture: str,
+    expectation: bool,
+    request: pytest.FixtureRequest,
+) -> None:
+    """Via the meta worker: Editable remove."""
+    request_queue, reply_queue = meta
+
+    # first add an editable, if provided
+    if pkgref_to_add_fixture:
+        pkgref_to_add = request.getfixturevalue(pkgref_to_add_fixture)
+        payload = {
+            "ref": pkgref_to_add,
+            "path": request.getfixturevalue(path_fixture),
+        }
+        meta_request = f"editable_add?{urllib.parse.urlencode(payload, doseq=True)}"
+        request_queue.put(meta_request)
+
+        reply = _process_replies(reply_queue)
+        assert reply_queue.empty()
+        assert isinstance(reply, Success)
+        assert reply.payload is None
+
+    payload = {
+        "ref": request.getfixturevalue(pkgref_to_remove_fixture),
+    }
+    meta_request = f"editable_remove?{urllib.parse.urlencode(payload, doseq=True)}"
+    request_queue.put(meta_request)
+
+    reply = _process_replies(reply_queue)
+    assert reply_queue.empty()
+    assert isinstance(reply, Success)
+    assert isinstance(reply.payload, bool)
+    assert reply.payload == expectation
+
+    _meta_done(request_queue, reply_queue)
