@@ -679,3 +679,4 @@ def test_meta_available_hooks(
     assert reply_queue.empty()
     assert isinstance(reply, Success)
     assert isinstance(reply.payload, list)
+    assert len(reply.payload) > 0

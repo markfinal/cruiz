@@ -75,15 +75,29 @@ def fixture_connanised_os() -> str:
 def fixture_conan_local_cache(
     tmp_path: pathlib.Path, conanised_os: str
 ) -> typing.Dict[str, str]:
-    """Refer to a temporary Conan local cache."""
+    """
+    Refer to a temporary Conan local cache.
+
+    Environment variables are set for Conan to pick up.
+    As these differ between Conan 1 and Conan 2, an additional test specific environemnt
+    variable is set with the _true_ local cache directory for tests to use,
+    _REAL_CONAN_LOCAL_CACHE_DIR.
+    """
     if CONAN_MAJOR_VERSION == 1:
-        env = {"CONAN_USER_HOME": os.fspath(tmp_path)}
-        profile_dir = tmp_path / ".conan" / "profiles"
+        local_cache_dir = tmp_path / ".conan"
+        env = {
+            "CONAN_USER_HOME": os.fspath(tmp_path),
+            "_REAL_CONAN_LOCAL_CACHE_DIR": os.fspath(local_cache_dir),
+        }
     else:
-        env = {"CONAN_HOME": os.fspath(tmp_path / ".conan2")}
-        profile_dir = tmp_path / ".conan2" / "profiles"
+        local_cache_dir = tmp_path / ".conan2"
+        env = {
+            "CONAN_HOME": os.fspath(local_cache_dir),
+            "_REAL_CONAN_LOCAL_CACHE_DIR": os.fspath(local_cache_dir),
+        }
 
     # create a dummy default profile
+    profile_dir = local_cache_dir / "profiles"
     profile_dir.mkdir(parents=True)
     with (profile_dir / "default").open("wt", encoding="utf-8") as profile:
         profile.write("[settings]\n")
@@ -307,12 +321,11 @@ def conan_recipe_invalid(tmp_path: pathlib.Path) -> pathlib.Path:
 @pytest.fixture(name="_installed_hook")
 def fixture_installed_hook(conan_local_cache: typing.Dict[str, str]) -> pathlib.Path:
     """Fixture that installs a hook into the local cache."""
-    if CONAN_MAJOR_VERSION == 1:
-        conan_local_cache_dir = pathlib.Path(conan_local_cache["CONAN_USER_HOME"])
-    else:
-        conan_local_cache_dir = pathlib.Path(conan_local_cache["CONAN_HOME"])
-
-    hook_path = conan_local_cache_dir / "hooks" / "my_hook.py"
+    hook_path = (
+        pathlib.Path(conan_local_cache["_REAL_CONAN_LOCAL_CACHE_DIR"])
+        / "hooks"
+        / "my_hook.py"
+    )
     hook_path.parent.mkdir(parents=True)
     with hook_path.open("wt", encoding="utf-8") as hook_file:
         hook_file.write("# a hook\n")
