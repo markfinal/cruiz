@@ -273,11 +273,14 @@ def _hooks_sync(api: typing.Any, hook_changes: typing.List[str]) -> None:
         else:
             if _has_config_option(api, "hooks", os.fspath(hook.path)):
                 _rm_config(api, hook_config)
-            else:
-                no_ext_path = hook.path.stem
-                hook_config = f"hooks.{no_ext_path}"
-                assert _has_config_option(api, "hooks", no_ext_path)
+            elif _has_config_option(api, "hooks", hook.path.stem):
+                # this is for non-cruiz managed hooks that might have been added
+                # without a .py extension
+                hook_config = f"hooks.{hook.path.stem}"
                 _rm_config(api, hook_config)
+            else:
+                # disabling a hook that has never been enabled
+                pass
 
 
 def _enable_hook(api: typing.Any, hook: str, hook_enabled: bool) -> None:

@@ -748,3 +748,64 @@ def test_meta_get_hooks(
     assert len(reply.payload) == expected_hook_count
     if expected_hook_count > 0:
         assert isinstance(reply.payload[0], ConanHook)
+
+
+@pytest.mark.xfail(
+    CONAN_MAJOR_VERSION == 2,
+    reason="Meta sync hooks not implemented in Conan 2",
+)
+@pytest.mark.parametrize(
+    "hook_path, hook_enabled",
+    [
+        ("enabled.py", True),
+        ("disabled.py", False),
+    ],
+)
+def test_meta_sync_hooks(
+    meta: typing.Tuple[
+        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
+    ],
+    hook_path: str,
+    hook_enabled: bool,
+    conan_local_cache: typing.Dict[str, str],
+) -> None:
+    """
+    Via the meta worker: Sync hooks.
+
+    When a hook is enabled, it is subsequently disabled.
+    Disabling a non-existent hook is a no-op path.
+
+    TODO: Missing coverage for Conan config hooks managing a hook without a .py
+    extension in the config but with a .py extension on disk
+    """
+    request_queue, reply_queue = meta
+
+    real_hook_path = (
+        pathlib.Path(conan_local_cache["_REAL_CONAN_LOCAL_CACHE_DIR"])
+        / "hooks"
+        / hook_path
+    )
+    hook = ConanHook(real_hook_path, hook_enabled)
+    payload = {"hooks": [hook]}
+    hooks_sync_request = f"hooks_sync?{urllib.parse.urlencode(payload, doseq=True)}"
+    request_queue.put(hooks_sync_request)
+
+    reply = _process_replies(reply_queue)
+
+    assert reply_queue.empty()
+    assert isinstance(reply, Success)
+    assert reply.payload is None
+
+    if hook.enabled:
+        hook = ConanHook(hook.path, False)
+
+    payload = {"hooks": [hook]}
+    hooks_sync_request = f"hooks_sync?{urllib.parse.urlencode(payload, doseq=True)}"
+    request_queue.put(hooks_sync_request)
+
+    reply = _process_replies(reply_queue)
+    _meta_done(request_queue, reply_queue)
+
+    assert reply_queue.empty()
+    assert isinstance(reply, Success)
+    assert reply.payload is None
