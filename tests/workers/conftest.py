@@ -38,6 +38,30 @@ import pytest
 LOGGER = logging.getLogger(__name__)
 
 
+@pytest.fixture(scope="session", autouse=True)
+def _do_not_run_tests_with_default_conan_local_caches() -> typing.Generator[None]:
+    """
+    Fixture to ensure the default local cache directory is not present.
+
+    If it is present, it can indicate a test not being set up correctly.
+    """
+
+    def _check_default_conan_cache_does_not_exist() -> None:
+        if CONAN_MAJOR_VERSION == 1:
+            assert not (
+                pathlib.Path.home() / ".conan"
+            ).exists(), "Do not run tests in the presense of a default local cache"
+        else:
+            assert not (pathlib.Path.home() / ".conan2").exists(), (
+                "Default local cache exists after tests complete;"
+                "are tests incorrectly configured?"
+            )
+
+    _check_default_conan_cache_does_not_exist()
+    yield
+    _check_default_conan_cache_does_not_exist()
+
+
 @pytest.fixture(name="conanised_os")
 def fixture_connanised_os() -> str:
     """Return the Conan terminology for the current OS."""
