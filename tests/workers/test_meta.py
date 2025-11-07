@@ -18,7 +18,7 @@ from cruizlib.interop.message import (
     Stdout,
     Success,
 )
-from cruizlib.interop.pod import ConanRemote
+from cruizlib.interop.pod import ConanHook, ConanRemote
 
 # pylint: disable=wrong-import-order
 import pytest
@@ -701,3 +701,50 @@ def test_meta_available_hooks(
     assert isinstance(reply, Success)
     assert isinstance(reply.payload, list)
     assert len(reply.payload) == expected_hook_count
+
+
+@pytest.mark.xfail(
+    CONAN_MAJOR_VERSION == 2,
+    reason="Meta get hooks not implemented in Conan 2",
+)
+@pytest.mark.parametrize(
+    "with_hook,with_hooks_dotgit_folder,expected_hook_count",
+    [
+        (True, False, 1),
+        (False, False, 0),
+        (True, True, 1),
+        (False, True, 0),
+    ],
+)
+# pylint: disable=too-many-arguments,too-many-positional-arguments
+def test_meta_get_hooks(
+    meta: typing.Tuple[
+        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
+    ],
+    with_hook: bool,
+    with_hooks_dotgit_folder: bool,
+    expected_hook_count: int,
+    conan_local_cache: typing.Dict[str, str],
+    request: pytest.FixtureRequest,
+) -> None:
+    """Via the meta worker: Get hooks."""
+    request_queue, reply_queue = meta
+
+    if with_hook:
+        request.getfixturevalue("_installed_hook")
+
+    if with_hooks_dotgit_folder:
+        local_cache_dir = pathlib.Path(conan_local_cache["_REAL_CONAN_LOCAL_CACHE_DIR"])
+        (local_cache_dir / "hooks" / ".git").mkdir(parents=True)
+
+    request_queue.put("get_hooks")
+
+    reply = _process_replies(reply_queue)
+    _meta_done(request_queue, reply_queue)
+
+    assert reply_queue.empty()
+    assert isinstance(reply, Success)
+    assert isinstance(reply.payload, list)
+    assert len(reply.payload) == expected_hook_count
+    if expected_hook_count > 0:
+        assert isinstance(reply.payload[0], ConanHook)
