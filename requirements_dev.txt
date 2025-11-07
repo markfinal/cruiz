@@ -13,6 +13,7 @@ mypy
 types-colorama
 types-six
 types-psutil
+types-PyYAML
 pytest
 pytest-cov
 pytest-subprocess
