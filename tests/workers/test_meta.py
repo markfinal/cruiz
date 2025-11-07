@@ -809,3 +809,39 @@ def test_meta_sync_hooks(
     assert reply_queue.empty()
     assert isinstance(reply, Success)
     assert reply.payload is None
+
+
+@pytest.mark.xfail(
+    CONAN_MAJOR_VERSION == 2,
+    reason="Meta enable hooks not implemented in Conan 2",
+)
+def test_meta_enable_hooks(
+    meta: typing.Tuple[
+        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
+    ],
+    _installed_hook: pathlib.Path,
+) -> None:
+    """Via the meta worker: Enable hooks."""
+    request_queue, reply_queue = meta
+
+    payload = {"hook": [_installed_hook], "hook_enabled": True}
+    hooks_sync_request = f"enable_hook?{urllib.parse.urlencode(payload, doseq=True)}"
+    request_queue.put(hooks_sync_request)
+
+    reply = _process_replies(reply_queue)
+
+    assert reply_queue.empty()
+    assert isinstance(reply, Success)
+    assert reply.payload is None
+
+    payload = {"hook": [_installed_hook], "hook_enabled": False}
+    hooks_sync_request = f"enable_hook?{urllib.parse.urlencode(payload, doseq=True)}"
+    request_queue.put(hooks_sync_request)
+
+    reply = _process_replies(reply_queue)
+
+    assert reply_queue.empty()
+    assert isinstance(reply, Success)
+    assert reply.payload is None
+
+    _meta_done(request_queue, reply_queue)
