@@ -298,7 +298,7 @@ def _get_conandata(api: typing.Any, recipe_path: str) -> typing.Dict[str, typing
         # conan 1.18+
         result = api.app.loader._load_data(recipe_path)
     except AttributeError:
-        result = api._cache.loader._load_data(recipe_path)
+        result = api._loader._load_data(recipe_path)
     return dict(result)
 
 

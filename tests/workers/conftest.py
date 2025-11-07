@@ -35,6 +35,8 @@ if typing.TYPE_CHECKING:
 # pylint: disable=wrong-import-order, wrong-import-position
 import pytest
 
+import yaml
+
 LOGGER = logging.getLogger(__name__)
 
 
@@ -330,3 +332,13 @@ def fixture_installed_hook(conan_local_cache: typing.Dict[str, str]) -> pathlib.
     with hook_path.open("wt", encoding="utf-8") as hook_file:
         hook_file.write("# a hook\n")
     return hook_path
+
+
+@pytest.fixture()
+def _conandata(tmp_path: pathlib.Path) -> pathlib.Path:
+    """Create and return path to a conandata.yml file."""
+    conandata_path = tmp_path / "conandata.yml"
+    content = {"versions": {"3.4.5": [1, 2, 3]}}
+    with conandata_path.open("wt", encoding="utf-8") as conandata_file:
+        yaml.dump(content, conandata_file)
+    return conandata_path

@@ -845,3 +845,25 @@ def test_meta_enable_hooks(
     assert reply.payload is None
 
     _meta_done(request_queue, reply_queue)
+
+
+def test_meta_get_conandata(
+    meta: typing.Tuple[
+        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
+    ],
+    conan_recipe: pathlib.Path,
+    _conandata: pathlib.Path,
+) -> None:
+    """Via the meta worker: Get conandata."""
+    request_queue, reply_queue = meta
+
+    payload = {"path": [os.fspath(conan_recipe)]}
+    hooks_sync_request = f"get_conandata?{urllib.parse.urlencode(payload, doseq=True)}"
+    request_queue.put(hooks_sync_request)
+
+    reply = _process_replies(reply_queue)
+    _meta_done(request_queue, reply_queue)
+
+    assert reply_queue.empty()
+    assert isinstance(reply, Success)
+    assert isinstance(reply.payload, dict)
