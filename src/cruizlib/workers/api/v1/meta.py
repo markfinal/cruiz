@@ -379,6 +379,8 @@ def invoke(
                     split = request.split("?")
                     request = split[0]
                     request_params = urllib.parse.parse_qs(split[1])
+                else:
+                    request_params = {}
 
                 # pylint: disable=possibly-used-before-assignment
                 if request == "remotes_list":
@@ -477,7 +479,10 @@ def invoke(
                     _create_default_profile(api)
                     result = None
                 else:
-                    raise ValueError(f"Unknown request: '{request}'")
+                    raise ValueError(
+                        f"Meta command request not implemented: '{request}' "
+                        f"with params '{request_params}'"
+                    )
                 reply_queue.put(Success(result))
                 request_queue.task_done()
                 # ensure that the result doesn't accidentally appear in
