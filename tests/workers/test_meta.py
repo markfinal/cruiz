@@ -977,3 +977,21 @@ def test_meta_set_config(
     assert reply_queue.empty()
     assert isinstance(reply, Success)
     assert reply.payload is None
+
+
+def test_meta_unknown_request(
+    meta: typing.Tuple[
+        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
+    ],
+) -> None:
+    """Via the meta worker: An unknown request."""
+    request_queue, reply_queue = meta
+
+    request_queue.put("this_is_unknown")
+
+    with pytest.raises(testexceptions.FailedMessageTestError) as exc_info:
+        _process_replies(reply_queue)
+    assert isinstance(exc_info.value.__cause__, Exception)
+    assert str(exc_info.value.__cause__).startswith(
+        "Meta command request not implemented:"
+    )

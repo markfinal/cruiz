@@ -197,7 +197,7 @@ def invoke(
                 elif request == "profile_meta":
                     result = _interop_profile_meta(api, request_params["name"][0])
                 else:
-                    raise RuntimeError(
+                    raise ValueError(
                         f"Meta command request not implemented: '{request}' "
                         f"with params '{request_params}'"
                     )
