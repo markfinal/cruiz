@@ -867,3 +867,52 @@ def test_meta_get_conandata(
     assert reply_queue.empty()
     assert isinstance(reply, Success)
     assert isinstance(reply.payload, dict)
+
+
+@pytest.mark.xfail(
+    CONAN_MAJOR_VERSION == 2,
+    reason="Meta get CMake generator not implemented in Conan 2",
+)
+def test_meta_get_cmake_generator(
+    meta: typing.Tuple[
+        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
+    ],
+) -> None:
+    """Via the meta worker: Get Conan's default CMake generator."""
+    request_queue, reply_queue = meta
+
+    request_queue.put("get_cmake_generator")
+
+    reply = _process_replies(reply_queue)
+    _meta_done(request_queue, reply_queue)
+
+    assert reply_queue.empty()
+    assert isinstance(reply, Success)
+    assert reply.payload is None, "As the CMake default generator is not set"
+
+
+def test_meta_get_config(
+    meta: typing.Tuple[
+        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
+    ],
+) -> None:
+    """Via the meta worker: Get Conan config."""
+    request_queue, reply_queue = meta
+
+    if CONAN_MAJOR_VERSION == 1:
+        payload = {"config": "general.default_package_id_mode"}
+    else:
+        payload = {"config": "core.package_id:default_embed_mode"}
+    hooks_sync_request = f"get_config?{urllib.parse.urlencode(payload, doseq=True)}"
+    request_queue.put(hooks_sync_request)
+
+    reply = _process_replies(reply_queue)
+    _meta_done(request_queue, reply_queue)
+
+    assert reply_queue.empty()
+    assert isinstance(reply, Success)
+    if CONAN_MAJOR_VERSION == 1:
+        assert isinstance(reply.payload, str)
+        assert reply.payload == "semver_direct_mode"
+    else:
+        assert reply.payload is None, "Conan 2 sets no default config"
