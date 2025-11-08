@@ -916,3 +916,22 @@ def test_meta_get_config(
         assert reply.payload == "semver_direct_mode"
     else:
         assert reply.payload is None, "Conan 2 sets no default config"
+
+
+def test_meta_get_config_envvars(
+    meta: typing.Tuple[
+        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
+    ],
+) -> None:
+    """Via the meta worker: Get Conan config environment variables."""
+    request_queue, reply_queue = meta
+
+    request_queue.put("get_config_envvars")
+
+    reply = _process_replies(reply_queue)
+    _meta_done(request_queue, reply_queue)
+
+    assert reply_queue.empty()
+    assert isinstance(reply, Success)
+    assert isinstance(reply.payload, list)
+    assert len(reply.payload) > 0
