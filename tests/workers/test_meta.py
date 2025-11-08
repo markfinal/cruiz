@@ -935,3 +935,21 @@ def test_meta_get_config_envvars(
     assert isinstance(reply, Success)
     assert isinstance(reply.payload, list)
     assert len(reply.payload) > 0
+
+
+def test_meta_create_default_profile(
+    meta: typing.Tuple[
+        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
+    ],
+) -> None:
+    """Via the meta worker: Create default Conan profile."""
+    request_queue, reply_queue = meta
+
+    request_queue.put("create_default_profile")
+
+    reply = _process_replies(reply_queue)
+    _meta_done(request_queue, reply_queue)
+
+    assert reply_queue.empty()
+    assert isinstance(reply, Success)
+    assert reply.payload is None
