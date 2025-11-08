@@ -953,3 +953,27 @@ def test_meta_create_default_profile(
     assert reply_queue.empty()
     assert isinstance(reply, Success)
     assert reply.payload is None
+
+
+@pytest.mark.xfail(
+    CONAN_MAJOR_VERSION == 2,
+    reason="Meta set config not implemented in Conan 2",
+)
+def test_meta_set_config(
+    meta: typing.Tuple[
+        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
+    ],
+) -> None:
+    """Via the meta worker: Set Conan config."""
+    request_queue, reply_queue = meta
+
+    payload = {"config": "general.default_package_id_mode", "value": "patch_mode"}
+    set_config_request = f"set_config?{urllib.parse.urlencode(payload, doseq=True)}"
+    request_queue.put(set_config_request)
+
+    reply = _process_replies(reply_queue)
+    _meta_done(request_queue, reply_queue)
+
+    assert reply_queue.empty()
+    assert isinstance(reply, Success)
+    assert reply.payload is None
