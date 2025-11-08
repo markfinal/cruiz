@@ -164,7 +164,6 @@ def invoke(
             try:
                 request = request_queue.get()
                 if isinstance(request, End):
-                    request_queue.task_done()
                     break
                 if "?" in request:
                     split = request.split("?")
@@ -202,12 +201,12 @@ def invoke(
                         f"with params '{request_params}'"
                     )
                 reply_queue.put(Success(result))
-                request_queue.task_done()
                 # ensure that the result doesn't accidentally appear in
                 # subsequent loop iterations
                 del result
             except Exception as exception:  # pylint: disable=broad-exception-caught
                 reply_queue.put(Failure(Exception(str(exception))))
+            finally:
                 request_queue.task_done()
     request_queue.join()
     request_queue.close()
