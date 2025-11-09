@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import pathlib
+import types
 import typing
 from multiprocessing import cpu_count
 
@@ -467,7 +468,10 @@ class RecipeSettingsReader:
         return self._settings_object
 
     def __exit__(
-        self, exc_type: typing.Any, exc_value: typing.Any, exc_traceback: typing.Any
+        self,
+        exc_type: typing.Optional[type[BaseException]],
+        exc_value: typing.Optional[BaseException],
+        exc_traceback: types.TracebackType,
     ) -> typing.Any:
         """Exit a context manager with a RecipeSettingsReader."""
         self.settings.endGroup()

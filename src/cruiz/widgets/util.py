@@ -3,6 +3,7 @@
 """Widget utilities."""
 
 import platform
+import types
 import typing
 
 from PySide6 import QtCore, QtWidgets
@@ -59,7 +60,10 @@ class BlockSignals:
         return self._object
 
     def __exit__(
-        self, exc_type: typing.Any, exc_value: typing.Any, exc_traceback: typing.Any
+        self,
+        exc_type: typing.Optional[type[BaseException]],
+        exc_value: typing.Optional[BaseException],
+        exc_traceback: types.TracebackType,
     ) -> None:
         """Exit a context manager with a BlockSignals."""
         self._object.blockSignals(self._old_state)

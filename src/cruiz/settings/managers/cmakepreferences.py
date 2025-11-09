@@ -2,6 +2,8 @@
 
 """Settings context manager for CMake preferences."""
 
+from __future__ import annotations
+
 import typing
 
 from .basesettings import (
@@ -12,6 +14,9 @@ from .basesettings import (
 )
 from .valueclasses import ScalarValue
 from .writermixin import _WriterMixin
+
+if typing.TYPE_CHECKING:
+    import types
 
 
 class CMakeSettings(ComparableCommonSettings):
@@ -50,7 +55,10 @@ class CMakeSettingsReader:
         return settings
 
     def __exit__(
-        self, exc_type: typing.Any, exc_value: typing.Any, exc_traceback: typing.Any
+        self,
+        exc_type: typing.Optional[type[BaseException]],
+        exc_value: typing.Optional[BaseException],
+        exc_traceback: types.TracebackType,
     ) -> typing.Any:
         """Exit a context manager with a CMakeSettingsReader."""
         self.settings.endGroup()

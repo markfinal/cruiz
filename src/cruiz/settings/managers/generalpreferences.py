@@ -3,6 +3,7 @@
 """Settings context managers for general preferences."""
 
 import platform
+import types
 import typing
 
 from PySide6 import QtCore, QtGui
@@ -183,7 +184,10 @@ class GeneralSettingsReader:
         return self._settings_object
 
     def __exit__(
-        self, exc_type: typing.Any, exc_value: typing.Any, exc_traceback: typing.Any
+        self,
+        exc_type: typing.Optional[type[BaseException]],
+        exc_value: typing.Optional[BaseException],
+        exc_traceback: types.TracebackType,
     ) -> typing.Any:
         """Exit a context manager with a GeneralSettingsReader."""
         self.settings.endGroup()

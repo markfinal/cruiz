@@ -3,6 +3,7 @@
 """Utility to save and restore the os.environ temporarily using a with statement."""
 
 import os
+import types
 import typing
 
 
@@ -18,7 +19,10 @@ class EnvironSaver:
         self._saved = os.environ.copy()
 
     def __exit__(
-        self, exc_type: typing.Any, exc_value: typing.Any, exc_traceback: typing.Any
+        self,
+        exc_type: typing.Optional[type[BaseException]],
+        exc_value: typing.Optional[BaseException],
+        exc_traceback: types.TracebackType,
     ) -> None:
         """Exit a context manager with an EnvironSaver."""
         self.restore()
