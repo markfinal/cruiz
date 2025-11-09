@@ -20,6 +20,7 @@ from cruiz.settings.managers.namedlocalcache import NamedLocalCacheSettingsReade
 import cruizlib.workers.api as workers_api
 from cruizlib.constants import DEFAULT_CACHE_NAME
 from cruizlib.interop.commandparameters import CommandParameters
+from cruizlib.workers.utils.text2html import text_to_html
 
 from .conanenv import get_conan_env
 from .conaninvocation import ConanInvocation
@@ -425,15 +426,11 @@ class ConanContext(QtCore.QObject):
             "inspect_recipe", {"path": recipe_path}
         )
         if exception:
-            lines = str(exception).splitlines()
-            html = ""
-            for line in lines:
-                stripped_line = line.lstrip()
-                num_leading_spaces = len(line) - len(stripped_line)
-                html += "&nbsp;" * num_leading_spaces + stripped_line + "<br>"
+            html = "<font color='red'>"
+            html += text_to_html(str(exception))
+            html += "</font>"
             self._log_details.stderr(
-                f"Exception raised from running command:<br>"
-                f"<font color='red'>{html}</font><br>"
+                f"Exception raised from running command:<br>" f"{html}<br>"
             )
             if propagate_errors:
                 raise RecipeInspectionError()

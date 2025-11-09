@@ -205,7 +205,11 @@ def reply_queue_fixture() -> (
                 replies.append(reply)
                 break
             if isinstance(reply, Failure):
-                raise testexceptions.FailedMessageTestError() from reply.exception
+                raise testexceptions.FailedMessageTestError(
+                    reply.message or "<Empty message from upstream>",
+                    reply.exception_type_name,
+                    reply.exception_traceback,
+                )
             if isinstance(reply, (ConanLogMessage, Stdout, Stderr)):
                 LOGGER.info("Message: '%s'", reply.message)
                 continue
@@ -243,7 +247,11 @@ def multiprocess_reply_queue_fixture() -> typing.Tuple[
                     replies.append(reply)
                     break
                 if isinstance(reply, Failure):
-                    raise testexceptions.FailedMessageTestError() from reply.exception
+                    raise testexceptions.FailedMessageTestError(
+                        reply.message or "<Empty message from upstream>",
+                        reply.exception_type_name,
+                        reply.exception_traceback,
+                    )
                 if isinstance(reply, (ConanLogMessage, Stdout, Stderr)):
                     LOGGER.info("Message: '%s'", reply.message)
                     continue

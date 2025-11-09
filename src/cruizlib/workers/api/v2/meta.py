@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import os
 import pathlib
+import traceback
 import typing
 import urllib.parse
 
@@ -205,7 +206,13 @@ def invoke(
                 # subsequent loop iterations
                 del result
             except Exception as exception:  # pylint: disable=broad-exception-caught
-                reply_queue.put(Failure(Exception(str(exception))))
+                reply_queue.put(
+                    Failure(
+                        str(exception),
+                        type(exception).__name__,
+                        traceback.format_tb(exception.__traceback__),
+                    )
+                )
             finally:
                 request_queue.task_done()
     request_queue.join()
