@@ -7,6 +7,7 @@ from __future__ import annotations
 import pathlib
 import shutil
 import time
+import types
 import typing
 
 from PySide6 import QtCore
@@ -30,7 +31,10 @@ class SettingsGroup:
         self._settings.beginGroup(self._group_name)
 
     def __exit__(
-        self, exc_type: typing.Any, value: typing.Any, exc_traceback: typing.Any
+        self,
+        exc_type: typing.Optional[type[BaseException]],
+        value: typing.Optional[BaseException],
+        exc_traceback: types.TracebackType,
     ) -> None:
         """Exit the context manager with a SettingsGroup."""
         self._settings.endGroup()
@@ -57,7 +61,10 @@ class SettingsReadArray:
         return self
 
     def __exit__(
-        self, exc_type: typing.Any, value: typing.Any, exc_traceback: typing.Any
+        self,
+        exc_type: typing.Optional[type[BaseException]],
+        value: typing.Optional[BaseException],
+        exc_traceback: types.TracebackType,
     ) -> None:
         """Exit a context manager with a SettingsReadArray."""
         self._settings.endArray()
@@ -77,7 +84,10 @@ class SettingsWriteArray:
         self._settings.beginWriteArray(self._array_name, self._array_size)
 
     def __exit__(
-        self, exc_type: typing.Any, value: typing.Any, exc_traceback: typing.Any
+        self,
+        exc_type: typing.Optional[type[BaseException]],
+        value: typing.Optional[BaseException],
+        exc_traceback: types.TracebackType,
     ) -> None:
         """Exit a context manager with a SettingsWriteArray."""
         self._settings.endArray()

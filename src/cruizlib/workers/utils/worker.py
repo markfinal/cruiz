@@ -9,6 +9,7 @@ import datetime
 import multiprocessing
 import os
 import traceback
+import types
 import typing
 
 from PySide6 import QtCore
@@ -70,12 +71,15 @@ class Worker:
             self._wall_clock.start()
 
     def _exception_to_html(
-        self, exc_type: typing.Any, value: typing.Any, exc_tb: typing.Any
+        self,
+        exc_type: typing.Optional[type[BaseException]],
+        exc_value: typing.Optional[BaseException],
+        exc_traceback: types.TracebackType,
     ) -> None:
+        exc_text = traceback.format_exception(exc_type, exc_value, exc_traceback)
         # since tracebacks objects can't be passed over the multiprocessing queue,
         # encode it into the string of a new Exception object
         # (also removes the issue of Conan exception types passing the divide)
-        exc_text = traceback.format_exception(exc_type, value, exc_tb)
         html = "<font color='red'>"
         html += text_to_html("".join(exc_text))
         html += "</font>"
@@ -89,7 +93,10 @@ class Worker:
         )
 
     def __exit__(
-        self, exc_type: typing.Any, exc_value: typing.Any, exc_traceback: typing.Any
+        self,
+        exc_type: typing.Optional[type[BaseException]],
+        exc_value: typing.Optional[BaseException],
+        exc_traceback: types.TracebackType,
     ) -> typing.Any:
         """Exit a context manager with a Worker."""
         if exc_value:

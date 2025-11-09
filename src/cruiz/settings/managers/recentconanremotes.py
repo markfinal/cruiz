@@ -2,11 +2,16 @@
 
 """Settings context manager for recent Conan remotes."""
 
+from __future__ import annotations
+
 import typing
 
 from .basesettings import BaseSettings, CommonSettings, ListSetting, SettingMeta
 from .valueclasses import ListValue
 from .writermixin import _WriterMixin
+
+if typing.TYPE_CHECKING:
+    import types
 
 
 # TODO: CommonSettings not all used
@@ -63,7 +68,10 @@ class RecentConanRemotesSettingsReader:
         return self._settings_object
 
     def __exit__(
-        self, exc_type: typing.Any, exc_value: typing.Any, exc_traceback: typing.Any
+        self,
+        exc_type: typing.Optional[type[BaseException]],
+        exc_value: typing.Optional[BaseException],
+        exc_traceback: types.TracebackType,
     ) -> typing.Any:
         """Exit a context manager with a RecentConanRemotesSettingReader."""
         self.settings.endArray()

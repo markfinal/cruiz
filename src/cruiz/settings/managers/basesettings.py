@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import inspect
+import types
 import typing
 from dataclasses import dataclass
 from enum import IntEnum
@@ -182,7 +183,10 @@ class BaseSettings:
             return self._settings
 
         def __exit__(
-            self, exc_type: typing.Any, exc_value: typing.Any, exc_traceback: typing.Any
+            self,
+            exc_type: typing.Optional[type[BaseException]],
+            exc_value: typing.Optional[BaseException],
+            exc_traceback: types.TracebackType,
         ) -> typing.Any:
             """Exit a context manager with a Group."""
             self._settings.endGroup()
@@ -203,7 +207,10 @@ class BaseSettings:
             return self._settings, count
 
         def __exit__(
-            self, exc_type: typing.Any, exc_value: typing.Any, exc_traceback: typing.Any
+            self,
+            exc_type: typing.Optional[type[BaseException]],
+            exc_value: typing.Optional[BaseException],
+            exc_traceback: types.TracebackType,
         ) -> typing.Any:
             """Exit a context manager with a ReadArray."""
             self._settings.endArray()
@@ -237,7 +244,10 @@ class BaseSettings:
             return self._settings
 
         def __exit__(
-            self, exc_type: typing.Any, exc_value: typing.Any, exc_traceback: typing.Any
+            self,
+            exc_type: typing.Optional[type[BaseException]],
+            exc_value: typing.Optional[BaseException],
+            exc_traceback: types.TracebackType,
         ) -> typing.Any:
             """Exit a context manager with a WriteArray."""
             self._settings.endArray()
