@@ -26,6 +26,7 @@ from cruizlib.interop.message import (
     Stdout,
     Success,
 )
+from cruizlib.workers.utils.text2html import text_to_html
 
 if typing.TYPE_CHECKING:
     from cruizlib.multiprocessingmessagequeuetype import MultiProcessingMessageQueueType
@@ -111,8 +112,14 @@ class MessageReplyProcessor(QtCore.QObject):
                 elif isinstance(entry, Failure):
                     # TODO: temporary, at least always record the exception
                     # in the error log
-                    self.stderr_message.emit(str(entry.exception))
-                    self.completed.emit(None, entry.exception)
+                    if entry.html:
+                        self.stderr_message.emit(entry.html)
+                    else:
+                        html = "<font color='red'>"
+                        html += text_to_html(entry.message)
+                        html += "</font>"
+                        self.stderr_message.emit(html)
+                    self.completed.emit(None, Exception(entry.message))
                 else:
                     logger.error("Unknown message type: '%s'", entry)
             except EOFError as exception:

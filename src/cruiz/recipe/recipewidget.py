@@ -35,6 +35,7 @@ import cruizlib.globals
 import cruizlib.workers.api as workers_api
 from cruizlib.interop.commandparameters import CommandParameters
 from cruizlib.interop.dependencygraph import dependencygraph_from_node_dependees
+from cruizlib.workers.utils.text2html import text_to_html
 
 try:
     import git
@@ -1166,15 +1167,12 @@ class RecipeWidget(QtWidgets.QMainWindow):
             if payload is None:
                 self._ui.configurePackageId.setText("Failed")
                 self.dependency_graph = None
-            lines = str(exception).splitlines()
-            html = ""
-            for line in lines:
-                stripped_line = line.lstrip()
-                num_leading_spaces = len(line) - len(stripped_line)
-                html += "&nbsp;" * num_leading_spaces + stripped_line + "<br>"
+
+            html = "<font color='red'>"
+            html += text_to_html(str(exception))
+            html += "</font>"
             self._dependency_generate_log.stderr(
-                f"Exception raised from running command:<br>"
-                f"<font color='red'>{html}</font><br>"
+                f"Exception raised from running command:<br>" f"{html}<br>"
             )
 
     def _visualise_dependencies(self, rank_dir_index: int) -> None:

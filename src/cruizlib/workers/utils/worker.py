@@ -70,12 +70,17 @@ class Worker:
         if self._wall_clock is not None:
             self._wall_clock.start()
 
-    def _exception_to_html(
+    def _raise_failure_to_caller(
         self,
         exc_type: typing.Optional[type[BaseException]],
         exc_value: typing.Optional[BaseException],
         exc_traceback: types.TracebackType,
     ) -> None:
+        exception_message = str(exc_value)
+        failure = Failure(
+            exception_message, str(exc_type), traceback.format_tb(exc_traceback)
+        )
+
         exc_text = traceback.format_exception(exc_type, exc_value, exc_traceback)
         # since tracebacks objects can't be passed over the multiprocessing queue,
         # encode it into the string of a new Exception object
@@ -84,7 +89,9 @@ class Worker:
         html += text_to_html("".join(exc_text))
         html += "</font>"
 
-        self._queue.put(Failure(Exception(html)))
+        failure.html = html
+
+        self._queue.put(failure)
 
         multiprocessing.get_logger().debug(
             "%i (child): Exception detected: %s",
@@ -100,7 +107,7 @@ class Worker:
     ) -> typing.Any:
         """Exit a context manager with a Worker."""
         if exc_value:
-            self._exception_to_html(exc_type, exc_value, exc_traceback)
+            self._raise_failure_to_caller(exc_type, exc_value, exc_traceback)
         if self._wall_clock is not None:
             elapsed_time = self._wall_clock.elapsed()
             self._queue.put(Stdout("-" * 64))

@@ -8,6 +8,7 @@ It must match one of the Conan verbs though.
 
 from __future__ import annotations
 
+import traceback
 import typing
 
 from cruizlib.interop.message import Failure, Success
@@ -42,7 +43,13 @@ def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) ->
                     raise RuntimeError(temp_err.getvalue()) from exc
                 queue.put(Success(temp_out.getvalue()))
             except RuntimeError as exc_inner:
-                queue.put(Failure(exc_inner))
+                queue.put(
+                    Failure(
+                        str(exc_inner),
+                        type(exc_inner).__name__,
+                        traceback.format_tb(exc_inner.__traceback__),
+                    )
+                )
         finally:
             sys.stderr = sys.__stderr__
             sys.stdout = sys.__stdout__

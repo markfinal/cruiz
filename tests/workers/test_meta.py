@@ -41,7 +41,11 @@ def _process_replies(reply_queue: MultiProcessingMessageQueueType) -> Message:
         if isinstance(reply, Success):
             break
         if isinstance(reply, Failure):
-            raise testexceptions.FailedMessageTestError() from reply.exception
+            raise testexceptions.FailedMessageTestError(
+                reply.message or "<Empty message from upstream>",
+                reply.exception_type_name,
+                reply.exception_traceback,
+            )
         if isinstance(reply, (ConanLogMessage, Stdout, Stderr)):
             LOGGER.info("Message: '%s'", reply.message)
             continue
@@ -77,10 +81,8 @@ def test_meta_get_version(
     else:
         with pytest.raises(testexceptions.FailedMessageTestError) as exc_info:
             _process_replies(reply_queue)
-        assert isinstance(exc_info.value.__cause__, Exception)
-        assert str(exc_info.value.__cause__).startswith(
-            "Meta command request not implemented"
-        )
+        assert exc_info.value.exception_type_name == "ValueError"
+        assert str(exc_info.value).startswith('("Meta command request not implemented')
 
     _meta_done(request_queue, reply_queue)
 
@@ -991,7 +993,5 @@ def test_meta_unknown_request(
 
     with pytest.raises(testexceptions.FailedMessageTestError) as exc_info:
         _process_replies(reply_queue)
-    assert isinstance(exc_info.value.__cause__, Exception)
-    assert str(exc_info.value.__cause__).startswith(
-        "Meta command request not implemented:"
-    )
+    assert exc_info.value.exception_type_name == "ValueError"
+    assert str(exc_info.value).startswith('("Meta command request not implemented:')

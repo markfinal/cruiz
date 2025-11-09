@@ -1,5 +1,7 @@
 """Tests for messages."""
 
+import traceback
+
 import cruizlib.interop.message
 
 
@@ -18,6 +20,12 @@ def test_message_extraction() -> None:
     assert isinstance(success.payload, int)
     assert success.payload == 1
 
-    failure = cruizlib.interop.message.Failure(RuntimeError("This Failed"))
-    assert isinstance(failure.exception, RuntimeError)
-    assert str(failure.exception) == "This Failed"
+    try:
+        raise RuntimeError("This Failed")
+    except RuntimeError as exc:
+        failure = cruizlib.interop.message.Failure(
+            str(exc), type(exc).__name__, traceback.format_tb(exc.__traceback__)
+        )
+        assert failure.message == "This Failed"
+        assert failure.exception_type_name == "RuntimeError"
+        assert len(failure.exception_traceback) > 0

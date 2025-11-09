@@ -153,7 +153,7 @@ class MetaRequestConanInvocation(QtCore.QObject):
                 response = reply
                 break
             elif isinstance(reply, Failure):
-                logger.debug("* Got failure message: '%s'", str(reply.exception))
+                logger.debug("* Got failure message: '%s'", reply.message)
                 response = reply
                 break
         assert self._reply_queue.empty()

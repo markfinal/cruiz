@@ -4,6 +4,8 @@
 
 """Conan interop message."""
 
+from __future__ import annotations
+
 import typing
 
 
@@ -72,14 +74,39 @@ class Success(Message):
 
 
 class Failure(Message):
-    """Message with an exception for a failed command."""
+    """Message with optional exception details for a failed command."""
 
-    def __init__(self, exception: Exception) -> None:
+    def __init__(
+        self, message: str, exception_type_name: str, traceback: typing.List[str]
+    ) -> None:
         """Initialise a Failure message."""
         super().__init__()
-        self._exception = exception
+        self._message = message
+        self._exception_type_name = exception_type_name
+        self._traceback = traceback
+        self._html_message: typing.Optional[str] = None
 
     @property
-    def exception(self) -> Exception:
-        """Get the exception."""
-        return self._exception
+    def message(self) -> str:
+        """Get the message."""
+        return self._message
+
+    @property
+    def exception_type_name(self) -> str:
+        """Get the name of the exception type that raised the failure."""
+        return self._exception_type_name
+
+    @property
+    def exception_traceback(self) -> typing.List[str]:
+        """Get the traceback of the exception that raised the failure."""
+        return self._traceback
+
+    @property
+    def html(self) -> typing.Optional[str]:
+        """Get the HTML exception message."""
+        return self._html_message
+
+    @html.setter
+    def html(self, html_message: str) -> None:
+        """Set the HTML exception message."""
+        self._html_message = html_message
