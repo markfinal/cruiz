@@ -52,7 +52,7 @@ LOGGER = logging.getLogger(__name__)
         ),
         pytest.param(
             "name",
-            "test",
+            "conan_recipe_name",
             marks=pytest.mark.skipif(
                 CONAN_MAJOR_VERSION == 1,
                 reason="name not supported in Conan 1",
@@ -60,7 +60,7 @@ LOGGER = logging.getLogger(__name__)
         ),
         pytest.param(
             "version",
-            "3.4.5",
+            "conan_recipe_version",
             marks=pytest.mark.skipif(
                 CONAN_MAJOR_VERSION == 1,
                 reason="version not supported in Conan 1",
@@ -94,6 +94,7 @@ def test_conan_source(
     tmp_path: pathlib.Path,
     arg: typing.Optional[str],
     value: typing.Union[typing.Optional[str], typing.List[str], typing.Dict[str, str]],
+    request: pytest.FixtureRequest,
 ) -> None:
     """
     Test: running conan source.
@@ -132,10 +133,10 @@ def test_conan_source(
             params.source_folder = tmp_path / value
         elif arg == "name":
             assert isinstance(value, str)
-            params.name = value
+            params.name = request.getfixturevalue(value)
         elif arg == "version":
             assert isinstance(value, str)
-            params.version = value
+            params.version = request.getfixturevalue(value)
         elif arg == "user":
             assert isinstance(value, str)
             params.user = value
