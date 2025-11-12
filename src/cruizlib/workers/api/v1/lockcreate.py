@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import typing
 
 from cruizlib.interop.dependencygraph import DependencyGraph
@@ -18,6 +19,7 @@ if typing.TYPE_CHECKING:
     from cruizlib.multiprocessingmessagequeuetype import MultiProcessingMessageQueueType
 
 
+# pylint: disable=too-many-branches, too-many-statements
 def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) -> None:
     """Run 'conan lock create'."""
     # pylint: disable=too-many-locals
@@ -36,9 +38,19 @@ def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) ->
         )
         from conans.model.ref import PackageReference
 
+        assert params.recipe_path
+        assert params.cwd
         assert params.profile, "Profile is needed for creating a lock file"
 
         try:
+            # Conan 1.18+
+            conan_cache = api.app.cache
+        except AttributeError:
+            # pylint: disable=protected-access, no-member
+            conan_cache = api._cache
+
+        try:
+            # pylint: disable=too-many-function-args, unexpected-keyword-arg
             phost = profile_from_args(
                 [params.profile],
                 None,
@@ -46,7 +58,7 @@ def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) ->
                 None,
                 None,
                 params.cwd,
-                api.app.cache,
+                conan_cache,
                 build_profile=False,
             )
         except TypeError:
@@ -58,34 +70,61 @@ def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) ->
                 format_options(params.options),
                 None,
                 params.cwd,
-                api.app.cache,
+                conan_cache,
             )
 
-        phost.process_settings(api.app.cache)
+        phost.process_settings(conan_cache)
 
         root_ref = ConanFileReference(
             params.name, params.version, params.user, params.channel, validate=False
         )
-        graph_info = GraphInfo(
-            profile_host=phost, profile_build=None, root_ref=root_ref
-        )
+        try:
+            # pylint: disable=unexpected-keyword-arg
+            graph_info = GraphInfo(
+                profile_host=phost, profile_build=None, root_ref=root_ref
+            )
+        except TypeError:
+            # profile_host not available in older Conans
+            graph_info = GraphInfo(profile=phost, root_ref=root_ref)
 
-        remotes = api.app.load_remotes()
+        try:
+            remotes = api.app.load_remotes()
+        except AttributeError:
+            # load_remotes in a different registry on older Conans
+            remotes = conan_cache.registry.load_remotes()
         recorder = ActionRecorder()
 
-        deps_graph = api.app.graph_manager.load_graph(
-            str(params.recipe_path),
-            None,
-            graph_info,
-            None,
-            None,
-            None,
-            remotes,
-            recorder,
-        )
+        try:
+            deps_graph = api.app.graph_manager.load_graph(
+                str(params.recipe_path),
+                None,
+                graph_info,
+                None,
+                None,
+                None,
+                remotes,
+                recorder,
+            )
+        except AttributeError:
+            # load_graph is on a different object on older Conans
+            # pylint: disable=protected-access, no-member
+            deps_graph, _ = api._graph_manager.load_graph(
+                str(params.recipe_path),
+                None,
+                graph_info,
+                None,
+                None,
+                None,
+                remotes,
+                recorder,
+            )
 
         # create nodes (derived from conan.graph.printer.print_graph)
-        build_time_nodes = deps_graph.build_time_nodes()
+        try:
+            build_time_nodes = deps_graph.build_time_nodes()
+        except AttributeError:
+            # no build time nodes in older Conans
+            build_time_nodes = []
         nodes = {}
         for node in sorted(deps_graph.nodes):
             # ensure some attributes, otherwise ConanInfo.dumps() fails
@@ -99,14 +138,16 @@ def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) ->
                 # node.conanfile.original_info is only available from Conan 1.47.0+
                 info = None
 
-            # layouts folders were introduced in 1.37
             try:
                 build_folder = node.conanfile.folders.build
             except AttributeError:
+                # layouts folders were introduced in 1.37
                 build_folder = None
 
-            if node.conanfile.info.invalid:
-                raise ValueError(node.conanfile.info.invalid)
+            # older Conans are unaware of the invalid info
+            with contextlib.suppress(AttributeError):
+                if node.conanfile.info.invalid:
+                    raise ValueError(node.conanfile.info.invalid)
 
             if node.recipe in (RECIPE_CONSUMER, RECIPE_VIRTUAL):
                 new_node = PackageNode(
