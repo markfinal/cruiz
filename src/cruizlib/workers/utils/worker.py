@@ -78,7 +78,9 @@ class Worker:
     ) -> None:
         exception_message = str(exc_value)
         failure = Failure(
-            exception_message, str(exc_type), traceback.format_tb(exc_traceback)
+            exception_message,
+            exc_type.__name__ if exc_type else "",
+            traceback.format_tb(exc_traceback),
         )
 
         exc_text = traceback.format_exception(exc_type, exc_value, exc_traceback)
