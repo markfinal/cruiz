@@ -44,8 +44,8 @@ LOGGER = logging.getLogger(__name__)
 )
 # pylint: disable=too-many-arguments, too-many-positional-arguments, too-many-branches, too-many-locals, too-many-statements  # noqa: E501
 def test_conan_imports(
-    reply_queue_fixture: typing.Tuple[
-        queue.Queue[Message], typing.List[Message], threading.Thread
+    reply_queue_fixture: typing.Callable[
+        [], typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
     ],
     conan_recipe: pathlib.Path,
     conan_local_cache: typing.Dict[str, str],
@@ -69,7 +69,7 @@ def test_conan_imports(
     if arg and isinstance(arg, str) and arg == "install_folder":
         assert isinstance(value, str)
         params.install_folder = tmp_path / value
-    reply_queue, replies, watcher_thread = reply_queue_fixture
+    reply_queue, replies, watcher_thread = reply_queue_fixture()
     # abusing the type system, as the API used for queue.Queue is the same
     # as for multiprocessing.Queue
     worker(reply_queue, params)  # type: ignore[arg-type]
@@ -89,7 +89,7 @@ def test_conan_imports(
         elif arg == "imports_folder":
             assert isinstance(value, str)
             params.imports_folder = tmp_path / value
-    reply_queue, replies, watcher_thread = reply_queue_fixture
+    reply_queue, replies, watcher_thread = reply_queue_fixture()
     # abusing the type system, as the API used for queue.Queue is the same
     # as for multiprocessing.Queue
     worker(reply_queue, params)  # type: ignore[arg-type]
