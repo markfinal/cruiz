@@ -185,41 +185,52 @@ class TestableThread(threading.Thread):
 
 
 @pytest.fixture()
-def reply_queue_fixture() -> (
-    typing.Tuple[queue.Queue[Message], typing.List[Message], TestableThread]
-):
+def reply_queue_fixture() -> typing.Callable[
+    [],
+    typing.Tuple[queue.Queue[Message], typing.List[Message], TestableThread],
+]:
     """
-    Fixture to create a reply queue for a worker invocation on the same process.
+    Fixture factory to create a reply queue for a worker invocation on the same process.
+
+    It is a factory because the fixture may need to be invoked several times during
+    a test to generate new queues.
 
     Uses a thread for message processing.
     The calling test must join the thread, before making any assertions on the
     responses.
     """
 
-    def _reply_watcher(
-        reply_queue: queue.Queue[Message], replies: typing.List[Message]
-    ) -> None:
-        while True:
-            reply = reply_queue.get()
-            if isinstance(reply, Success):
-                replies.append(reply)
-                break
-            if isinstance(reply, Failure):
-                raise testexceptions.FailedMessageTestError(
-                    reply.message or "<Empty message from upstream>",
-                    reply.exception_type_name,
-                    reply.exception_traceback,
-                )
-            if isinstance(reply, (ConanLogMessage, Stdout, Stderr)):
-                LOGGER.info("Message: '%s'", reply.message)
-                continue
-            raise ValueError(f"Unknown reply of type '{type(reply)}'")
+    def _the_fixture() -> (
+        typing.Tuple[queue.Queue[Message], typing.List[Message], TestableThread]
+    ):
+        def _reply_watcher(
+            reply_queue: queue.Queue[Message], replies: typing.List[Message]
+        ) -> None:
+            while True:
+                reply = reply_queue.get()
+                if isinstance(reply, Success):
+                    replies.append(reply)
+                    break
+                if isinstance(reply, Failure):
+                    raise testexceptions.FailedMessageTestError(
+                        reply.message or "<Empty message from upstream>",
+                        reply.exception_type_name,
+                        reply.exception_traceback,
+                    )
+                if isinstance(reply, (ConanLogMessage, Stdout, Stderr)):
+                    LOGGER.info("Message: '%s'", reply.message)
+                    continue
+                raise ValueError(f"Unknown reply of type '{type(reply)}'")
 
-    reply_queue = queue.Queue[Message]()
-    replies: typing.List[Message] = []
-    watcher_thread = TestableThread(target=_reply_watcher, args=(reply_queue, replies))
-    watcher_thread.start()
-    return reply_queue, replies, watcher_thread
+        reply_queue = queue.Queue[Message]()
+        replies: typing.List[Message] = []
+        watcher_thread = TestableThread(
+            target=_reply_watcher, args=(reply_queue, replies)
+        )
+        watcher_thread.start()
+        return reply_queue, replies, watcher_thread
+
+    return _the_fixture
 
 
 @pytest.fixture()

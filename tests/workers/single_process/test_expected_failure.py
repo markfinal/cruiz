@@ -30,8 +30,8 @@ LOGGER = logging.getLogger(__name__)
 
 
 def test_expected_failure(
-    reply_queue_fixture: typing.Tuple[
-        queue.Queue[Message], typing.List[Message], threading.Thread
+    reply_queue_fixture: typing.Callable[
+        [], typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
     ],
     conan_local_cache: typing.Dict[str, str],
 ) -> None:
@@ -39,7 +39,7 @@ def test_expected_failure(
     worker = workers_api.install.invoke
     params = CommandParameters("install", worker)
     params.added_environment = conan_local_cache
-    reply_queue, _, watcher_thread = reply_queue_fixture
+    reply_queue, _, watcher_thread = reply_queue_fixture()
     # abusing the type system, as the API used for queue.Queue is the same
     # as for multiprocessing.Queue
     worker(reply_queue, params)  # type: ignore[arg-type]
