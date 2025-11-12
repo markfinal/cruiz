@@ -67,7 +67,9 @@ def test_conan_package(
     params.recipe_path = conan_recipe
     params.cwd = conan_recipe.parent
     params.profile = "default"
-    if arg and isinstance(arg, str) and arg == "install_folder":
+    if arg and isinstance(arg, str) and arg in ("install_folder", "build_folder"):
+        # if specifying build_folder, this changes the behaviour of looking
+        # in the cwd for the install artifacts
         assert isinstance(value, str)
         params.install_folder = tmp_path / value
     reply_queue, replies, watcher_thread = reply_queue_fixture()
