@@ -13,7 +13,7 @@ import threading
 import typing
 
 import cruizlib.workers.api as workers_api
-from cruizlib.globals import CONAN_FULL_VERSION, CONAN_MAJOR_VERSION
+from cruizlib.globals import CONAN_MAJOR_VERSION, CONAN_VERSION_COMPONENTS
 from cruizlib.interop.commandparameters import CommandParameters
 from cruizlib.interop.message import (
     Message,
@@ -70,7 +70,7 @@ def test_conan_exportpkg(
         if arg and isinstance(arg, str) and arg == "install_folder":
             assert isinstance(value, str)
             params.install_folder = tmp_path / value
-        if CONAN_FULL_VERSION == "1.17.1":
+        if CONAN_VERSION_COMPONENTS == (1, 17, 1):
             # since this early Conan version requires a user and channel on pkgrefs
             params.user = params.user or "test_user"
             params.channel = params.channel or "test_channel"
@@ -88,7 +88,7 @@ def test_conan_exportpkg(
     params.recipe_path = conan_recipe
     params.cwd = conan_recipe.parent
     params.name = conan_recipe_name
-    if CONAN_FULL_VERSION == "1.17.1":
+    if CONAN_VERSION_COMPONENTS == (1, 17, 1):
         # since this early Conan version requires a user and channel on pkgrefs
         params.user = params.user or "test_user"
         params.channel = params.channel or "test_channel"

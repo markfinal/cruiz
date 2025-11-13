@@ -9,7 +9,7 @@ import typing
 import urllib.parse
 from contextlib import nullcontext as does_not_raise
 
-from cruizlib.globals import CONAN_FULL_VERSION, CONAN_MAJOR_VERSION
+from cruizlib.globals import CONAN_MAJOR_VERSION, CONAN_VERSION_COMPONENTS
 from cruizlib.interop.message import (
     ConanLogMessage,
     Failure,
@@ -77,7 +77,7 @@ def test_meta_get_version(
         assert reply_queue.empty()
         assert isinstance(reply, Success)
         assert isinstance(reply.payload, str)
-        assert reply.payload == CONAN_FULL_VERSION
+        assert reply.payload == ".".join([str(i) for i in CONAN_VERSION_COMPONENTS])
     else:
         with pytest.raises(testexceptions.FailedMessageTestError) as exc_info:
             _process_replies(reply_queue)
@@ -260,7 +260,7 @@ def _pkgref_components(
             "5678",
             False,
             marks=pytest.mark.xfail(
-                CONAN_FULL_VERSION == "1.17.1",
+                CONAN_VERSION_COMPONENTS == (1, 17, 1),
                 reason="Unexpected Conan 1.17.1 expects user and channel",
             ),
         ),
@@ -270,7 +270,7 @@ def _pkgref_components(
             "5678",
             True,
             marks=pytest.mark.xfail(
-                CONAN_FULL_VERSION == "1.17.1",
+                CONAN_VERSION_COMPONENTS == (1, 17, 1),
                 reason="Unexpected Conan 1.17.1 expects user and channel",
             ),
         ),
@@ -325,7 +325,7 @@ def test_meta_get_package_dir(
             "mypackage/1.0.0",
             False,
             marks=pytest.mark.xfail(
-                CONAN_FULL_VERSION == "1.17.1",
+                CONAN_VERSION_COMPONENTS == (1, 17, 1),
                 reason="Unexpected Conan 1.17.1 expects user and channel",
             ),
         ),
@@ -333,7 +333,7 @@ def test_meta_get_package_dir(
             "mypackage/1.0.0",
             True,
             marks=pytest.mark.xfail(
-                CONAN_FULL_VERSION == "1.17.1",
+                CONAN_VERSION_COMPONENTS == (1, 17, 1),
                 reason="Unexpected Conan 1.17.1 expects user and channel",
             ),
         ),
@@ -384,7 +384,7 @@ def test_meta_get_package_export_dir(
             "mypackage/1.0.0",
             False,
             marks=pytest.mark.xfail(
-                CONAN_FULL_VERSION == "1.17.1",
+                CONAN_VERSION_COMPONENTS == (1, 17, 1),
                 reason="Unexpected Conan 1.17.1 expects user and channel",
             ),
         ),
@@ -392,7 +392,7 @@ def test_meta_get_package_export_dir(
             "mypackage/1.0.0",
             True,
             marks=pytest.mark.xfail(
-                CONAN_FULL_VERSION == "1.17.1",
+                CONAN_VERSION_COMPONENTS == (1, 17, 1),
                 reason="Unexpected Conan 1.17.1 expects user and channel",
             ),
         ),
@@ -465,7 +465,7 @@ def test_meta_get_editable_list(
             "conan_recipe_invalid",
             pytest.raises(testexceptions.FailedMessageTestError),
             marks=pytest.mark.xfail(
-                CONAN_FULL_VERSION == "1.17.1",
+                CONAN_VERSION_COMPONENTS == (1, 17, 1),
                 reason="Unexpected Conan 1.17.1 expects user and channel",
             ),
         ),
@@ -539,7 +539,7 @@ def test_meta_editable_add(
             "conan_recipe",
             False,
             marks=pytest.mark.xfail(
-                CONAN_FULL_VERSION == "1.17.1",
+                CONAN_VERSION_COMPONENTS == (1, 17, 1),
                 reason="Unexpected Conan 1.17.1 expects user and channel",
             ),
         ),
