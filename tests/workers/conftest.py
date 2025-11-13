@@ -12,7 +12,7 @@ import threading
 import typing
 
 import cruizlib.workers.api as workers_api
-from cruizlib.globals import CONAN_MAJOR_VERSION
+from cruizlib.globals import CONAN_MAJOR_VERSION, CONAN_VERSION_COMPONENTS
 from cruizlib.interop.commandparameters import CommandParameters
 from cruizlib.interop.message import (
     ConanLogMessage,
@@ -361,3 +361,55 @@ def _conandata(tmp_path: pathlib.Path) -> pathlib.Path:
     with conandata_path.open("wt", encoding="utf-8") as conandata_file:
         yaml.dump(content, conandata_file)
     return conandata_path
+
+
+@pytest.fixture()
+def conan_dependent_recipes(
+    tmp_path: pathlib.Path,
+) -> typing.Tuple[pathlib.Path, str, str, pathlib.Path, str, str]:
+    """Create and return dependent recipes."""
+    base_name = "base"
+    base_version = "1.0"
+    base_recipe_path = tmp_path / "conanfile_base.py"
+    with base_recipe_path.open("wt", encoding="utf-8") as conanfile:
+        if CONAN_MAJOR_VERSION == 1:
+            conanfile.write("from conans import ConanFile\n")
+            conanfile.write("class BaseConanFile(ConanFile):\n")
+        else:
+            conanfile.write("from conan import ConanFile\n")
+            conanfile.write("class BaseConanFile(ConanFile):\n")
+        conanfile.write(f"  name = '{base_name}'\n")
+        conanfile.write(f"  version = '{base_version}'\n")
+        conanfile.write("  options = {'shared': [True, False]}\n")
+        conanfile.write("  default_options = {'shared': True}\n")
+
+    dependent_name = "dependent"
+    dependent_version = "2.0"
+    dependent_recipe_path = tmp_path / "conanfile_dependent.py"
+    with dependent_recipe_path.open("wt", encoding="utf-8") as conanfile:
+        if CONAN_MAJOR_VERSION == 1:
+            conanfile.write("from conans import ConanFile\n")
+            conanfile.write("class DependentConanFile(ConanFile):\n")
+        else:
+            conanfile.write("from conan import ConanFile\n")
+            conanfile.write("class DependentConanFile(ConanFile):\n")
+        conanfile.write(f"  name = '{dependent_name}'\n")
+        conanfile.write(f"  version = '{dependent_version}'\n")
+        conanfile.write("  options = {'shared': [True, False]}\n")
+        conanfile.write("  default_options = {'shared': True}\n")
+        if CONAN_VERSION_COMPONENTS > (1, 17, 1):
+            conanfile.write(f"  requires = '{base_name}/{base_version}'\n")
+        else:
+            # older Conans insist on having a user and channel
+            conanfile.write(
+                f"  requires = '{base_name}/{base_version}@test_user/test_channel'\n"
+            )
+
+    return (
+        base_recipe_path,
+        base_name,
+        base_version,
+        dependent_recipe_path,
+        dependent_name,
+        dependent_version,
+    )
