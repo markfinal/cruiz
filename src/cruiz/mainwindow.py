@@ -630,7 +630,7 @@ Remove from the recent list?",
 
         def get_conan_version_output(path: str) -> str:
             # pylint: disable=unused-argument
-            return cruizlib.globals.CONAN_FULL_VERSION
+            return ".".join([str(i) for i in cruizlib.globals.CONAN_VERSION_COMPONENTS])
 
         statusbar_tool(
             "conan",
