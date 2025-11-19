@@ -37,19 +37,17 @@ def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) ->
             sys.argv = ["conan", params.verb] + params.arguments
             run()
         except SystemExit as exc:
-            try:
-                # pylint: disable=using-constant-test
-                if exc.code:
-                    raise RuntimeError(temp_err.getvalue()) from exc
-                queue.put(Success(temp_out.getvalue()))
-            except RuntimeError as exc_inner:
+            # pylint: disable=using-constant-test
+            if exc.code:
                 queue.put(
                     Failure(
-                        str(exc_inner),
-                        type(exc_inner).__name__,
-                        traceback.format_tb(exc_inner.__traceback__),
+                        temp_err.getvalue(),
+                        "SystemExit",
+                        traceback.format_tb(exc.__traceback__),
                     )
                 )
+            else:
+                queue.put(Success(temp_out.getvalue()))
         finally:
             sys.stderr = sys.__stderr__
             sys.stdout = sys.__stdout__
