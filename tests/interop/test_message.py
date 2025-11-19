@@ -29,3 +29,4 @@ def test_message_extraction() -> None:
         assert failure.message == "This Failed"
         assert failure.exception_type_name == "RuntimeError"
         assert len(failure.exception_traceback) > 0
+        assert failure.html is None
