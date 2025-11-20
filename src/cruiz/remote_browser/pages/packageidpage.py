@@ -377,8 +377,8 @@ class PackageIdPage(Page):
     def _on_package_id_header_menu(self, position: QtCore.QPoint) -> None:
         menu = QtWidgets.QMenu(self)
         offset = 1
-        assert self._model.settings
-        for i, s in enumerate(self._model.settings):
+        settings = self._model.settings or []
+        for i, s in enumerate(settings):
             action = QtGui.QAction(s, self)
             action.setCheckable(True)
             action.setData(i + offset)
@@ -386,9 +386,9 @@ class PackageIdPage(Page):
             action.toggled.connect(self._on_toggle_hide_column)
             menu.addAction(action)
         menu.addSeparator()
-        offset = 1 + len(self._model.settings)
-        assert self._model.options
-        for i, o in enumerate(self._model.options):
+        offset = 1 + len(settings)
+        options = self._model.options or []
+        for i, o in enumerate(options):
             action = QtGui.QAction(o, self)
             action.setData(i + offset)
             action.setCheckable(True)
@@ -396,7 +396,7 @@ class PackageIdPage(Page):
             action.toggled.connect(self._on_toggle_hide_column)
             menu.addAction(action)
         menu.addSeparator()
-        offset = 1 + len(self._model.settings) + len(self._model.options)
+        offset = 1 + len(settings) + len(options)
         action = QtGui.QAction("Requires", self)
         action.setData(offset)
         action.setCheckable(True)
