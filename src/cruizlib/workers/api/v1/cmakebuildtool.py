@@ -4,10 +4,11 @@
 
 from __future__ import annotations
 
+import traceback
 import typing
 
 import cruizlib.runcommands
-from cruizlib.interop.message import Stderr, Stdout, Success
+from cruizlib.interop.message import Failure, Stdout, Success
 from cruizlib.workers.utils.worker import Worker
 
 if typing.TYPE_CHECKING:
@@ -54,11 +55,18 @@ def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) ->
             cwd=params.cwd,
         ) as process,
     ):
-        assert process.stdout
-        for line in iter(process.stdout.readline, ""):
-            queue.put(Stdout(line))
-        assert process.stderr
-        for line in iter(process.stderr.readline, ""):
-            queue.put(Stderr(line))
+        stdout, stderr = process.communicate()
 
-        queue.put(Success(process.returncode))
+        if stdout:
+            queue.put(Stdout(stdout.strip()))
+
+        if process.returncode:
+            queue.put(
+                Failure(
+                    stderr.strip(),
+                    "subprocess.CalledProcessError",
+                    traceback.format_stack(),
+                )
+            )
+        else:
+            queue.put(Success(0))
