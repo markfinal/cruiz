@@ -11,6 +11,7 @@ class CommonParameters:
     """Common parameters for all commands to run."""
 
     worker: typing.Union[
+        typing.Callable[[typing.Any], None],
         typing.Callable[[typing.Any, typing.Any], None],
         typing.Callable[[typing.Any, typing.Any, typing.Any], None],
     ]

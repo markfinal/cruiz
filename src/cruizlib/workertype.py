@@ -29,6 +29,8 @@ AllWorkerParameterType = typing.Union[
 
 
 WorkerType = typing.Union[
+    # End() worker
+    typing.Callable[[MultiProcessingMessageQueueType], None],
     # regular worker
     typing.Callable[[MultiProcessingMessageQueueType, AllWorkerParameterType], None],
     # meta worker

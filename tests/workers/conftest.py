@@ -266,6 +266,10 @@ def multiprocess_reply_queue_fixture() -> typing.Tuple[
                 if isinstance(reply, (ConanLogMessage, Stdout, Stderr)):
                     LOGGER.info("Message: '%s'", reply.message)
                     continue
+                if isinstance(reply, End):
+                    LOGGER.info("Message: End")
+                    replies.append(Success(None))
+                    break
                 raise ValueError(f"Unknown reply of type '{type(reply)}'")
         finally:
             reply_queue.close()

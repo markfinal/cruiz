@@ -25,6 +25,7 @@ class CommandParameters(CommonParameters):
         self,
         verb: str,
         worker: typing.Union[
+            typing.Callable[[typing.Any], None],
             typing.Callable[[typing.Any, typing.Any], None],
             typing.Callable[[typing.Any, typing.Any, typing.Any], None],
         ],
