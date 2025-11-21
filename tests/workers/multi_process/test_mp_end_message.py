@@ -2,13 +2,17 @@
 
 from __future__ import annotations
 
+import logging
 import threading
 import typing
 
 import cruizlib.workers.api as workers_api
 from cruizlib.interop.message import Success
 
-# pylint: disable=wrong-import-order, import-error
+# pylint: disable=wrong-import-order
+import pytest
+
+# pylint: disable=import-error
 import testexceptions
 
 if typing.TYPE_CHECKING:
@@ -25,12 +29,15 @@ def test_end_watcher_thread(
         threading.Thread,
         typing.Any,
     ],
+    caplog: pytest.LogCaptureFixture,
 ) -> None:
     """
     Test: Explicitly end the watcher thread.
 
     Does not need a local cache as it does not use a Worker.
     """
+    caplog.set_level(logging.INFO)
+
     worker = workers_api.endmessagethread.invoke
     reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture
 
@@ -41,6 +48,7 @@ def test_end_watcher_thread(
     if watcher_thread.is_alive():
         raise testexceptions.WatcherThreadTimeoutError()
 
+    assert "EndOfLine" in caplog.text
     assert replies
     assert isinstance(replies[0], Success)
     assert replies[0].payload is None
