@@ -47,7 +47,7 @@ def _process_replies(reply_queue: MultiProcessingMessageQueueType) -> Message:
                 reply.exception_traceback,
             )
         if isinstance(reply, (ConanLogMessage, Stdout, Stderr)):
-            LOGGER.info("Message: '%s'", reply.message)
+            LOGGER.info(reply.message)
             continue
         raise ValueError(f"Unknown reply of type '{type(reply)}'")
     return reply
