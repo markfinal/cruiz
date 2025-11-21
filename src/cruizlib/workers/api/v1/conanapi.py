@@ -18,7 +18,6 @@ from conans.client import conan_api, output, runner  # noqa: E402, I100
 from conans.paths import get_conan_user_home  # noqa: E402
 
 from cruizlib.interop.commandparameters import CommandParameters  # noqa: E402
-from cruizlib.interop.commonparameters import CommonParameters  # noqa: E402
 from cruizlib.interop.message import Stderr, Stdout  # noqa: E402
 from cruizlib.workers.utils.stream import QueuedStreamSix  # noqa: E402
 
@@ -30,34 +29,27 @@ if typing.TYPE_CHECKING:
 
 def instance(
     queue: MultiProcessingMessageQueueType,
-    params: typing.Union[CommandParameters, CommonParameters],
+    params: CommandParameters,
 ) -> conan_api.ConanAPIV1:
     """Get a new instance of the Conan API object."""
     QtLogger().set_queue(queue)
     stdout = QueuedStreamSix(queue, Stdout)
     stderr = QueuedStreamSix(queue, Stderr)
     newoutputter = output.ConanOutput(stream=stdout, stream_err=stderr, color=True)
-    if isinstance(params, CommandParameters):
-        home_dir = pathlib.Path(
-            params.added_environment.get("CONAN_USER_HOME", get_conan_user_home())
-        )
-        local_cache_dir = home_dir / ".conan"
-        cache = conan_api.ClientCache(local_cache_dir, stdout)
-        print_commands_to_output = cache.config.print_commands_to_output
-        if params.cwd:
-            # TODO: this has some broken assumptions about pure paths
-            if isinstance(params.cwd, pathlib.PurePath):
-                pathlib.Path(params.cwd).mkdir(parents=True, exist_ok=True)
-            else:
-                params.cwd.mkdir(parents=True, exist_ok=True)
-            os.chdir(params.cwd)
-    elif isinstance(params, CommonParameters):
-        home_dir = pathlib.Path(
-            params.added_environment.get("CONAN_USER_HOME", get_conan_user_home())
-        )
-        local_cache_dir = home_dir / ".conan"
-        cache = conan_api.ClientCache(local_cache_dir, stdout)
-        print_commands_to_output = False
+    assert isinstance(params, CommandParameters)
+    home_dir = pathlib.Path(
+        params.added_environment.get("CONAN_USER_HOME", get_conan_user_home())
+    )
+    local_cache_dir = home_dir / ".conan"
+    cache = conan_api.ClientCache(local_cache_dir, stdout)
+    print_commands_to_output = cache.config.print_commands_to_output
+    if params.cwd:
+        # TODO: this has some broken assumptions about pure paths
+        if isinstance(params.cwd, pathlib.PurePath):
+            pathlib.Path(params.cwd).mkdir(parents=True, exist_ok=True)
+        else:
+            params.cwd.mkdir(parents=True, exist_ok=True)
+        os.chdir(params.cwd)
 
     # pylint: disable=possibly-used-before-assignment
     newrunner = runner.ConanRunner(

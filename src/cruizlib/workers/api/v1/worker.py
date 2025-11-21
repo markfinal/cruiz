@@ -5,6 +5,7 @@
 import contextlib
 import typing
 
+from cruizlib.interop.commandparameters import CommandParameters  # noqa: E402
 from cruizlib.workers.utils.worker import Worker
 
 
@@ -20,6 +21,7 @@ class ConanWorker(Worker):
         # pylint: disable=import-outside-toplevel
         from .conanapi import instance
 
+        assert isinstance(self._params, CommandParameters)
         api = instance(self._queue, self._params)
         return api
 
