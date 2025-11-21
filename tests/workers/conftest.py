@@ -218,7 +218,7 @@ def reply_queue_fixture() -> typing.Callable[
                         reply.exception_traceback,
                     )
                 if isinstance(reply, (ConanLogMessage, Stdout, Stderr)):
-                    LOGGER.info("Message: '%s'", reply.message)
+                    LOGGER.info(reply.message)
                     continue
                 raise ValueError(f"Unknown reply of type '{type(reply)}'")
 
@@ -264,10 +264,10 @@ def multiprocess_reply_queue_fixture() -> typing.Tuple[
                         reply.exception_traceback,
                     )
                 if isinstance(reply, (ConanLogMessage, Stdout, Stderr)):
-                    LOGGER.info("Message: '%s'", reply.message)
+                    LOGGER.info(reply.message)
                     continue
                 if isinstance(reply, End):
-                    LOGGER.info("Message: End")
+                    LOGGER.info("EndOfLine")
                     replies.append(Success(None))
                     break
                 raise ValueError(f"Unknown reply of type '{type(reply)}'")
