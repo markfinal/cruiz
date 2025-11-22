@@ -19,6 +19,8 @@ if typing.TYPE_CHECKING:
 def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) -> None:
     """Run 'conan config install'."""
     with worker.ConanWorker(queue, params) as api:
+        assert "pathOrUrl" in params.named_arguments
+
         args = {}
         if "gitBranch" in params.named_arguments:
             args["args"] = f"-b {params.named_arguments['gitBranch']}"
