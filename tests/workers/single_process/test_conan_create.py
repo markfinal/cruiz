@@ -44,7 +44,7 @@ LOGGER = logging.getLogger(__name__)
             "arguments",
             ["--update"],
             marks=pytest.mark.xfail(
-                CONAN_MAJOR_VERSION == 2,
+                CONAN_VERSION_COMPONENTS > (2, 0, 14),
                 reason="Unexpected Conan 2 create behaviour with --update",
             ),
         ),
