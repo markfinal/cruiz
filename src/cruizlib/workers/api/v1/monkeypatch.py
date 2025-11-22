@@ -210,4 +210,5 @@ def _do_monkey_patching() -> None:
     _monkey_patch_autotools_helper()
 
 
-_do_monkey_patching()
+if __name__ == "__main__":
+    _do_monkey_patching()
