@@ -19,7 +19,7 @@ See the documentation at [Read The Docs](https://cruiz.readthedocs.io/).
 - ARM platforms:
   - macOS (11.0+), Apple silicon
   - additional details found [here](#arm-platforms)
-- Python 3.9-3.13
+- Python 3.10-3.13
 - Conan 1.x (from 1.17.1 onwards) and 2.x (from 2.0.14 onwards)
 
 All other Python dependencies are installed when the package is installed.

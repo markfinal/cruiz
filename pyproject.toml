@@ -13,14 +13,13 @@ authors = [
 maintainers = [
     {name = "Mark Final", email = "markfinal@hotmail.com"},
 ]
-requires-python = ">=3.9, <3.14"
+requires-python = ">=3.10, <3.14"
 license = {file = "LICENSE"}
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "Topic :: Software Development :: Build Tools",
     "License :: OSI Approved :: Apache Software License",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -136,6 +135,7 @@ commands_pre = [["pip", "install", "-qe", ".[dev]"]]
 deps = [
     "conan==1.17.1",
     "markupsafe<2.1",  # workaround for https://github.com/yaml/pyyaml/issues/724, see https://github.com/conan-io/conan/issues/10611
+    "pyyaml==5.3.1",
 ]
 commands = [
     ["pip", "show", "conan"],
@@ -202,7 +202,7 @@ commands_pre = [["pip", "install", "-qe", ".[dev]"]]
 deps = [
     "conan==1.17.1",
     "markupsafe<2.1",  # workaround for https://github.com/yaml/pyyaml/issues/724, see https://github.com/conan-io/conan/issues/10611
-    "pyyaml==5.3.1",  # only seem to need this locally
+    "pyyaml==5.3.1",
 ]
 commands = [
     ["pip", "show", "conan"],
