@@ -705,10 +705,6 @@ def test_meta_available_hooks(
     assert len(reply.payload) == expected_hook_count
 
 
-@pytest.mark.xfail(
-    CONAN_MAJOR_VERSION == 2,
-    reason="Meta get hooks not implemented in Conan 2",
-)
 @pytest.mark.parametrize(
     "with_hook,with_hooks_dotgit_folder,expected_hook_count",
     [
@@ -737,7 +733,10 @@ def test_meta_get_hooks(
 
     if with_hooks_dotgit_folder:
         local_cache_dir = pathlib.Path(conan_local_cache["_REAL_CONAN_LOCAL_CACHE_DIR"])
-        (local_cache_dir / "hooks" / ".git").mkdir(parents=True)
+        if CONAN_MAJOR_VERSION == 1:
+            (local_cache_dir / "hooks" / ".git").mkdir(parents=True)
+        else:
+            (local_cache_dir / "extensions" / "hooks" / ".git").mkdir(parents=True)
 
     request_queue.put("get_hooks")
 
