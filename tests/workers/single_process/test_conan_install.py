@@ -13,7 +13,7 @@ import threading
 import typing
 
 import cruizlib.workers.api as workers_api
-from cruizlib.globals import CONAN_MAJOR_VERSION
+from cruizlib.globals import CONAN_MAJOR_VERSION, CONAN_VERSION_COMPONENTS
 from cruizlib.interop.commandparameters import CommandParameters
 from cruizlib.interop.message import (
     Message,
@@ -45,7 +45,7 @@ LOGGER = logging.getLogger(__name__)
             "arguments",
             ["--update"],
             marks=pytest.mark.xfail(
-                CONAN_MAJOR_VERSION == 2,
+                CONAN_VERSION_COMPONENTS > (2, 0, 14),
                 reason="Unexpected Conan 2 install behaviour with --update",
             ),
         ),
