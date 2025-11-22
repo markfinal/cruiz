@@ -23,10 +23,6 @@ def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) ->
         if params.build_folder:
             cmakecache_file /= params.build_folder
         cmakecache_file /= "CMakeCache.txt"
-        try:
-            # Python 3.8+
-            Path(cmakecache_file).unlink(missing_ok=True)
-        except TypeError:
-            Path(cmakecache_file).unlink()
+        Path(cmakecache_file).unlink(missing_ok=True)
         queue.put(Stdout(f"Deleted CMake cache at {cmakecache_file}"))
         queue.put(Success(None))
