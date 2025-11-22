@@ -453,10 +453,6 @@ def test_meta_get_editable_list(
     assert isinstance(reply.payload, list)
 
 
-@pytest.mark.xfail(
-    CONAN_MAJOR_VERSION == 2,
-    reason="Meta editable add not implemented in Conan 2",
-)
 @pytest.mark.parametrize(
     "pkgref_fixture,path_fixture,expectation",
     [
@@ -474,10 +470,14 @@ def test_meta_get_editable_list(
             "conan_recipe_invalid",
             pytest.raises(testexceptions.FailedMessageTestError),
         ),
-        (
+        pytest.param(
             "conan_recipe_pkgref_namespaced",
             "conan_recipe",
             does_not_raise(),
+            marks=pytest.mark.xfail(
+                CONAN_MAJOR_VERSION == 2,
+                reason="Expected to fail in Conan 2 as editable is not implemented",
+            ),
         ),
         (
             "conan_recipe_pkgref_namespaced",
