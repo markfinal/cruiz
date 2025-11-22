@@ -16,7 +16,8 @@
         "editor.formatOnSave": true,
     },
     "python.testing.pytestArgs": [
-        "tests"
+        "tests",
+        "--strict"
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
