@@ -8,6 +8,7 @@ import os
 import pathlib
 import platform
 import queue
+import stat
 import threading
 import typing
 
@@ -368,6 +369,106 @@ def fixture_cmake_script(tmp_path: pathlib.Path) -> pathlib.Path:
     with cmake_script_path.open("wt", encoding="utf-8") as cmake_script_file:
         cmake_script_file.write("cmake_minimum_required(VERSION 3.31 FATAL_ERROR)")
     return cmake_script_path
+
+
+@pytest.fixture()
+def conan_autotoolsbuildenvironment_configure_recipe(
+    tmp_path: pathlib.Path, conan_recipe_name: str, conan_recipe_version: str
+) -> pathlib.Path:
+    """
+    Create and return path to a Conan recipe using the AutoToolsBuildEnvironment.
+
+    This helper is only in Conan 1.
+
+    This recipe only calls the configure method.
+    """
+    recipe_path = tmp_path / "conanfile.py"
+    with recipe_path.open("wt", encoding="utf-8") as conanfile:
+        if CONAN_MAJOR_VERSION == 1:
+            conanfile.write(
+                "from conans import ConanFile, AutoToolsBuildEnvironment, tools\n"
+            )
+            conanfile.write("class TestConanFile(ConanFile):\n")
+        else:
+            conanfile.write("from conan import ConanFile\n")
+            conanfile.write("class TestConanFile(ConanFile):\n")
+        conanfile.write(f"  name = '{conan_recipe_name}'\n")
+        conanfile.write(f"  version = '{conan_recipe_version}'\n")
+        conanfile.write("  settings = 'os'\n")
+        conanfile.write("  options = {'shared': [True, False]}\n")
+        conanfile.write("  default_options = {'shared': True}\n")
+        if CONAN_MAJOR_VERSION == 1:
+            conanfile.write("  def build(self):\n")
+            conanfile.write(
+                "    at = AutoToolsBuildEnvironment(self, win_bash=tools.os_info.is_windows)\n"  # pylint: disable=line-too-long  # noqa: E501
+            )
+            conanfile.write("    at.configure()\n")
+    return recipe_path
+
+
+@pytest.fixture()
+def conan_autotoolsbuildenvironment_make_recipe(
+    tmp_path: pathlib.Path, conan_recipe_name: str, conan_recipe_version: str
+) -> pathlib.Path:
+    """
+    Create and return path to a Conan recipe using the AutoToolsBuildEnvironment.
+
+    This helper is only in Conan 1.
+
+    This recipe calls the configure and make methods.
+    """
+    recipe_path = tmp_path / "conanfile.py"
+    with recipe_path.open("wt", encoding="utf-8") as conanfile:
+        if CONAN_MAJOR_VERSION == 1:
+            conanfile.write(
+                "from conans import ConanFile, AutoToolsBuildEnvironment, tools\n"
+            )
+            conanfile.write("class TestConanFile(ConanFile):\n")
+        else:
+            conanfile.write("from conan import ConanFile\n")
+            conanfile.write("class TestConanFile(ConanFile):\n")
+        conanfile.write(f"  name = '{conan_recipe_name}'\n")
+        conanfile.write(f"  version = '{conan_recipe_version}'\n")
+        conanfile.write("  options = {'shared': [True, False]}\n")
+        conanfile.write("  default_options = {'shared': True}\n")
+        if CONAN_MAJOR_VERSION == 1:
+            conanfile.write("  def build(self):\n")
+            conanfile.write(
+                "    at = AutoToolsBuildEnvironment(self, win_bash=tools.os_info.is_windows)\n"  # pylint: disable=line-too-long  # noqa: E501
+            )
+            conanfile.write("    at.configure()\n")
+            conanfile.write("    at.make()\n")
+    return recipe_path
+
+
+@pytest.fixture(name="_configure_script")
+def fixture_configure_script(tmp_path: pathlib.Path) -> pathlib.Path:
+    """Create and return path to a configure script."""
+    configure_script_path = tmp_path / "configure"
+    with configure_script_path.open("wt", encoding="utf-8") as configure_script_file:
+        configure_script_file.write("#!/usr/bin/env sh")
+    configure_script_path.chmod(configure_script_path.stat().st_mode | stat.S_IEXEC)
+    return configure_script_path
+
+
+@pytest.fixture(name="_makefile")
+def fixture_makefile(tmp_path: pathlib.Path) -> pathlib.Path:
+    """Create and return path to a Makefile."""
+    makefile_path = tmp_path / "Makefile"
+    with makefile_path.open("wt", encoding="utf-8") as makefile_file:
+        makefile_file.write("# empty")
+    return makefile_path
+
+
+@pytest.fixture(name="custom_make_command")
+def fixture_custom_make_command(tmp_path: pathlib.Path) -> pathlib.Path:
+    """Fixture generating an executable script to replace make."""
+    script_path = tmp_path / "custom_make.sh"
+    with script_path.open("wt", encoding="utf-8") as script_file:
+        script_file.write("#!/usr/bin/env bash\n")
+        script_file.write("echo 'This is a custom CMake command'\n")
+    script_path.chmod(script_path.stat().st_mode | stat.S_IEXEC)
+    return script_path
 
 
 @pytest.fixture()
