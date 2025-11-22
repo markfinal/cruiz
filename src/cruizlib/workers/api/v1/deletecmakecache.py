@@ -28,5 +28,5 @@ def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) ->
             Path(cmakecache_file).unlink(missing_ok=True)
         except TypeError:
             Path(cmakecache_file).unlink()
-        queue.put(Stdout(f"Deleted {cmakecache_file}"))
+        queue.put(Stdout(f"Deleted CMake cache at {cmakecache_file}"))
         queue.put(Success(None))
