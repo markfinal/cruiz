@@ -338,6 +338,39 @@ def conan_recipe(
 
 
 @pytest.fixture()
+def conan_cmake_helper_recipe(
+    tmp_path: pathlib.Path, conan_recipe_name: str, conan_recipe_version: str
+) -> pathlib.Path:
+    """Create and return path to a Conan recipe using the CMake helper in Conan 1."""
+    recipe_path = tmp_path / "conanfile.py"
+    with recipe_path.open("wt", encoding="utf-8") as conanfile:
+        if CONAN_MAJOR_VERSION == 1:
+            conanfile.write("from conans import ConanFile, CMake\n")
+            conanfile.write("class TestConanFile(ConanFile):\n")
+        else:
+            conanfile.write("from conan import ConanFile\n")
+            conanfile.write("class TestConanFile(ConanFile):\n")
+        conanfile.write(f"  name = '{conan_recipe_name}'\n")
+        conanfile.write(f"  version = '{conan_recipe_version}'\n")
+        conanfile.write("  options = {'shared': [True, False]}\n")
+        conanfile.write("  default_options = {'shared': True}\n")
+        if CONAN_MAJOR_VERSION == 1:
+            conanfile.write("  def build(self):\n")
+            conanfile.write("    cmake = CMake(self)\n")
+            conanfile.write("    cmake.configure()\n")
+    return recipe_path
+
+
+@pytest.fixture(name="_cmake_script")
+def fixture_cmake_script(tmp_path: pathlib.Path) -> pathlib.Path:
+    """Create and return path to a CMakeLists.txt."""
+    cmake_script_path = tmp_path / "CMakeLists.txt"
+    with cmake_script_path.open("wt", encoding="utf-8") as cmake_script_file:
+        cmake_script_file.write("cmake_minimum_required(VERSION 3.31 FATAL_ERROR)")
+    return cmake_script_path
+
+
+@pytest.fixture()
 def conan_recipe_invalid(tmp_path: pathlib.Path) -> pathlib.Path:
     """Return an invalid path to a recipe."""
     return tmp_path / "does_not_exist.py"
