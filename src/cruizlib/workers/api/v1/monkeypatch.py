@@ -41,12 +41,7 @@ try:
         conans.client.build.cmake.CMakeBuildHelper.configure
     )
 except AttributeError:
-    try:
-        original_cmake_build_helper_configure = (
-            conans.client.build.cmake.CMake.configure
-        )
-    except AttributeError:
-        print("CONAN 2: Fix up CMake configure monkey patch")
+    original_cmake_build_helper_configure = conans.client.build.cmake.CMake.configure
 
 
 def _monkey_patch_cmake_helper() -> None:
@@ -104,22 +99,16 @@ def _monkey_patch_cmake_helper() -> None:
         # conan < 1.34.0
         conans.client.build.cmake.CMakeBuildHelper.configure = new_configure
     except AttributeError:
-        try:
-            conans.client.build.cmake.CMake.configure = new_configure
-        except AttributeError:
-            print("CONAN 2: Fix up CMake monkey patch")
+        conans.client.build.cmake.CMake.configure = new_configure
 
 
-try:
-    original_autotools_build_helper_configure = (
-        conans.client.build.autotools_environment.AutoToolsBuildEnvironment.configure
-    )
+original_autotools_build_helper_configure = (
+    conans.client.build.autotools_environment.AutoToolsBuildEnvironment.configure
+)
 
-    original_autotools_build_helper_make = (
-        conans.client.build.autotools_environment.AutoToolsBuildEnvironment.make
-    )
-except AttributeError:
-    print("CONAN 2: Fix up Autotools monkey patch")
+original_autotools_build_helper_make = (
+    conans.client.build.autotools_environment.AutoToolsBuildEnvironment.make
+)
 
 
 def _monkey_patch_autotools_helper() -> None:
@@ -184,11 +173,8 @@ def _monkey_patch_autotools_helper() -> None:
             use_default_install_dirs,
         )
 
-    try:
-        autotools_env = conans.client.build.autotools_environment
-        autotools_env.AutoToolsBuildEnvironment.configure = new_configure
-    except AttributeError:
-        print("CONAN 2: Fix up Autotools monkey patch")
+    autotools_env = conans.client.build.autotools_environment
+    autotools_env.AutoToolsBuildEnvironment.configure = new_configure
 
     def new_make(
         self: typing.Any,
@@ -215,12 +201,7 @@ def _monkey_patch_autotools_helper() -> None:
         # now execute the old function
         original_autotools_build_helper_make(self, args, make_program, target, vars)
 
-    try:
-        conans.client.build.autotools_environment.AutoToolsBuildEnvironment.make = (
-            new_make
-        )
-    except AttributeError:
-        print("CONAN 2: Fix up Autotools monkey patch")
+    conans.client.build.autotools_environment.AutoToolsBuildEnvironment.make = new_make
 
 
 def _do_monkey_patching() -> None:
