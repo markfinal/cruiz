@@ -183,15 +183,14 @@ commands = [
     ["pylint", "--enable=all", "--disable=locally-disabled,suppressed-message,fixme,duplicate-code", "tests"],
 ]
 
-[tool.tox.pytest]
-testpaths = [
-    "tests",
+[tool.pytest]
+addopts = [
+    "--strict",
+    "--cache-clear",
+    "--junitxml", "pytest.xml",
+    "--cov", "cruizlib",
+    "--cov-report", "term-missing:skip-covered",
 ]
-
-# cannot seem to convert to native TOML for addopts
-# as in Python 3.9, some arguments are ignored
-[tool.pytest.ini_options]
-addopts = "--cache-clear --junitxml=pytest.xml --cov=cruizlib --cov-report=term-missing:skip-covered"
 
 [tool.coverage.run]
 patch = ["subprocess"]
@@ -206,7 +205,7 @@ deps = [
 ]
 commands = [
     ["pip", "show", "conan"],
-    ["pytest", "--strict"],
+    ["pytest"],
 ]
 
 [tool.tox.env.test-latest1]
@@ -217,7 +216,7 @@ deps = [
 ]
 commands = [
     ["pip", "show", "conan"],
-    ["pytest", "--strict"],
+    ["pytest"],
 ]
 
 [tool.tox.env.test-2_0_14]
@@ -228,7 +227,7 @@ deps = [
 ]
 commands = [
     ["pip", "show", "conan"],
-    ["pytest", "--strict"],
+    ["pytest"],
 ]
 
 [tool.tox.env.test-latest2]
@@ -236,7 +235,7 @@ description = "Run pytest targeting latest Conan 2"
 commands_pre = [["pip", "install", "-qe", ".[dev]"]]
 commands = [
     ["pip", "show", "conan"],
-    ["pytest", "--strict"],
+    ["pytest"],
 ]
 
 [tool.pylint.main]
