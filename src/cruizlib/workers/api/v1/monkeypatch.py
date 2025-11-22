@@ -199,7 +199,9 @@ def _monkey_patch_autotools_helper() -> None:
             variables["PATH"] = [os.fspath(pathlib.Path(cache_executable).parent)]
 
         # now execute the old function
-        original_autotools_build_helper_make(self, args, make_program, target, vars)
+        original_autotools_build_helper_make(
+            self, args, make_program, target, variables
+        )
 
     conans.client.build.autotools_environment.AutoToolsBuildEnvironment.make = new_make
 
