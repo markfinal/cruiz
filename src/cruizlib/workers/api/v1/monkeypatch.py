@@ -58,24 +58,24 @@ def _monkey_patch_cmake_helper() -> None:
         pkg_config_paths: typing.Any = None,
     ) -> None:
         # CMake find debug support
-        if str(BuildFeatureConstants.CMAKEFINDDEBUGMODE) in os.environ:
+        if BuildFeatureConstants.CMAKEFINDDEBUGMODE.name in os.environ:
             defs = defs or {}
             defs["CMAKE_FIND_DEBUG_MODE"] = "TRUE"
 
         # CMake verbose support
-        if str(BuildFeatureConstants.CMAKEVERBOSEMODE) in os.environ:
+        if BuildFeatureConstants.CMAKEVERBOSEMODE.name in os.environ:
             defs = defs or {}
             defs["CMAKE_VERBOSE_MAKEFILE"] = "TRUE"
 
         # CMake compiler cache support
-        cache_executable = os.environ.get(str(BuildFeatureConstants.CCACHEEXECUTABLE))
+        cache_executable = os.environ.get(BuildFeatureConstants.CCACHEEXECUTABLE.name)
         if cache_executable is None:
             cache_executable = os.environ.get(
-                str(BuildFeatureConstants.SCCACHEEXECUTABLE)
+                BuildFeatureConstants.SCCACHEEXECUTABLE.name
             )
         if cache_executable is None:
             cache_executable = os.environ.get(
-                str(BuildFeatureConstants.BUILDCACHEEXECUTABLE)
+                BuildFeatureConstants.BUILDCACHEEXECUTABLE.name
             )
         if cache_executable:
             defs = defs or {}
@@ -125,31 +125,31 @@ def _monkey_patch_autotools_helper() -> None:
         use_default_install_dirs: typing.Any = True,
     ) -> None:
         args = args or []
-        cache_executable = os.environ.get(str(BuildFeatureConstants.CCACHEEXECUTABLE))
+        cache_executable = os.environ.get(BuildFeatureConstants.CCACHEEXECUTABLE.name)
         if cache_executable is not None:
             args.extend(
                 os.environ.get(
-                    str(BuildFeatureConstants.CCACHEAUTOTOOLSCONFIGARGS), ""
+                    BuildFeatureConstants.CCACHEAUTOTOOLSCONFIGARGS.name, ""
                 ).split(" ")
             )
         else:
             cache_executable = os.environ.get(
-                str(BuildFeatureConstants.SCCACHEEXECUTABLE)
+                BuildFeatureConstants.SCCACHEEXECUTABLE.name
             )
             if cache_executable is not None:
                 args.extend(
                     os.environ.get(
-                        str(BuildFeatureConstants.SCCACHEAUTOTOOLSCONFIGARGS), ""
+                        BuildFeatureConstants.SCCACHEAUTOTOOLSCONFIGARGS.name, ""
                     ).split(" ")
                 )
             else:
                 cache_executable = os.environ.get(
-                    str(BuildFeatureConstants.BUILDCACHEEXECUTABLE)
+                    BuildFeatureConstants.BUILDCACHEEXECUTABLE.name
                 )
                 if cache_executable is not None:
                     args.extend(
                         os.environ.get(
-                            str(BuildFeatureConstants.BUILDCACHEAUTOTOOLSCONFIGARGS), ""
+                            BuildFeatureConstants.BUILDCACHEAUTOTOOLSCONFIGARGS.name, ""
                         ).split(" ")
                     )
         if cache_executable:
@@ -183,14 +183,14 @@ def _monkey_patch_autotools_helper() -> None:
         target: typing.Optional[str] = None,
         variables: typing.Any = None,
     ) -> None:
-        cache_executable = os.environ.get(str(BuildFeatureConstants.CCACHEEXECUTABLE))
+        cache_executable = os.environ.get(BuildFeatureConstants.CCACHEEXECUTABLE.name)
         if cache_executable is None:
             cache_executable = os.environ.get(
-                str(BuildFeatureConstants.SCCACHEEXECUTABLE)
+                BuildFeatureConstants.SCCACHEEXECUTABLE.name
             )
         if cache_executable is None:
             cache_executable = os.environ.get(
-                str(BuildFeatureConstants.BUILDCACHEEXECUTABLE)
+                BuildFeatureConstants.BUILDCACHEEXECUTABLE.name
             )
         if cache_executable:
             variables = variables or {}
