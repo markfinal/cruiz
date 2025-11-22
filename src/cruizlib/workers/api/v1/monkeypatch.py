@@ -210,7 +210,3 @@ def _do_monkey_patching() -> None:
     _monkey_patch_logger()
     _monkey_patch_cmake_helper()
     _monkey_patch_autotools_helper()
-
-
-if __name__ == "__main__":
-    _do_monkey_patching()
