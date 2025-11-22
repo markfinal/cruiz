@@ -460,10 +460,6 @@ def test_meta_get_editable_list(
             "conan_recipe_pkgref_namespaced",
             "conan_recipe_invalid",
             pytest.raises(testexceptions.FailedMessageTestError),
-            marks=pytest.mark.xfail(
-                CONAN_VERSION_COMPONENTS == (1, 17, 1),
-                reason="Unexpected Conan 1.17.1 expects user and channel",
-            ),
         ),
         (
             "conan_recipe_pkgref_namespaced",
