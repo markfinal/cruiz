@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import logging
 import multiprocessing
 import os
@@ -106,6 +107,20 @@ def fixture_conan_local_cache(
         profile.write("[settings]\n")
         profile.write(f"os={conanised_os}\n")
         profile.write("[options]\n")
+
+    # create default remote
+    remotes_file = local_cache_dir / "remotes.json"
+    with remotes_file.open("wt", encoding="utf-8") as remotes:
+        remotes_data = {
+            "remotes": [
+                {
+                    "name": "conancenter",
+                    "url": "https://center.conan.io",
+                    "verify_ssl": True,
+                }
+            ]
+        }
+        json.dump(remotes_data, remotes)
 
     return env
 
