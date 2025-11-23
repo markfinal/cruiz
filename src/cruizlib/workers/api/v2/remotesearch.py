@@ -28,22 +28,33 @@ def invoke(
     SearchRecipesParameters has dynamic attributes.
     """
     with worker.ConanWorker(queue, params) as api:
+        # pylint: disable=import-outside-toplevel
+        from conan.api.model import ListPattern
+
         remote_name = params.remote_name  # type: ignore
         remote = api.remotes.get(remote_name)
         refs: typing.List[typing.Tuple[str, typing.Optional[str]]] = []
 
         assert hasattr(params, "pattern")
+
+        # api.search removed in v2.20.0
+        # https://github.com/conan-io/conan/pull/18726
+        # however, api.list.select has been available for a while, so use that
+
+        package_list = api.list.select(
+            pattern=ListPattern(params.pattern), remote=remote
+        )
         try:
-            for ref in api.search.recipes(query=params.pattern, remote=remote):
-                # returns a list of conans.model.recipe_ref.RecipeReference
-                refs.append((str(ref), None))
+            for first, _ in package_list.items():
+                refs.append((str(first), None))
         except AttributeError:
-            # api.search removed in v2.20.0
-            # https://github.com/conan-io/conan/pull/18726
-            for ref in list(api.list.select(pattern=params.pattern, remote=remote)):
-                # returns a list of conans.model.recipe_ref.RecipeReference
-                refs.append((str(ref), None))
+            # in Conan 2.21.0, the items() method was added, but in older,
+            # need to use the instance attribute recipes
+            for first, _ in package_list.recipes.items():  # pylint: disable=no-member
+                refs.append((str(first), None))
 
         # TODO: alias aware
+        # Conan 2 still allows aliases, but not recommended and may be removed in future
+        # https://docs.conan.io/2/reference/conanfile/attributes.html#alias
 
         queue.put(Success(refs or None))
