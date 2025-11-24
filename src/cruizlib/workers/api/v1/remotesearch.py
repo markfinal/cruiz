@@ -12,8 +12,7 @@ from cruizlib.interop.message import Success
 from . import worker
 
 if typing.TYPE_CHECKING:
-    from cruiz.interop.searchrecipesparameters import SearchRecipesParameters
-
+    from cruizlib.interop.searchrecipesparameters import SearchRecipesParameters
     from cruizlib.multiprocessingmessagequeuetype import MultiProcessingMessageQueueType
 
 

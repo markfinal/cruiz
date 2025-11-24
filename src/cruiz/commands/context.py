@@ -31,10 +31,10 @@ if typing.TYPE_CHECKING:
     from cruiz.interop.packageidparameters import PackageIdParameters
     from cruiz.interop.packagerevisionsparameters import PackageRevisionsParameters
     from cruiz.interop.reciperevisionsparameters import RecipeRevisionsParameters
-    from cruiz.interop.searchrecipesparameters import SearchRecipesParameters
 
     from cruizlib.interop.packagenode import PackageNode
     from cruizlib.interop.pod import ConanHook, ConanRemote
+    from cruizlib.interop.searchrecipesparameters import SearchRecipesParameters
 
     from .conanconf import ConanConfigBoolean
     from .logdetails import LogDetails

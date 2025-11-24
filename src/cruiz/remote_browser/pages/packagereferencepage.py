@@ -9,11 +9,11 @@ import typing
 from PySide6 import QtCore, QtGui, QtWidgets
 
 from cruiz.commands.conanconf import ConanConfigBoolean
-from cruiz.interop.searchrecipesparameters import SearchRecipesParameters
 from cruiz.settings.managers.namedlocalcache import AllNamedLocalCacheSettingsReader
 from cruiz.widgets.util import BlockSignals
 
 import cruizlib.globals
+from cruizlib.interop.searchrecipesparameters import SearchRecipesParameters
 
 from .page import Page
 
