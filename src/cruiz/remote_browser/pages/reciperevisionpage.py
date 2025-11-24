@@ -8,7 +8,7 @@ import typing
 
 from PySide6 import QtCore, QtGui, QtWidgets
 
-from cruiz.interop.reciperevisionsparameters import RecipeRevisionsParameters
+from cruizlib.interop.reciperevisionsparameters import RecipeRevisionsParameters
 
 from .page import Page
 

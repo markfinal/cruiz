@@ -4,9 +4,10 @@
 
 import typing
 
-from cruizlib.interop.commonparameters import CommonParameters
+from .commonparameters import CommonParameters
 
 
+# pylint: disable=too-few-public-methods
 class RecipeRevisionsParameters(CommonParameters):
     """
     Representation of all the arguments to get recipe revisions.
@@ -16,6 +17,7 @@ class RecipeRevisionsParameters(CommonParameters):
 
     def __init__(self, **args: typing.Any) -> None:
         """Initialise a RecipeRevisionsParameters."""
+        # pylint: disable=import-outside-toplevel
         import cruizlib.workers.api as workers_api
 
         super().__init__(workers_api.reciperevisions.invoke)

@@ -7,9 +7,9 @@ import typing
 from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
 from cruiz.interop.packageidparameters import PackageIdParameters
 from cruiz.interop.packagerevisionsparameters import PackageRevisionsParameters
-from cruiz.interop.reciperevisionsparameters import RecipeRevisionsParameters
 
 from cruizlib.interop.commandparameters import CommandParameters
+from cruizlib.interop.reciperevisionsparameters import RecipeRevisionsParameters
 from cruizlib.interop.searchrecipesparameters import SearchRecipesParameters
 from cruizlib.multiprocessingmessagequeuetype import (
     MultiProcessingMessageQueueType,
