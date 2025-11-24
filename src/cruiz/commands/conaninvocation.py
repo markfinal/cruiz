@@ -30,9 +30,9 @@ if typing.TYPE_CHECKING:
     from cruiz.interop.packageidparameters import PackageIdParameters
     from cruiz.interop.packagerevisionsparameters import PackageRevisionsParameters
     from cruiz.interop.reciperevisionsparameters import RecipeRevisionsParameters
-    from cruiz.interop.searchrecipesparameters import SearchRecipesParameters
 
     from cruizlib.interop.commandparameters import CommandParameters
+    from cruizlib.interop.searchrecipesparameters import SearchRecipesParameters
 
     from .logdetails import LogDetails
 

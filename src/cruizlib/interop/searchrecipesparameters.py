@@ -4,9 +4,10 @@
 
 import typing
 
-from cruizlib.interop.commonparameters import CommonParameters
+from .commonparameters import CommonParameters
 
 
+# pylint: disable=too-few-public-methods
 class SearchRecipesParameters(CommonParameters):
     """
     Representation of all the arguments to search for a recipe.
@@ -16,6 +17,7 @@ class SearchRecipesParameters(CommonParameters):
 
     def __init__(self, **args: typing.Any) -> None:
         """Initialise a SearchRecipesParameters."""
+        # pylint: disable=import-outside-toplevel
         import cruizlib.workers.api as workers_api
 
         super().__init__(workers_api.remotesearch.invoke)
