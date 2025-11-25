@@ -430,7 +430,8 @@ def invoke(
                     )
                     result = None
                 elif request == "editable_remove":
-                    result = _editable_remove(api, request_params["ref"][0])  # type: ignore[assignment]  # noqa: E501  # pylint: disable=line-too-long
+                    local_result = _editable_remove(api, request_params["ref"][0])
+                    result = local_result  # type: ignore[assignment]
                 elif request == "inspect_recipe":
                     result = _inspect_recipe(
                         api, request_params["path"][0]
