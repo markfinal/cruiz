@@ -63,7 +63,7 @@ def _patch_conan_run(queue: MultiProcessingMessageQueueType) -> None:
         except AttributeError:
             # moved in 2.17.0
             # https://github.com/conan-io/conan/commit/6b701e2c4d2b792757d54ea2fbdccc259995d1f7
-            # pylint: disable=used-before-assignment, no-member
+            # pylint: disable=no-member
             with conans.util.runners.pyinstaller_bundle_env_cleaned():
                 with cruizlib.runcommands.get_popen_for_capture(
                     command,
