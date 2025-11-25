@@ -22,9 +22,9 @@ from cruizlib.workers.utils.text2html import text_to_html
 
 if typing.TYPE_CHECKING:
     from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
-    from cruiz.interop.packagerevisionsparameters import PackageRevisionsParameters
 
     from cruizlib.interop.packageidparameters import PackageIdParameters
+    from cruizlib.interop.packagerevisionsparameters import PackageRevisionsParameters
     from cruizlib.interop.reciperevisionsparameters import RecipeRevisionsParameters
     from cruizlib.interop.searchrecipesparameters import SearchRecipesParameters
     from cruizlib.multiprocessingmessagequeuetype import MultiProcessingMessageQueueType
