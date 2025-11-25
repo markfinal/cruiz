@@ -28,10 +28,10 @@ from .metarequestconaninvocation import MetaRequestConanInvocation
 
 if typing.TYPE_CHECKING:
     from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
-    from cruiz.interop.packagerevisionsparameters import PackageRevisionsParameters
 
     from cruizlib.interop.packageidparameters import PackageIdParameters
     from cruizlib.interop.packagenode import PackageNode
+    from cruizlib.interop.packagerevisionsparameters import PackageRevisionsParameters
     from cruizlib.interop.pod import ConanHook, ConanRemote
     from cruizlib.interop.reciperevisionsparameters import RecipeRevisionsParameters
     from cruizlib.interop.searchrecipesparameters import SearchRecipesParameters

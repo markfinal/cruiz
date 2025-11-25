@@ -5,10 +5,10 @@
 import typing
 
 from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
-from cruiz.interop.packagerevisionsparameters import PackageRevisionsParameters
 
 from cruizlib.interop.commandparameters import CommandParameters
 from cruizlib.interop.packageidparameters import PackageIdParameters
+from cruizlib.interop.packagerevisionsparameters import PackageRevisionsParameters
 from cruizlib.interop.reciperevisionsparameters import RecipeRevisionsParameters
 from cruizlib.interop.searchrecipesparameters import SearchRecipesParameters
 from cruizlib.multiprocessingmessagequeuetype import (
