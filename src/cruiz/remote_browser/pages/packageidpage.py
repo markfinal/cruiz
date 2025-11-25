@@ -8,8 +8,9 @@ import typing
 
 from PySide6 import QtCore, QtGui, QtWidgets
 
-from cruiz.interop.packageidparameters import PackageIdParameters
 from cruiz.widgets.util import BlockSignals
+
+from cruizlib.interop.packageidparameters import PackageIdParameters
 
 from .page import Page
 
