@@ -26,7 +26,7 @@ from cruizlib.interop.message import (
     Success,
 )
 
-# pylint: disable=import-error,wrong-import-order
+# pylint: disable=wrong-import-order
 import testexceptions
 
 if typing.TYPE_CHECKING:

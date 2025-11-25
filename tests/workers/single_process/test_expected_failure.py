@@ -19,7 +19,6 @@ from cruizlib.interop.commandparameters import CommandParameters
 # pylint: disable=wrong-import-order
 import pytest
 
-# pylint: disable=import-error
 import testexceptions
 
 if typing.TYPE_CHECKING:

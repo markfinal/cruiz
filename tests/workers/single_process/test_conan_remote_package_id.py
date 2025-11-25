@@ -24,7 +24,6 @@ from cruizlib.interop.packageidparameters import PackageIdParameters
 # pylint: disable=wrong-import-order
 import pytest
 
-# pylint: disable=import-error
 import testexceptions
 
 
