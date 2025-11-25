@@ -23,7 +23,6 @@ from cruizlib.interop.searchrecipesparameters import SearchRecipesParameters
 # pylint: disable=wrong-import-order
 import pytest
 
-# pylint: disable=import-error
 import testexceptions
 
 

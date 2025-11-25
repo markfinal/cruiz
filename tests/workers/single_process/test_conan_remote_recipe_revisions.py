@@ -24,7 +24,6 @@ from cruizlib.interop.reciperevisionsparameters import RecipeRevisionsParameters
 # pylint: disable=wrong-import-order
 import pytest
 
-# pylint: disable=import-error
 import testexceptions
 
 
