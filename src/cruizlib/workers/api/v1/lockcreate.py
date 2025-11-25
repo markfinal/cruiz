@@ -50,7 +50,6 @@ def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) ->
             conan_cache = api._cache
 
         try:
-            # pylint: disable=too-many-function-args, unexpected-keyword-arg
             phost = profile_from_args(
                 [params.profile],
                 None,
