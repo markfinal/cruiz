@@ -41,7 +41,7 @@ LOGGER = logging.getLogger(__name__)
         ("imports_folder", "imports"),
     ],
 )
-# pylint: disable=too-many-arguments, too-many-positional-arguments, too-many-branches, too-many-locals, too-many-statements  # noqa: E501
+# pylint: disable=too-many-arguments, too-many-positional-arguments
 def test_conan_imports(
     reply_queue_fixture: typing.Callable[
         [], typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]

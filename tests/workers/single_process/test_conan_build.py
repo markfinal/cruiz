@@ -67,7 +67,7 @@ LOGGER = logging.getLogger(__name__)
         ),
     ],
 )
-# pylint: disable=too-many-arguments, too-many-positional-arguments, too-many-branches, too-many-locals, too-many-statements  # noqa: E501
+# pylint: disable=too-many-arguments, too-many-positional-arguments  # noqa: E501
 def test_conan_build(
     reply_queue_fixture: typing.Callable[
         [], typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
