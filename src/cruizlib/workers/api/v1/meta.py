@@ -382,7 +382,6 @@ def invoke(
                 else:
                     request_params = {}
 
-                # pylint: disable=possibly-used-before-assignment
                 if request == "remotes_list":
                     result = _remotes_list(api)
                 elif request == "remotes_sync":
