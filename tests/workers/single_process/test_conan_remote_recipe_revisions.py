@@ -81,3 +81,5 @@ def test_conan_remote_rrev_search(
         assert isinstance(replies[0], Success)
         assert isinstance(replies[0].payload, list)
         assert replies[0].payload
+        assert "revision" in replies[0].payload[0]
+        assert "time" in replies[0].payload[0]

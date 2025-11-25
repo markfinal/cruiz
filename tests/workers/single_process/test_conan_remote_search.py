@@ -78,6 +78,9 @@ def test_conan_remote_search_pkg_exists(
         assert isinstance(replies[0], Success)
         assert isinstance(replies[0].payload, list)
         assert replies[0].payload
+        assert isinstance(replies[0].payload[0], tuple)
+        assert isinstance(replies[0].payload[0][0], str)
+        assert replies[0].payload[0][1] is None, "No alias expected"
 
 
 def test_conan_remote_search_pkg_not_exists(
