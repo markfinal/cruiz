@@ -7,11 +7,13 @@ added complexity.
 """
 
 import logging
+import pathlib
 import queue
 import threading
 import typing
 
 import cruizlib.workers.api as workers_api
+from cruizlib.globals import CONAN_VERSION_COMPONENTS
 from cruizlib.interop.commandparameters import CommandParameters
 from cruizlib.interop.message import (
     Message,
@@ -30,8 +32,30 @@ def test_conan_remove_all_packages(
         [], typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
     ],
     conan_local_cache: typing.Dict[str, str],
+    conan_recipe: pathlib.Path,
 ) -> None:
-    """Test: running conan remove (for all packages)."""
+    """
+    Test: running conan remove (for all packages).
+
+    Requires installing a package first.
+    """
+    worker = workers_api.create.invoke
+    params = CommandParameters("create", worker)
+    params.added_environment = conan_local_cache
+    params.recipe_path = conan_recipe
+    params.cwd = conan_recipe.parent
+    params.profile = "default"
+    if CONAN_VERSION_COMPONENTS == (1, 17, 1):
+        params.user = "user1"
+        params.channel = "channel1"
+    reply_queue, replies, watcher_thread = reply_queue_fixture()
+    # abusing the type system, as the API used for queue.Queue is the same
+    # as for multiprocessing.Queue
+    worker(reply_queue, params)  # type: ignore[arg-type]
+    watcher_thread.join(timeout=5.0)
+    if watcher_thread.is_alive():
+        raise testexceptions.WatcherThreadTimeoutError()
+
     worker = workers_api.removeallpackages.invoke
     params = CommandParameters("removeallpackages", worker)
     params.added_environment = conan_local_cache
