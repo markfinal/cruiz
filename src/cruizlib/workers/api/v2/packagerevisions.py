@@ -49,15 +49,16 @@ def invoke(
 
         prevs_and_timestamps: typing.List[typing.Dict[str, str]] = []
         try:
-            new_ref = app.remote_manager.get_recipe_revision(pref, remote)
-            prevs_and_timestamps.append(
-                {
-                    "revision": new_ref.revision,
-                    "time": datetime.datetime.utcfromtimestamp(
-                        new_ref.timestamp
-                    ).strftime("%Y-%m-%dT%H:%M:%S%Z"),
-                }
-            )
+            assert pref.revision is None
+            for new_ref in app.remote_manager.get_package_revisions(pref, remote):
+                prevs_and_timestamps.append(
+                    {
+                        "revision": new_ref.revision,
+                        "time": datetime.datetime.utcfromtimestamp(
+                            new_ref.timestamp
+                        ).strftime("%Y-%m-%dT%H:%M:%S%Z"),
+                    }
+                )
         except AttributeError:
             # older than v2.22.0
             # https://github.com/conan-io/conan/commit/aa1f137d546a0c646eaeb29d7637e88c162ead83
