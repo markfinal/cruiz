@@ -11,8 +11,7 @@ from cruizlib.interop.message import Success
 from . import worker
 
 if typing.TYPE_CHECKING:
-    from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
-
+    from cruizlib.interop.packagebinaryparameters import PackageBinaryParameters
     from cruizlib.multiprocessingmessagequeuetype import MultiProcessingMessageQueueType
 
 
