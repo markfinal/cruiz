@@ -33,7 +33,7 @@ def test_conan_remove_all_packages(
 ) -> None:
     """Test: running conan remove (for all packages)."""
     worker = workers_api.removeallpackages.invoke
-    params = CommandParameters("package", worker)
+    params = CommandParameters("removeallpackages", worker)
     params.added_environment = conan_local_cache
     reply_queue, replies, watcher_thread = reply_queue_fixture()
     # abusing the type system, as the API used for queue.Queue is the same
