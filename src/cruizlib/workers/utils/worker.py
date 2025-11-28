@@ -21,8 +21,7 @@ from cruizlib.workers.utils.env import clear_conan_env, set_env
 from cruizlib.workers.utils.text2html import text_to_html
 
 if typing.TYPE_CHECKING:
-    from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
-
+    from cruizlib.interop.packagebinaryparameters import PackageBinaryParameters
     from cruizlib.interop.packageidparameters import PackageIdParameters
     from cruizlib.interop.packagerevisionsparameters import PackageRevisionsParameters
     from cruizlib.interop.reciperevisionsparameters import RecipeRevisionsParameters

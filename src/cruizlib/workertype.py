@@ -4,9 +4,8 @@
 
 import typing
 
-from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
-
 from cruizlib.interop.commandparameters import CommandParameters
+from cruizlib.interop.packagebinaryparameters import PackageBinaryParameters
 from cruizlib.interop.packageidparameters import PackageIdParameters
 from cruizlib.interop.packagerevisionsparameters import PackageRevisionsParameters
 from cruizlib.interop.reciperevisionsparameters import RecipeRevisionsParameters

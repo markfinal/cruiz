@@ -27,8 +27,7 @@ from .conaninvocation import ConanInvocation
 from .metarequestconaninvocation import MetaRequestConanInvocation
 
 if typing.TYPE_CHECKING:
-    from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
-
+    from cruizlib.interop.packagebinaryparameters import PackageBinaryParameters
     from cruizlib.interop.packageidparameters import PackageIdParameters
     from cruizlib.interop.packagenode import PackageNode
     from cruizlib.interop.packagerevisionsparameters import PackageRevisionsParameters

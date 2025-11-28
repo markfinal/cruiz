@@ -20,7 +20,8 @@ except ImportError:
     print("No WebEngine available. File viewer is disabled")
 
 import cruiz.globals
-from cruiz.interop.packagebinaryparameters import PackageBinaryParameters
+
+from cruizlib.interop.packagebinaryparameters import PackageBinaryParameters
 
 with contextlib.suppress(ImportError):
     from cruiz.pyside6.remote_browser_fileview import Ui_remote_browser_fileview
