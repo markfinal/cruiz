@@ -19,11 +19,11 @@ def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) ->
     """Run 'conan remove [-f] *'."""
     with worker.ConanWorker(queue, params) as api:
         force = True
-        result = api.remove("*", force=force)
+        api.remove("*", force=force)
         queue.put(
             Stdout(
                 "Removed all packages from the local cache" " (forced)" if force else ""
             )
         )
 
-        queue.put(Success(result))
+        queue.put(Success(True))
