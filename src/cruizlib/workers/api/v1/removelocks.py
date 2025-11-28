@@ -18,6 +18,6 @@ if typing.TYPE_CHECKING:
 def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) -> None:
     """Run 'conan remove --locks'."""
     with worker.ConanWorker(queue, params) as api:
-        result = api.remove_locks()
+        api.remove_locks()
 
-        queue.put(Success(result))
+        queue.put(Success(None))
