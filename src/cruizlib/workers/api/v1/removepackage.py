@@ -22,7 +22,7 @@ def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) ->
         args = {}
         if params.force:
             args["force"] = params.force
-        result = api.remove(
+        api.remove(
             params.package_reference,
             **args,
         )
@@ -36,4 +36,4 @@ def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) ->
             )
         )
 
-        queue.put(Success(result))
+        queue.put(Success(True))
