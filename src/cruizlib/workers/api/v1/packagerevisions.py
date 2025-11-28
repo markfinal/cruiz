@@ -26,9 +26,12 @@ def invoke(
     PackageRevisionsParameters has dynamic attributes.
     """
     with worker.ConanWorker(queue, params) as api:
+        assert hasattr(params, "reference")
+        assert hasattr(params, "remote_name")
+
         result = api.get_package_revisions(
-            params.reference,  # type: ignore
-            remote_name=params.remote_name,  # type: ignore
+            params.reference,
+            remote_name=params.remote_name,
         )
 
         queue.put(Success(result))

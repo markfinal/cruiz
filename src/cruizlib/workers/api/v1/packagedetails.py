@@ -24,9 +24,12 @@ def invoke(queue: MultiProcessingMessageQueueType, params: PackageIdParameters) 
     PackageIdParameters has dynamic attributes.
     """
     with worker.ConanWorker(queue, params) as api:
+        assert hasattr(params, "reference")
+        assert hasattr(params, "remote_name")
+
         result = api.search_packages(
-            params.reference,  # type: ignore
-            remote_name=params.remote_name,  # type: ignore
+            params.reference,
+            remote_name=params.remote_name,
         )
         results_list = result["results"][0]["items"][0]["packages"]
 

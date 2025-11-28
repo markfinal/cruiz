@@ -29,23 +29,28 @@ def invoke(
     SearchRecipesParameters has dynamic attributes.
     """
     with worker.ConanWorker(queue, params) as api:
-        remote_name = params.remote_name  # type: ignore
-        alias_aware = params.alias_aware  # type: ignore
+        assert hasattr(params, "pattern")
+        assert hasattr(params, "remote_name")
+        assert hasattr(params, "alias_aware")
+        assert hasattr(params, "case_sensitive")
+
+        remote_name = params.remote_name
+        alias_aware = params.alias_aware
         args = {
             "remote_name": remote_name,
-            "case_sensitive": params.case_sensitive,  # type: ignore
+            "case_sensitive": params.case_sensitive,
         }
         try:
             # fill_revisions argument in Conan 1.18.0+
             # cannot use True as the value as it tries to inspect the local cache
             results = api.search_recipes(
-                params.pattern,  # type: ignore
+                params.pattern,
                 fill_revisions=False,
                 **args,
             )
         except TypeError:
             results = api.search_recipes(
-                params.pattern,  # type: ignore
+                params.pattern,
                 **args,
             )
 

@@ -27,6 +27,10 @@ def invoke(
     from conans.model.ref import PackageReference
 
     with worker.ConanWorker(queue, params) as api:
+        assert hasattr(params, "reference")
+        assert hasattr(params, "remote_name")
+        assert hasattr(params, "where")
+
         try:
             # Conan 1.18+
             remote_manager = api.app.remote_manager
@@ -34,9 +38,9 @@ def invoke(
             # pylint: disable=protected-access, no-member
             remote_manager = api._remote_manager
 
-        remote_name = params.remote_name  # type: ignore
-        pkgref = params.reference  # type: ignore
-        where = params.where  # type: ignore
+        remote_name = params.remote_name
+        pkgref = params.reference
+        where = params.where
 
         try:
             # Conan 1.19+
