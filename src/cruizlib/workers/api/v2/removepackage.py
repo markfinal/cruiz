@@ -25,7 +25,7 @@ def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) ->
         ref_pattern = ListPattern(params.package_reference)
         select_bundle = api.list.select(ref_pattern)
 
-        for ref, _ in select_bundle.refs():
+        for ref, _ in select_bundle.refs().items():
             api.remove.recipe(ref)
 
         queue.put(
