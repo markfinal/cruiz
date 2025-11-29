@@ -574,3 +574,26 @@ def conan_dependent_recipes(
         dependent_name,
         dependent_version,
     )
+
+
+@pytest.fixture()
+def conan_testpackage_recipe(
+    tmp_path: pathlib.Path, conan_recipe_name: str
+) -> pathlib.Path:
+    """Create and return path to a Conan test_package recipe."""
+    recipe_path = tmp_path / "test_package" / "conanfile.py"
+    recipe_path.parent.mkdir(parents=True)
+    with recipe_path.open("wt", encoding="utf-8") as conanfile:
+        if CONAN_MAJOR_VERSION == 1:
+            conanfile.write("from conans import ConanFile\n")
+            conanfile.write("class TestPackageConanFile(ConanFile):\n")
+        else:
+            conanfile.write("from conan import ConanFile\n")
+            conanfile.write("class TestPackageConanFile(ConanFile):\n")
+        conanfile.write(f"  name = '{conan_recipe_name}_test'\n")
+        conanfile.write("  def test(self):\n")
+        conanfile.write("    pass\n")
+        if CONAN_MAJOR_VERSION == 2:
+            conanfile.write("  def requirements(self):\n")
+            conanfile.write("    self.requires(self.tested_reference_str)\n")
+    return recipe_path

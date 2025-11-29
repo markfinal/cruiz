@@ -32,7 +32,7 @@ def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) ->
             args["test_build_folder"] = str(params.test_build_folder)
 
         result = api.test(
-            params.recipe_path,
+            str(params.recipe_path),
             params.package_reference,
             **args,
         )
