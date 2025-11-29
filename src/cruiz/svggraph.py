@@ -9,8 +9,9 @@ import typing
 
 from PySide6 import QtCore, QtGui, QtSvg, QtSvgWidgets, QtWidgets
 
-from cruiz.environ import EnvironSaver
 from cruiz.settings.managers.graphvizpreferences import GraphVizSettingsReader
+
+from cruizlib.environ import EnvironSaver
 
 import graphviz
 
