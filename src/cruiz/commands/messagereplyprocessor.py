@@ -15,9 +15,8 @@ import typing
 
 from PySide6 import QtCore
 
-from cruiz.dumpobjecttypes import dump_object_types
-
 import cruizlib.workers.api as workers_api
+from cruizlib.dumpobjecttypes import dump_object_types
 from cruizlib.interop.message import (
     ConanLogMessage,
     End,
