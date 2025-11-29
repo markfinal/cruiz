@@ -3,6 +3,7 @@
 import os
 import typing
 
+from cruizlib.environ import EnvironSaver
 from cruizlib.workers.utils.env import set_env
 
 # pylint: disable=wrong-import-order
@@ -11,10 +12,8 @@ import pytest
 
 @pytest.fixture()
 def _global_environment() -> typing.Generator[None, None, None]:
-    env_copy = os.environ.copy()
-    yield
-    os.environ.clear()
-    os.environ.update(env_copy)
+    with EnvironSaver():
+        yield
 
 
 ENVVAR = "TEST_ENVVAR"
