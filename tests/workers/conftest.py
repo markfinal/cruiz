@@ -223,20 +223,22 @@ def reply_queue_fixture() -> typing.Callable[
             reply_queue: queue.Queue[Message], replies: typing.List[Message]
         ) -> None:
             while True:
-                reply = reply_queue.get()
+                reply = reply_queue.get(timeout=10)
                 if isinstance(reply, Success):
+                    assert not replies
                     replies.append(reply)
-                    break
-                if isinstance(reply, Failure):
+                elif isinstance(reply, Failure):
                     raise testexceptions.FailedMessageTestError(
                         reply.message or "<Empty message from upstream>",
                         reply.exception_type_name,
                         reply.exception_traceback,
                     )
-                if isinstance(reply, (ConanLogMessage, Stdout, Stderr)):
+                elif isinstance(reply, (ConanLogMessage, Stdout, Stderr)):
                     LOGGER.info(reply.message)
-                    continue
-                raise ValueError(f"Unknown reply of type '{type(reply)}'")
+                else:
+                    raise ValueError(f"Unknown reply of type '{type(reply)}'")
+                if reply_queue.empty() and replies:
+                    break
 
         reply_queue = queue.Queue[Message]()
         replies: typing.List[Message] = []
@@ -269,24 +271,27 @@ def multiprocess_reply_queue_fixture() -> typing.Tuple[
     ) -> None:
         try:
             while True:
-                reply = reply_queue.get()
+                reply = reply_queue.get(timeout=10)
                 if isinstance(reply, Success):
+                    assert not replies
                     replies.append(reply)
-                    break
-                if isinstance(reply, Failure):
+                elif isinstance(reply, Failure):
                     raise testexceptions.FailedMessageTestError(
                         reply.message or "<Empty message from upstream>",
                         reply.exception_type_name,
                         reply.exception_traceback,
                     )
-                if isinstance(reply, (ConanLogMessage, Stdout, Stderr)):
+                elif isinstance(reply, End):
+                    LOGGER.info("EndOfLine")
+                    assert not replies
+                    replies.append(Success(None))
+                elif isinstance(reply, (ConanLogMessage, Stdout, Stderr)):
                     LOGGER.info(reply.message)
                     continue
-                if isinstance(reply, End):
-                    LOGGER.info("EndOfLine")
-                    replies.append(Success(None))
+                else:
+                    raise ValueError(f"Unknown reply of type '{type(reply)}'")
+                if reply_queue.empty() and replies:
                     break
-                raise ValueError(f"Unknown reply of type '{type(reply)}'")
         finally:
             reply_queue.close()
             reply_queue.join_thread()
