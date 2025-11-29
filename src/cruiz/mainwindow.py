@@ -16,7 +16,6 @@ from functools import partial
 
 from PySide6 import QtCore, QtGui, QtWidgets
 
-import cruiz.config
 import cruiz.globals
 from cruiz.environ import EnvironSaver
 from cruiz.exceptions import (
@@ -50,6 +49,7 @@ from cruiz.widgets import (
     log_created_widget,
 )
 
+import cruizlib.config
 import cruizlib.globals
 import cruizlib.runcommands
 
