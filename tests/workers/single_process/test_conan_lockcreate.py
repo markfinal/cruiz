@@ -30,12 +30,20 @@ import testexceptions
 LOGGER = logging.getLogger(__name__)
 
 
+@pytest.mark.parametrize(
+    "arg,value",
+    [
+        (None, None),
+        ("options", {"shared": "True"}),
+    ],
+)
 # "'DepsGraph' object has no attribute 'build_time_nodes'" from v2.0.15
 @pytest.mark.xfail(
     CONAN_VERSION_COMPONENTS >= (2, 0, 15),
     reason="build_time_nodes removed in Conan 2.0.15",
     raises=testexceptions.FailedMessageTestError,
 )
+# pylint: disable=too-many-arguments, too-many-positional-arguments
 def test_conan_lock_create(
     reply_queue_fixture: typing.Callable[
         [], typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
@@ -43,6 +51,8 @@ def test_conan_lock_create(
     conan_recipe_name: str,
     conan_recipe: pathlib.Path,
     conan_local_cache: typing.Dict[str, str],
+    arg: typing.Optional[str],
+    value: typing.Union[typing.Optional[str], typing.List[str], typing.Dict[str, str]],
 ) -> None:
     """Test: running conan lock create."""
     worker = workers_api.lockcreate.invoke
@@ -51,6 +61,10 @@ def test_conan_lock_create(
     params.recipe_path = conan_recipe
     params.cwd = conan_recipe.parent
     params.profile = "default"
+    if arg == "options":
+        assert isinstance(value, dict)
+        for key, val in value.items():
+            params.add_option("test", key, val)
 
     reply_queue, replies, watcher_thread = reply_queue_fixture()
     # abusing the type system, as the API used for queue.Queue is the same
