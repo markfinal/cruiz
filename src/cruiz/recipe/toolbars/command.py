@@ -9,7 +9,6 @@ from io import StringIO
 from PySide6 import QtCore, QtGui, QtWidgets
 
 import cruiz.globals
-from cruiz.environ import EnvironSaver
 from cruiz.exceptions import RecipeInspectionError
 from cruiz.settings.managers.compilercachepreferences import CompilerCacheSettingsReader
 from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
@@ -19,6 +18,7 @@ from cruiz.settings.managers.shortcuts import ShortcutSettingsReader
 import cruizlib.globals
 import cruizlib.workers.api as workers_api
 from cruizlib.constants import BuildFeatureConstants, CompilerCacheTypes
+from cruizlib.environ import EnvironSaver
 from cruizlib.interop.commandparameters import CommandParameters
 
 IS_CONAN_V1 = cruizlib.globals.CONAN_MAJOR_VERSION == 1
