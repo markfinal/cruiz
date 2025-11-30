@@ -108,7 +108,7 @@ def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) ->
                 short_paths = False
 
                 if node.conanfile.info.invalid:
-                    raise ValueError(node.conanfile.info.invalid)
+                    raise ValueError(node.conanfile.info.invalid)  # pragma: no cover
 
                 if node.recipe in (RECIPE_CONSUMER, RECIPE_VIRTUAL):
                     new_node = PackageNode(

@@ -146,7 +146,7 @@ def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) ->
             # older Conans are unaware of the invalid info
             with contextlib.suppress(AttributeError):
                 if node.conanfile.info.invalid:
-                    raise ValueError(node.conanfile.info.invalid)
+                    raise ValueError(node.conanfile.info.invalid)  # pragma: no cover
 
             if node.recipe in (RECIPE_CONSUMER, RECIPE_VIRTUAL):
                 new_node = PackageNode(
