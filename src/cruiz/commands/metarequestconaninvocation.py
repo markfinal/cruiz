@@ -29,8 +29,6 @@ from cruizlib.interop.message import (
     Success,
 )
 
-from .conanenv import get_conan_env
-
 if typing.TYPE_CHECKING:
     from .logdetails import LogDetails
 
@@ -52,7 +50,8 @@ class MetaRequestConanInvocation(QtCore.QObject):
     def __init__(  # noqa: F811
         self,
         parent: QtCore.QObject,
-        cache_name: str,
+        added_environment: typing.Dict[str, str],
+        removed_environment: typing.List[str],
         log_details: LogDetails,
     ) -> None:
         """Initialise a MetaRequestConanInvocation."""
@@ -64,7 +63,6 @@ class MetaRequestConanInvocation(QtCore.QObject):
         self._reply_queue = self._mp_context.Queue()
         self.active = False
         params = CommandParameters("meta", workers_api.meta.invoke)
-        added_environment, removed_environment = get_conan_env(cache_name)
         params.added_environment.update(added_environment)
         params.removed_environment.extend(removed_environment)
         self._invoke_conan_process(params)
