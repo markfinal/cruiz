@@ -30,7 +30,7 @@ from cruizlib.interop.message import (
 )
 
 if typing.TYPE_CHECKING:
-    from .logdetails import LogDetails
+    from cruiz.commands.logdetails import LogDetails
 
 
 logger = logging.getLogger(__name__)
