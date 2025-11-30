@@ -40,12 +40,10 @@ def invoke(queue: MultiProcessingMessageQueueType, params: PackageIdParameters) 
             if "options" in entry:
                 new_options = {}
                 for option_key, option_value in entry["options"].items():
-                    if isinstance(
+                    assert isinstance(
                         option_value, conans.model.options.PackageOptionValue
-                    ):
-                        new_options[option_key] = str(option_value)
-                    else:
-                        new_options[option_key] = option_value
+                    )
+                    new_options[option_key] = str(option_value)
                 entry["options"] = new_options
 
         queue.put(Success(results_list or None))
