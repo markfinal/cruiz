@@ -12,7 +12,14 @@ import urllib.parse
 
 from attrs.converters import to_bool
 
-from cruizlib.interop.message import End, Failure, Stderr, Success
+from cruizlib.interop.message import (
+    ConanLogMessage,
+    End,
+    Failure,
+    Stderr,
+    Stdout,
+    Success,
+)
 from cruizlib.interop.pod import ConanHook, ConanRemote
 
 from . import worker
@@ -477,6 +484,15 @@ def invoke(
                     result = _get_config_envvars(api)  # type: ignore[assignment]
                 elif request == "create_default_profile":
                     _create_default_profile(api)
+                    result = None
+                elif request == "test_stdout":
+                    reply_queue.put(Stdout("Testing Stdout messaging"))
+                    result = None
+                elif request == "test_stderr":
+                    reply_queue.put(Stderr("Testing Stderr messaging"))
+                    result = None
+                elif request == "test_conanlog":
+                    reply_queue.put(ConanLogMessage("Testing ConanLog messaging"))
                     result = None
                 else:
                     raise ValueError(

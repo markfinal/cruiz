@@ -14,7 +14,14 @@ import traceback
 import typing
 import urllib.parse
 
-from cruizlib.interop.message import End, Failure, Success
+from cruizlib.interop.message import (
+    ConanLogMessage,
+    End,
+    Failure,
+    Stderr,
+    Stdout,
+    Success,
+)
 from cruizlib.interop.pod import ConanHook, ConanRemote
 
 from . import worker
@@ -153,7 +160,7 @@ def _interop_profile_meta(
     return details
 
 
-# pylint: disable=too-many-branches
+# pylint: disable=too-many-branches,too-many-statements
 def invoke(
     request_queue: MultiProcessingStringJoinableQueueType,
     reply_queue: MultiProcessingMessageQueueType,
@@ -196,6 +203,12 @@ def invoke(
                     result = _interop_get_config_envvars(api)
                 elif request == "profile_meta":
                     result = _interop_profile_meta(api, request_params["name"][0])
+                elif request == "test_stdout":
+                    reply_queue.put(Stdout("Testing Stdout messaging"))
+                elif request == "test_stderr":
+                    reply_queue.put(Stderr("Testing Stderr messaging"))
+                elif request == "test_conanlog":
+                    reply_queue.put(ConanLogMessage("Testing ConanLog messaging"))
                 else:
                     raise ValueError(
                         f"Meta command request not implemented: '{request}' "

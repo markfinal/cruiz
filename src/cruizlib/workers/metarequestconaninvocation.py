@@ -19,6 +19,7 @@ from PySide6 import QtCore
 
 import cruizlib.workers.api as workers_api
 from cruizlib.dumpobjecttypes import dump_object_types
+from cruizlib.exceptions import MetaCommandFailureError
 from cruizlib.interop.commandparameters import CommandParameters
 from cruizlib.interop.message import (
     ConanLogMessage,
@@ -100,11 +101,12 @@ class MetaRequestConanInvocation(QtCore.QObject):
     def __check_for_conan_leakage(entry: typing.Any = None) -> None:
         if "conans" not in sys.modules:
             return
-        if entry:
+        # remaining code is exceptional and fatal, so coverage is not needed
+        if entry:  # pragma: no cover
             logger.critical("Conan has leaked into message queue object dump:")
             dump_object_types(entry, loglevel="CRITICAL")
-        logger.critical("Conan has leaked into cruiz")
-        sys.exit(1)
+        logger.critical("Conan has leaked into cruiz")  # pragma: no cover
+        sys.exit(1)  # pragma: no cover
 
     def request_data(
         self,
@@ -156,8 +158,15 @@ class MetaRequestConanInvocation(QtCore.QObject):
         assert self._reply_queue.empty()
         self.active = False
         if response is not None:
-            if isinstance(reply, Success):
-                return (response.payload, None)  # type: ignore
-            if isinstance(reply, Failure):
-                return (None, response.exception)  # type: ignore
-        raise RuntimeError("No success message")
+            if isinstance(response, Success):
+                return (response.payload, None)
+            if isinstance(response, Failure):
+                return (
+                    None,
+                    MetaCommandFailureError(
+                        response.message,
+                        response.exception_type_name,
+                        response.exception_traceback,
+                    ),
+                )
+        raise RuntimeError("No identified response")  # pragma: no cover
