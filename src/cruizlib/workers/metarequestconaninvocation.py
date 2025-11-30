@@ -19,6 +19,7 @@ from PySide6 import QtCore
 
 import cruizlib.workers.api as workers_api
 from cruizlib.dumpobjecttypes import dump_object_types
+from cruizlib.exceptions import MetaCommandFailureError
 from cruizlib.interop.commandparameters import CommandParameters
 from cruizlib.interop.message import (
     ConanLogMessage,
@@ -159,5 +160,5 @@ class MetaRequestConanInvocation(QtCore.QObject):
             if isinstance(reply, Success):
                 return (response.payload, None)  # type: ignore
             if isinstance(reply, Failure):
-                return (None, response.exception)  # type: ignore
+                return (None, MetaCommandFailureError(response.message, response.exception_type_name, response.exception_traceback))  # type: ignore
         raise RuntimeError("No success message")
