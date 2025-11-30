@@ -33,7 +33,7 @@ def replace_conan_version_struct_with_string(
     But these cannot be passed over the process divide so just convert them to strings.
     """
     if "installed" not in result:
-        return
+        return  # pragma: no cover
     for installed in result["installed"]:
         recipe = installed["recipe"]
         recipe["version"] = str(recipe["version"])
@@ -47,11 +47,13 @@ def replace_conan_version_struct_with_string(
             with contextlib.suppress(KeyError):
                 # ignore 'components' not being in cpp_info
                 for component_key in cpp_info["components"]:
-                    component = cpp_info["components"][component_key]
-                    component["version"] = str(component["version"])
+                    component = cpp_info["components"][
+                        component_key
+                    ]  # pragma: no cover
+                    component["version"] = str(component["version"])  # pragma: no cover
             with contextlib.suppress(KeyError):
                 # ignore 'build_modules' not being in cpp_info
                 build_modules: typing.Dict[str, str] = {}
                 for key, value in cpp_info["build_modules"].items():
-                    build_modules[key] = value
-                cpp_info["build_modules"] = build_modules
+                    build_modules[key] = value  # pragma: no cover
+                cpp_info["build_modules"] = build_modules  # pragma: no cover
