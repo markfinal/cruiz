@@ -207,6 +207,10 @@ pythonpath = [
 
 [tool.coverage.run]
 patch = ["subprocess"]
+omit = [
+    "multiprocessingmessagequeuetype.py",
+    "workertype.py"
+]
 
 [tool.tox.env.test-1_17_1]
 description = "Run pytest targeting latest Conan 1.17.1 (oldest version developed against)"
