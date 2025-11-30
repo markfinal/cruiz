@@ -1,7 +1,7 @@
-name: main actions
+name: prod actions
 on:
   push:
-    branches-ignore:
+    branches:
       - main
       - v*.*
     tags:
