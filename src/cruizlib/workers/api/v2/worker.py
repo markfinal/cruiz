@@ -41,7 +41,7 @@ def _patch_conan_run(queue: MultiProcessingMessageQueueType) -> None:
 
     # entirely replacing the vanilla conan_run, because it uses subprocess communicate
     # which does not stream the output, but waits for the end of the process
-    def new_conan_run(  # type: ignore[no-untyped-def]
+    def new_conan_run(  # type: ignore[no-untyped-def]  # pragma: no cover
         command, stdout=None, stderr=None, cwd=None, shell=True
     ):
         # pylint: disable=unused-argument
