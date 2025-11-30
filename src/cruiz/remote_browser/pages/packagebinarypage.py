@@ -19,8 +19,7 @@ try:
 except ImportError:
     print("No WebEngine available. File viewer is disabled")
 
-import cruiz.globals
-
+import cruizlib.globals
 from cruizlib.interop.packagebinaryparameters import PackageBinaryParameters
 
 with contextlib.suppress(ImportError):
@@ -237,7 +236,7 @@ class _FileViewer(QtWidgets.QDialog):
             url_start = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0"
             html_file.write("<html>")
             html_file.write("<head>")
-            if cruiz.globals.is_dark_theme():
+            if cruizlib.globals.is_dark_theme():
                 html_file.write(
                     f'<link rel="stylesheet" href="{url_start}/styles/dark.min.css">'
                 )
