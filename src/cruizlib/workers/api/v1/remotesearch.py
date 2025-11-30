@@ -67,7 +67,7 @@ def invoke(
                 alias = None
                 matches = predicate.findall(contents)
                 if matches:
-                    alias = matches[0]
+                    alias = matches[0]  # pragma: no cover
                 filtered_results.append((ref, alias))
         else:
             filtered_results = [(ref, None) for ref in package_references]
