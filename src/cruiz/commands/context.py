@@ -20,11 +20,11 @@ from cruiz.settings.managers.namedlocalcache import NamedLocalCacheSettingsReade
 import cruizlib.workers.api as workers_api
 from cruizlib.constants import DEFAULT_CACHE_NAME
 from cruizlib.interop.commandparameters import CommandParameters
+from cruizlib.workers.metarequestconaninvocation import MetaRequestConanInvocation
 from cruizlib.workers.utils.text2html import text_to_html
 
 from .conanenv import get_conan_env
 from .conaninvocation import ConanInvocation
-from .metarequestconaninvocation import MetaRequestConanInvocation
 
 if typing.TYPE_CHECKING:
     from cruizlib.interop.packagebinaryparameters import PackageBinaryParameters
