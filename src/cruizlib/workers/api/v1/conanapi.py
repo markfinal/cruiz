@@ -46,10 +46,8 @@ def instance(
         print_commands_to_output = cache.config.print_commands_to_output
         if params.cwd:
             # TODO: this has some broken assumptions about pure paths
-            if isinstance(params.cwd, pathlib.PurePath):
-                pathlib.Path(params.cwd).mkdir(parents=True, exist_ok=True)
-            else:
-                params.cwd.mkdir(parents=True, exist_ok=True)
+            assert isinstance(params.cwd, pathlib.PurePath)
+            pathlib.Path(params.cwd).mkdir(parents=True, exist_ok=True)
             os.chdir(params.cwd)
     elif isinstance(params, CommonParameters):
         home_dir = pathlib.Path(
