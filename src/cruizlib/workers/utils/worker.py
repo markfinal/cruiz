@@ -61,10 +61,10 @@ class Worker:
         if isinstance(self._params, (CommandParameters, CommonParameters)):
             set_env(self._params.added_environment, self._params.removed_environment)
         else:
-            with contextlib.suppress(TypeError):
+            with contextlib.suppress(TypeError):  # pragma: no cover
                 # can happen for other types of *Parameters classes
-                if "env" in self._params:
-                    set_env(self._params["env"], [])
+                if "env" in self._params:  # pragma: no cover
+                    set_env(self._params["env"], [])  # pragma: no cover
 
         if self._wall_clock is not None:
             self._wall_clock.start()
@@ -112,11 +112,8 @@ class Worker:
         if self._wall_clock is not None:
             elapsed_time = self._wall_clock.elapsed()
             self._queue.put(Stdout("-" * 64))
-            if isinstance(self._params, CommandParameters):
-                worker = self._params.worker
-            else:
-                # TODO: does this get used any more?
-                worker = self._params["worker"]  # type: ignore
+            assert isinstance(self._params, CommandParameters)
+            worker = self._params.worker
             self._queue.put(
                 Stdout(
                     f"Command {worker} ran in "
