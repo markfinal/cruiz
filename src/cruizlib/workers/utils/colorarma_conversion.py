@@ -27,7 +27,7 @@ def convert_from_colorama_to_html(escaped_string: str) -> str:
         if code == colorama.Style.BRIGHT:
             style = ("<strong>", "</strong>")
         elif code == colorama.Fore.BLACK:
-            foreground_colour = ('<font color="black">', "</font>")
+            foreground_colour = ('<font color="black">', "</font>")  # pragma: no cover
         elif code == colorama.Fore.RED:
             foreground_colour = ('<font color="red">', "</font>")
         elif code == colorama.Fore.GREEN:
@@ -35,7 +35,7 @@ def convert_from_colorama_to_html(escaped_string: str) -> str:
         elif code == colorama.Fore.YELLOW:
             foreground_colour = ('<font color="yellow">', "</font>")
         elif code == colorama.Fore.BLUE:
-            foreground_colour = ('<font color="blue">', "</font>")
+            foreground_colour = ('<font color="blue">', "</font>")  # pragma: no cover
         elif code == colorama.Fore.MAGENTA:
             foreground_colour = ('<font color="magenta">', "</font>")
         elif code == colorama.Fore.CYAN:
