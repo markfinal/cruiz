@@ -17,12 +17,6 @@ from functools import partial
 from PySide6 import QtCore, QtGui, QtWidgets
 
 import cruiz.globals
-from cruiz.exceptions import (
-    InconsistentSettingsError,
-    RecipeAlreadyOpenError,
-    RecipeDoesNotExistError,
-    RecipeInspectionError,
-)
 from cruiz.load_recipe.loadrecipewizard import LoadRecipeWizard
 from cruiz.manage_local_cache import ManageLocalCachesDialog
 from cruiz.recipe.recipewidget import RecipeWidget
@@ -52,6 +46,12 @@ import cruizlib.config
 import cruizlib.globals
 import cruizlib.runcommands
 from cruizlib.environ import EnvironSaver
+from cruizlib.exceptions import (
+    InconsistentSettingsError,
+    RecipeAlreadyOpenError,
+    RecipeDoesNotExistError,
+    RecipeInspectionError,
+)
 
 
 import psutil
