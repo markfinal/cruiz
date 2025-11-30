@@ -157,8 +157,15 @@ class MetaRequestConanInvocation(QtCore.QObject):
         assert self._reply_queue.empty()
         self.active = False
         if response is not None:
-            if isinstance(reply, Success):
-                return (response.payload, None)  # type: ignore
-            if isinstance(reply, Failure):
-                return (None, MetaCommandFailureError(response.message, response.exception_type_name, response.exception_traceback))  # type: ignore
-        raise RuntimeError("No success message")
+            if isinstance(response, Success):
+                return (response.payload, None)
+            if isinstance(response, Failure):
+                return (
+                    None,
+                    MetaCommandFailureError(
+                        response.message,
+                        response.exception_type_name,
+                        response.exception_traceback,
+                    ),
+                )
+        raise RuntimeError("No identified response")
