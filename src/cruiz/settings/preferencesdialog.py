@@ -1319,7 +1319,7 @@ class PreferencesDialog(QtWidgets.QDialog):
             if name.startswith(":/"):
                 icon = QtGui.QIcon(name)
             else:
-                icon = QtGui.QIcon(f":/icons/{cruiz.globals.get_theme()}/{name}")
+                icon = QtGui.QIcon(f":/icons/{cruizlib.globals.get_theme()}/{name}")
             label.setPixmap(icon.pixmap(size, size))
 
         _set_pixmap(self._ui.shortcut_conan_create, "create.svg")

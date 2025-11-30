@@ -8,7 +8,6 @@ from io import StringIO
 
 from PySide6 import QtCore, QtGui, QtWidgets
 
-import cruiz.globals
 from cruiz.exceptions import RecipeInspectionError
 from cruiz.settings.managers.compilercachepreferences import CompilerCacheSettingsReader
 from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
@@ -175,7 +174,9 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             if icon_path.startswith(":/"):
                 icon = QtGui.QIcon(icon_path)
             else:
-                icon = QtGui.QIcon(f":/icons/{cruiz.globals.get_theme()}/{icon_path}")
+                icon = QtGui.QIcon(
+                    f":/icons/{cruizlib.globals.get_theme()}/{icon_path}"
+                )
             action.setIcon(icon)
 
         # pylint: disable=protected-access
@@ -257,7 +258,9 @@ class RecipeCommandToolbar(QtWidgets.QToolBar):
             if icon_path.startswith(":/"):
                 icon = QtGui.QIcon(icon_path)
             else:
-                icon = QtGui.QIcon(f":/icons/{cruiz.globals.get_theme()}/{icon_path}")
+                icon = QtGui.QIcon(
+                    f":/icons/{cruizlib.globals.get_theme()}/{icon_path}"
+                )
             action.setIcon(icon)
 
         _configure_non_conan_action(

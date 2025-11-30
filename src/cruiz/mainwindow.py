@@ -689,5 +689,5 @@ Remove from the recent list?",
     def _on_platform_theme_changed(self, color_scheme: QtCore.Qt.ColorScheme) -> None:
         if color_scheme == QtCore.Qt.ColorScheme.Unknown:
             color_scheme = QtCore.Qt.ColorScheme.Light
-        cruiz.globals.CRUIZ_THEME = color_scheme.name
+        cruizlib.globals.set_theme(color_scheme.name)
         self.theme_changed.emit(color_scheme.name)

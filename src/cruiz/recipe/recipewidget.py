@@ -12,6 +12,7 @@ from PySide6 import QtCore, QtGui, QtWidgets
 
 from attrs.converters import to_bool
 
+import cruiz.globals
 import cruiz.revealonfilesystem
 from cruiz.commands.context import ConanContext
 from cruiz.commands.logdetails import LogDetails
