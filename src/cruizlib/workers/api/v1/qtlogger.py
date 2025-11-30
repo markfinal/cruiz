@@ -52,5 +52,5 @@ class QtLogger(logging.Handler, metaclass=_Singleton):
 
     def emit(self, record: typing.Any) -> None:
         """Emit a log message."""
-        assert self._queue
-        self._queue.put(ConanLogMessage(self.format(record)))
+        assert self._queue  # pragma: no cover
+        self._queue.put(ConanLogMessage(self.format(record)))  # pragma: no cover
