@@ -23,7 +23,7 @@ def text_to_html(text: str, spaces_per_tab: int = 4) -> str:
             raise RuntimeError(
                 f"Unrecognised space character: '{current_char}' "
                 f"({ord(current_char)}), in the text '{text}'"
-            )
+            )  # pragma: no cover
     escaped = html_module.escape(stripped_line)
     escaped = escaped.replace(" ", "&nbsp;")
     html.write(escaped)
