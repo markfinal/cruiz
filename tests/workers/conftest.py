@@ -12,6 +12,7 @@ import queue
 import stat
 import sys
 import typing
+from unittest.mock import MagicMock
 
 import cruizlib.workers.api as workers_api
 from cruizlib.globals import CONAN_MAJOR_VERSION, CONAN_VERSION_COMPONENTS
@@ -25,6 +26,7 @@ from cruizlib.interop.message import (
     Stdout,
     Success,
 )
+from cruizlib.workers.metarequestconaninvocation import MetaRequestConanInvocation
 
 # pylint: disable=wrong-import-order
 import pytest
@@ -187,6 +189,24 @@ def meta(
     # wait for the child process to finish
     process.join()
     process.close()
+
+
+@pytest.fixture()
+def cruiz_meta(
+    conan_local_cache: typing.Dict[str, str],
+) -> typing.Generator[typing.Tuple[MetaRequestConanInvocation, MagicMock], None, None]:
+    """Use cruiz's meta setup and shutdown."""
+    log_details_mock = MagicMock()
+    meta_invoc = MetaRequestConanInvocation(
+        parent=None,  # type: ignore[arg-type]
+        added_environment=conan_local_cache,
+        removed_environment=[],
+        log_details=log_details_mock,
+    )
+
+    yield meta_invoc, log_details_mock
+
+    meta_invoc.close()
 
 
 @pytest.fixture()
