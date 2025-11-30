@@ -277,8 +277,8 @@ def _hooks_sync(api: typing.Any, hook_changes: typing.List[str]) -> None:
             elif _has_config_option(api, "hooks", hook.path.stem):
                 # this is for non-cruiz managed hooks that might have been added
                 # without a .py extension
-                hook_config = f"hooks.{hook.path.stem}"
-                _rm_config(api, hook_config)
+                hook_config = f"hooks.{hook.path.stem}"  # pragma: no cover
+                _rm_config(api, hook_config)  # pragma: no cover
             else:
                 # disabling a hook that has never been enabled
                 pass
