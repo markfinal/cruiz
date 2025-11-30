@@ -92,9 +92,11 @@ class ConanContext(QtCore.QObject):
 
     def _configure_to_local_cache(self, cache_name: str) -> None:
         self.cache_name = cache_name
+        added_environment, removed_environment = get_conan_env(cache_name)
         self._meta_invocation = MetaRequestConanInvocation(
             self,
-            cache_name,
+            added_environment,
+            removed_environment,
             self._log_details,
         )
 
