@@ -39,8 +39,8 @@ def invoke(queue: MultiProcessingMessageQueueType, params: CommandParameters) ->
         from conans.model.ref import PackageReference
 
         assert params.recipe_path
-        assert params.cwd
         assert params.profile, "Profile is needed for creating a lock file"
+        # params.cwd can be None
 
         try:
             # Conan 1.18+
