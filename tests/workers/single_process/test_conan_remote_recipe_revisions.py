@@ -39,6 +39,7 @@ LOGGER = logging.getLogger(__name__)
             marks=pytest.mark.xfail(
                 CONAN_MAJOR_VERSION == 2,
                 reason="Conan 2 does not allow disabling revisions",
+                strict=True,
             ),
         ),
         pytest.param(
@@ -47,6 +48,7 @@ LOGGER = logging.getLogger(__name__)
             marks=pytest.mark.xfail(
                 CONAN_VERSION_COMPONENTS == (1, 17, 1),
                 reason="Conan 1.17.1 cannot connect",
+                strict=True,
             ),
         ),
     ],

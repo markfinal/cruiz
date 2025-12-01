@@ -42,6 +42,7 @@ LOGGER = logging.getLogger(__name__)
     CONAN_VERSION_COMPONENTS >= (2, 0, 15),
     reason="build_time_nodes removed in Conan 2.0.15",
     raises=testexceptions.FailedMessageTestError,
+    strict=True,
 )
 # pylint: disable=too-many-arguments, too-many-positional-arguments
 def test_conan_lock_create(
@@ -86,6 +87,7 @@ def test_conan_lock_create(
     CONAN_VERSION_COMPONENTS >= (2, 0, 15),
     reason="build_time_nodes removed in Conan 2.0.15",
     raises=testexceptions.FailedMessageTestError,
+    strict=True,
 )
 def test_conan_lock_create_dependent_recipes(
     reply_queue_fixture: typing.Callable[

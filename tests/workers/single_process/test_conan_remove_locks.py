@@ -31,6 +31,7 @@ LOGGER = logging.getLogger(__name__)
 @pytest.mark.xfail(
     CONAN_MAJOR_VERSION == 2,
     reason="Remove locks does not exist in Conan 2",
+    strict=True,
 )
 def test_conan_remove_locks(
     reply_queue_fixture: typing.Callable[

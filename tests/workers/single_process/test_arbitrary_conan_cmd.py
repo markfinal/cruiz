@@ -35,6 +35,7 @@ import testexceptions
             marks=pytest.mark.xfail(
                 CONAN_VERSION_COMPONENTS == (1, 17, 1),
                 reason="Conan 1.17.1 does not implement conan config home",
+                strict=True,
             ),
         ),
         (

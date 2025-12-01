@@ -46,6 +46,7 @@ LOGGER = logging.getLogger(__name__)
             marks=pytest.mark.xfail(
                 CONAN_VERSION_COMPONENTS > (2, 0, 14),
                 reason="Unexpected Conan 2 install behaviour with --update",
+                strict=True,
             ),
         ),
     ],
