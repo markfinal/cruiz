@@ -35,18 +35,11 @@ LOGGER = logging.getLogger(__name__)
     [
         pytest.param(
             {"CONAN_REVISIONS_ENABLED": "0"},
-            marks=[
-                pytest.mark.xfail(
-                    CONAN_MAJOR_VERSION == 2,
-                    reason="Conan 2 does not allow disabling revisions",
-                    strict=True,
-                ),
-                pytest.mark.xfail(
-                    CONAN_VERSION_COMPONENTS == (1, 17, 1),
-                    reason="Conan 1.17.1 requires user and channel",
-                    strict=True,
-                ),
-            ],
+            marks=pytest.mark.xfail(
+                CONAN_VERSION_COMPONENTS == (1, 17, 1),
+                reason="Conan 1.17.1 requires user and channel",
+                strict=True,
+            ),
         ),
         pytest.param(
             {"CONAN_REVISIONS_ENABLED": "1"},
