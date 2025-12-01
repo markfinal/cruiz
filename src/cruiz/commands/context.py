@@ -13,18 +13,18 @@ from PySide6 import QtCore, QtWidgets
 
 from attr.converters import to_bool
 
-from cruiz.exceptions import RecipeInspectionError
 from cruiz.recipe.logs.command import CommandListWidgetItem, RecipeCommandHistoryWidget
 from cruiz.settings.managers.namedlocalcache import NamedLocalCacheSettingsReader
 
 import cruizlib.workers.api as workers_api
 from cruizlib.constants import DEFAULT_CACHE_NAME
+from cruizlib.exceptions import RecipeInspectionError
 from cruizlib.interop.commandparameters import CommandParameters
+from cruizlib.workers.metarequestconaninvocation import MetaRequestConanInvocation
 from cruizlib.workers.utils.text2html import text_to_html
 
 from .conanenv import get_conan_env
 from .conaninvocation import ConanInvocation
-from .metarequestconaninvocation import MetaRequestConanInvocation
 
 if typing.TYPE_CHECKING:
     from cruizlib.interop.packagebinaryparameters import PackageBinaryParameters

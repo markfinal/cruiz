@@ -11,7 +11,7 @@ from multiprocessing import cpu_count
 
 from PySide6 import QtCore
 
-from cruiz.exceptions import InconsistentSettingsError
+from cruizlib.exceptions import InconsistentSettingsError
 
 from .basesettings import (
     BaseSettings,

@@ -25,6 +25,7 @@ from cruizlib.interop.message import (
     Stdout,
     Success,
 )
+from cruizlib.workers.metarequestconaninvocation import MetaRequestConanInvocation
 
 # pylint: disable=wrong-import-order
 import testexceptions
@@ -171,6 +172,23 @@ def meta(
     # wait for the child process to finish
     process.join()
     process.close()
+
+
+@pytest.fixture()
+def cruiz_meta(
+    conan_local_cache: typing.Dict[str, str],
+) -> typing.Generator[MetaRequestConanInvocation, None, None]:
+    """Use cruiz's meta setup and shutdown."""
+    meta_invoc = MetaRequestConanInvocation(
+        parent=None,  # type: ignore[arg-type]
+        added_environment=conan_local_cache,
+        removed_environment=[],
+        log_details=None,  # type: ignore[arg-type]
+    )
+
+    yield meta_invoc
+
+    meta_invoc.close()
 
 
 class TestableThread(threading.Thread):
