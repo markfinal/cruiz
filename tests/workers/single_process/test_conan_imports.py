@@ -32,6 +32,7 @@ LOGGER = logging.getLogger(__name__)
 @pytest.mark.xfail(
     CONAN_MAJOR_VERSION == 2,
     reason="conan imports command does not exist in Conan 2",
+    strict=True,
 )
 @pytest.mark.parametrize(
     "arg,value",

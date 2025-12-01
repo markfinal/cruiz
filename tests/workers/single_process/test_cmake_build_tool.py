@@ -36,6 +36,7 @@ LOGGER = logging.getLogger(__name__)
 @pytest.mark.xfail(
     CONAN_MAJOR_VERSION == 2,
     reason="CMake build tool command does not exist in Conan 2",
+    strict=True,
 )
 def test_cmake_no_cache(
     reply_queue_fixture: typing.Callable[
@@ -77,6 +78,7 @@ def fixture_custom_cmake_command(tmp_path: pathlib.Path) -> pathlib.Path:
 @pytest.mark.xfail(
     CONAN_MAJOR_VERSION == 2,
     reason="CMake build tool command does not exist in Conan 2",
+    strict=True,
 )
 def test_cmake_custom_program(
     reply_queue_fixture: typing.Callable[
@@ -111,6 +113,7 @@ def test_cmake_custom_program(
 @pytest.mark.xfail(
     CONAN_MAJOR_VERSION == 2,
     reason="CMake build tool command does not exist in Conan 2",
+    strict=True,
 )
 def test_cmake_custom_build_tool(
     reply_queue_fixture: typing.Callable[
@@ -141,6 +144,7 @@ def test_cmake_custom_build_tool(
 @pytest.mark.xfail(
     CONAN_MAJOR_VERSION == 2,
     reason="CMake build tool command does not exist in Conan 2",
+    strict=True,
 )
 def test_cmake_use_ninja_generator(
     reply_queue_fixture: typing.Callable[
@@ -171,6 +175,7 @@ def test_cmake_use_ninja_generator(
 @pytest.mark.xfail(
     CONAN_MAJOR_VERSION == 2,
     reason="CMake build tool command does not exist in Conan 2",
+    strict=True,
 )
 @pytest.mark.parametrize("generator", [None, "Ninja"])
 def test_cmake_verbose_output(
@@ -205,6 +210,7 @@ def test_cmake_verbose_output(
 @pytest.mark.xfail(
     CONAN_MAJOR_VERSION == 2,
     reason="CMake build tool command does not exist in Conan 2",
+    strict=True,
 )
 def test_cmake_set_cpu_count(
     reply_queue_fixture: typing.Callable[

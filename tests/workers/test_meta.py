@@ -1,5 +1,7 @@
 """Test the meta worker functionality."""
 
+# pylint: disable=too-many-lines
+
 from __future__ import annotations
 
 import logging
@@ -188,6 +190,7 @@ def test_meta_get_profiles_dir(
 @pytest.mark.xfail(
     CONAN_MAJOR_VERSION == 2,
     reason="Meta get default profile path not implemented in Conan 2",
+    strict=True,
 )
 def test_meta_get_default_profile_path(
     meta: typing.Tuple[
@@ -249,6 +252,7 @@ def _pkgref_components(
 @pytest.mark.xfail(
     CONAN_MAJOR_VERSION == 2,
     reason="Meta get package dir not implemented in Conan 2",
+    strict=True,
 )
 @pytest.mark.parametrize(
     "pkgref,package_id,rrev,short_paths",
@@ -261,6 +265,7 @@ def _pkgref_components(
             marks=pytest.mark.xfail(
                 CONAN_VERSION_COMPONENTS == (1, 17, 1),
                 reason="Unexpected Conan 1.17.1 expects user and channel",
+                strict=True,
             ),
         ),
         pytest.param(
@@ -271,6 +276,7 @@ def _pkgref_components(
             marks=pytest.mark.xfail(
                 CONAN_VERSION_COMPONENTS == (1, 17, 1),
                 reason="Unexpected Conan 1.17.1 expects user and channel",
+                strict=True,
             ),
         ),
         ("mypackage/1.0.0@cruiz/stable", "1234", "5678", False),
@@ -316,6 +322,7 @@ def test_meta_get_package_dir(
 @pytest.mark.xfail(
     CONAN_MAJOR_VERSION == 2,
     reason="Meta get package export dir not implemented in Conan 2",
+    strict=True,
 )
 @pytest.mark.parametrize(
     "pkgref,short_paths",
@@ -326,6 +333,7 @@ def test_meta_get_package_dir(
             marks=pytest.mark.xfail(
                 CONAN_VERSION_COMPONENTS == (1, 17, 1),
                 reason="Unexpected Conan 1.17.1 expects user and channel",
+                strict=True,
             ),
         ),
         pytest.param(
@@ -334,6 +342,7 @@ def test_meta_get_package_dir(
             marks=pytest.mark.xfail(
                 CONAN_VERSION_COMPONENTS == (1, 17, 1),
                 reason="Unexpected Conan 1.17.1 expects user and channel",
+                strict=True,
             ),
         ),
         ("mypackage/1.0.0@cruiz/stable", False),
@@ -375,6 +384,7 @@ def test_meta_get_package_export_dir(
 @pytest.mark.xfail(
     CONAN_MAJOR_VERSION == 2,
     reason="Meta get export sources dir not implemented in Conan 2",
+    strict=True,
 )
 @pytest.mark.parametrize(
     "pkgref,short_paths",
@@ -385,6 +395,7 @@ def test_meta_get_package_export_dir(
             marks=pytest.mark.xfail(
                 CONAN_VERSION_COMPONENTS == (1, 17, 1),
                 reason="Unexpected Conan 1.17.1 expects user and channel",
+                strict=True,
             ),
         ),
         pytest.param(
@@ -393,6 +404,7 @@ def test_meta_get_package_export_dir(
             marks=pytest.mark.xfail(
                 CONAN_VERSION_COMPONENTS == (1, 17, 1),
                 reason="Unexpected Conan 1.17.1 expects user and channel",
+                strict=True,
             ),
         ),
         ("mypackage/1.0.0@cruiz/stable", False),
@@ -434,6 +446,7 @@ def test_meta_get_package_export_sources_dir(
 @pytest.mark.xfail(
     CONAN_MAJOR_VERSION == 2,
     reason="Meta get editable list not implemented in Conan 2",
+    strict=True,
 )
 def test_meta_get_editable_list(
     meta: typing.Tuple[
@@ -472,6 +485,7 @@ def test_meta_get_editable_list(
             marks=pytest.mark.xfail(
                 CONAN_MAJOR_VERSION == 2,
                 reason="Expected to fail in Conan 2 as editable is not implemented",
+                strict=True,
             ),
         ),
         (
@@ -512,6 +526,7 @@ def test_meta_editable_add(
 @pytest.mark.xfail(
     CONAN_MAJOR_VERSION == 2,
     reason="Meta editable remove not implemented in Conan 2",
+    strict=True,
 )
 @pytest.mark.parametrize(
     "pkgref_to_add_fixture,pkgref_to_remove_fixture,path_fixture,expectation",
@@ -536,6 +551,7 @@ def test_meta_editable_add(
             marks=pytest.mark.xfail(
                 CONAN_VERSION_COMPONENTS == (1, 17, 1),
                 reason="Unexpected Conan 1.17.1 expects user and channel",
+                strict=True,
             ),
         ),
     ],
@@ -614,6 +630,7 @@ def test_meta_inspect_recipe(
 @pytest.mark.xfail(
     CONAN_MAJOR_VERSION == 2,
     reason="Meta get hook path not implemented in Conan 2",
+    strict=True,
 )
 def test_meta_get_hook_path(
     meta: typing.Tuple[
@@ -636,6 +653,7 @@ def test_meta_get_hook_path(
 @pytest.mark.xfail(
     CONAN_MAJOR_VERSION == 2,
     reason="Meta enabled hooks not implemented in Conan 2",
+    strict=True,
 )
 def test_meta_enabled_hooks(
     meta: typing.Tuple[
@@ -658,6 +676,7 @@ def test_meta_enabled_hooks(
 @pytest.mark.xfail(
     CONAN_MAJOR_VERSION == 2,
     reason="Meta available hooks not implemented in Conan 2",
+    strict=True,
 )
 @pytest.mark.parametrize(
     "with_hook,with_hooks_dotgit_folder,expected_hook_count",
@@ -749,6 +768,7 @@ def test_meta_get_hooks(
 @pytest.mark.xfail(
     CONAN_MAJOR_VERSION == 2,
     reason="Meta sync hooks not implemented in Conan 2",
+    strict=True,
 )
 @pytest.mark.parametrize(
     "hook_path, hook_enabled",
@@ -810,6 +830,7 @@ def test_meta_sync_hooks(
 @pytest.mark.xfail(
     CONAN_MAJOR_VERSION == 2,
     reason="Meta enable hooks not implemented in Conan 2",
+    strict=True,
 )
 def test_meta_enable_hooks(
     meta: typing.Tuple[
@@ -868,6 +889,7 @@ def test_meta_get_conandata(
 @pytest.mark.xfail(
     CONAN_MAJOR_VERSION == 2,
     reason="Meta get CMake generator not implemented in Conan 2",
+    strict=True,
 )
 def test_meta_get_cmake_generator(
     meta: typing.Tuple[
@@ -954,6 +976,7 @@ def test_meta_create_default_profile(
 @pytest.mark.xfail(
     CONAN_MAJOR_VERSION == 2,
     reason="Meta set config not implemented in Conan 2",
+    strict=True,
 )
 def test_meta_set_config(
     meta: typing.Tuple[
