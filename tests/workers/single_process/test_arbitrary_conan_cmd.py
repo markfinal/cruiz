@@ -68,7 +68,7 @@ def test_arbitrary_conan_command(
     conan_local_cache: typing.Dict[str, str],
     verb: str,
     args: typing.List[str],
-    expectation: typing.Iterator[None],
+    expectation: typing.ContextManager[None],
 ) -> None:
     """
     Test: running arbitrary conan command.
@@ -84,7 +84,7 @@ def test_arbitrary_conan_command(
     reply_queue, replies, watcher_thread = reply_queue_fixture()
     # abusing the type system, as the API used for queue.Queue is the same
     # as for multiprocessing.Queue
-    with expectation:  # type: ignore[attr-defined]
+    with expectation:
         worker(reply_queue, params)  # type: ignore[arg-type]
         watcher_thread.join(timeout=5.0)
         if watcher_thread.is_alive():
