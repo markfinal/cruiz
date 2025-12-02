@@ -21,11 +21,14 @@ if typing.TYPE_CHECKING:
 
 
 def test_expected_failure(
-    multiprocess_reply_queue_fixture: typing.Tuple[
-        MultiProcessingMessageQueueType,
-        typing.List[Message],
-        threading.Thread,
-        typing.Any,
+    multiprocess_reply_queue_fixture: typing.Callable[
+        [],
+        typing.Tuple[
+            MultiProcessingMessageQueueType,
+            typing.List[Message],
+            threading.Thread,
+            typing.Any,
+        ],
     ],
     conan_local_cache: typing.Dict[str, str],
 ) -> None:
@@ -33,7 +36,7 @@ def test_expected_failure(
     worker = workers_api.install.invoke
     params = CommandParameters("install", worker)
     params.added_environment = conan_local_cache
-    reply_queue, _, watcher_thread, context = multiprocess_reply_queue_fixture
+    reply_queue, _, watcher_thread, context = multiprocess_reply_queue_fixture()
 
     process = context.Process(target=worker, args=(reply_queue, params))
     process.start()

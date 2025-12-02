@@ -6,7 +6,10 @@ to isolate the Conan commands, but this test shows it still works without that
 added complexity.
 """
 
+from __future__ import annotations
+
 import queue
+import sys
 import threading
 import typing
 from contextlib import nullcontext as does_not_raise
@@ -23,6 +26,13 @@ from cruizlib.interop.message import (
 import pytest
 
 import texceptions
+
+if typing.TYPE_CHECKING:
+    import multiprocessing
+
+    from cruizlib.multiprocessingmessagequeuetype import (
+        MultiProcessingMessageQueueType,
+    )
 
 
 @pytest.mark.parametrize(
@@ -65,6 +75,24 @@ def test_arbitrary_conan_command(
     reply_queue_fixture: typing.Callable[
         [], typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
     ],
+    multiprocess_reply_queue_fixture: typing.Callable[
+        [],
+        typing.Tuple[
+            MultiProcessingMessageQueueType,
+            typing.List[Message],
+            threading.Thread,
+            typing.Any,
+        ],
+    ],
+    run_worker: typing.Callable[
+        [
+            typing.Any,
+            typing.Any,
+            CommandParameters,
+            typing.Optional[multiprocessing.context.SpawnContext],
+        ],
+        None,
+    ],
     conan_local_cache: typing.Dict[str, str],
     verb: str,
     args: typing.List[str],
@@ -81,11 +109,17 @@ def test_arbitrary_conan_command(
     if args:
         params.arguments.extend(args)
 
-    reply_queue, replies, watcher_thread = reply_queue_fixture()
-    # abusing the type system, as the API used for queue.Queue is the same
-    # as for multiprocessing.Queue
+    if False:
+        reply_queue, replies, watcher_thread = reply_queue_fixture()
+        context = None
+    else:
+        reply_queue, replies, watcher_thread, context = (
+            multiprocess_reply_queue_fixture()
+        )
     with expectation:
-        worker(reply_queue, params)  # type: ignore[arg-type]
+        assert "conans" not in sys.modules
+        run_worker(worker, reply_queue, params, context)
+        assert "conans" not in sys.modules
         watcher_thread.join(timeout=5.0)
         if watcher_thread.is_alive():
             raise texceptions.WatcherThreadTimeoutError()

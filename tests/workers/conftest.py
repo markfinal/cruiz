@@ -252,56 +252,99 @@ def reply_queue_fixture() -> typing.Callable[
 
 
 @pytest.fixture()
-def multiprocess_reply_queue_fixture() -> typing.Tuple[
-    MultiProcessingMessageQueueType,
-    typing.List[Message],
-    TestableThread,
-    typing.Any,
+def multiprocess_reply_queue_fixture() -> typing.Callable[
+    [],
+    typing.Tuple[
+        MultiProcessingMessageQueueType,
+        typing.List[Message],
+        TestableThread,
+        multiprocessing.context.SpawnContext,
+    ],
 ]:
     """
-    Fixture to create a reply queue for a worker invocation on a child process.
+    Fixture factory to create a reply queue for a worker invocation on a child process.
 
     Uses a thread for message processing.
     The calling test must join the thread, before making any assertions on the
     responses.
     """
 
-    def _reply_watcher(
-        reply_queue: MultiProcessingMessageQueueType, replies: typing.List[Message]
-    ) -> None:
-        try:
-            while True:
-                reply = reply_queue.get(timeout=10)
-                if isinstance(reply, Success):
-                    assert not replies
-                    replies.append(reply)
-                elif isinstance(reply, Failure):
-                    raise texceptions.FailedMessageTestError(
-                        reply.message or "<Empty message from upstream>",
-                        reply.exception_type_name,
-                        reply.exception_traceback,
-                    )
-                elif isinstance(reply, End):
-                    LOGGER.info("EndOfLine")
-                    assert not replies
-                    replies.append(Success(None))
-                elif isinstance(reply, (ConanLogMessage, Stdout, Stderr)):
-                    LOGGER.info(reply.message)
-                    continue
-                else:
-                    raise ValueError(f"Unknown reply of type '{type(reply)}'")
-                if reply_queue.empty() and replies:
-                    break
-        finally:
-            reply_queue.close()
-            reply_queue.join_thread()
+    def _the_fixture() -> typing.Tuple[
+        MultiProcessingMessageQueueType,
+        typing.List[Message],
+        TestableThread,
+        multiprocessing.context.SpawnContext,
+    ]:
+        def _reply_watcher(
+            reply_queue: MultiProcessingMessageQueueType, replies: typing.List[Message]
+        ) -> None:
+            try:
+                while True:
+                    reply = reply_queue.get(timeout=10)
+                    if isinstance(reply, Success):
+                        assert not replies
+                        replies.append(reply)
+                    elif isinstance(reply, Failure):
+                        raise texceptions.FailedMessageTestError(
+                            reply.message or "<Empty message from upstream>",
+                            reply.exception_type_name,
+                            reply.exception_traceback,
+                        )
+                    elif isinstance(reply, End):
+                        LOGGER.info("EndOfLine")
+                        assert not replies
+                        replies.append(Success(None))
+                    elif isinstance(reply, (ConanLogMessage, Stdout, Stderr)):
+                        LOGGER.info(reply.message)
+                        continue
+                    else:
+                        raise ValueError(f"Unknown reply of type '{type(reply)}'")
+                    if reply_queue.empty() and replies:
+                        break
+            finally:
+                reply_queue.close()
+                reply_queue.join_thread()
 
-    context = multiprocessing.get_context("spawn")
-    reply_queue = context.Queue()
-    replies: typing.List[Message] = []
-    watcher_thread = TestableThread(target=_reply_watcher, args=(reply_queue, replies))
-    watcher_thread.start()
-    return reply_queue, replies, watcher_thread, context
+        context = multiprocessing.get_context("spawn")
+        reply_queue = context.Queue()
+        replies: typing.List[Message] = []
+        watcher_thread = TestableThread(
+            target=_reply_watcher, args=(reply_queue, replies)
+        )
+        watcher_thread.start()
+        return reply_queue, replies, watcher_thread, context
+
+    return _the_fixture
+
+
+@pytest.fixture()
+def run_worker() -> typing.Callable[
+    [
+        typing.Any,
+        typing.Any,
+        CommandParameters,
+        typing.Optional[multiprocessing.context.SpawnContext],
+    ],
+    None,
+]:
+    """Fixture factory returning how to run the worker."""
+
+    def _the_fixture(
+        worker: typing.Any,
+        reply_queue: typing.Any,
+        params: CommandParameters,
+        context: typing.Optional[multiprocessing.context.SpawnContext],
+    ) -> None:
+        if context is None:
+            # abusing the type system, as the API used for queue.Queue is the same
+            # as for multiprocessing.Queue
+            worker(reply_queue, params)
+        else:
+            process = context.Process(target=worker, args=(reply_queue, params))
+            process.start()
+            process.join()
+
+    return _the_fixture
 
 
 @pytest.fixture(name="conan_recipe_name_invalid")

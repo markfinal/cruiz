@@ -22,11 +22,14 @@ if typing.TYPE_CHECKING:
 
 
 def test_end_watcher_thread(
-    multiprocess_reply_queue_fixture: typing.Tuple[
-        MultiProcessingMessageQueueType,
-        typing.List[Message],
-        threading.Thread,
-        typing.Any,
+    multiprocess_reply_queue_fixture: typing.Callable[
+        [],
+        typing.Tuple[
+            MultiProcessingMessageQueueType,
+            typing.List[Message],
+            threading.Thread,
+            typing.Any,
+        ],
     ],
     caplog: pytest.LogCaptureFixture,
 ) -> None:
@@ -38,7 +41,7 @@ def test_end_watcher_thread(
     caplog.set_level(logging.INFO)
 
     worker = workers_api.endmessagethread.invoke
-    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture
+    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture()
 
     process = context.Process(target=worker, args=(reply_queue,))
     process.start()
