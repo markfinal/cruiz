@@ -1,7 +1,5 @@
 """Test the meta worker functionality."""
 
-# pylint: disable=too-many-lines
-
 from __future__ import annotations
 
 import logging
@@ -33,6 +31,8 @@ if typing.TYPE_CHECKING:
         MultiProcessingStringJoinableQueueType,
     )
 
+    from ttypes import MetaFixture
+
 LOGGER = logging.getLogger(__name__)
 
 
@@ -63,11 +63,7 @@ def _meta_done(
     reply_queue.join_thread()
 
 
-def test_meta_get_version(
-    meta: typing.Tuple[
-        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
-    ],
-) -> None:
+def test_meta_get_version(meta: MetaFixture) -> None:
     """Via the meta worker: Get the version."""
     request_queue, reply_queue = meta
 
@@ -88,11 +84,7 @@ def test_meta_get_version(
     _meta_done(request_queue, reply_queue)
 
 
-def test_meta_get_remotes_list(
-    meta: typing.Tuple[
-        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
-    ],
-) -> None:
+def test_meta_get_remotes_list(meta: MetaFixture) -> None:
     """Via the meta worker: Get the remotes list."""
     request_queue, reply_queue = meta
 
@@ -107,11 +99,7 @@ def test_meta_get_remotes_list(
     _meta_done(request_queue, reply_queue)
 
 
-def test_meta_remotes_sync(
-    meta: typing.Tuple[
-        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
-    ],
-) -> None:
+def test_meta_remotes_sync(meta: MetaFixture) -> None:
     """Via the meta worker: Synchronize remotes."""
     request_queue, reply_queue = meta
 
@@ -149,11 +137,7 @@ def test_meta_remotes_sync(
     _meta_done(request_queue, reply_queue)
 
 
-def test_meta_get_profiles_dir(
-    meta: typing.Tuple[
-        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
-    ],
-) -> None:
+def test_meta_get_profiles_dir(meta: MetaFixture) -> None:
     """
     Via the meta worker: Get the profiles directory.
 
@@ -192,11 +176,7 @@ def test_meta_get_profiles_dir(
     reason="Meta get default profile path not implemented in Conan 2",
     strict=True,
 )
-def test_meta_get_default_profile_path(
-    meta: typing.Tuple[
-        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
-    ],
-) -> None:
+def test_meta_get_default_profile_path(meta: MetaFixture) -> None:
     """Via the meta worker: Get the default profile path."""
     request_queue, reply_queue = meta
 
@@ -211,12 +191,7 @@ def test_meta_get_default_profile_path(
     _meta_done(request_queue, reply_queue)
 
 
-def test_meta_get_profile_meta(
-    meta: typing.Tuple[
-        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
-    ],
-    conanised_os: str,
-) -> None:
+def test_meta_get_profile_meta(meta: MetaFixture, conanised_os: str) -> None:
     """Via the meta worker: Get profile meta."""
     request_queue, reply_queue = meta
 
@@ -284,9 +259,7 @@ def _pkgref_components(
     ],
 )
 def test_meta_get_package_dir(
-    meta: typing.Tuple[
-        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
-    ],
+    meta: MetaFixture,
     pkgref: str,
     package_id: str,
     rrev: str,
@@ -350,9 +323,7 @@ def test_meta_get_package_dir(
     ],
 )
 def test_meta_get_package_export_dir(
-    meta: typing.Tuple[
-        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
-    ],
+    meta: MetaFixture,
     pkgref: str,
     short_paths: bool,
 ) -> None:
@@ -412,9 +383,7 @@ def test_meta_get_package_export_dir(
     ],
 )
 def test_meta_get_package_export_sources_dir(
-    meta: typing.Tuple[
-        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
-    ],
+    meta: MetaFixture,
     pkgref: str,
     short_paths: bool,
 ) -> None:
@@ -448,11 +417,7 @@ def test_meta_get_package_export_sources_dir(
     reason="Meta get editable list not implemented in Conan 2",
     strict=True,
 )
-def test_meta_get_editable_list(
-    meta: typing.Tuple[
-        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
-    ],
-) -> None:
+def test_meta_get_editable_list(meta: MetaFixture) -> None:
     """Via the meta worker: Get editable list."""
     request_queue, reply_queue = meta
 
@@ -496,9 +461,7 @@ def test_meta_get_editable_list(
     ],
 )
 def test_meta_editable_add(
-    meta: typing.Tuple[
-        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
-    ],
+    meta: MetaFixture,
     pkgref_fixture: str,
     path_fixture: str,
     expectation: typing.ContextManager[None],
@@ -558,9 +521,7 @@ def test_meta_editable_add(
 )
 # pylint: disable=too-many-arguments,too-many-positional-arguments
 def test_meta_editable_remove(
-    meta: typing.Tuple[
-        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
-    ],
+    meta: MetaFixture,
     pkgref_to_add_fixture: typing.Optional[str],
     pkgref_to_remove_fixture: str,
     path_fixture: str,
@@ -600,12 +561,7 @@ def test_meta_editable_remove(
     _meta_done(request_queue, reply_queue)
 
 
-def test_meta_inspect_recipe(
-    meta: typing.Tuple[
-        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
-    ],
-    conan_recipe: str,
-) -> None:
+def test_meta_inspect_recipe(meta: MetaFixture, conan_recipe: str) -> None:
     """Via the meta worker: Inspect a recipe."""
     request_queue, reply_queue = meta
 
@@ -632,11 +588,7 @@ def test_meta_inspect_recipe(
     reason="Meta get hook path not implemented in Conan 2",
     strict=True,
 )
-def test_meta_get_hook_path(
-    meta: typing.Tuple[
-        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
-    ],
-) -> None:
+def test_meta_get_hook_path(meta: MetaFixture) -> None:
     """Via the meta worker: Get the hook path."""
     request_queue, reply_queue = meta
 
@@ -655,11 +607,7 @@ def test_meta_get_hook_path(
     reason="Meta enabled hooks not implemented in Conan 2",
     strict=True,
 )
-def test_meta_enabled_hooks(
-    meta: typing.Tuple[
-        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
-    ],
-) -> None:
+def test_meta_enabled_hooks(meta: MetaFixture) -> None:
     """Via the meta worker: Enabled hooks."""
     request_queue, reply_queue = meta
 
@@ -689,9 +637,7 @@ def test_meta_enabled_hooks(
 )
 # pylint: disable=too-many-arguments,too-many-positional-arguments
 def test_meta_available_hooks(
-    meta: typing.Tuple[
-        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
-    ],
+    meta: MetaFixture,
     with_hook: bool,
     with_hooks_dotgit_folder: bool,
     expected_hook_count: int,
@@ -730,9 +676,7 @@ def test_meta_available_hooks(
 )
 # pylint: disable=too-many-arguments,too-many-positional-arguments
 def test_meta_get_hooks(
-    meta: typing.Tuple[
-        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
-    ],
+    meta: MetaFixture,
     with_hook: bool,
     with_hooks_dotgit_folder: bool,
     expected_hook_count: int,
@@ -778,9 +722,7 @@ def test_meta_get_hooks(
     ],
 )
 def test_meta_sync_hooks(
-    meta: typing.Tuple[
-        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
-    ],
+    meta: MetaFixture,
     hook_path: str,
     hook_enabled: bool,
     conan_local_cache: typing.Dict[str, str],
@@ -832,12 +774,7 @@ def test_meta_sync_hooks(
     reason="Meta enable hooks not implemented in Conan 2",
     strict=True,
 )
-def test_meta_enable_hooks(
-    meta: typing.Tuple[
-        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
-    ],
-    _installed_hook: pathlib.Path,
-) -> None:
+def test_meta_enable_hooks(meta: MetaFixture, _installed_hook: pathlib.Path) -> None:
     """Via the meta worker: Enable hooks."""
     request_queue, reply_queue = meta
 
@@ -865,11 +802,7 @@ def test_meta_enable_hooks(
 
 
 def test_meta_get_conandata(
-    meta: typing.Tuple[
-        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
-    ],
-    conan_recipe: pathlib.Path,
-    _conandata: pathlib.Path,
+    meta: MetaFixture, conan_recipe: pathlib.Path, _conandata: pathlib.Path
 ) -> None:
     """Via the meta worker: Get conandata."""
     request_queue, reply_queue = meta
@@ -891,11 +824,7 @@ def test_meta_get_conandata(
     reason="Meta get CMake generator not implemented in Conan 2",
     strict=True,
 )
-def test_meta_get_cmake_generator(
-    meta: typing.Tuple[
-        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
-    ],
-) -> None:
+def test_meta_get_cmake_generator(meta: MetaFixture) -> None:
     """Via the meta worker: Get Conan's default CMake generator."""
     request_queue, reply_queue = meta
 
@@ -909,11 +838,7 @@ def test_meta_get_cmake_generator(
     assert reply.payload is None, "As the CMake default generator is not set"
 
 
-def test_meta_get_config(
-    meta: typing.Tuple[
-        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
-    ],
-) -> None:
+def test_meta_get_config(meta: MetaFixture) -> None:
     """Via the meta worker: Get Conan config."""
     request_queue, reply_queue = meta
 
@@ -936,11 +861,7 @@ def test_meta_get_config(
         assert reply.payload is None, "Conan 2 sets no default config"
 
 
-def test_meta_get_config_envvars(
-    meta: typing.Tuple[
-        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
-    ],
-) -> None:
+def test_meta_get_config_envvars(meta: MetaFixture) -> None:
     """Via the meta worker: Get Conan config environment variables."""
     request_queue, reply_queue = meta
 
@@ -955,11 +876,7 @@ def test_meta_get_config_envvars(
     assert len(reply.payload) > 0
 
 
-def test_meta_create_default_profile(
-    meta: typing.Tuple[
-        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
-    ],
-) -> None:
+def test_meta_create_default_profile(meta: MetaFixture) -> None:
     """Via the meta worker: Create default Conan profile."""
     request_queue, reply_queue = meta
 
@@ -978,11 +895,7 @@ def test_meta_create_default_profile(
     reason="Meta set config not implemented in Conan 2",
     strict=True,
 )
-def test_meta_set_config(
-    meta: typing.Tuple[
-        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
-    ],
-) -> None:
+def test_meta_set_config(meta: MetaFixture) -> None:
     """Via the meta worker: Set Conan config."""
     request_queue, reply_queue = meta
 
@@ -998,11 +911,7 @@ def test_meta_set_config(
     assert reply.payload is None
 
 
-def test_meta_unknown_request(
-    meta: typing.Tuple[
-        MultiProcessingStringJoinableQueueType, MultiProcessingMessageQueueType
-    ],
-) -> None:
+def test_meta_unknown_request(meta: MetaFixture) -> None:
     """Via the meta worker: An unknown request."""
     request_queue, reply_queue = meta
 

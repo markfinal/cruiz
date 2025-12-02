@@ -6,23 +6,23 @@ to isolate the Conan commands, but this test shows it still works without that
 added complexity.
 """
 
-import queue
-import threading
+from __future__ import annotations
+
 import typing
 from contextlib import nullcontext as does_not_raise
 
 import cruizlib.workers.api as workers_api
 from cruizlib.globals import CONAN_MAJOR_VERSION, CONAN_VERSION_COMPONENTS
 from cruizlib.interop.commandparameters import CommandParameters
-from cruizlib.interop.message import (
-    Message,
-    Success,
-)
+from cruizlib.interop.message import Success
 
 # pylint: disable=wrong-import-order
 import pytest
 
 import texceptions
+
+if typing.TYPE_CHECKING:
+    from ttypes import RunWorkerFixture, SingleprocessReplyQueueFixture
 
 
 @pytest.mark.parametrize(
@@ -61,10 +61,10 @@ import texceptions
         ),
     ],
 )
+# pylint: disable=too-many-arguments, too-many-positional-arguments
 def test_arbitrary_conan_command(
-    reply_queue_fixture: typing.Callable[
-        [], typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
-    ],
+    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    run_worker: RunWorkerFixture,
     conan_local_cache: typing.Dict[str, str],
     verb: str,
     args: typing.List[str],
@@ -81,11 +81,9 @@ def test_arbitrary_conan_command(
     if args:
         params.arguments.extend(args)
 
-    reply_queue, replies, watcher_thread = reply_queue_fixture()
-    # abusing the type system, as the API used for queue.Queue is the same
-    # as for multiprocessing.Queue
+    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
     with expectation:
-        worker(reply_queue, params)  # type: ignore[arg-type]
+        run_worker(worker, reply_queue, params, context)
         watcher_thread.join(timeout=5.0)
         if watcher_thread.is_alive():
             raise texceptions.WatcherThreadTimeoutError()

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import logging
-import threading
 import typing
 
 import cruizlib.workers.api as workers_api
@@ -15,19 +14,11 @@ import pytest
 import texceptions
 
 if typing.TYPE_CHECKING:
-    from cruizlib.interop.message import Message
-    from cruizlib.multiprocessingmessagequeuetype import (
-        MultiProcessingMessageQueueType,
-    )
+    from ttypes import MultiprocessReplyQueueFixture
 
 
 def test_end_watcher_thread(
-    multiprocess_reply_queue_fixture: typing.Tuple[
-        MultiProcessingMessageQueueType,
-        typing.List[Message],
-        threading.Thread,
-        typing.Any,
-    ],
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
     """
@@ -38,7 +29,7 @@ def test_end_watcher_thread(
     caplog.set_level(logging.INFO)
 
     worker = workers_api.endmessagethread.invoke
-    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture
+    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture()
 
     process = context.Process(target=worker, args=(reply_queue,))
     process.start()
