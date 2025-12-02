@@ -10,8 +10,6 @@ from __future__ import annotations
 
 import logging
 import pathlib
-import queue
-import threading
 import typing
 
 import cruizlib.workers.api as workers_api
@@ -25,7 +23,7 @@ import pytest
 import texceptions
 
 if typing.TYPE_CHECKING:
-    from cruizlib.interop.message import Message
+    from ttypes import RunWorkerFixture, SingleprocessReplyQueueFixture
 
 
 LOGGER = logging.getLogger(__name__)
@@ -38,9 +36,8 @@ LOGGER = logging.getLogger(__name__)
     strict=True,
 )
 def test_cmake_delete_cache(
-    reply_queue_fixture: typing.Callable[
-        [], typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
-    ],
+    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    run_worker: RunWorkerFixture,
     tmp_path: pathlib.Path,
     caplog: pytest.LogCaptureFixture,
     build_folder: typing.Optional[pathlib.PurePath],
@@ -53,10 +50,8 @@ def test_cmake_delete_cache(
     params.cwd = tmp_path
     if build_folder:
         params.build_folder = build_folder
-    reply_queue, replies, watcher_thread = reply_queue_fixture()
-    # abusing the type system, as the API used for queue.Queue is the same
-    # as for multiprocessing.Queue
-    worker(reply_queue, params)  # type: ignore[arg-type]
+    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    run_worker(worker, reply_queue, params, context)
     watcher_thread.join(timeout=5.0)
     if watcher_thread.is_alive():
         raise texceptions.WatcherThreadTimeoutError()

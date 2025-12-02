@@ -6,27 +6,26 @@ to isolate the Conan commands, but this test shows it still works without that
 added complexity.
 """
 
+from __future__ import annotations
+
 import logging
 import os
 import pathlib
-import queue
-import threading
 import typing
 
 import cruizlib.workers.api as workers_api
 from cruizlib.constants import BuildFeatureConstants
 from cruizlib.globals import CONAN_MAJOR_VERSION
 from cruizlib.interop.commandparameters import CommandParameters
-from cruizlib.interop.message import (
-    Message,
-    Success,
-)
+from cruizlib.interop.message import Success
 
 # pylint: disable=wrong-import-order
 import pytest
 
 import texceptions
 
+if typing.TYPE_CHECKING:
+    from ttypes import RunWorkerFixture, SingleprocessReplyQueueFixture
 
 LOGGER = logging.getLogger(__name__)
 
@@ -63,9 +62,8 @@ LOGGER = logging.getLogger(__name__)
 )
 # pylint: disable=too-many-arguments, too-many-positional-arguments  # noqa: E501
 def test_conan_autotoolsbuildhelper_configure(
-    reply_queue_fixture: typing.Callable[
-        [], typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
-    ],
+    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    run_worker: RunWorkerFixture,
     conan_autotoolsbuildenvironment_configure_recipe: pathlib.Path,
     conan_local_cache: typing.Dict[str, str],
     _configure_script: pathlib.Path,
@@ -85,10 +83,8 @@ def test_conan_autotoolsbuildhelper_configure(
         params.recipe_path = conan_autotoolsbuildenvironment_configure_recipe
         params.cwd = conan_autotoolsbuildenvironment_configure_recipe.parent
         params.profile = "default"
-        reply_queue, replies, watcher_thread = reply_queue_fixture()
-        # abusing the type system, as the API used for queue.Queue is the same
-        # as for multiprocessing.Queue
-        worker(reply_queue, params)  # type: ignore[arg-type]
+        reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+        run_worker(worker, reply_queue, params, context)
         watcher_thread.join(timeout=5.0)
         if watcher_thread.is_alive():
             raise texceptions.WatcherThreadTimeoutError()
@@ -102,10 +98,8 @@ def test_conan_autotoolsbuildhelper_configure(
     params.added_environment = conan_local_cache
     params.recipe_path = conan_autotoolsbuildenvironment_configure_recipe
     params.cwd = conan_autotoolsbuildenvironment_configure_recipe.parent
-    reply_queue, replies, watcher_thread = reply_queue_fixture()
-    # abusing the type system, as the API used for queue.Queue is the same
-    # as for multiprocessing.Queue
-    worker(reply_queue, params)  # type: ignore[arg-type]
+    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    run_worker(worker, reply_queue, params, context)
     watcher_thread.join(timeout=5.0)
     if watcher_thread.is_alive():
         raise texceptions.WatcherThreadTimeoutError()
@@ -128,9 +122,8 @@ def test_conan_autotoolsbuildhelper_configure(
 )
 # pylint: disable=too-many-arguments, too-many-positional-arguments  # noqa: E501
 def test_conan_autotoolsbuildhelper_make(
-    reply_queue_fixture: typing.Callable[
-        [], typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
-    ],
+    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    run_worker: RunWorkerFixture,
     conan_autotoolsbuildenvironment_make_recipe: pathlib.Path,
     conan_local_cache: typing.Dict[str, str],
     _configure_script: pathlib.Path,
@@ -154,10 +147,8 @@ def test_conan_autotoolsbuildhelper_make(
         params.recipe_path = conan_autotoolsbuildenvironment_make_recipe
         params.cwd = conan_autotoolsbuildenvironment_make_recipe.parent
         params.profile = "default"
-        reply_queue, replies, watcher_thread = reply_queue_fixture()
-        # abusing the type system, as the API used for queue.Queue is the same
-        # as for multiprocessing.Queue
-        worker(reply_queue, params)  # type: ignore[arg-type]
+        reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+        run_worker(worker, reply_queue, params, context)
         watcher_thread.join(timeout=5.0)
         if watcher_thread.is_alive():
             raise texceptions.WatcherThreadTimeoutError()
@@ -171,10 +162,8 @@ def test_conan_autotoolsbuildhelper_make(
     params.added_environment["CONAN_MAKE_PROGRAM"] = os.fspath(custom_make_command)
     params.recipe_path = conan_autotoolsbuildenvironment_make_recipe
     params.cwd = conan_autotoolsbuildenvironment_make_recipe.parent
-    reply_queue, replies, watcher_thread = reply_queue_fixture()
-    # abusing the type system, as the API used for queue.Queue is the same
-    # as for multiprocessing.Queue
-    worker(reply_queue, params)  # type: ignore[arg-type]
+    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    run_worker(worker, reply_queue, params, context)
     watcher_thread.join(timeout=5.0)
     if watcher_thread.is_alive():
         raise texceptions.WatcherThreadTimeoutError()
