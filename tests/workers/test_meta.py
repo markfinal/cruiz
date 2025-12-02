@@ -501,7 +501,7 @@ def test_meta_editable_add(
     ],
     pkgref_fixture: str,
     path_fixture: str,
-    expectation: typing.Iterator[None],
+    expectation: typing.ContextManager[None],
     request: pytest.FixtureRequest,
 ) -> None:
     """Via the meta worker: Editable add."""
@@ -515,7 +515,7 @@ def test_meta_editable_add(
     request_queue.put(meta_request)
 
     # for nullcontext warning, see https://github.com/python/mypy/issues/10109
-    with expectation:  # type: ignore[attr-defined]
+    with expectation:
         reply = _process_replies(reply_queue)
         _meta_done(request_queue, reply_queue)
         assert reply_queue.empty()
