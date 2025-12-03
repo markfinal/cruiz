@@ -88,8 +88,7 @@ def test_arbitrary_conan_command(
         params.arguments.extend(args)
 
     if False:  # pylint: disable=using-constant-test
-        reply_queue, replies, watcher_thread = reply_queue_fixture()
-        context = None
+        reply_queue, replies, watcher_thread, context = reply_queue_fixture()
     else:
         reply_queue, replies, watcher_thread, context = (
             multiprocess_reply_queue_fixture()

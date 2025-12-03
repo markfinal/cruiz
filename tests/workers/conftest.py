@@ -43,9 +43,9 @@ if typing.TYPE_CHECKING:
         MetaFixture,
         MultiprocessReplyQueueFixture,
         MultiprocessReplyQueueReturnType,
+        RunWorkerFixture,
         SingleprocessReplyQueueFixture,
         SingleprocessReplyQueueReturnType,
-        RunWorkerFixture,
     )
 
 
@@ -224,7 +224,7 @@ def reply_queue_fixture() -> SingleprocessReplyQueueFixture:
             target=_reply_watcher, args=(reply_queue, replies)
         )
         watcher_thread.start()
-        return reply_queue, replies, watcher_thread
+        return reply_queue, replies, watcher_thread, None
 
     return _the_fixture
 

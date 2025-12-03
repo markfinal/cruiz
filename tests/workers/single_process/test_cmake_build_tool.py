@@ -11,9 +11,7 @@ from __future__ import annotations
 import logging
 import os
 import pathlib
-import queue
 import stat
-import threading
 import typing
 
 import cruizlib.workers.api as workers_api
@@ -27,7 +25,7 @@ import pytest
 import texceptions
 
 if typing.TYPE_CHECKING:
-    from cruizlib.interop.message import Message
+    from ttypes import SingleprocessReplyQueueFixture
 
 
 LOGGER = logging.getLogger(__name__)
@@ -39,9 +37,7 @@ LOGGER = logging.getLogger(__name__)
     strict=True,
 )
 def test_cmake_no_cache(
-    reply_queue_fixture: typing.Callable[
-        [], typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
-    ],
+    reply_queue_fixture: SingleprocessReplyQueueFixture,
     tmp_path: pathlib.Path,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
@@ -52,7 +48,7 @@ def test_cmake_no_cache(
     params = CommandParameters("cmakebuild", worker)
     params.cwd = tmp_path
     # params.added_environment = conan_local_cache
-    reply_queue, _, watcher_thread = reply_queue_fixture()
+    reply_queue, _, watcher_thread, _ = reply_queue_fixture()
     # abusing the type system, as the API used for queue.Queue is the same
     # as for multiprocessing.Queue
     with pytest.raises(
@@ -81,9 +77,7 @@ def fixture_custom_cmake_command(tmp_path: pathlib.Path) -> pathlib.Path:
     strict=True,
 )
 def test_cmake_custom_program(
-    reply_queue_fixture: typing.Callable[
-        [], typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
-    ],
+    reply_queue_fixture: SingleprocessReplyQueueFixture,
     tmp_path: pathlib.Path,
     caplog: pytest.LogCaptureFixture,
     custom_cmake_command: pathlib.Path,
@@ -95,7 +89,7 @@ def test_cmake_custom_program(
     params = CommandParameters("cmakebuild", worker)
     params.cwd = tmp_path
     params.added_environment = {"CONAN_CMAKE_PROGRAM": os.fspath(custom_cmake_command)}
-    reply_queue, replies, watcher_thread = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, _ = reply_queue_fixture()
     # abusing the type system, as the API used for queue.Queue is the same
     # as for multiprocessing.Queue
     worker(reply_queue, params)  # type: ignore[arg-type]
@@ -116,9 +110,7 @@ def test_cmake_custom_program(
     strict=True,
 )
 def test_cmake_custom_build_tool(
-    reply_queue_fixture: typing.Callable[
-        [], typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
-    ],
+    reply_queue_fixture: SingleprocessReplyQueueFixture,
     tmp_path: pathlib.Path,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
@@ -129,7 +121,7 @@ def test_cmake_custom_build_tool(
     params = CommandParameters("cmakebuild", worker)
     params.cwd = tmp_path
     params.added_environment = {"CONAN_MAKE_PROGRAM": "another_make"}
-    reply_queue, _, watcher_thread = reply_queue_fixture()
+    reply_queue, _, watcher_thread, _ = reply_queue_fixture()
     # abusing the type system, as the API used for queue.Queue is the same
     # as for multiprocessing.Queue
     with pytest.raises(
@@ -147,9 +139,7 @@ def test_cmake_custom_build_tool(
     strict=True,
 )
 def test_cmake_use_ninja_generator(
-    reply_queue_fixture: typing.Callable[
-        [], typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
-    ],
+    reply_queue_fixture: SingleprocessReplyQueueFixture,
     tmp_path: pathlib.Path,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
@@ -160,7 +150,7 @@ def test_cmake_use_ninja_generator(
     params = CommandParameters("cmakebuild", worker)
     params.cwd = tmp_path
     params.added_environment = {"CONAN_CMAKE_GENERATOR": "Ninja"}
-    reply_queue, _, watcher_thread = reply_queue_fixture()
+    reply_queue, _, watcher_thread, _ = reply_queue_fixture()
     # abusing the type system, as the API used for queue.Queue is the same
     # as for multiprocessing.Queue
     with pytest.raises(
@@ -179,9 +169,7 @@ def test_cmake_use_ninja_generator(
 )
 @pytest.mark.parametrize("generator", [None, "Ninja"])
 def test_cmake_verbose_output(
-    reply_queue_fixture: typing.Callable[
-        [], typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
-    ],
+    reply_queue_fixture: SingleprocessReplyQueueFixture,
     tmp_path: pathlib.Path,
     caplog: pytest.LogCaptureFixture,
     generator: typing.Optional[str],
@@ -195,7 +183,7 @@ def test_cmake_verbose_output(
     if generator:
         params.added_environment = {"CONAN_CMAKE_GENERATOR": generator}
     params.arguments.append("verbose")
-    reply_queue, _, watcher_thread = reply_queue_fixture()
+    reply_queue, _, watcher_thread, _ = reply_queue_fixture()
     # abusing the type system, as the API used for queue.Queue is the same
     # as for multiprocessing.Queue
     with pytest.raises(
@@ -213,9 +201,7 @@ def test_cmake_verbose_output(
     strict=True,
 )
 def test_cmake_set_cpu_count(
-    reply_queue_fixture: typing.Callable[
-        [], typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
-    ],
+    reply_queue_fixture: SingleprocessReplyQueueFixture,
     tmp_path: pathlib.Path,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
@@ -226,7 +212,7 @@ def test_cmake_set_cpu_count(
     params = CommandParameters("cmakebuild", worker)
     params.cwd = tmp_path
     params.added_environment = {"CONAN_CPU_COUNT": "1"}
-    reply_queue, _, watcher_thread = reply_queue_fixture()
+    reply_queue, _, watcher_thread, _ = reply_queue_fixture()
     # abusing the type system, as the API used for queue.Queue is the same
     # as for multiprocessing.Queue
     with pytest.raises(

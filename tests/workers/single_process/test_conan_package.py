@@ -6,24 +6,24 @@ to isolate the Conan commands, but this test shows it still works without that
 added complexity.
 """
 
+from __future__ import annotations
+
 import logging
 import pathlib
-import queue
-import threading
 import typing
 
 import cruizlib.workers.api as workers_api
 from cruizlib.globals import CONAN_MAJOR_VERSION
 from cruizlib.interop.commandparameters import CommandParameters
-from cruizlib.interop.message import (
-    Message,
-    Success,
-)
+from cruizlib.interop.message import Success
 
 # pylint: disable=wrong-import-order
 import pytest
 
 import texceptions
+
+if typing.TYPE_CHECKING:
+    from ttypes import SingleprocessReplyQueueFixture
 
 
 LOGGER = logging.getLogger(__name__)
@@ -44,9 +44,7 @@ LOGGER = logging.getLogger(__name__)
 )
 # pylint: disable=too-many-arguments, too-many-positional-arguments
 def test_conan_package(
-    reply_queue_fixture: typing.Callable[
-        [], typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
-    ],
+    reply_queue_fixture: SingleprocessReplyQueueFixture,
     conan_recipe: pathlib.Path,
     conan_local_cache: typing.Dict[str, str],
     tmp_path: pathlib.Path,
@@ -71,7 +69,7 @@ def test_conan_package(
         # in the cwd for the install artifacts
         assert isinstance(value, str)
         params.install_folder = tmp_path / value
-    reply_queue, replies, watcher_thread = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, _ = reply_queue_fixture()
     # abusing the type system, as the API used for queue.Queue is the same
     # as for multiprocessing.Queue
     worker(reply_queue, params)  # type: ignore[arg-type]
@@ -97,7 +95,7 @@ def test_conan_package(
         elif arg == "package_folder":
             assert isinstance(value, str)
             params.package_folder = tmp_path / value
-    reply_queue, replies, watcher_thread = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, _ = reply_queue_fixture()
     # abusing the type system, as the API used for queue.Queue is the same
     # as for multiprocessing.Queue
     worker(reply_queue, params)  # type: ignore[arg-type]

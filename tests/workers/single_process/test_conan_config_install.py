@@ -6,36 +6,34 @@ to isolate the Conan commands, but this test shows it still works without that
 added complexity.
 """
 
+from __future__ import annotations
+
 import logging
 import os
 import pathlib
-import queue
 import subprocess
-import threading
 import typing
 import zipfile
 
 import cruizlib.workers.api as workers_api
 from cruizlib.globals import CONAN_MAJOR_VERSION
 from cruizlib.interop.commandparameters import CommandParameters
-from cruizlib.interop.message import (
-    Message,
-    Success,
-)
+from cruizlib.interop.message import Success
 
 # pylint: disable=wrong-import-order
 import pytest
 
 import texceptions
 
+if typing.TYPE_CHECKING:
+    from ttypes import SingleprocessReplyQueueFixture
+
 
 LOGGER = logging.getLogger(__name__)
 
 
 def test_conan_config_install_missing(
-    reply_queue_fixture: typing.Callable[
-        [], typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
-    ],
+    reply_queue_fixture: SingleprocessReplyQueueFixture,
     conan_local_cache: typing.Dict[str, str],
 ) -> None:
     """Test: running conan config install that is missing."""
@@ -43,7 +41,7 @@ def test_conan_config_install_missing(
     params = CommandParameters("install_config", worker)
     params.added_environment = conan_local_cache
     params.named_arguments["pathOrUrl"] = "/some/unknownpath"
-    reply_queue, _, watcher_thread = reply_queue_fixture()
+    reply_queue, _, watcher_thread, _ = reply_queue_fixture()
     # abusing the type system, as the API used for queue.Queue is the same
     # as for multiprocessing.Queue
     with pytest.raises(
@@ -88,9 +86,7 @@ def fixture_conan_config_git_repo(tmp_path: pathlib.Path) -> pathlib.Path:
 
 
 def test_conan_config_install_from_zip(
-    reply_queue_fixture: typing.Callable[
-        [], typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
-    ],
+    reply_queue_fixture: SingleprocessReplyQueueFixture,
     conan_local_cache: typing.Dict[str, str],
     conan_config_zip: pathlib.Path,
     caplog: pytest.LogCaptureFixture,
@@ -101,7 +97,7 @@ def test_conan_config_install_from_zip(
     params = CommandParameters("install_config", worker)
     params.added_environment = conan_local_cache
     params.named_arguments["pathOrUrl"] = os.fspath(conan_config_zip)
-    reply_queue, replies, watcher_thread = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, _ = reply_queue_fixture()
     # abusing the type system, as the API used for queue.Queue is the same
     # as for multiprocessing.Queue
     worker(reply_queue, params)  # type: ignore[arg-type]
@@ -121,9 +117,7 @@ def test_conan_config_install_from_zip(
 
 
 def test_conan_config_install_from_git(
-    reply_queue_fixture: typing.Callable[
-        [], typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
-    ],
+    reply_queue_fixture: SingleprocessReplyQueueFixture,
     conan_local_cache: typing.Dict[str, str],
     conan_config_git_repo: pathlib.Path,
     caplog: pytest.LogCaptureFixture,
@@ -134,7 +128,7 @@ def test_conan_config_install_from_git(
     params = CommandParameters("install_config", worker)
     params.added_environment = conan_local_cache
     params.named_arguments["pathOrUrl"] = os.fspath(conan_config_git_repo)
-    reply_queue, replies, watcher_thread = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, _ = reply_queue_fixture()
     # abusing the type system, as the API used for queue.Queue is the same
     # as for multiprocessing.Queue
     worker(reply_queue, params)  # type: ignore[arg-type]
@@ -154,9 +148,7 @@ def test_conan_config_install_from_git(
 
 
 def test_conan_config_install_with_git_branch(
-    reply_queue_fixture: typing.Callable[
-        [], typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
-    ],
+    reply_queue_fixture: SingleprocessReplyQueueFixture,
     conan_local_cache: typing.Dict[str, str],
     conan_config_git_repo: pathlib.Path,
     caplog: pytest.LogCaptureFixture,
@@ -171,7 +163,7 @@ def test_conan_config_install_with_git_branch(
     params.added_environment = conan_local_cache
     params.named_arguments["pathOrUrl"] = os.fspath(conan_config_git_repo)
     params.named_arguments["gitBranch"] = git_branch_name
-    reply_queue, replies, watcher_thread = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, _ = reply_queue_fixture()
     # abusing the type system, as the API used for queue.Queue is the same
     # as for multiprocessing.Queue
     worker(reply_queue, params)  # type: ignore[arg-type]
@@ -192,9 +184,7 @@ def test_conan_config_install_with_git_branch(
 
 
 def test_conan_config_install_with_missing_git_branch(
-    reply_queue_fixture: typing.Callable[
-        [], typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
-    ],
+    reply_queue_fixture: SingleprocessReplyQueueFixture,
     conan_local_cache: typing.Dict[str, str],
     conan_config_git_repo: pathlib.Path,
     caplog: pytest.LogCaptureFixture,
@@ -213,7 +203,7 @@ def test_conan_config_install_with_missing_git_branch(
     params.added_environment = conan_local_cache
     params.named_arguments["pathOrUrl"] = os.fspath(conan_config_git_repo)
     params.named_arguments["gitBranch"] = git_branch_name
-    reply_queue, replies, watcher_thread = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, _ = reply_queue_fixture()
     # abusing the type system, as the API used for queue.Queue is the same
     # as for multiprocessing.Queue
     worker(reply_queue, params)  # type: ignore[arg-type]
@@ -234,9 +224,7 @@ def test_conan_config_install_with_missing_git_branch(
 
 
 def test_conan_config_install_from_source_folder(
-    reply_queue_fixture: typing.Callable[
-        [], typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
-    ],
+    reply_queue_fixture: SingleprocessReplyQueueFixture,
     conan_local_cache: typing.Dict[str, str],
     conan_config_zip: pathlib.Path,
     caplog: pytest.LogCaptureFixture,
@@ -255,7 +243,7 @@ def test_conan_config_install_from_source_folder(
     params.added_environment = conan_local_cache
     params.named_arguments["pathOrUrl"] = os.fspath(conan_config_zip)
     params.named_arguments["sourceFolder"] = source_folder
-    reply_queue, replies, watcher_thread = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, _ = reply_queue_fixture()
     # abusing the type system, as the API used for queue.Queue is the same
     # as for multiprocessing.Queue
     worker(reply_queue, params)  # type: ignore[arg-type]
@@ -276,9 +264,7 @@ def test_conan_config_install_from_source_folder(
 
 
 def test_conan_config_install_to_target_folder(
-    reply_queue_fixture: typing.Callable[
-        [], typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
-    ],
+    reply_queue_fixture: SingleprocessReplyQueueFixture,
     conan_local_cache: typing.Dict[str, str],
     conan_config_zip: pathlib.Path,
     caplog: pytest.LogCaptureFixture,
@@ -293,7 +279,7 @@ def test_conan_config_install_to_target_folder(
     params.added_environment = conan_local_cache
     params.named_arguments["pathOrUrl"] = os.fspath(conan_config_zip)
     params.named_arguments["targetFolder"] = target_folder
-    reply_queue, replies, watcher_thread = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, _ = reply_queue_fixture()
     # abusing the type system, as the API used for queue.Queue is the same
     # as for multiprocessing.Queue
     worker(reply_queue, params)  # type: ignore[arg-type]

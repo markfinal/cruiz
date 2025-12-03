@@ -16,7 +16,10 @@ from tthread import TestableThread  # pylint: disable=wrong-import-order
 
 # Single process
 SingleprocessReplyQueueReturnType = typing.Tuple[
-    queue.Queue[Message], typing.List[Message], TestableThread
+    queue.Queue[Message],
+    typing.List[Message],
+    TestableThread,
+    None,
 ]
 
 SingleprocessReplyQueueFixture = typing.Callable[
@@ -29,7 +32,7 @@ MultiprocessReplyQueueReturnType = typing.Tuple[
     MultiProcessingMessageQueueType,
     typing.List[Message],
     threading.Thread,
-    typing.Optional[multiprocessing.context.SpawnContext],
+    multiprocessing.context.SpawnContext,
 ]
 
 MultiprocessReplyQueueFixture = typing.Callable[[], MultiprocessReplyQueueReturnType]
