@@ -19,7 +19,7 @@ from cruizlib.interop.commandparameters import CommandParameters
 # pylint: disable=wrong-import-order
 import pytest
 
-import testexceptions
+import texceptions
 
 if typing.TYPE_CHECKING:
     from cruizlib.interop.message import Message
@@ -42,7 +42,7 @@ def test_expected_failure(
     # abusing the type system, as the API used for queue.Queue is the same
     # as for multiprocessing.Queue
     worker(reply_queue, params)  # type: ignore[arg-type]
-    with pytest.raises(testexceptions.FailedMessageTestError):
+    with pytest.raises(texceptions.FailedMessageTestError):
         watcher_thread.join(timeout=5.0)
         if watcher_thread.is_alive():
-            raise testexceptions.WatcherThreadTimeoutError()
+            raise texceptions.WatcherThreadTimeoutError()

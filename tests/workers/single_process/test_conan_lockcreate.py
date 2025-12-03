@@ -24,7 +24,7 @@ from cruizlib.interop.message import (
 # pylint: disable=wrong-import-order
 import pytest
 
-import testexceptions
+import texceptions
 
 
 LOGGER = logging.getLogger(__name__)
@@ -41,7 +41,7 @@ LOGGER = logging.getLogger(__name__)
 @pytest.mark.xfail(
     CONAN_VERSION_COMPONENTS >= (2, 0, 15),
     reason="build_time_nodes removed in Conan 2.0.15",
-    raises=testexceptions.FailedMessageTestError,
+    raises=texceptions.FailedMessageTestError,
     strict=True,
 )
 # pylint: disable=too-many-arguments, too-many-positional-arguments
@@ -73,7 +73,7 @@ def test_conan_lock_create(
     worker(reply_queue, params)  # type: ignore[arg-type]
     watcher_thread.join(timeout=5.0)
     if watcher_thread.is_alive():
-        raise testexceptions.WatcherThreadTimeoutError()
+        raise texceptions.WatcherThreadTimeoutError()
 
     assert replies
     assert isinstance(replies[0], Success)
@@ -86,7 +86,7 @@ def test_conan_lock_create(
 @pytest.mark.xfail(
     CONAN_VERSION_COMPONENTS >= (2, 0, 15),
     reason="build_time_nodes removed in Conan 2.0.15",
-    raises=testexceptions.FailedMessageTestError,
+    raises=texceptions.FailedMessageTestError,
     strict=True,
 )
 def test_conan_lock_create_dependent_recipes(
@@ -119,7 +119,7 @@ def test_conan_lock_create_dependent_recipes(
     worker(reply_queue, params)  # type: ignore[arg-type]
     watcher_thread.join(timeout=5.0)
     if watcher_thread.is_alive():
-        raise testexceptions.WatcherThreadTimeoutError()
+        raise texceptions.WatcherThreadTimeoutError()
 
     assert replies
     assert isinstance(replies[0], Success)
@@ -137,7 +137,7 @@ def test_conan_lock_create_dependent_recipes(
     worker(reply_queue, params)  # type: ignore[arg-type]
     watcher_thread.join(timeout=5.0)
     if watcher_thread.is_alive():
-        raise testexceptions.WatcherThreadTimeoutError()
+        raise texceptions.WatcherThreadTimeoutError()
 
     assert replies
     assert isinstance(replies[0], Success)

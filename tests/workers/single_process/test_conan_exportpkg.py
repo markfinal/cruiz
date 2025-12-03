@@ -23,7 +23,7 @@ from cruizlib.interop.message import (
 # pylint: disable=wrong-import-order
 import pytest
 
-import testexceptions
+import texceptions
 
 
 LOGGER = logging.getLogger(__name__)
@@ -79,7 +79,7 @@ def test_conan_exportpkg(
         worker(reply_queue, params)  # type: ignore[arg-type]
         watcher_thread.join(timeout=5.0)
         if watcher_thread.is_alive():
-            raise testexceptions.WatcherThreadTimeoutError()
+            raise texceptions.WatcherThreadTimeoutError()
 
     worker = workers_api.exportpackage.invoke
     params = CommandParameters("export-pkg", worker)
@@ -131,7 +131,7 @@ def test_conan_exportpkg(
     worker(reply_queue, params)  # type: ignore[arg-type]
     watcher_thread.join(timeout=5.0)
     if watcher_thread.is_alive():
-        raise testexceptions.WatcherThreadTimeoutError()
+        raise texceptions.WatcherThreadTimeoutError()
 
     assert replies
     assert isinstance(replies[0], Success)
@@ -141,11 +141,11 @@ def test_conan_exportpkg(
         reply_queue, replies, watcher_thread = reply_queue_fixture()
         # abusing the type system, as the API used for queue.Queue is the same
         # as for multiprocessing.Queue
-        with pytest.raises(testexceptions.FailedMessageTestError) as exc:
+        with pytest.raises(texceptions.FailedMessageTestError) as exc:
             worker(reply_queue, params)  # type: ignore[arg-type]
             watcher_thread.join(timeout=5.0)
             if watcher_thread.is_alive():
-                raise testexceptions.WatcherThreadTimeoutError()
+                raise texceptions.WatcherThreadTimeoutError()
 
         assert "Package already exists" in str(exc.value)
 
@@ -161,7 +161,7 @@ def test_conan_exportpkg(
     worker(reply_queue, params)  # type: ignore[arg-type]
     watcher_thread.join(timeout=5.0)
     if watcher_thread.is_alive():
-        raise testexceptions.WatcherThreadTimeoutError()
+        raise texceptions.WatcherThreadTimeoutError()
 
     assert replies
     assert isinstance(replies[0], Success)

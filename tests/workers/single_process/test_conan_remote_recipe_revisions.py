@@ -24,7 +24,7 @@ from cruizlib.interop.reciperevisionsparameters import RecipeRevisionsParameters
 # pylint: disable=wrong-import-order
 import pytest
 
-import testexceptions
+import texceptions
 
 
 LOGGER = logging.getLogger(__name__)
@@ -35,7 +35,7 @@ LOGGER = logging.getLogger(__name__)
     [
         pytest.param(
             {"CONAN_REVISIONS_ENABLED": "0"},
-            pytest.raises(testexceptions.FailedMessageTestError),
+            pytest.raises(texceptions.FailedMessageTestError),
             marks=pytest.mark.xfail(
                 CONAN_MAJOR_VERSION == 2,
                 reason="Conan 2 does not allow disabling revisions",
@@ -76,7 +76,7 @@ def test_conan_remote_rrev_search(
         worker(reply_queue, params)  # type: ignore[arg-type]
         watcher_thread.join(timeout=5.0)
         if watcher_thread.is_alive():
-            raise testexceptions.WatcherThreadTimeoutError()
+            raise texceptions.WatcherThreadTimeoutError()
 
         assert replies
         assert isinstance(replies[0], Success)

@@ -22,7 +22,7 @@ from cruizlib.interop.message import Success
 # pylint: disable=wrong-import-order
 import pytest
 
-import testexceptions
+import texceptions
 
 if typing.TYPE_CHECKING:
     from cruizlib.interop.message import Message
@@ -59,7 +59,7 @@ def test_cmake_delete_cache(
     worker(reply_queue, params)  # type: ignore[arg-type]
     watcher_thread.join(timeout=5.0)
     if watcher_thread.is_alive():
-        raise testexceptions.WatcherThreadTimeoutError()
+        raise texceptions.WatcherThreadTimeoutError()
 
     assert replies
     assert isinstance(replies[0], Success)

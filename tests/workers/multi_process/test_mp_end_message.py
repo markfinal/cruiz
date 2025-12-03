@@ -12,7 +12,7 @@ from cruizlib.interop.message import Success
 # pylint: disable=wrong-import-order
 import pytest
 
-import testexceptions
+import texceptions
 
 if typing.TYPE_CHECKING:
     from cruizlib.interop.message import Message
@@ -45,7 +45,7 @@ def test_end_watcher_thread(
     process.join()
     watcher_thread.join(timeout=5.0)
     if watcher_thread.is_alive():
-        raise testexceptions.WatcherThreadTimeoutError()
+        raise texceptions.WatcherThreadTimeoutError()
 
     assert "EndOfLine" in caplog.text
     assert replies
