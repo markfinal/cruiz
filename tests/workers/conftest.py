@@ -10,7 +10,6 @@ import pathlib
 import platform
 import queue
 import stat
-import threading
 import typing
 
 import cruizlib.workers.api as workers_api
@@ -31,6 +30,8 @@ import pytest
 
 import texceptions
 
+from tthread import TestableThread
+
 import yaml
 
 if typing.TYPE_CHECKING:
@@ -43,6 +44,7 @@ if typing.TYPE_CHECKING:
         MultiprocessReplyQueueFixture,
         MultiprocessReplyQueueReturnType,
     )
+
 
 LOGGER = logging.getLogger(__name__)
 
@@ -176,33 +178,6 @@ def meta(
     # wait for the child process to finish
     process.join()
     process.close()
-
-
-class TestableThread(threading.Thread):
-    """
-    Wrapper around `threading.Thread` that propagates exceptions.
-
-    REF: https://gist.github.com/sbrugman/59b3535ebcd5aa0e2598293cfa58b6ab
-    """
-
-    def __init__(self, *args: typing.Any, **kwargs: typing.Any) -> None:
-        """Subclassed from threading.Thread."""
-        super().__init__(*args, **kwargs)
-        self.exc: typing.Optional[BaseException] = None
-
-    def run(self) -> None:
-        """Subclassed from threading.Thread."""
-        try:
-            super().run()
-        # pylint: disable=broad-exception-caught
-        except BaseException as e:  # noqa: B036
-            self.exc = e
-
-    def join(self, timeout: typing.Optional[float] = None) -> None:
-        """Subclassed from threading.Thread."""
-        super().join(timeout)
-        if self.exc:
-            raise self.exc
 
 
 @pytest.fixture()
