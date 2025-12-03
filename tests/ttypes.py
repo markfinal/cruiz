@@ -17,6 +17,11 @@ SingleprocessReplyQueueReturnType = typing.Tuple[
     queue.Queue[Message], typing.List[Message], TestableThread
 ]
 
+SingleprocessReplyQueueFixture = typing.Callable[
+    [],
+    SingleprocessReplyQueueReturnType,
+]
+
 # Multi-processing
 MultiprocessReplyQueueReturnType = typing.Tuple[
     MultiProcessingMessageQueueType,

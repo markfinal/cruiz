@@ -43,6 +43,8 @@ if typing.TYPE_CHECKING:
         MetaFixture,
         MultiprocessReplyQueueFixture,
         MultiprocessReplyQueueReturnType,
+        SingleprocessReplyQueueFixture,
+        SingleprocessReplyQueueReturnType,
     )
 
 
@@ -181,10 +183,7 @@ def meta(
 
 
 @pytest.fixture()
-def reply_queue_fixture() -> typing.Callable[
-    [],
-    typing.Tuple[queue.Queue[Message], typing.List[Message], TestableThread],
-]:
+def reply_queue_fixture() -> SingleprocessReplyQueueFixture:
     """
     Fixture factory to create a reply queue for a worker invocation on the same process.
 
@@ -196,9 +195,7 @@ def reply_queue_fixture() -> typing.Callable[
     responses.
     """
 
-    def _the_fixture() -> (
-        typing.Tuple[queue.Queue[Message], typing.List[Message], TestableThread]
-    ):
+    def _the_fixture() -> SingleprocessReplyQueueReturnType:
         def _reply_watcher(
             reply_queue: queue.Queue[Message], replies: typing.List[Message]
         ) -> None:
