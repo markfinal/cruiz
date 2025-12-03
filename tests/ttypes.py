@@ -29,7 +29,7 @@ MultiprocessReplyQueueReturnType = typing.Tuple[
     MultiProcessingMessageQueueType,
     typing.List[Message],
     threading.Thread,
-    typing.Any,
+    typing.Optional[multiprocessing.context.SpawnContext],
 ]
 
 MultiprocessReplyQueueFixture = typing.Callable[[], MultiprocessReplyQueueReturnType]
