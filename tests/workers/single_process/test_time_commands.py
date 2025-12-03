@@ -19,13 +19,13 @@ from cruizlib.interop.message import Success
 import pytest
 
 if typing.TYPE_CHECKING:
-    from ttypes import RunWorkerFixture, SingleprocessReplyQueueFixture
+    from ttypes import MultiprocessReplyQueueFixture, RunWorkerFixture
 
 LOGGER = logging.getLogger(__name__)
 
 
 def test_conan_time_command_duration(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     conan_local_cache: typing.Dict[str, str],
     caplog: pytest.LogCaptureFixture,
@@ -36,7 +36,7 @@ def test_conan_time_command_duration(
     params = CommandParameters("removeallpackages", worker)
     params.added_environment = conan_local_cache
     params.time_commands = True
-    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture()
     run_worker(worker, reply_queue, params, watcher_thread, context)
 
     assert replies

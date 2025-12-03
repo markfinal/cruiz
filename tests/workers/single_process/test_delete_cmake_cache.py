@@ -21,7 +21,7 @@ from cruizlib.interop.message import Success
 import pytest
 
 if typing.TYPE_CHECKING:
-    from ttypes import RunWorkerFixture, SingleprocessReplyQueueFixture
+    from ttypes import MultiprocessReplyQueueFixture, RunWorkerFixture
 
 
 LOGGER = logging.getLogger(__name__)
@@ -34,7 +34,7 @@ LOGGER = logging.getLogger(__name__)
     strict=True,
 )
 def test_cmake_delete_cache(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     tmp_path: pathlib.Path,
     caplog: pytest.LogCaptureFixture,
@@ -48,7 +48,7 @@ def test_cmake_delete_cache(
     params.cwd = tmp_path
     if build_folder:
         params.build_folder = build_folder
-    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture()
     run_worker(worker, reply_queue, params, watcher_thread, context)
 
     assert replies

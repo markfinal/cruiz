@@ -24,7 +24,7 @@ import pytest
 import texceptions
 
 if typing.TYPE_CHECKING:
-    from ttypes import RunWorkerFixture, SingleprocessReplyQueueFixture
+    from ttypes import MultiprocessReplyQueueFixture, RunWorkerFixture
 
 
 LOGGER = logging.getLogger(__name__)
@@ -46,7 +46,7 @@ LOGGER = logging.getLogger(__name__)
 )
 # pylint: disable=too-many-arguments, too-many-positional-arguments
 def test_conan_lock_create(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     conan_recipe_name: str,
     conan_recipe: pathlib.Path,
@@ -66,7 +66,7 @@ def test_conan_lock_create(
         for key, val in value.items():
             params.add_option("test", key, val)
 
-    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture()
     run_worker(worker, reply_queue, params, watcher_thread, context)
 
     assert replies
@@ -84,7 +84,7 @@ def test_conan_lock_create(
     strict=True,
 )
 def test_conan_lock_create_dependent_recipes(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     conan_dependent_recipes: typing.Tuple[
         pathlib.Path, str, str, pathlib.Path, str, str
@@ -106,7 +106,7 @@ def test_conan_lock_create_dependent_recipes(
         params.user = params.user or "test_user"
         params.channel = params.channel or "test_channel"
 
-    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture()
     run_worker(worker, reply_queue, params, watcher_thread, context)
 
     assert replies
@@ -119,7 +119,7 @@ def test_conan_lock_create_dependent_recipes(
     params.cwd = conan_dependent_recipes[3].parent
     params.profile = "default"
 
-    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture()
     run_worker(worker, reply_queue, params, watcher_thread, context)
 
     assert replies

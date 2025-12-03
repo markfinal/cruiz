@@ -26,14 +26,14 @@ import pytest
 import texceptions
 
 if typing.TYPE_CHECKING:
-    from ttypes import RunWorkerFixture, SingleprocessReplyQueueFixture
+    from ttypes import MultiprocessReplyQueueFixture, RunWorkerFixture
 
 
 LOGGER = logging.getLogger(__name__)
 
 
 def test_conan_config_install_missing(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     conan_local_cache: typing.Dict[str, str],
 ) -> None:
@@ -42,7 +42,7 @@ def test_conan_config_install_missing(
     params = CommandParameters("install_config", worker)
     params.added_environment = conan_local_cache
     params.named_arguments["pathOrUrl"] = "/some/unknownpath"
-    reply_queue, _, watcher_thread, context = reply_queue_fixture()
+    reply_queue, _, watcher_thread, context = multiprocess_reply_queue_fixture()
     with pytest.raises(
         texceptions.FailedMessageTestError,
         match="Unable to deduce type config install",
@@ -82,7 +82,7 @@ def fixture_conan_config_git_repo(tmp_path: pathlib.Path) -> pathlib.Path:
 
 
 def test_conan_config_install_from_zip(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     conan_local_cache: typing.Dict[str, str],
     conan_config_zip: pathlib.Path,
@@ -94,7 +94,7 @@ def test_conan_config_install_from_zip(
     params = CommandParameters("install_config", worker)
     params.added_environment = conan_local_cache
     params.named_arguments["pathOrUrl"] = os.fspath(conan_config_zip)
-    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture()
     run_worker(worker, reply_queue, params, watcher_thread, context)
 
     if CONAN_MAJOR_VERSION == 1:
@@ -109,7 +109,7 @@ def test_conan_config_install_from_zip(
 
 
 def test_conan_config_install_from_git(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     conan_local_cache: typing.Dict[str, str],
     conan_config_git_repo: pathlib.Path,
@@ -121,7 +121,7 @@ def test_conan_config_install_from_git(
     params = CommandParameters("install_config", worker)
     params.added_environment = conan_local_cache
     params.named_arguments["pathOrUrl"] = os.fspath(conan_config_git_repo)
-    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture()
     run_worker(worker, reply_queue, params, watcher_thread, context)
 
     if CONAN_MAJOR_VERSION == 1:
@@ -136,7 +136,7 @@ def test_conan_config_install_from_git(
 
 
 def test_conan_config_install_with_git_branch(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     conan_local_cache: typing.Dict[str, str],
     conan_config_git_repo: pathlib.Path,
@@ -152,7 +152,7 @@ def test_conan_config_install_with_git_branch(
     params.added_environment = conan_local_cache
     params.named_arguments["pathOrUrl"] = os.fspath(conan_config_git_repo)
     params.named_arguments["gitBranch"] = git_branch_name
-    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture()
     run_worker(worker, reply_queue, params, watcher_thread, context)
 
     if CONAN_MAJOR_VERSION == 1:
@@ -168,7 +168,7 @@ def test_conan_config_install_with_git_branch(
 
 
 def test_conan_config_install_with_missing_git_branch(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     conan_local_cache: typing.Dict[str, str],
     conan_config_git_repo: pathlib.Path,
@@ -188,7 +188,7 @@ def test_conan_config_install_with_missing_git_branch(
     params.added_environment = conan_local_cache
     params.named_arguments["pathOrUrl"] = os.fspath(conan_config_git_repo)
     params.named_arguments["gitBranch"] = git_branch_name
-    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture()
     run_worker(worker, reply_queue, params, watcher_thread, context)
 
     if CONAN_MAJOR_VERSION == 1:
@@ -204,7 +204,7 @@ def test_conan_config_install_with_missing_git_branch(
 
 
 def test_conan_config_install_from_source_folder(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     conan_local_cache: typing.Dict[str, str],
     conan_config_zip: pathlib.Path,
@@ -224,7 +224,7 @@ def test_conan_config_install_from_source_folder(
     params.added_environment = conan_local_cache
     params.named_arguments["pathOrUrl"] = os.fspath(conan_config_zip)
     params.named_arguments["sourceFolder"] = source_folder
-    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture()
     run_worker(worker, reply_queue, params, watcher_thread, context)
 
     if CONAN_MAJOR_VERSION == 1:
@@ -240,7 +240,7 @@ def test_conan_config_install_from_source_folder(
 
 
 def test_conan_config_install_to_target_folder(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     conan_local_cache: typing.Dict[str, str],
     conan_config_zip: pathlib.Path,
@@ -256,7 +256,7 @@ def test_conan_config_install_to_target_folder(
     params.added_environment = conan_local_cache
     params.named_arguments["pathOrUrl"] = os.fspath(conan_config_zip)
     params.named_arguments["targetFolder"] = target_folder
-    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture()
     run_worker(worker, reply_queue, params, watcher_thread, context)
 
     if CONAN_MAJOR_VERSION == 1:

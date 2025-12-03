@@ -22,7 +22,7 @@ import pytest
 import texceptions
 
 if typing.TYPE_CHECKING:
-    from ttypes import RunWorkerFixture, SingleprocessReplyQueueFixture
+    from ttypes import MultiprocessReplyQueueFixture, RunWorkerFixture
 
 
 LOGGER = logging.getLogger(__name__)
@@ -41,7 +41,7 @@ LOGGER = logging.getLogger(__name__)
     ],
 )
 def test_conan_remote_search_pkg_exists(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     conan_local_cache: typing.Dict[str, str],
     aliasaware: bool,
@@ -55,7 +55,7 @@ def test_conan_remote_search_pkg_exists(
         pattern="zlib",
     )
     params.added_environment = conan_local_cache
-    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture()
     if CONAN_VERSION_COMPONENTS == (1, 17, 1):
         with pytest.raises(texceptions.FailedMessageTestError) as exc_info:
             run_worker(worker, reply_queue, params, watcher_thread, context)
@@ -73,7 +73,7 @@ def test_conan_remote_search_pkg_exists(
 
 
 def test_conan_remote_search_pkg_not_exists(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     conan_local_cache: typing.Dict[str, str],
 ) -> None:
@@ -86,7 +86,7 @@ def test_conan_remote_search_pkg_not_exists(
         pattern="doesnotexist",
     )
     params.added_environment = conan_local_cache
-    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture()
     if CONAN_VERSION_COMPONENTS == (1, 17, 1):
         with pytest.raises(texceptions.FailedMessageTestError) as exc_info:
             run_worker(worker, reply_queue, params, watcher_thread, context)
