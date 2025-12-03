@@ -21,7 +21,7 @@ from cruizlib.interop.message import Success
 import pytest
 
 if typing.TYPE_CHECKING:
-    from ttypes import RunWorkerFixture, SingleprocessReplyQueueFixture
+    from ttypes import MultiprocessReplyQueueFixture, RunWorkerFixture
 
 
 LOGGER = logging.getLogger(__name__)
@@ -37,7 +37,7 @@ LOGGER = logging.getLogger(__name__)
 )
 # pylint: disable=too-many-arguments, too-many-positional-arguments, too-many-locals  # noqa: E501
 def test_conan_test(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     conan_recipe: pathlib.Path,
     conan_testpackage_recipe: pathlib.Path,
@@ -62,7 +62,7 @@ def test_conan_test(
     if CONAN_VERSION_COMPONENTS == (1, 17, 1):
         params.user = "user1"
         params.channel = "channel1"
-    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture()
     run_worker(worker, reply_queue, params, watcher_thread, context)
 
     worker = workers_api.testpackage.invoke
@@ -86,7 +86,7 @@ def test_conan_test(
         elif arg == "test_build_folder":
             assert isinstance(value, str)
             params.test_build_folder = tmp_path / value
-    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture()
     run_worker(worker, reply_queue, params, watcher_thread, context)
 
     assert replies

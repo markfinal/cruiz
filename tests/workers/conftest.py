@@ -10,6 +10,7 @@ import pathlib
 import platform
 import queue
 import stat
+import sys
 import typing
 
 import cruizlib.workers.api as workers_api
@@ -308,21 +309,38 @@ def run_worker() -> RunWorkerFixture:
         watcher_thread: TestableThread,
         context: typing.Optional[multiprocessing.context.SpawnContext],
     ) -> None:
+        def _have_conan_symbols_leaked() -> None:
+            assert "conans" not in sys.modules
+
         if context is None:
             # abusing the type system, as the API used for queue.Queue is the same
             # as for multiprocessing.Queue
             worker(reply_queue, params)
         else:
+            _have_conan_symbols_leaked()
             process = context.Process(target=worker, args=(reply_queue, params))
             process.start()
             process.join()
 
         # tell the watcher thread that there is no more information coming
-        workers_api.endmessagethread.invoke(reply_queue)  # type: ignore[arg-type]
+        if context is not None:
+            # this must be done in a separate process because it closes the other side
+            # of the queue
+            process = context.Process(
+                target=workers_api.endmessagethread.invoke, args=(reply_queue,)
+            )
+            process.start()
+            process.join()
+        else:
+            # no need to close ths single process queue
+            reply_queue.put(End())
 
         watcher_thread.join(timeout=5.0)
         if watcher_thread.is_alive():
             raise texceptions.WatcherThreadTimeoutError()
+
+        if context is not None:
+            _have_conan_symbols_leaked()
 
     return _the_fixture
 

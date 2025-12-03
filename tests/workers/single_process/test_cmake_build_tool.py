@@ -25,7 +25,7 @@ import pytest
 import texceptions
 
 if typing.TYPE_CHECKING:
-    from ttypes import RunWorkerFixture, SingleprocessReplyQueueFixture
+    from ttypes import MultiprocessReplyQueueFixture, RunWorkerFixture
 
 
 LOGGER = logging.getLogger(__name__)
@@ -37,7 +37,7 @@ LOGGER = logging.getLogger(__name__)
     strict=True,
 )
 def test_cmake_no_cache(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     tmp_path: pathlib.Path,
     caplog: pytest.LogCaptureFixture,
@@ -49,7 +49,7 @@ def test_cmake_no_cache(
     params = CommandParameters("cmakebuild", worker)
     params.cwd = tmp_path
     # params.added_environment = conan_local_cache
-    reply_queue, _, watcher_thread, context = reply_queue_fixture()
+    reply_queue, _, watcher_thread, context = multiprocess_reply_queue_fixture()
     with pytest.raises(
         texceptions.FailedMessageTestError, match="Error: could not load cache"
     ):
@@ -73,7 +73,7 @@ def fixture_custom_cmake_command(tmp_path: pathlib.Path) -> pathlib.Path:
     strict=True,
 )
 def test_cmake_custom_program(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     tmp_path: pathlib.Path,
     caplog: pytest.LogCaptureFixture,
@@ -86,7 +86,7 @@ def test_cmake_custom_program(
     params = CommandParameters("cmakebuild", worker)
     params.cwd = tmp_path
     params.added_environment = {"CONAN_CMAKE_PROGRAM": os.fspath(custom_cmake_command)}
-    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture()
     run_worker(worker, reply_queue, params, watcher_thread, context)
 
     assert replies
@@ -102,7 +102,7 @@ def test_cmake_custom_program(
     strict=True,
 )
 def test_cmake_custom_build_tool(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     tmp_path: pathlib.Path,
     caplog: pytest.LogCaptureFixture,
@@ -114,7 +114,7 @@ def test_cmake_custom_build_tool(
     params = CommandParameters("cmakebuild", worker)
     params.cwd = tmp_path
     params.added_environment = {"CONAN_MAKE_PROGRAM": "another_make"}
-    reply_queue, _, watcher_thread, context = reply_queue_fixture()
+    reply_queue, _, watcher_thread, context = multiprocess_reply_queue_fixture()
     with pytest.raises(
         texceptions.FailedMessageTestError, match="Error: could not load cache"
     ):
@@ -127,7 +127,7 @@ def test_cmake_custom_build_tool(
     strict=True,
 )
 def test_cmake_use_ninja_generator(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     tmp_path: pathlib.Path,
     caplog: pytest.LogCaptureFixture,
@@ -139,7 +139,7 @@ def test_cmake_use_ninja_generator(
     params = CommandParameters("cmakebuild", worker)
     params.cwd = tmp_path
     params.added_environment = {"CONAN_CMAKE_GENERATOR": "Ninja"}
-    reply_queue, _, watcher_thread, context = reply_queue_fixture()
+    reply_queue, _, watcher_thread, context = multiprocess_reply_queue_fixture()
     with pytest.raises(
         texceptions.FailedMessageTestError, match="Error: could not load cache"
     ):
@@ -153,7 +153,7 @@ def test_cmake_use_ninja_generator(
 )
 @pytest.mark.parametrize("generator", [None, "Ninja"])
 def test_cmake_verbose_output(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     tmp_path: pathlib.Path,
     caplog: pytest.LogCaptureFixture,
@@ -168,7 +168,7 @@ def test_cmake_verbose_output(
     if generator:
         params.added_environment = {"CONAN_CMAKE_GENERATOR": generator}
     params.arguments.append("verbose")
-    reply_queue, _, watcher_thread, context = reply_queue_fixture()
+    reply_queue, _, watcher_thread, context = multiprocess_reply_queue_fixture()
     with pytest.raises(
         texceptions.FailedMessageTestError, match="Error: could not load cache"
     ):
@@ -181,7 +181,7 @@ def test_cmake_verbose_output(
     strict=True,
 )
 def test_cmake_set_cpu_count(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     tmp_path: pathlib.Path,
     caplog: pytest.LogCaptureFixture,
@@ -193,7 +193,7 @@ def test_cmake_set_cpu_count(
     params = CommandParameters("cmakebuild", worker)
     params.cwd = tmp_path
     params.added_environment = {"CONAN_CPU_COUNT": "1"}
-    reply_queue, _, watcher_thread, context = reply_queue_fixture()
+    reply_queue, _, watcher_thread, context = multiprocess_reply_queue_fixture()
     with pytest.raises(
         texceptions.FailedMessageTestError, match="Error: could not load cache"
     ):

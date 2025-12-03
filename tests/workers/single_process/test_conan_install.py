@@ -21,7 +21,7 @@ from cruizlib.interop.message import Success
 import pytest
 
 if typing.TYPE_CHECKING:
-    from ttypes import RunWorkerFixture, SingleprocessReplyQueueFixture
+    from ttypes import MultiprocessReplyQueueFixture, RunWorkerFixture
 
 
 LOGGER = logging.getLogger(__name__)
@@ -51,7 +51,7 @@ LOGGER = logging.getLogger(__name__)
 )
 # pylint: disable=too-many-arguments, too-many-positional-arguments, too-many-branches, too-many-locals  # noqa: E501
 def test_conan_install(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     conan_recipe: pathlib.Path,
     conan_local_cache: typing.Dict[str, str],
@@ -90,7 +90,7 @@ def test_conan_install(
             assert isinstance(arg, tuple)
             for index, key in enumerate(arg):
                 setattr(params, key, value[index])
-    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture()
     run_worker(worker, reply_queue, params, watcher_thread, context)
 
     assert replies

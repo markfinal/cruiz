@@ -20,14 +20,14 @@ import pytest
 import texceptions
 
 if typing.TYPE_CHECKING:
-    from ttypes import RunWorkerFixture, SingleprocessReplyQueueFixture
+    from ttypes import MultiprocessReplyQueueFixture, RunWorkerFixture
 
 
 LOGGER = logging.getLogger(__name__)
 
 
 def test_expected_failure(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     conan_local_cache: typing.Dict[str, str],
 ) -> None:
@@ -35,6 +35,6 @@ def test_expected_failure(
     worker = workers_api.install.invoke
     params = CommandParameters("install", worker)
     params.added_environment = conan_local_cache
-    reply_queue, _, watcher_thread, context = reply_queue_fixture()
+    reply_queue, _, watcher_thread, context = multiprocess_reply_queue_fixture()
     with pytest.raises(texceptions.FailedMessageTestError):
         run_worker(worker, reply_queue, params, watcher_thread, context)

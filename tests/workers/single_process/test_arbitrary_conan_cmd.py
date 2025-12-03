@@ -22,7 +22,7 @@ import pytest
 import texceptions
 
 if typing.TYPE_CHECKING:
-    from ttypes import RunWorkerFixture, SingleprocessReplyQueueFixture
+    from ttypes import MultiprocessReplyQueueFixture, RunWorkerFixture
 
 
 @pytest.mark.parametrize(
@@ -63,7 +63,7 @@ if typing.TYPE_CHECKING:
 )
 # pylint: disable=too-many-arguments, too-many-positional-arguments
 def test_arbitrary_conan_command(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     conan_local_cache: typing.Dict[str, str],
     verb: str,
@@ -81,7 +81,7 @@ def test_arbitrary_conan_command(
     if args:
         params.arguments.extend(args)
 
-    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture()
     with expectation:
         run_worker(worker, reply_queue, params, watcher_thread, context)
 

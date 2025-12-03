@@ -18,14 +18,14 @@ from cruizlib.interop.commandparameters import CommandParameters
 from cruizlib.interop.message import Success
 
 if typing.TYPE_CHECKING:
-    from ttypes import RunWorkerFixture, SingleprocessReplyQueueFixture
+    from ttypes import MultiprocessReplyQueueFixture, RunWorkerFixture
 
 
 LOGGER = logging.getLogger(__name__)
 
 
 def test_conan_remove_all_packages(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     conan_local_cache: typing.Dict[str, str],
     conan_recipe: pathlib.Path,
@@ -44,13 +44,13 @@ def test_conan_remove_all_packages(
     if CONAN_VERSION_COMPONENTS == (1, 17, 1):
         params.user = "user1"
         params.channel = "channel1"
-    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture()
     run_worker(worker, reply_queue, params, watcher_thread, context)
 
     worker = workers_api.removeallpackages.invoke
     params = CommandParameters("removeallpackages", worker)
     params.added_environment = conan_local_cache
-    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture()
     run_worker(worker, reply_queue, params, watcher_thread, context)
 
     assert replies
