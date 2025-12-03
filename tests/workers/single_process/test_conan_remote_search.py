@@ -23,7 +23,7 @@ from cruizlib.interop.searchrecipesparameters import SearchRecipesParameters
 # pylint: disable=wrong-import-order
 import pytest
 
-import testexceptions
+import texceptions
 
 
 LOGGER = logging.getLogger(__name__)
@@ -61,17 +61,17 @@ def test_conan_remote_search_pkg_exists(
     # abusing the type system, as the API used for queue.Queue is the same
     # as for multiprocessing.Queue
     if CONAN_VERSION_COMPONENTS == (1, 17, 1):
-        with pytest.raises(testexceptions.FailedMessageTestError) as exc_info:
+        with pytest.raises(texceptions.FailedMessageTestError) as exc_info:
             worker(reply_queue, params)  # type: ignore[arg-type]
             watcher_thread.join(timeout=5.0)
             if watcher_thread.is_alive():
-                raise testexceptions.WatcherThreadTimeoutError()
+                raise texceptions.WatcherThreadTimeoutError()
         assert exc_info.value.exception_type_name == "ConanConnectionError"
     else:
         worker(reply_queue, params)  # type: ignore[arg-type]
         watcher_thread.join(timeout=5.0)
         if watcher_thread.is_alive():
-            raise testexceptions.WatcherThreadTimeoutError()
+            raise texceptions.WatcherThreadTimeoutError()
 
         assert replies
         assert isinstance(replies[0], Success)
@@ -101,27 +101,27 @@ def test_conan_remote_search_pkg_not_exists(
     # abusing the type system, as the API used for queue.Queue is the same
     # as for multiprocessing.Queue
     if CONAN_VERSION_COMPONENTS == (1, 17, 1):
-        with pytest.raises(testexceptions.FailedMessageTestError) as exc_info:
+        with pytest.raises(texceptions.FailedMessageTestError) as exc_info:
             worker(reply_queue, params)  # type: ignore[arg-type]
             watcher_thread.join(timeout=5.0)
             if watcher_thread.is_alive():
-                raise testexceptions.WatcherThreadTimeoutError()
+                raise texceptions.WatcherThreadTimeoutError()
         assert exc_info.value.exception_type_name == "ConanConnectionError"
     elif CONAN_MAJOR_VERSION == 1:
         worker(reply_queue, params)  # type: ignore[arg-type]
         watcher_thread.join(timeout=5.0)
         if watcher_thread.is_alive():
-            raise testexceptions.WatcherThreadTimeoutError()
+            raise texceptions.WatcherThreadTimeoutError()
 
         assert replies
         assert isinstance(replies[0], Success)
         assert replies[0].payload is None
     else:
-        with pytest.raises(testexceptions.FailedMessageTestError) as exc_info:
+        with pytest.raises(texceptions.FailedMessageTestError) as exc_info:
             worker(reply_queue, params)  # type: ignore[arg-type]
             watcher_thread.join(timeout=5.0)
             if watcher_thread.is_alive():
-                raise testexceptions.WatcherThreadTimeoutError()
+                raise texceptions.WatcherThreadTimeoutError()
         if CONAN_VERSION_COMPONENTS == (2, 0, 14):
             assert exc_info.value.exception_type_name == "ConanException"
         else:

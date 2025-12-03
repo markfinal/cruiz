@@ -25,7 +25,7 @@ from cruizlib.interop.pod import ConanHook, ConanRemote
 # pylint: disable=wrong-import-order
 import pytest
 
-import testexceptions
+import texceptions
 
 if typing.TYPE_CHECKING:
     from cruizlib.multiprocessingmessagequeuetype import (
@@ -42,7 +42,7 @@ def _process_replies(reply_queue: MultiProcessingMessageQueueType) -> Message:
         if isinstance(reply, Success):
             break
         if isinstance(reply, Failure):
-            raise testexceptions.FailedMessageTestError(
+            raise texceptions.FailedMessageTestError(
                 reply.message or "<Empty message from upstream>",
                 reply.exception_type_name,
                 reply.exception_traceback,
@@ -80,7 +80,7 @@ def test_meta_get_version(
         assert isinstance(reply.payload, str)
         assert reply.payload == ".".join([str(i) for i in CONAN_VERSION_COMPONENTS])
     else:
-        with pytest.raises(testexceptions.FailedMessageTestError) as exc_info:
+        with pytest.raises(texceptions.FailedMessageTestError) as exc_info:
             _process_replies(reply_queue)
         assert exc_info.value.exception_type_name == "ValueError"
         assert str(exc_info.value).startswith('("Meta command request not implemented')
@@ -471,12 +471,12 @@ def test_meta_get_editable_list(
         pytest.param(
             "conan_recipe_pkgref_namespaced",
             "conan_recipe_invalid",
-            pytest.raises(testexceptions.FailedMessageTestError),
+            pytest.raises(texceptions.FailedMessageTestError),
         ),
         (
             "conan_recipe_pkgref_namespaced",
             "conan_recipe_invalid",
-            pytest.raises(testexceptions.FailedMessageTestError),
+            pytest.raises(texceptions.FailedMessageTestError),
         ),
         pytest.param(
             "conan_recipe_pkgref_namespaced",
@@ -491,7 +491,7 @@ def test_meta_get_editable_list(
         (
             "conan_recipe_pkgref_namespaced",
             "conan_recipe_name_invalid",
-            pytest.raises(testexceptions.FailedMessageTestError),
+            pytest.raises(texceptions.FailedMessageTestError),
         ),
     ],
 )
@@ -1008,7 +1008,7 @@ def test_meta_unknown_request(
 
     request_queue.put("this_is_unknown")
 
-    with pytest.raises(testexceptions.FailedMessageTestError) as exc_info:
+    with pytest.raises(texceptions.FailedMessageTestError) as exc_info:
         _process_replies(reply_queue)
     assert exc_info.value.exception_type_name == "ValueError"
     assert str(exc_info.value).startswith('("Meta command request not implemented:')

@@ -56,9 +56,6 @@ readme = {file = "README.md", content-type = "text/markdown"}
 
 [tool.mypy]
 python_version = "3.10"
-mypy_path = [
-    "testutilities"
-]
 
 # exclude generated files
 exclude = "/pyside6/"
@@ -145,14 +142,12 @@ commands = [
     ["flake8", "src/cruiz"],
     ["flake8", "src/cruizlib"],
     ["flake8", "tests"],
-    ["flake8", "testutilities"],
     ["mypy", "src/cruiz"],
     ["mypy", "--warn-return-any", "src/cruizlib"],
     ["mypy", "tests"],
-    ["mypy", "testutilities"],
     ["pylint", "--ignore-paths=^src/cruiz/pyside6/.*$", "src/cruiz"],
     ["pylint", "--extension-pkg-allow-list=PySide6.QtCore", "--ignore-paths=^src/cruizlib/workers/api/v2/.*$", "--enable=all", "--disable=locally-disabled,suppressed-message,fixme,duplicate-code,unexpected-keyword-arg,no-value-for-parameter,no-member,too-many-function-args,useless-suppression", "src/cruizlib"],
-    ["pylint", "--enable=all", "--disable=locally-disabled,suppressed-message,fixme,duplicate-code", "tests", "testutilities"],
+    ["pylint", "--enable=all", "--disable=locally-disabled,suppressed-message,fixme,duplicate-code", "tests"],
 ]
 
 [tool.tox.env.lint_conan1]
@@ -164,14 +159,12 @@ commands = [
     ["flake8", "src/cruiz"],
     ["flake8", "src/cruizlib"],
     ["flake8", "tests"],
-    ["flake8", "testutilities"],
     ["mypy", "src/cruiz"],
     ["mypy", "--warn-return-any", "src/cruizlib"],
     ["mypy", "tests"],
-    ["mypy", "testutilities"],
     ["pylint", "--ignore-paths=^src/cruiz/pyside6/.*$", "src/cruiz"],
     ["pylint", "--extension-pkg-allow-list=PySide6.QtCore", "--ignore-paths=^src/cruizlib/workers/api/v2/.*$", "--enable=all", "--disable=locally-disabled,suppressed-message,fixme,duplicate-code", "src/cruizlib"],
-    ["pylint", "--enable=all", "--disable=locally-disabled,suppressed-message,fixme,duplicate-code", "tests", "testutilities"],
+    ["pylint", "--enable=all", "--disable=locally-disabled,suppressed-message,fixme,duplicate-code", "tests"],
 ]
 
 [tool.tox.env.lint_conan2]
@@ -182,14 +175,12 @@ commands = [
     ["flake8", "src/cruiz"],
     ["flake8", "src/cruizlib"],
     ["flake8", "tests"],
-    ["flake8", "testutilities"],
     ["mypy", "src/cruiz"],
     ["mypy", "--warn-return-any", "src/cruizlib"],
     ["mypy", "tests"],
-    ["mypy", "testutilities"],
     ["pylint", "--ignore-paths=^src/cruiz/pyside6/.*$", "src/cruiz"],
     ["pylint", "--extension-pkg-allow-list=PySide6.QtCore", "--ignore-paths=^src/cruizlib/workers/api/v1/.*$", "--enable=all", "--disable=locally-disabled,suppressed-message,fixme,duplicate-code", "src/cruizlib"],
-    ["pylint", "--enable=all", "--disable=locally-disabled,suppressed-message,fixme,duplicate-code", "tests", "testutilities"],
+    ["pylint", "--enable=all", "--disable=locally-disabled,suppressed-message,fixme,duplicate-code", "tests"],
 ]
 
 [tool.pytest]
@@ -202,7 +193,7 @@ addopts = [
     "--import-mode=importlib",
 ]
 pythonpath = [
-    "testutilities",
+    "tests",
 ]
 
 [tool.coverage.run]

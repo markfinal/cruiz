@@ -22,7 +22,7 @@ from cruizlib.interop.message import (
 # pylint: disable=wrong-import-order
 import pytest
 
-import testexceptions
+import texceptions
 
 
 @pytest.mark.parametrize(
@@ -42,7 +42,7 @@ import testexceptions
             "config",
             ["unknown"],
             pytest.raises(
-                testexceptions.FailedMessageTestError,  # TODO: Check for usage error
+                texceptions.FailedMessageTestError,  # TODO: Check for usage error
             ),
         ),
         (
@@ -52,11 +52,11 @@ import testexceptions
             # visible, see https://github.com/markfinal/cruiz/issues/332
             (
                 pytest.raises(
-                    testexceptions.FailedMessageTestError,
+                    texceptions.FailedMessageTestError,
                     match="'Command' object has no attribute 'unknown'",
                 )
                 if CONAN_MAJOR_VERSION == 1
-                else pytest.raises(testexceptions.FailedMessageTestError)
+                else pytest.raises(texceptions.FailedMessageTestError)
             ),
         ),
     ],
@@ -88,7 +88,7 @@ def test_arbitrary_conan_command(
         worker(reply_queue, params)  # type: ignore[arg-type]
         watcher_thread.join(timeout=5.0)
         if watcher_thread.is_alive():
-            raise testexceptions.WatcherThreadTimeoutError()
+            raise texceptions.WatcherThreadTimeoutError()
 
         assert replies
         assert isinstance(replies[0], Success)

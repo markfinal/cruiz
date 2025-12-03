@@ -25,7 +25,7 @@ from cruizlib.interop.message import (
 # pylint: disable=wrong-import-order
 import pytest
 
-import testexceptions
+import texceptions
 
 
 LOGGER = logging.getLogger(__name__)
@@ -91,7 +91,7 @@ def test_conan_autotoolsbuildhelper_configure(
         worker(reply_queue, params)  # type: ignore[arg-type]
         watcher_thread.join(timeout=5.0)
         if watcher_thread.is_alive():
-            raise testexceptions.WatcherThreadTimeoutError()
+            raise texceptions.WatcherThreadTimeoutError()
 
     if env_key and env_value:
         for key, value in zip(env_key, env_value):
@@ -108,7 +108,7 @@ def test_conan_autotoolsbuildhelper_configure(
     worker(reply_queue, params)  # type: ignore[arg-type]
     watcher_thread.join(timeout=5.0)
     if watcher_thread.is_alive():
-        raise testexceptions.WatcherThreadTimeoutError()
+        raise texceptions.WatcherThreadTimeoutError()
 
     assert replies
     assert isinstance(replies[0], Success)
@@ -160,7 +160,7 @@ def test_conan_autotoolsbuildhelper_make(
         worker(reply_queue, params)  # type: ignore[arg-type]
         watcher_thread.join(timeout=5.0)
         if watcher_thread.is_alive():
-            raise testexceptions.WatcherThreadTimeoutError()
+            raise texceptions.WatcherThreadTimeoutError()
 
     if env_key and env_value:
         monkeypatch.setenv(env_key, env_value)
@@ -177,7 +177,7 @@ def test_conan_autotoolsbuildhelper_make(
     worker(reply_queue, params)  # type: ignore[arg-type]
     watcher_thread.join(timeout=5.0)
     if watcher_thread.is_alive():
-        raise testexceptions.WatcherThreadTimeoutError()
+        raise texceptions.WatcherThreadTimeoutError()
 
     assert replies
     assert isinstance(replies[0], Success)

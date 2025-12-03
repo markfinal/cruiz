@@ -26,7 +26,7 @@ from cruizlib.interop.message import (
 # pylint: disable=wrong-import-order
 import pytest
 
-import testexceptions
+import texceptions
 
 
 LOGGER = logging.getLogger(__name__)
@@ -47,13 +47,13 @@ def test_conan_config_install_missing(
     # abusing the type system, as the API used for queue.Queue is the same
     # as for multiprocessing.Queue
     with pytest.raises(
-        testexceptions.FailedMessageTestError,
+        texceptions.FailedMessageTestError,
         match="Unable to deduce type config install",
     ):
         worker(reply_queue, params)  # type: ignore[arg-type]
         watcher_thread.join(timeout=5.0)
         if watcher_thread.is_alive():
-            raise testexceptions.WatcherThreadTimeoutError()
+            raise texceptions.WatcherThreadTimeoutError()
 
 
 @pytest.fixture(name="conan_config_zip")
@@ -107,7 +107,7 @@ def test_conan_config_install_from_zip(
     worker(reply_queue, params)  # type: ignore[arg-type]
     watcher_thread.join(timeout=5.0)
     if watcher_thread.is_alive():
-        raise testexceptions.WatcherThreadTimeoutError()
+        raise texceptions.WatcherThreadTimeoutError()
 
     if CONAN_MAJOR_VERSION == 1:
         assert "Unzipping" in caplog.text
@@ -140,7 +140,7 @@ def test_conan_config_install_from_git(
     worker(reply_queue, params)  # type: ignore[arg-type]
     watcher_thread.join(timeout=5.0)
     if watcher_thread.is_alive():
-        raise testexceptions.WatcherThreadTimeoutError()
+        raise texceptions.WatcherThreadTimeoutError()
 
     if CONAN_MAJOR_VERSION == 1:
         assert "Processing" in caplog.text
@@ -177,7 +177,7 @@ def test_conan_config_install_with_git_branch(
     worker(reply_queue, params)  # type: ignore[arg-type]
     watcher_thread.join(timeout=5.0)
     if watcher_thread.is_alive():
-        raise testexceptions.WatcherThreadTimeoutError()
+        raise texceptions.WatcherThreadTimeoutError()
 
     if CONAN_MAJOR_VERSION == 1:
         assert "Processing" in caplog.text
@@ -219,7 +219,7 @@ def test_conan_config_install_with_missing_git_branch(
     worker(reply_queue, params)  # type: ignore[arg-type]
     watcher_thread.join(timeout=5.0)
     if watcher_thread.is_alive():
-        raise testexceptions.WatcherThreadTimeoutError()
+        raise texceptions.WatcherThreadTimeoutError()
 
     if CONAN_MAJOR_VERSION == 1:
         assert "Processing" in caplog.text
@@ -261,7 +261,7 @@ def test_conan_config_install_from_source_folder(
     worker(reply_queue, params)  # type: ignore[arg-type]
     watcher_thread.join(timeout=5.0)
     if watcher_thread.is_alive():
-        raise testexceptions.WatcherThreadTimeoutError()
+        raise texceptions.WatcherThreadTimeoutError()
 
     if CONAN_MAJOR_VERSION == 1:
         assert "Unzipping" in caplog.text
@@ -299,7 +299,7 @@ def test_conan_config_install_to_target_folder(
     worker(reply_queue, params)  # type: ignore[arg-type]
     watcher_thread.join(timeout=5.0)
     if watcher_thread.is_alive():
-        raise testexceptions.WatcherThreadTimeoutError()
+        raise texceptions.WatcherThreadTimeoutError()
 
     if CONAN_MAJOR_VERSION == 1:
         assert "Unzipping" in caplog.text

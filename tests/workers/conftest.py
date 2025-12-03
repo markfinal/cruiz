@@ -27,7 +27,7 @@ from cruizlib.interop.message import (
 )
 
 # pylint: disable=wrong-import-order
-import testexceptions
+import texceptions
 
 if typing.TYPE_CHECKING:
     from cruizlib.multiprocessingmessagequeuetype import (
@@ -228,7 +228,7 @@ def reply_queue_fixture() -> typing.Callable[
                     assert not replies
                     replies.append(reply)
                 elif isinstance(reply, Failure):
-                    raise testexceptions.FailedMessageTestError(
+                    raise texceptions.FailedMessageTestError(
                         reply.message or "<Empty message from upstream>",
                         reply.exception_type_name,
                         reply.exception_traceback,
@@ -276,7 +276,7 @@ def multiprocess_reply_queue_fixture() -> typing.Tuple[
                     assert not replies
                     replies.append(reply)
                 elif isinstance(reply, Failure):
-                    raise testexceptions.FailedMessageTestError(
+                    raise texceptions.FailedMessageTestError(
                         reply.message or "<Empty message from upstream>",
                         reply.exception_type_name,
                         reply.exception_traceback,
