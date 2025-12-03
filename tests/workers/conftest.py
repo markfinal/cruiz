@@ -293,7 +293,9 @@ def run_worker() -> RunWorkerFixture:
 
     def _the_fixture(
         worker: typing.Any,
-        reply_queue: typing.Any,
+        reply_queue: typing.Union[
+            queue.Queue[Message], MultiProcessingMessageQueueType
+        ],
         params: typing.Union[
             CommandParameters,
             PackageBinaryParameters,

@@ -46,7 +46,7 @@ MultiprocessReplyQueueFixture = typing.Callable[[], MultiprocessReplyQueueReturn
 RunWorkerFixture = typing.Callable[
     [
         typing.Any,
-        typing.Any,
+        typing.Union[queue.Queue[Message], MultiProcessingMessageQueueType],
         typing.Union[
             CommandParameters,
             PackageBinaryParameters,
