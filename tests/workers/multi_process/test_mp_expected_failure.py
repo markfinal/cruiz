@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import threading
 import typing
 
 import cruizlib.workers.api as workers_api
@@ -14,22 +13,11 @@ import pytest
 import texceptions
 
 if typing.TYPE_CHECKING:
-    from cruizlib.interop.message import Message
-    from cruizlib.multiprocessingmessagequeuetype import (
-        MultiProcessingMessageQueueType,
-    )
+    from ttypes import MultiprocessReplyQueueFixture
 
 
 def test_expected_failure(
-    multiprocess_reply_queue_fixture: typing.Callable[
-        [],
-        typing.Tuple[
-            MultiProcessingMessageQueueType,
-            typing.List[Message],
-            threading.Thread,
-            typing.Any,
-        ],
-    ],
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     conan_local_cache: typing.Dict[str, str],
 ) -> None:
     """Test: running conan install incorrect setup, so has an expected failure."""

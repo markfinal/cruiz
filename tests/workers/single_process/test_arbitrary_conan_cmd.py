@@ -30,9 +30,7 @@ import texceptions
 if typing.TYPE_CHECKING:
     import multiprocessing
 
-    from cruizlib.multiprocessingmessagequeuetype import (
-        MultiProcessingMessageQueueType,
-    )
+    from ttypes import MultiprocessReplyQueueFixture
 
 
 @pytest.mark.parametrize(
@@ -71,19 +69,12 @@ if typing.TYPE_CHECKING:
         ),
     ],
 )
+# pylint: disable=too-many-arguments, too-many-positional-arguments
 def test_arbitrary_conan_command(
     reply_queue_fixture: typing.Callable[
         [], typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
     ],
-    multiprocess_reply_queue_fixture: typing.Callable[
-        [],
-        typing.Tuple[
-            MultiProcessingMessageQueueType,
-            typing.List[Message],
-            threading.Thread,
-            typing.Any,
-        ],
-    ],
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: typing.Callable[
         [
             typing.Any,
@@ -109,7 +100,7 @@ def test_arbitrary_conan_command(
     if args:
         params.arguments.extend(args)
 
-    if False:
+    if False:  # pylint: disable=using-constant-test
         reply_queue, replies, watcher_thread = reply_queue_fixture()
         context = None
     else:

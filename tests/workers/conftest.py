@@ -27,17 +27,22 @@ from cruizlib.interop.message import (
 )
 
 # pylint: disable=wrong-import-order
+import pytest
+
 import texceptions
+
+import yaml
 
 if typing.TYPE_CHECKING:
     from cruizlib.multiprocessingmessagequeuetype import (
         MultiProcessingMessageQueueType,
     )
 
-# pylint: disable=wrong-import-order, wrong-import-position
-import pytest
-
-import yaml
+    from ttypes import (
+        MetaFixture,
+        MultiprocessReplyQueueFixture,
+        MultiprocessReplyQueueReturnType,
+    )
 
 LOGGER = logging.getLogger(__name__)
 
@@ -130,7 +135,7 @@ def fixture_conan_local_cache(
 @pytest.fixture()
 def meta(
     conan_local_cache: typing.Dict[str, str],
-) -> typing.Generator[typing.Tuple[typing.Any, typing.Any], None, None]:
+) -> typing.Generator[MetaFixture, None, None]:
     """
     Fixture for setup and teardown of meta processes and queues.
 
@@ -252,15 +257,7 @@ def reply_queue_fixture() -> typing.Callable[
 
 
 @pytest.fixture()
-def multiprocess_reply_queue_fixture() -> typing.Callable[
-    [],
-    typing.Tuple[
-        MultiProcessingMessageQueueType,
-        typing.List[Message],
-        TestableThread,
-        multiprocessing.context.SpawnContext,
-    ],
-]:
+def multiprocess_reply_queue_fixture() -> MultiprocessReplyQueueFixture:
     """
     Fixture factory to create a reply queue for a worker invocation on a child process.
 
@@ -269,12 +266,7 @@ def multiprocess_reply_queue_fixture() -> typing.Callable[
     responses.
     """
 
-    def _the_fixture() -> typing.Tuple[
-        MultiProcessingMessageQueueType,
-        typing.List[Message],
-        TestableThread,
-        multiprocessing.context.SpawnContext,
-    ]:
+    def _the_fixture() -> MultiprocessReplyQueueReturnType:
         def _reply_watcher(
             reply_queue: MultiProcessingMessageQueueType, replies: typing.List[Message]
         ) -> None:
