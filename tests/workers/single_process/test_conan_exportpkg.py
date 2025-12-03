@@ -23,7 +23,7 @@ import pytest
 import texceptions
 
 if typing.TYPE_CHECKING:
-    from ttypes import SingleprocessReplyQueueFixture
+    from ttypes import RunWorkerFixture, SingleprocessReplyQueueFixture
 
 
 LOGGER = logging.getLogger(__name__)
@@ -44,6 +44,7 @@ LOGGER = logging.getLogger(__name__)
 # pylint: disable=too-many-arguments, too-many-positional-arguments, too-many-branches, too-many-locals, too-many-statements  # noqa: E501
 def test_conan_exportpkg(
     reply_queue_fixture: SingleprocessReplyQueueFixture,
+    run_worker: RunWorkerFixture,
     conan_recipe_name: str,
     conan_recipe: pathlib.Path,
     conan_local_cache: typing.Dict[str, str],
@@ -71,10 +72,8 @@ def test_conan_exportpkg(
             # since this early Conan version requires a user and channel on pkgrefs
             params.user = params.user or "test_user"
             params.channel = params.channel or "test_channel"
-        reply_queue, replies, watcher_thread, _ = reply_queue_fixture()
-        # abusing the type system, as the API used for queue.Queue is the same
-        # as for multiprocessing.Queue
-        worker(reply_queue, params)  # type: ignore[arg-type]
+        reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+        run_worker(worker, reply_queue, params, context)
         watcher_thread.join(timeout=5.0)
         if watcher_thread.is_alive():
             raise texceptions.WatcherThreadTimeoutError()
@@ -123,10 +122,8 @@ def test_conan_exportpkg(
             assert isinstance(arg, tuple)
             for index, key in enumerate(arg):
                 setattr(params, key, value[index])
-    reply_queue, replies, watcher_thread, _ = reply_queue_fixture()
-    # abusing the type system, as the API used for queue.Queue is the same
-    # as for multiprocessing.Queue
-    worker(reply_queue, params)  # type: ignore[arg-type]
+    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    run_worker(worker, reply_queue, params, context)
     watcher_thread.join(timeout=5.0)
     if watcher_thread.is_alive():
         raise texceptions.WatcherThreadTimeoutError()
@@ -136,11 +133,9 @@ def test_conan_exportpkg(
 
     if CONAN_MAJOR_VERSION == 1:
         # repeat the export to fail, because it requires a force
-        reply_queue, replies, watcher_thread, _ = reply_queue_fixture()
-        # abusing the type system, as the API used for queue.Queue is the same
-        # as for multiprocessing.Queue
+        reply_queue, replies, watcher_thread, context = reply_queue_fixture()
         with pytest.raises(texceptions.FailedMessageTestError) as exc:
-            worker(reply_queue, params)  # type: ignore[arg-type]
+            run_worker(worker, reply_queue, params, context)
             watcher_thread.join(timeout=5.0)
             if watcher_thread.is_alive():
                 raise texceptions.WatcherThreadTimeoutError()
@@ -153,10 +148,8 @@ def test_conan_exportpkg(
         # Conan 2 does not fail to re-export, not need a force
         pass
 
-    reply_queue, replies, watcher_thread, _ = reply_queue_fixture()
-    # abusing the type system, as the API used for queue.Queue is the same
-    # as for multiprocessing.Queue
-    worker(reply_queue, params)  # type: ignore[arg-type]
+    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    run_worker(worker, reply_queue, params, context)
     watcher_thread.join(timeout=5.0)
     if watcher_thread.is_alive():
         raise texceptions.WatcherThreadTimeoutError()

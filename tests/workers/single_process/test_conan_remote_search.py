@@ -22,7 +22,7 @@ import pytest
 import texceptions
 
 if typing.TYPE_CHECKING:
-    from ttypes import SingleprocessReplyQueueFixture
+    from ttypes import RunWorkerFixture, SingleprocessReplyQueueFixture
 
 
 LOGGER = logging.getLogger(__name__)
@@ -42,6 +42,7 @@ LOGGER = logging.getLogger(__name__)
 )
 def test_conan_remote_search_pkg_exists(
     reply_queue_fixture: SingleprocessReplyQueueFixture,
+    run_worker: RunWorkerFixture,
     conan_local_cache: typing.Dict[str, str],
     aliasaware: bool,
 ) -> None:
@@ -54,18 +55,16 @@ def test_conan_remote_search_pkg_exists(
         pattern="zlib",
     )
     params.added_environment = conan_local_cache
-    reply_queue, replies, watcher_thread, _ = reply_queue_fixture()
-    # abusing the type system, as the API used for queue.Queue is the same
-    # as for multiprocessing.Queue
+    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
     if CONAN_VERSION_COMPONENTS == (1, 17, 1):
         with pytest.raises(texceptions.FailedMessageTestError) as exc_info:
-            worker(reply_queue, params)  # type: ignore[arg-type]
+            run_worker(worker, reply_queue, params, context)
             watcher_thread.join(timeout=5.0)
             if watcher_thread.is_alive():
                 raise texceptions.WatcherThreadTimeoutError()
         assert exc_info.value.exception_type_name == "ConanConnectionError"
     else:
-        worker(reply_queue, params)  # type: ignore[arg-type]
+        run_worker(worker, reply_queue, params, context)
         watcher_thread.join(timeout=5.0)
         if watcher_thread.is_alive():
             raise texceptions.WatcherThreadTimeoutError()
@@ -81,6 +80,7 @@ def test_conan_remote_search_pkg_exists(
 
 def test_conan_remote_search_pkg_not_exists(
     reply_queue_fixture: SingleprocessReplyQueueFixture,
+    run_worker: RunWorkerFixture,
     conan_local_cache: typing.Dict[str, str],
 ) -> None:
     """Test: running conan remote searches for a package that will not exist."""
@@ -92,18 +92,16 @@ def test_conan_remote_search_pkg_not_exists(
         pattern="doesnotexist",
     )
     params.added_environment = conan_local_cache
-    reply_queue, replies, watcher_thread, _ = reply_queue_fixture()
-    # abusing the type system, as the API used for queue.Queue is the same
-    # as for multiprocessing.Queue
+    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
     if CONAN_VERSION_COMPONENTS == (1, 17, 1):
         with pytest.raises(texceptions.FailedMessageTestError) as exc_info:
-            worker(reply_queue, params)  # type: ignore[arg-type]
+            run_worker(worker, reply_queue, params, context)
             watcher_thread.join(timeout=5.0)
             if watcher_thread.is_alive():
                 raise texceptions.WatcherThreadTimeoutError()
         assert exc_info.value.exception_type_name == "ConanConnectionError"
     elif CONAN_MAJOR_VERSION == 1:
-        worker(reply_queue, params)  # type: ignore[arg-type]
+        run_worker(worker, reply_queue, params, context)
         watcher_thread.join(timeout=5.0)
         if watcher_thread.is_alive():
             raise texceptions.WatcherThreadTimeoutError()
@@ -113,7 +111,7 @@ def test_conan_remote_search_pkg_not_exists(
         assert replies[0].payload is None
     else:
         with pytest.raises(texceptions.FailedMessageTestError) as exc_info:
-            worker(reply_queue, params)  # type: ignore[arg-type]
+            run_worker(worker, reply_queue, params, context)
             watcher_thread.join(timeout=5.0)
             if watcher_thread.is_alive():
                 raise texceptions.WatcherThreadTimeoutError()

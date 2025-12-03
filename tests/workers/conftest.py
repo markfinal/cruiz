@@ -35,6 +35,11 @@ from tthread import TestableThread
 import yaml
 
 if typing.TYPE_CHECKING:
+    from cruizlib.interop.packagebinaryparameters import PackageBinaryParameters
+    from cruizlib.interop.packageidparameters import PackageIdParameters
+    from cruizlib.interop.packagerevisionsparameters import PackageRevisionsParameters
+    from cruizlib.interop.reciperevisionsparameters import RecipeRevisionsParameters
+    from cruizlib.interop.searchrecipesparameters import SearchRecipesParameters
     from cruizlib.multiprocessingmessagequeuetype import (
         MultiProcessingMessageQueueType,
     )
@@ -289,7 +294,14 @@ def run_worker() -> RunWorkerFixture:
     def _the_fixture(
         worker: typing.Any,
         reply_queue: typing.Any,
-        params: CommandParameters,
+        params: typing.Union[
+            CommandParameters,
+            PackageBinaryParameters,
+            PackageIdParameters,
+            PackageRevisionsParameters,
+            RecipeRevisionsParameters,
+            SearchRecipesParameters,
+        ],
         context: typing.Optional[multiprocessing.context.SpawnContext],
     ) -> None:
         if context is None:

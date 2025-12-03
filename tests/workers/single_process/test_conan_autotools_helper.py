@@ -25,7 +25,7 @@ import pytest
 import texceptions
 
 if typing.TYPE_CHECKING:
-    from ttypes import SingleprocessReplyQueueFixture
+    from ttypes import RunWorkerFixture, SingleprocessReplyQueueFixture
 
 LOGGER = logging.getLogger(__name__)
 
@@ -63,6 +63,7 @@ LOGGER = logging.getLogger(__name__)
 # pylint: disable=too-many-arguments, too-many-positional-arguments  # noqa: E501
 def test_conan_autotoolsbuildhelper_configure(
     reply_queue_fixture: SingleprocessReplyQueueFixture,
+    run_worker: RunWorkerFixture,
     conan_autotoolsbuildenvironment_configure_recipe: pathlib.Path,
     conan_local_cache: typing.Dict[str, str],
     _configure_script: pathlib.Path,
@@ -82,10 +83,8 @@ def test_conan_autotoolsbuildhelper_configure(
         params.recipe_path = conan_autotoolsbuildenvironment_configure_recipe
         params.cwd = conan_autotoolsbuildenvironment_configure_recipe.parent
         params.profile = "default"
-        reply_queue, replies, watcher_thread, _ = reply_queue_fixture()
-        # abusing the type system, as the API used for queue.Queue is the same
-        # as for multiprocessing.Queue
-        worker(reply_queue, params)  # type: ignore[arg-type]
+        reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+        run_worker(worker, reply_queue, params, context)
         watcher_thread.join(timeout=5.0)
         if watcher_thread.is_alive():
             raise texceptions.WatcherThreadTimeoutError()
@@ -99,10 +98,8 @@ def test_conan_autotoolsbuildhelper_configure(
     params.added_environment = conan_local_cache
     params.recipe_path = conan_autotoolsbuildenvironment_configure_recipe
     params.cwd = conan_autotoolsbuildenvironment_configure_recipe.parent
-    reply_queue, replies, watcher_thread, _ = reply_queue_fixture()
-    # abusing the type system, as the API used for queue.Queue is the same
-    # as for multiprocessing.Queue
-    worker(reply_queue, params)  # type: ignore[arg-type]
+    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    run_worker(worker, reply_queue, params, context)
     watcher_thread.join(timeout=5.0)
     if watcher_thread.is_alive():
         raise texceptions.WatcherThreadTimeoutError()
@@ -126,6 +123,7 @@ def test_conan_autotoolsbuildhelper_configure(
 # pylint: disable=too-many-arguments, too-many-positional-arguments  # noqa: E501
 def test_conan_autotoolsbuildhelper_make(
     reply_queue_fixture: SingleprocessReplyQueueFixture,
+    run_worker: RunWorkerFixture,
     conan_autotoolsbuildenvironment_make_recipe: pathlib.Path,
     conan_local_cache: typing.Dict[str, str],
     _configure_script: pathlib.Path,
@@ -149,10 +147,8 @@ def test_conan_autotoolsbuildhelper_make(
         params.recipe_path = conan_autotoolsbuildenvironment_make_recipe
         params.cwd = conan_autotoolsbuildenvironment_make_recipe.parent
         params.profile = "default"
-        reply_queue, replies, watcher_thread, _ = reply_queue_fixture()
-        # abusing the type system, as the API used for queue.Queue is the same
-        # as for multiprocessing.Queue
-        worker(reply_queue, params)  # type: ignore[arg-type]
+        reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+        run_worker(worker, reply_queue, params, context)
         watcher_thread.join(timeout=5.0)
         if watcher_thread.is_alive():
             raise texceptions.WatcherThreadTimeoutError()
@@ -166,10 +162,8 @@ def test_conan_autotoolsbuildhelper_make(
     params.added_environment["CONAN_MAKE_PROGRAM"] = os.fspath(custom_make_command)
     params.recipe_path = conan_autotoolsbuildenvironment_make_recipe
     params.cwd = conan_autotoolsbuildenvironment_make_recipe.parent
-    reply_queue, replies, watcher_thread, _ = reply_queue_fixture()
-    # abusing the type system, as the API used for queue.Queue is the same
-    # as for multiprocessing.Queue
-    worker(reply_queue, params)  # type: ignore[arg-type]
+    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    run_worker(worker, reply_queue, params, context)
     watcher_thread.join(timeout=5.0)
     if watcher_thread.is_alive():
         raise texceptions.WatcherThreadTimeoutError()

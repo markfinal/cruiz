@@ -21,13 +21,14 @@ import pytest
 import texceptions
 
 if typing.TYPE_CHECKING:
-    from ttypes import SingleprocessReplyQueueFixture
+    from ttypes import RunWorkerFixture, SingleprocessReplyQueueFixture
 
 LOGGER = logging.getLogger(__name__)
 
 
 def test_conan_time_command_duration(
     reply_queue_fixture: SingleprocessReplyQueueFixture,
+    run_worker: RunWorkerFixture,
     conan_local_cache: typing.Dict[str, str],
     caplog: pytest.LogCaptureFixture,
 ) -> None:
@@ -37,10 +38,8 @@ def test_conan_time_command_duration(
     params = CommandParameters("removeallpackages", worker)
     params.added_environment = conan_local_cache
     params.time_commands = True
-    reply_queue, replies, watcher_thread, _ = reply_queue_fixture()
-    # abusing the type system, as the API used for queue.Queue is the same
-    # as for multiprocessing.Queue
-    worker(reply_queue, params)  # type: ignore[arg-type]
+    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    run_worker(worker, reply_queue, params, context)
     watcher_thread.join(timeout=5.0)
     if watcher_thread.is_alive():
         raise texceptions.WatcherThreadTimeoutError()

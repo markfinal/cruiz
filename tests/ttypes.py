@@ -7,6 +7,11 @@ import typing
 
 from cruizlib.interop.commandparameters import CommandParameters
 from cruizlib.interop.message import Message
+from cruizlib.interop.packagebinaryparameters import PackageBinaryParameters
+from cruizlib.interop.packageidparameters import PackageIdParameters
+from cruizlib.interop.packagerevisionsparameters import PackageRevisionsParameters
+from cruizlib.interop.reciperevisionsparameters import RecipeRevisionsParameters
+from cruizlib.interop.searchrecipesparameters import SearchRecipesParameters
 from cruizlib.multiprocessingmessagequeuetype import (
     MultiProcessingMessageQueueType,
     MultiProcessingStringJoinableQueueType,
@@ -42,7 +47,14 @@ RunWorkerFixture = typing.Callable[
     [
         typing.Any,
         typing.Any,
-        CommandParameters,
+        typing.Union[
+            CommandParameters,
+            PackageBinaryParameters,
+            PackageIdParameters,
+            PackageRevisionsParameters,
+            RecipeRevisionsParameters,
+            SearchRecipesParameters,
+        ],
         typing.Optional[multiprocessing.context.SpawnContext],
     ],
     None,
