@@ -10,6 +10,7 @@ import pathlib
 import platform
 import queue
 import stat
+import sys
 import typing
 
 import cruizlib.workers.api as workers_api
@@ -306,6 +307,7 @@ def run_worker() -> RunWorkerFixture:
         ],
         context: typing.Optional[multiprocessing.context.SpawnContext],
     ) -> None:
+        assert "conans" not in sys.modules
         if context is None:
             # abusing the type system, as the API used for queue.Queue is the same
             # as for multiprocessing.Queue
@@ -314,6 +316,7 @@ def run_worker() -> RunWorkerFixture:
             process = context.Process(target=worker, args=(reply_queue, params))
             process.start()
             process.join()
+        assert "conans" not in sys.modules
 
     return _the_fixture
 

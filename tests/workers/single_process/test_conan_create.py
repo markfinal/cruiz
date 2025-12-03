@@ -23,7 +23,7 @@ import pytest
 import texceptions
 
 if typing.TYPE_CHECKING:
-    from ttypes import RunWorkerFixture, SingleprocessReplyQueueFixture
+    from ttypes import MultiprocessReplyQueueFixture, RunWorkerFixture
 
 
 LOGGER = logging.getLogger(__name__)
@@ -52,7 +52,7 @@ LOGGER = logging.getLogger(__name__)
 )
 # pylint: disable=too-many-arguments, too-many-positional-arguments, too-many-branches, too-many-locals  # noqa: E501
 def test_conan_create(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     conan_recipe: pathlib.Path,
     conan_local_cache: typing.Dict[str, str],
@@ -89,7 +89,7 @@ def test_conan_create(
         # since this early Conan version requires a user and channel on pkgrefs
         params.user = params.user or "test_user"
         params.channel = params.channel or "test_channel"
-    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture()
     run_worker(worker, reply_queue, params, context)
     watcher_thread.join(timeout=5.0)
     if watcher_thread.is_alive():

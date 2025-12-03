@@ -24,7 +24,7 @@ import pytest
 import texceptions
 
 if typing.TYPE_CHECKING:
-    from ttypes import RunWorkerFixture, SingleprocessReplyQueueFixture
+    from ttypes import MultiprocessReplyQueueFixture, RunWorkerFixture
 
 
 LOGGER = logging.getLogger(__name__)
@@ -46,7 +46,7 @@ LOGGER = logging.getLogger(__name__)
 )
 # pylint: disable=too-many-arguments, too-many-positional-arguments  # noqa: E501
 def test_conan_cmake_helper(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     conan_cmake_helper_recipe: pathlib.Path,
     conan_local_cache: typing.Dict[str, str],
@@ -67,7 +67,9 @@ def test_conan_cmake_helper(
         params.recipe_path = conan_cmake_helper_recipe
         params.cwd = conan_cmake_helper_recipe.parent
         params.profile = "default"
-        reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+        reply_queue, replies, watcher_thread, context = (
+            multiprocess_reply_queue_fixture()
+        )
         run_worker(worker, reply_queue, params, context)
         watcher_thread.join(timeout=5.0)
         if watcher_thread.is_alive():
@@ -81,7 +83,7 @@ def test_conan_cmake_helper(
     params.added_environment = conan_local_cache
     params.recipe_path = conan_cmake_helper_recipe
     params.cwd = conan_cmake_helper_recipe.parent
-    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture()
     run_worker(worker, reply_queue, params, context)
     watcher_thread.join(timeout=5.0)
     if watcher_thread.is_alive():

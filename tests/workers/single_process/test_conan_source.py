@@ -23,7 +23,7 @@ import pytest
 import texceptions
 
 if typing.TYPE_CHECKING:
-    from ttypes import RunWorkerFixture, SingleprocessReplyQueueFixture
+    from ttypes import MultiprocessReplyQueueFixture, RunWorkerFixture
 
 
 LOGGER = logging.getLogger(__name__)
@@ -85,7 +85,7 @@ LOGGER = logging.getLogger(__name__)
 )
 # pylint: disable=too-many-arguments, too-many-positional-arguments, too-many-statements  # noqa: E501
 def test_conan_source(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
+    multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     conan_recipe: pathlib.Path,
     conan_local_cache: typing.Dict[str, str],
@@ -109,7 +109,9 @@ def test_conan_source(
         if arg and isinstance(arg, str) and arg == "install_folder":
             assert isinstance(value, str)
             params.install_folder = tmp_path / value
-        reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+        reply_queue, replies, watcher_thread, context = (
+            multiprocess_reply_queue_fixture()
+        )
         run_worker(worker, reply_queue, params, context)
         watcher_thread.join(timeout=5.0)
         if watcher_thread.is_alive():
@@ -143,7 +145,7 @@ def test_conan_source(
             assert isinstance(value, tuple)
             params.user = value[0]
             params.channel = value[1]
-    reply_queue, replies, watcher_thread, context = reply_queue_fixture()
+    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture()
     run_worker(worker, reply_queue, params, context)
     watcher_thread.join(timeout=5.0)
     if watcher_thread.is_alive():

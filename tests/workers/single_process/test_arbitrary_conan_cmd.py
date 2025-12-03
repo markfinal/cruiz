@@ -8,7 +8,6 @@ added complexity.
 
 from __future__ import annotations
 
-import sys
 import typing
 from contextlib import nullcontext as does_not_raise
 
@@ -23,11 +22,7 @@ import pytest
 import texceptions
 
 if typing.TYPE_CHECKING:
-    from ttypes import (
-        MultiprocessReplyQueueFixture,
-        RunWorkerFixture,
-        SingleprocessReplyQueueFixture,
-    )
+    from ttypes import MultiprocessReplyQueueFixture, RunWorkerFixture
 
 
 @pytest.mark.parametrize(
@@ -68,7 +63,6 @@ if typing.TYPE_CHECKING:
 )
 # pylint: disable=too-many-arguments, too-many-positional-arguments
 def test_arbitrary_conan_command(
-    reply_queue_fixture: SingleprocessReplyQueueFixture,
     multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
     conan_local_cache: typing.Dict[str, str],
@@ -87,16 +81,9 @@ def test_arbitrary_conan_command(
     if args:
         params.arguments.extend(args)
 
-    if False:  # pylint: disable=using-constant-test
-        reply_queue, replies, watcher_thread, context = reply_queue_fixture()
-    else:
-        reply_queue, replies, watcher_thread, context = (
-            multiprocess_reply_queue_fixture()
-        )
+    reply_queue, replies, watcher_thread, context = multiprocess_reply_queue_fixture()
     with expectation:
-        assert "conans" not in sys.modules
         run_worker(worker, reply_queue, params, context)
-        assert "conans" not in sys.modules
         watcher_thread.join(timeout=5.0)
         if watcher_thread.is_alive():
             raise texceptions.WatcherThreadTimeoutError()
