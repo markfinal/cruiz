@@ -8,19 +8,14 @@ added complexity.
 
 from __future__ import annotations
 
-import queue
 import sys
-import threading
 import typing
 from contextlib import nullcontext as does_not_raise
 
 import cruizlib.workers.api as workers_api
 from cruizlib.globals import CONAN_MAJOR_VERSION, CONAN_VERSION_COMPONENTS
 from cruizlib.interop.commandparameters import CommandParameters
-from cruizlib.interop.message import (
-    Message,
-    Success,
-)
+from cruizlib.interop.message import Success
 
 # pylint: disable=wrong-import-order
 import pytest
@@ -28,9 +23,11 @@ import pytest
 import texceptions
 
 if typing.TYPE_CHECKING:
-    import multiprocessing
-
-    from ttypes import MultiprocessReplyQueueFixture
+    from ttypes import (
+        MultiprocessReplyQueueFixture,
+        RunWorkerFixture,
+        SingleprocessReplyQueueFixture,
+    )
 
 
 @pytest.mark.parametrize(
@@ -71,19 +68,9 @@ if typing.TYPE_CHECKING:
 )
 # pylint: disable=too-many-arguments, too-many-positional-arguments
 def test_arbitrary_conan_command(
-    reply_queue_fixture: typing.Callable[
-        [], typing.Tuple[queue.Queue[Message], typing.List[Message], threading.Thread]
-    ],
+    reply_queue_fixture: SingleprocessReplyQueueFixture,
     multiprocess_reply_queue_fixture: MultiprocessReplyQueueFixture,
-    run_worker: typing.Callable[
-        [
-            typing.Any,
-            typing.Any,
-            CommandParameters,
-            typing.Optional[multiprocessing.context.SpawnContext],
-        ],
-        None,
-    ],
+    run_worker: RunWorkerFixture,
     conan_local_cache: typing.Dict[str, str],
     verb: str,
     args: typing.List[str],

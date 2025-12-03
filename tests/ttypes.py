@@ -1,9 +1,11 @@
 """Test types."""
 
+import multiprocessing
 import queue
 import threading
 import typing
 
+from cruizlib.interop.commandparameters import CommandParameters
 from cruizlib.interop.message import Message
 from cruizlib.multiprocessingmessagequeuetype import (
     MultiProcessingMessageQueueType,
@@ -31,6 +33,17 @@ MultiprocessReplyQueueReturnType = typing.Tuple[
 ]
 
 MultiprocessReplyQueueFixture = typing.Callable[[], MultiprocessReplyQueueReturnType]
+
+# Run worker
+RunWorkerFixture = typing.Callable[
+    [
+        typing.Any,
+        typing.Any,
+        CommandParameters,
+        typing.Optional[multiprocessing.context.SpawnContext],
+    ],
+    None,
+]
 
 # Meta processing
 MetaFixture = typing.Tuple[

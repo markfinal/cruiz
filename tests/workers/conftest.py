@@ -45,6 +45,7 @@ if typing.TYPE_CHECKING:
         MultiprocessReplyQueueReturnType,
         SingleprocessReplyQueueFixture,
         SingleprocessReplyQueueReturnType,
+        RunWorkerFixture,
     )
 
 
@@ -282,15 +283,7 @@ def multiprocess_reply_queue_fixture() -> MultiprocessReplyQueueFixture:
 
 
 @pytest.fixture()
-def run_worker() -> typing.Callable[
-    [
-        typing.Any,
-        typing.Any,
-        CommandParameters,
-        typing.Optional[multiprocessing.context.SpawnContext],
-    ],
-    None,
-]:
+def run_worker() -> RunWorkerFixture:
     """Fixture factory returning how to run the worker."""
 
     def _the_fixture(
