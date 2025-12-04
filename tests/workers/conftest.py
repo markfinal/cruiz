@@ -250,29 +250,39 @@ def multiprocess_reply_queue_fixture() -> MultiprocessReplyQueueFixture:
             reply_queue: MultiProcessingMessageQueueType, replies: typing.List[Message]
         ) -> None:
             try:
+                i = 0
                 while True:
+                    print(f"MPRQF: it {i}")
+                    i += 1
                     reply = reply_queue.get(timeout=10)
                     if isinstance(reply, Success):
                         assert not replies
+                        print(f"{i} Success")
                         replies.append(reply)
                     elif isinstance(reply, Failure):
+                        print(f"{i} Failure")
                         raise texceptions.FailedMessageTestError(
                             reply.message or "<Empty message from upstream>",
                             reply.exception_type_name,
                             reply.exception_traceback,
                         )
                     elif isinstance(reply, End):
+                        print(f"{i} End")
                         LOGGER.info("EndOfLine")
                         assert not replies
                         replies.append(Success(None))
                     elif isinstance(reply, (ConanLogMessage, Stdout, Stderr)):
+                        print(f"{i} Logging")
                         LOGGER.info(reply.message)
                         continue
                     else:
+                        print(f"{i} Unknown")
                         raise ValueError(f"Unknown reply of type '{type(reply)}'")
                     if reply_queue.empty() and replies:
+                        print(f"{i} Exit")
                         break
             finally:
+                print(f"{i} Finally")
                 reply_queue.close()
                 reply_queue.join_thread()
 
