@@ -20,8 +20,6 @@ from cruizlib.interop.message import Success
 # pylint: disable=wrong-import-order
 import pytest
 
-import texceptions
-
 if typing.TYPE_CHECKING:
     from ttypes import RunWorkerFixture, SingleprocessReplyQueueFixture
 
@@ -93,10 +91,7 @@ def test_conan_install(
             for index, key in enumerate(arg):
                 setattr(params, key, value[index])
     reply_queue, replies, watcher_thread, context = reply_queue_fixture()
-    run_worker(worker, reply_queue, params, context)
-    watcher_thread.join(timeout=5.0)
-    if watcher_thread.is_alive():
-        raise texceptions.WatcherThreadTimeoutError()
+    run_worker(worker, reply_queue, params, watcher_thread, context)
 
     assert replies
     assert isinstance(replies[0], Success)

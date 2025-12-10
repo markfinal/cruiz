@@ -73,10 +73,7 @@ def test_conan_exportpkg(
             params.user = params.user or "test_user"
             params.channel = params.channel or "test_channel"
         reply_queue, replies, watcher_thread, context = reply_queue_fixture()
-        run_worker(worker, reply_queue, params, context)
-        watcher_thread.join(timeout=5.0)
-        if watcher_thread.is_alive():
-            raise texceptions.WatcherThreadTimeoutError()
+        run_worker(worker, reply_queue, params, watcher_thread, context)
 
     worker = workers_api.exportpackage.invoke
     params = CommandParameters("export-pkg", worker)
@@ -123,10 +120,7 @@ def test_conan_exportpkg(
             for index, key in enumerate(arg):
                 setattr(params, key, value[index])
     reply_queue, replies, watcher_thread, context = reply_queue_fixture()
-    run_worker(worker, reply_queue, params, context)
-    watcher_thread.join(timeout=5.0)
-    if watcher_thread.is_alive():
-        raise texceptions.WatcherThreadTimeoutError()
+    run_worker(worker, reply_queue, params, watcher_thread, context)
 
     assert replies
     assert isinstance(replies[0], Success)
@@ -135,10 +129,7 @@ def test_conan_exportpkg(
         # repeat the export to fail, because it requires a force
         reply_queue, replies, watcher_thread, context = reply_queue_fixture()
         with pytest.raises(texceptions.FailedMessageTestError) as exc:
-            run_worker(worker, reply_queue, params, context)
-            watcher_thread.join(timeout=5.0)
-            if watcher_thread.is_alive():
-                raise texceptions.WatcherThreadTimeoutError()
+            run_worker(worker, reply_queue, params, watcher_thread, context)
 
         assert "Package already exists" in str(exc.value)
 
@@ -149,10 +140,7 @@ def test_conan_exportpkg(
         pass
 
     reply_queue, replies, watcher_thread, context = reply_queue_fixture()
-    run_worker(worker, reply_queue, params, context)
-    watcher_thread.join(timeout=5.0)
-    if watcher_thread.is_alive():
-        raise texceptions.WatcherThreadTimeoutError()
+    run_worker(worker, reply_queue, params, watcher_thread, context)
 
     assert replies
     assert isinstance(replies[0], Success)

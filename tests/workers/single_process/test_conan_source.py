@@ -20,8 +20,6 @@ from cruizlib.interop.message import Success
 # pylint: disable=wrong-import-order
 import pytest
 
-import texceptions
-
 if typing.TYPE_CHECKING:
     from ttypes import RunWorkerFixture, SingleprocessReplyQueueFixture
 
@@ -83,7 +81,7 @@ LOGGER = logging.getLogger(__name__)
         ),
     ],
 )
-# pylint: disable=too-many-arguments, too-many-positional-arguments, too-many-statements  # noqa: E501
+# pylint: disable=too-many-arguments, too-many-positional-arguments
 def test_conan_source(
     reply_queue_fixture: SingleprocessReplyQueueFixture,
     run_worker: RunWorkerFixture,
@@ -110,10 +108,7 @@ def test_conan_source(
             assert isinstance(value, str)
             params.install_folder = tmp_path / value
         reply_queue, replies, watcher_thread, context = reply_queue_fixture()
-        run_worker(worker, reply_queue, params, context)
-        watcher_thread.join(timeout=5.0)
-        if watcher_thread.is_alive():
-            raise texceptions.WatcherThreadTimeoutError()
+        run_worker(worker, reply_queue, params, watcher_thread, context)
 
     worker = workers_api.source.invoke
     params = CommandParameters("source", worker)
@@ -144,10 +139,7 @@ def test_conan_source(
             params.user = value[0]
             params.channel = value[1]
     reply_queue, replies, watcher_thread, context = reply_queue_fixture()
-    run_worker(worker, reply_queue, params, context)
-    watcher_thread.join(timeout=5.0)
-    if watcher_thread.is_alive():
-        raise texceptions.WatcherThreadTimeoutError()
+    run_worker(worker, reply_queue, params, watcher_thread, context)
 
     assert replies
     assert isinstance(replies[0], Success)

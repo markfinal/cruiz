@@ -58,16 +58,10 @@ def test_conan_remote_search_pkg_exists(
     reply_queue, replies, watcher_thread, context = reply_queue_fixture()
     if CONAN_VERSION_COMPONENTS == (1, 17, 1):
         with pytest.raises(texceptions.FailedMessageTestError) as exc_info:
-            run_worker(worker, reply_queue, params, context)
-            watcher_thread.join(timeout=5.0)
-            if watcher_thread.is_alive():
-                raise texceptions.WatcherThreadTimeoutError()
+            run_worker(worker, reply_queue, params, watcher_thread, context)
         assert exc_info.value.exception_type_name == "ConanConnectionError"
     else:
-        run_worker(worker, reply_queue, params, context)
-        watcher_thread.join(timeout=5.0)
-        if watcher_thread.is_alive():
-            raise texceptions.WatcherThreadTimeoutError()
+        run_worker(worker, reply_queue, params, watcher_thread, context)
 
         assert replies
         assert isinstance(replies[0], Success)
@@ -95,26 +89,17 @@ def test_conan_remote_search_pkg_not_exists(
     reply_queue, replies, watcher_thread, context = reply_queue_fixture()
     if CONAN_VERSION_COMPONENTS == (1, 17, 1):
         with pytest.raises(texceptions.FailedMessageTestError) as exc_info:
-            run_worker(worker, reply_queue, params, context)
-            watcher_thread.join(timeout=5.0)
-            if watcher_thread.is_alive():
-                raise texceptions.WatcherThreadTimeoutError()
+            run_worker(worker, reply_queue, params, watcher_thread, context)
         assert exc_info.value.exception_type_name == "ConanConnectionError"
     elif CONAN_MAJOR_VERSION == 1:
-        run_worker(worker, reply_queue, params, context)
-        watcher_thread.join(timeout=5.0)
-        if watcher_thread.is_alive():
-            raise texceptions.WatcherThreadTimeoutError()
+        run_worker(worker, reply_queue, params, watcher_thread, context)
 
         assert replies
         assert isinstance(replies[0], Success)
         assert replies[0].payload is None
     else:
         with pytest.raises(texceptions.FailedMessageTestError) as exc_info:
-            run_worker(worker, reply_queue, params, context)
-            watcher_thread.join(timeout=5.0)
-            if watcher_thread.is_alive():
-                raise texceptions.WatcherThreadTimeoutError()
+            run_worker(worker, reply_queue, params, watcher_thread, context)
         if CONAN_VERSION_COMPONENTS == (2, 0, 14):
             assert exc_info.value.exception_type_name == "ConanException"
         else:

@@ -2,7 +2,6 @@
 
 import multiprocessing
 import queue
-import threading
 import typing
 
 from cruizlib.interop.commandparameters import CommandParameters
@@ -36,7 +35,7 @@ SingleprocessReplyQueueFixture = typing.Callable[
 MultiprocessReplyQueueReturnType = typing.Tuple[
     MultiProcessingMessageQueueType,
     typing.List[Message],
-    threading.Thread,
+    TestableThread,
     multiprocessing.context.SpawnContext,
 ]
 
@@ -55,6 +54,7 @@ RunWorkerFixture = typing.Callable[
             RecipeRevisionsParameters,
             SearchRecipesParameters,
         ],
+        TestableThread,
         typing.Optional[multiprocessing.context.SpawnContext],
     ],
     None,

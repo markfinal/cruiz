@@ -304,6 +304,7 @@ def run_worker() -> RunWorkerFixture:
             RecipeRevisionsParameters,
             SearchRecipesParameters,
         ],
+        watcher_thread: TestableThread,
         context: typing.Optional[multiprocessing.context.SpawnContext],
     ) -> None:
         if context is None:
@@ -314,6 +315,10 @@ def run_worker() -> RunWorkerFixture:
             process = context.Process(target=worker, args=(reply_queue, params))
             process.start()
             process.join()
+
+        watcher_thread.join(timeout=5.0)
+        if watcher_thread.is_alive():
+            raise texceptions.WatcherThreadTimeoutError()
 
     return _the_fixture
 
