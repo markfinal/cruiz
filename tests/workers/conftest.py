@@ -197,8 +197,8 @@ def reply_queue_fixture() -> SingleprocessReplyQueueFixture:
     a test to generate new queues.
 
     Uses a thread for message processing.
-    The calling test must join the thread, before making any assertions on the
-    responses.
+    The calling test must send the End message and join the thread, before making any
+    assertions on the responses.
     """
 
     def _the_fixture() -> SingleprocessReplyQueueReturnType:
@@ -207,6 +207,11 @@ def reply_queue_fixture() -> SingleprocessReplyQueueFixture:
         ) -> None:
             while True:
                 reply = reply_queue.get(timeout=10)
+                if isinstance(reply, End):
+                    # this is the only way to exit this loop
+                    LOGGER.info("EndOfLine")
+                    break
+
                 if isinstance(reply, Success):
                     assert not replies
                     replies.append(reply)
@@ -220,8 +225,6 @@ def reply_queue_fixture() -> SingleprocessReplyQueueFixture:
                     LOGGER.info(reply.message)
                 else:
                     raise ValueError(f"Unknown reply of type '{type(reply)}'")
-                if reply_queue.empty() and replies:
-                    break
 
         reply_queue = queue.Queue[Message]()
         replies: typing.List[Message] = []
@@ -240,8 +243,8 @@ def multiprocess_reply_queue_fixture() -> MultiprocessReplyQueueFixture:
     Fixture factory to create a reply queue for a worker invocation on a child process.
 
     Uses a thread for message processing.
-    The calling test must join the thread, before making any assertions on the
-    responses.
+    The calling test must send the End message and join the thread, before making any
+    assertions on the responses.
     """
 
     def _the_fixture() -> MultiprocessReplyQueueReturnType:
@@ -251,6 +254,11 @@ def multiprocess_reply_queue_fixture() -> MultiprocessReplyQueueFixture:
             try:
                 while True:
                     reply = reply_queue.get(timeout=10)
+                    if isinstance(reply, End):
+                        # this is the only way to exit this loop
+                        LOGGER.info("EndOfLine")
+                        break
+
                     if isinstance(reply, Success):
                         assert not replies
                         replies.append(reply)
@@ -260,17 +268,10 @@ def multiprocess_reply_queue_fixture() -> MultiprocessReplyQueueFixture:
                             reply.exception_type_name,
                             reply.exception_traceback,
                         )
-                    elif isinstance(reply, End):
-                        LOGGER.info("EndOfLine")
-                        assert not replies
-                        replies.append(Success(None))
                     elif isinstance(reply, (ConanLogMessage, Stdout, Stderr)):
                         LOGGER.info(reply.message)
-                        continue
                     else:
                         raise ValueError(f"Unknown reply of type '{type(reply)}'")
-                    if reply_queue.empty() and replies:
-                        break
             finally:
                 reply_queue.close()
                 reply_queue.join_thread()
@@ -315,6 +316,9 @@ def run_worker() -> RunWorkerFixture:
             process = context.Process(target=worker, args=(reply_queue, params))
             process.start()
             process.join()
+
+        # tell the watcher thread that there is no more information coming
+        workers_api.endmessagethread.invoke(reply_queue)  # type: ignore[arg-type]
 
         watcher_thread.join(timeout=5.0)
         if watcher_thread.is_alive():
