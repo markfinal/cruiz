@@ -53,10 +53,7 @@ def test_cmake_no_cache(
     with pytest.raises(
         texceptions.FailedMessageTestError, match="Error: could not load cache"
     ):
-        run_worker(worker, reply_queue, params, context)
-        watcher_thread.join(timeout=5.0)
-        if watcher_thread.is_alive():
-            raise texceptions.WatcherThreadTimeoutError()
+        run_worker(worker, reply_queue, params, watcher_thread, context)
 
 
 @pytest.fixture(name="custom_cmake_command")
@@ -90,10 +87,7 @@ def test_cmake_custom_program(
     params.cwd = tmp_path
     params.added_environment = {"CONAN_CMAKE_PROGRAM": os.fspath(custom_cmake_command)}
     reply_queue, replies, watcher_thread, context = reply_queue_fixture()
-    run_worker(worker, reply_queue, params, context)
-    watcher_thread.join(timeout=5.0)
-    if watcher_thread.is_alive():
-        raise texceptions.WatcherThreadTimeoutError()
+    run_worker(worker, reply_queue, params, watcher_thread, context)
 
     assert replies
     assert isinstance(replies[0], Success)
@@ -124,10 +118,7 @@ def test_cmake_custom_build_tool(
     with pytest.raises(
         texceptions.FailedMessageTestError, match="Error: could not load cache"
     ):
-        run_worker(worker, reply_queue, params, context)
-        watcher_thread.join(timeout=5.0)
-        if watcher_thread.is_alive():
-            raise texceptions.WatcherThreadTimeoutError()
+        run_worker(worker, reply_queue, params, watcher_thread, context)
 
 
 @pytest.mark.xfail(
@@ -152,10 +143,7 @@ def test_cmake_use_ninja_generator(
     with pytest.raises(
         texceptions.FailedMessageTestError, match="Error: could not load cache"
     ):
-        run_worker(worker, reply_queue, params, context)
-        watcher_thread.join(timeout=5.0)
-        if watcher_thread.is_alive():
-            raise texceptions.WatcherThreadTimeoutError()
+        run_worker(worker, reply_queue, params, watcher_thread, context)
 
 
 @pytest.mark.xfail(
@@ -184,10 +172,7 @@ def test_cmake_verbose_output(
     with pytest.raises(
         texceptions.FailedMessageTestError, match="Error: could not load cache"
     ):
-        run_worker(worker, reply_queue, params, context)
-        watcher_thread.join(timeout=5.0)
-        if watcher_thread.is_alive():
-            raise texceptions.WatcherThreadTimeoutError()
+        run_worker(worker, reply_queue, params, watcher_thread, context)
 
 
 @pytest.mark.xfail(
@@ -212,7 +197,4 @@ def test_cmake_set_cpu_count(
     with pytest.raises(
         texceptions.FailedMessageTestError, match="Error: could not load cache"
     ):
-        run_worker(worker, reply_queue, params, context)
-        watcher_thread.join(timeout=5.0)
-        if watcher_thread.is_alive():
-            raise texceptions.WatcherThreadTimeoutError()
+        run_worker(worker, reply_queue, params, watcher_thread, context)

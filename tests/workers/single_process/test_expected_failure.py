@@ -36,8 +36,5 @@ def test_expected_failure(
     params = CommandParameters("install", worker)
     params.added_environment = conan_local_cache
     reply_queue, _, watcher_thread, context = reply_queue_fixture()
-    run_worker(worker, reply_queue, params, context)
     with pytest.raises(texceptions.FailedMessageTestError):
-        watcher_thread.join(timeout=5.0)
-        if watcher_thread.is_alive():
-            raise texceptions.WatcherThreadTimeoutError()
+        run_worker(worker, reply_queue, params, watcher_thread, context)

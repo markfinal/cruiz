@@ -22,8 +22,6 @@ from cruizlib.interop.message import Success
 # pylint: disable=wrong-import-order
 import pytest
 
-import texceptions
-
 if typing.TYPE_CHECKING:
     from ttypes import RunWorkerFixture, SingleprocessReplyQueueFixture
 
@@ -84,10 +82,7 @@ def test_conan_autotoolsbuildhelper_configure(
         params.cwd = conan_autotoolsbuildenvironment_configure_recipe.parent
         params.profile = "default"
         reply_queue, replies, watcher_thread, context = reply_queue_fixture()
-        run_worker(worker, reply_queue, params, context)
-        watcher_thread.join(timeout=5.0)
-        if watcher_thread.is_alive():
-            raise texceptions.WatcherThreadTimeoutError()
+        run_worker(worker, reply_queue, params, watcher_thread, context)
 
     if env_key and env_value:
         for key, value in zip(env_key, env_value):
@@ -99,10 +94,7 @@ def test_conan_autotoolsbuildhelper_configure(
     params.recipe_path = conan_autotoolsbuildenvironment_configure_recipe
     params.cwd = conan_autotoolsbuildenvironment_configure_recipe.parent
     reply_queue, replies, watcher_thread, context = reply_queue_fixture()
-    run_worker(worker, reply_queue, params, context)
-    watcher_thread.join(timeout=5.0)
-    if watcher_thread.is_alive():
-        raise texceptions.WatcherThreadTimeoutError()
+    run_worker(worker, reply_queue, params, watcher_thread, context)
 
     assert replies
     assert isinstance(replies[0], Success)
@@ -148,10 +140,7 @@ def test_conan_autotoolsbuildhelper_make(
         params.cwd = conan_autotoolsbuildenvironment_make_recipe.parent
         params.profile = "default"
         reply_queue, replies, watcher_thread, context = reply_queue_fixture()
-        run_worker(worker, reply_queue, params, context)
-        watcher_thread.join(timeout=5.0)
-        if watcher_thread.is_alive():
-            raise texceptions.WatcherThreadTimeoutError()
+        run_worker(worker, reply_queue, params, watcher_thread, context)
 
     if env_key and env_value:
         monkeypatch.setenv(env_key, env_value)
@@ -163,10 +152,7 @@ def test_conan_autotoolsbuildhelper_make(
     params.recipe_path = conan_autotoolsbuildenvironment_make_recipe
     params.cwd = conan_autotoolsbuildenvironment_make_recipe.parent
     reply_queue, replies, watcher_thread, context = reply_queue_fixture()
-    run_worker(worker, reply_queue, params, context)
-    watcher_thread.join(timeout=5.0)
-    if watcher_thread.is_alive():
-        raise texceptions.WatcherThreadTimeoutError()
+    run_worker(worker, reply_queue, params, watcher_thread, context)
 
     assert replies
     assert isinstance(replies[0], Success)

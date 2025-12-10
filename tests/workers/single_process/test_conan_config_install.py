@@ -47,10 +47,7 @@ def test_conan_config_install_missing(
         texceptions.FailedMessageTestError,
         match="Unable to deduce type config install",
     ):
-        run_worker(worker, reply_queue, params, context)
-        watcher_thread.join(timeout=5.0)
-        if watcher_thread.is_alive():
-            raise texceptions.WatcherThreadTimeoutError()
+        run_worker(worker, reply_queue, params, watcher_thread, context)
 
 
 @pytest.fixture(name="conan_config_zip")
@@ -98,10 +95,7 @@ def test_conan_config_install_from_zip(
     params.added_environment = conan_local_cache
     params.named_arguments["pathOrUrl"] = os.fspath(conan_config_zip)
     reply_queue, replies, watcher_thread, context = reply_queue_fixture()
-    run_worker(worker, reply_queue, params, context)
-    watcher_thread.join(timeout=5.0)
-    if watcher_thread.is_alive():
-        raise texceptions.WatcherThreadTimeoutError()
+    run_worker(worker, reply_queue, params, watcher_thread, context)
 
     if CONAN_MAJOR_VERSION == 1:
         assert "Unzipping" in caplog.text
@@ -128,10 +122,7 @@ def test_conan_config_install_from_git(
     params.added_environment = conan_local_cache
     params.named_arguments["pathOrUrl"] = os.fspath(conan_config_git_repo)
     reply_queue, replies, watcher_thread, context = reply_queue_fixture()
-    run_worker(worker, reply_queue, params, context)
-    watcher_thread.join(timeout=5.0)
-    if watcher_thread.is_alive():
-        raise texceptions.WatcherThreadTimeoutError()
+    run_worker(worker, reply_queue, params, watcher_thread, context)
 
     if CONAN_MAJOR_VERSION == 1:
         assert "Processing" in caplog.text
@@ -162,10 +153,7 @@ def test_conan_config_install_with_git_branch(
     params.named_arguments["pathOrUrl"] = os.fspath(conan_config_git_repo)
     params.named_arguments["gitBranch"] = git_branch_name
     reply_queue, replies, watcher_thread, context = reply_queue_fixture()
-    run_worker(worker, reply_queue, params, context)
-    watcher_thread.join(timeout=5.0)
-    if watcher_thread.is_alive():
-        raise texceptions.WatcherThreadTimeoutError()
+    run_worker(worker, reply_queue, params, watcher_thread, context)
 
     if CONAN_MAJOR_VERSION == 1:
         assert "Processing" in caplog.text
@@ -201,10 +189,7 @@ def test_conan_config_install_with_missing_git_branch(
     params.named_arguments["pathOrUrl"] = os.fspath(conan_config_git_repo)
     params.named_arguments["gitBranch"] = git_branch_name
     reply_queue, replies, watcher_thread, context = reply_queue_fixture()
-    run_worker(worker, reply_queue, params, context)
-    watcher_thread.join(timeout=5.0)
-    if watcher_thread.is_alive():
-        raise texceptions.WatcherThreadTimeoutError()
+    run_worker(worker, reply_queue, params, watcher_thread, context)
 
     if CONAN_MAJOR_VERSION == 1:
         assert "Processing" in caplog.text
@@ -240,10 +225,7 @@ def test_conan_config_install_from_source_folder(
     params.named_arguments["pathOrUrl"] = os.fspath(conan_config_zip)
     params.named_arguments["sourceFolder"] = source_folder
     reply_queue, replies, watcher_thread, context = reply_queue_fixture()
-    run_worker(worker, reply_queue, params, context)
-    watcher_thread.join(timeout=5.0)
-    if watcher_thread.is_alive():
-        raise texceptions.WatcherThreadTimeoutError()
+    run_worker(worker, reply_queue, params, watcher_thread, context)
 
     if CONAN_MAJOR_VERSION == 1:
         assert "Unzipping" in caplog.text
@@ -275,10 +257,7 @@ def test_conan_config_install_to_target_folder(
     params.named_arguments["pathOrUrl"] = os.fspath(conan_config_zip)
     params.named_arguments["targetFolder"] = target_folder
     reply_queue, replies, watcher_thread, context = reply_queue_fixture()
-    run_worker(worker, reply_queue, params, context)
-    watcher_thread.join(timeout=5.0)
-    if watcher_thread.is_alive():
-        raise texceptions.WatcherThreadTimeoutError()
+    run_worker(worker, reply_queue, params, watcher_thread, context)
 
     if CONAN_MAJOR_VERSION == 1:
         assert "Unzipping" in caplog.text

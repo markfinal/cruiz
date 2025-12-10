@@ -17,9 +17,6 @@ from cruizlib.globals import CONAN_VERSION_COMPONENTS
 from cruizlib.interop.commandparameters import CommandParameters
 from cruizlib.interop.message import Success
 
-# pylint: disable=wrong-import-order
-import texceptions
-
 if typing.TYPE_CHECKING:
     from ttypes import RunWorkerFixture, SingleprocessReplyQueueFixture
 
@@ -51,10 +48,7 @@ def test_conan_remove_package(
         params.user = "user1"
         params.channel = "channel1"
     reply_queue, replies, watcher_thread, context = reply_queue_fixture()
-    run_worker(worker, reply_queue, params, context)
-    watcher_thread.join(timeout=5.0)
-    if watcher_thread.is_alive():
-        raise texceptions.WatcherThreadTimeoutError()
+    run_worker(worker, reply_queue, params, watcher_thread, context)
 
     worker = workers_api.removepackage.invoke
     params = CommandParameters("removepackages", worker)
@@ -65,10 +59,7 @@ def test_conan_remove_package(
     # force is required, otherwise stdin is read
     params.force = True
     reply_queue, replies, watcher_thread, context = reply_queue_fixture()
-    run_worker(worker, reply_queue, params, context)
-    watcher_thread.join(timeout=5.0)
-    if watcher_thread.is_alive():
-        raise texceptions.WatcherThreadTimeoutError()
+    run_worker(worker, reply_queue, params, watcher_thread, context)
 
     assert replies
     assert isinstance(replies[0], Success)
