@@ -4,7 +4,7 @@ import os
 import typing
 
 from cruizlib.environ import EnvironSaver
-from cruizlib.workers.utils.env import set_env
+from cruizlib.workers.utils.env import clear_conan_env, set_env
 
 # pylint: disable=wrong-import-order
 import pytest
@@ -49,3 +49,12 @@ def test_env_add_and_remove(
     if removed:
         set_env({}, removed)
         assert ENVVAR not in os.environ
+
+
+def test_clear_conan_environment_vars(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Test the removal of Conan environment variables."""
+    env_var = "CONAN_BANANA"
+    monkeypatch.setenv(env_var, "1")
+    assert env_var in os.environ
+    clear_conan_env()
+    assert env_var not in os.environ
