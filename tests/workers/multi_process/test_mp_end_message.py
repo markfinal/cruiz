@@ -6,7 +6,6 @@ import logging
 import typing
 
 import cruizlib.workers.api as workers_api
-from cruizlib.interop.message import Success
 
 # pylint: disable=wrong-import-order
 import pytest
@@ -39,6 +38,4 @@ def test_end_watcher_thread(
         raise texceptions.WatcherThreadTimeoutError()
 
     assert "EndOfLine" in caplog.text
-    assert replies
-    assert isinstance(replies[0], Success)
-    assert replies[0].payload is None
+    assert not replies
