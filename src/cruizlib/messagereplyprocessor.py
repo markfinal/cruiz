@@ -8,9 +8,11 @@ Processing replies from child processes and converting to signals.
 
 from __future__ import annotations
 
+import functools
 import logging
 import multiprocessing
 import sys
+import threading
 import typing
 
 from PySide6 import QtCore
@@ -31,6 +33,22 @@ if typing.TYPE_CHECKING:
     from cruizlib.multiprocessingmessagequeuetype import MultiProcessingMessageQueueType
 
 logger = logging.getLogger(__name__)
+
+
+# needed for coverage to record from a QThread
+# see https://github.com/coveragepy/coveragepy/issues/686
+def coverage_resolve_trace(fn: typing.Any) -> typing.Any:
+    """."""
+
+    @functools.wraps(fn)
+    def _wrapped(  # pragma: no cover
+        *args: typing.Any, **kwargs: typing.Any
+    ) -> typing.Any:
+        if "coverage" in sys.modules:
+            sys.settrace(threading.gettrace())
+        fn(*args, **kwargs)
+
+    return _wrapped
 
 
 class MessageReplyProcessor(QtCore.QObject):
@@ -74,14 +92,15 @@ class MessageReplyProcessor(QtCore.QObject):
     def __check_for_conan_leakage(self, entry: typing.Any = None) -> bool:
         if "conans" not in sys.modules:
             return True
-        if entry:
+        if entry:  # pragma: no cover
             logger.critical("Conan has leaked into message queue object dump:")
             dump_object_types(entry, loglevel="CRITICAL")
             raise AssertionError("Conan has leaked into cruiz")
-        self.critical_failure.emit("Conan has leaked into cruiz")
-        return False
+        self.critical_failure.emit("Conan has leaked into cruiz")  # pragma: no cover
+        return False  # pragma: no cover
 
     # pylint: disable=too-many-branches
+    @coverage_resolve_trace
     def process(self) -> None:
         """Process messages received from a child process."""
         try:
@@ -89,17 +108,17 @@ class MessageReplyProcessor(QtCore.QObject):
             # pylint: disable=import-outside-toplevel
             import pydevd
 
-            pydevd.settrace(suspend=False)
+            pydevd.settrace(suspend=False)  # pragma: no cover
         except ModuleNotFoundError:
             pass
         while True:
             logger.debug("(%d) wait for queue entry...", id(self))
             try:
                 if not self.__check_for_conan_leakage(None):
-                    break
+                    break  # pragma: no cover
                 entry = self._queue.get()
                 if not self.__check_for_conan_leakage(entry):
-                    break
+                    break  # pragma: no cover
                 if isinstance(entry, End):
                     break
                 if isinstance(entry, Stdout):
@@ -123,7 +142,7 @@ class MessageReplyProcessor(QtCore.QObject):
                     self.completed.emit(None, Exception(entry.message))
                 else:
                     logger.error("Unknown message type: '%s'", entry)
-            except EOFError as exception:
+            except EOFError as exception:  # pragma: no cover
                 logger.debug(
                     "(%d) queue failed because %s",
                     id(self),

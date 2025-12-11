@@ -4,6 +4,8 @@ import multiprocessing
 import queue
 import typing
 
+from PySide6 import QtCore
+
 from cruizlib.interop.commandparameters import CommandParameters
 from cruizlib.interop.message import Message
 from cruizlib.interop.packagebinaryparameters import PackageBinaryParameters
@@ -11,6 +13,7 @@ from cruizlib.interop.packageidparameters import PackageIdParameters
 from cruizlib.interop.packagerevisionsparameters import PackageRevisionsParameters
 from cruizlib.interop.reciperevisionsparameters import RecipeRevisionsParameters
 from cruizlib.interop.searchrecipesparameters import SearchRecipesParameters
+from cruizlib.messagereplyprocessor import MessageReplyProcessor
 from cruizlib.multiprocessingmessagequeuetype import (
     MultiProcessingMessageQueueType,
     MultiProcessingStringJoinableQueueType,
@@ -41,6 +44,17 @@ MultiprocessReplyQueueReturnType = typing.Tuple[
 
 MultiprocessReplyQueueFixture = typing.Callable[[], MultiprocessReplyQueueReturnType]
 
+# MessageReplyProcessor
+MessageReplyProcessorReturnType = typing.Tuple[
+    MultiProcessingMessageQueueType,
+    typing.List[Message],
+    QtCore.QThread,
+    MessageReplyProcessor,
+    multiprocessing.context.SpawnContext,
+]
+
+MessageReplyProcessorFixture = typing.Callable[[], MessageReplyProcessorReturnType]
+
 # Run worker
 RunWorkerFixture = typing.Callable[
     [
@@ -55,6 +69,26 @@ RunWorkerFixture = typing.Callable[
             SearchRecipesParameters,
         ],
         TestableThread,
+        typing.Optional[multiprocessing.context.SpawnContext],
+    ],
+    None,
+]
+
+# Run worker using the MessageReplyProcessor
+RunWorkerMessageProcessorFixture = typing.Callable[
+    [
+        typing.Any,
+        typing.Union[queue.Queue[Message], MultiProcessingMessageQueueType],
+        typing.Union[
+            CommandParameters,
+            PackageBinaryParameters,
+            PackageIdParameters,
+            PackageRevisionsParameters,
+            RecipeRevisionsParameters,
+            SearchRecipesParameters,
+        ],
+        QtCore.QThread,
+        MessageReplyProcessor,
         typing.Optional[multiprocessing.context.SpawnContext],
     ],
     None,
