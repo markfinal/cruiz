@@ -21,9 +21,9 @@ from PySide6 import QtCore, QtWidgets
 
 from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
 
-import psutil
+from cruizlib.messagereplyprocessor import MessageReplyProcessor
 
-from .messagereplyprocessor import MessageReplyProcessor
+import psutil
 
 if typing.TYPE_CHECKING:
     from cruizlib.interop.commandparameters import CommandParameters
