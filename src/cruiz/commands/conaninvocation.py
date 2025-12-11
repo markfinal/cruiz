@@ -43,7 +43,6 @@ class ConanInvocation(QtCore.QObject):
 
     completed = QtCore.Signal(object, Exception)
     finished = QtCore.Signal()
-    _begin_processing = QtCore.Signal()
 
     def __del__(self) -> None:
         """Log when a ConanInvocation is deleted."""
@@ -58,7 +57,7 @@ class ConanInvocation(QtCore.QObject):
         self._thread = QtCore.QThread()
         self._queue_processor = MessageReplyProcessor(self._process_queue)
         self._queue_processor.moveToThread(self._thread)
-        self._begin_processing.connect(self._queue_processor.process)
+        self._thread.started.connect(self._queue_processor.process)
         self._queue_processor.completed.connect(self.completed)
         # self._thread.finished not guaranteed to be delivered in a
         # qApp quitting scenario
@@ -69,7 +68,6 @@ class ConanInvocation(QtCore.QObject):
         self._cleanup_thread: typing.Optional[threading.Thread] = None
 
         self._thread.start()
-        self._begin_processing.emit()
 
     def close(self) -> None:
         """Tidy up any resources on the context that need closing."""
