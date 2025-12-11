@@ -14,6 +14,8 @@ import sys
 import typing
 from unittest.mock import MagicMock
 
+from PySide6 import QtCore
+
 import cruizlib.workers.api as workers_api
 from cruizlib.globals import CONAN_MAJOR_VERSION, CONAN_VERSION_COMPONENTS
 from cruizlib.interop.commandparameters import CommandParameters
@@ -26,6 +28,7 @@ from cruizlib.interop.message import (
     Stdout,
     Success,
 )
+from cruizlib.messagereplyprocessor import MessageReplyProcessor
 from cruizlib.workers.metarequestconaninvocation import MetaRequestConanInvocation
 
 # pylint: disable=wrong-import-order
@@ -48,10 +51,13 @@ if typing.TYPE_CHECKING:
     )
 
     from ttypes import (
+        MessageReplyProcessorFixture,
+        MessageReplyProcessorReturnType,
         MetaFixture,
         MultiprocessReplyQueueFixture,
         MultiprocessReplyQueueReturnType,
         RunWorkerFixture,
+        RunWorkerMessageProcessorFixture,
         SingleprocessReplyQueueFixture,
         SingleprocessReplyQueueReturnType,
     )
@@ -310,6 +316,47 @@ def multiprocess_reply_queue_fixture() -> MultiprocessReplyQueueFixture:
 
 
 @pytest.fixture()
+def messagereplyprocessor_fixture() -> MessageReplyProcessorFixture:
+    """
+    Fixture factory to create a reply queue for a worker invocation on a child process.
+
+    Uses a thread for message processing.
+    The calling test must send the End message and join the thread, before making any
+    assertions on the responses.
+    """
+    replies: typing.List[typing.Any] = []
+
+    def _append(obj: object, exc: object) -> None:
+        if obj:
+            replies.append(obj)
+        if exc:
+            replies.append(exc)
+
+    def _message(msg: str) -> None:
+        LOGGER.info(msg)
+
+    def _the_fixture() -> MessageReplyProcessorReturnType:
+        context = multiprocessing.get_context("spawn")
+        reply_queue = context.Queue()
+        watcher_thread = QtCore.QThread()
+        processor = MessageReplyProcessor(reply_queue)
+        processor.moveToThread(watcher_thread)
+        watcher_thread.started.connect(processor.process)  # pylint: disable=no-member
+        watcher_thread.finished.connect(  # pylint: disable=no-member
+            watcher_thread.deleteLater
+        )
+        processor.completed.connect(_append)
+        processor.stdout_message.connect(_message)
+        processor.stderr_message.connect(_message)
+        processor.conan_log_message.connect(_message)
+        processor.critical_failure.connect(_message)
+        watcher_thread.start()
+        return reply_queue, replies, watcher_thread, processor, context
+
+    return _the_fixture
+
+
+@pytest.fixture()
 def run_worker() -> RunWorkerFixture:
     """Fixture factory returning how to run the worker."""
 
@@ -344,8 +391,8 @@ def run_worker() -> RunWorkerFixture:
 
         # tell the watcher thread that there is no more information coming
         if context is not None:
-            # this must be done in a separate process because it closes the other side
-            # of the queue
+            # this must be done in a separate process because it closes the other
+            # side of the queue
             process = context.Process(
                 target=workers_api.endmessagethread.invoke, args=(reply_queue,)
             )
@@ -357,6 +404,53 @@ def run_worker() -> RunWorkerFixture:
 
         watcher_thread.join(timeout=5.0)
         if watcher_thread.is_alive():
+            raise texceptions.WatcherThreadTimeoutError()
+
+        if context is not None:
+            _have_conan_symbols_leaked()
+
+    return _the_fixture
+
+
+@pytest.fixture()
+def run_worker_message_processor() -> RunWorkerMessageProcessorFixture:
+    """Fixture factory returning how to run the worker."""  # noqa: D202
+
+    # pylint: disable=too-many-arguments,too-many-positional-arguments
+    def _the_fixture(
+        worker: typing.Any,
+        reply_queue: typing.Union[
+            queue.Queue[Message], MultiProcessingMessageQueueType
+        ],
+        params: typing.Union[
+            CommandParameters,
+            PackageBinaryParameters,
+            PackageIdParameters,
+            PackageRevisionsParameters,
+            RecipeRevisionsParameters,
+            SearchRecipesParameters,
+        ],
+        watcher_thread: QtCore.QThread,
+        processor: MessageReplyProcessor,
+        context: typing.Optional[multiprocessing.context.SpawnContext],
+    ) -> None:
+        def _have_conan_symbols_leaked() -> None:
+            assert "conans" not in sys.modules
+
+        if context is None:
+            # abusing the type system, as the API used for queue.Queue is the same
+            # as for multiprocessing.Queue
+            worker(reply_queue, params)
+        else:
+            _have_conan_symbols_leaked()
+            process = context.Process(target=worker, args=(reply_queue, params))
+            process.start()
+            process.join()
+
+        processor.stop()
+
+        watcher_thread.wait(5)
+        if not watcher_thread.isFinished():
             raise texceptions.WatcherThreadTimeoutError()
 
         if context is not None:
