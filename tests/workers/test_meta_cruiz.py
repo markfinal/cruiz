@@ -10,7 +10,7 @@ from cruizlib.globals import CONAN_MAJOR_VERSION, CONAN_VERSION_COMPONENTS
 if typing.TYPE_CHECKING:
     from unittest.mock import MagicMock
 
-    from cruizlib.workers.metarequestconaninvocation import MetaRequestConanInvocation
+    from cruizlib.commands.metarequestconaninvocation import MetaRequestConanInvocation
 
 
 def test_meta_get_version(

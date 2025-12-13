@@ -21,7 +21,7 @@ from PySide6 import QtCore, QtWidgets
 
 from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
 
-from cruizlib.messagereplyprocessor import MessageReplyProcessor
+from cruizlib.commands.messagereplyprocessor import MessageReplyProcessor
 
 import psutil
 

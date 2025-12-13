@@ -35,10 +35,12 @@ if typing.TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-# needed for coverage to record from a QThread
-# see https://github.com/coveragepy/coveragepy/issues/686
 def coverage_resolve_trace(fn: typing.Any) -> typing.Any:
-    """."""
+    """
+    Allow measuring coverage of a QThread function.
+
+    See https://github.com/coveragepy/coveragepy/issues/686
+    """
 
     @functools.wraps(fn)
     def _wrapped(  # pragma: no cover
