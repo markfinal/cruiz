@@ -13,7 +13,6 @@ from enum import IntEnum
 
 from PySide6 import QtCore, QtGui, QtWidgets
 
-from cruiz.commands.conanconf import ConanConfigBoolean
 from cruiz.commands.context import ConanContext
 from cruiz.commands.logdetails import LogDetails
 from cruiz.pyside6.local_cache_manage import Ui_ManageLocalCaches
@@ -33,6 +32,7 @@ from cruiz.settings.managers.recentconanremotes import (
 from cruiz.widgets.util import BlockSignals
 
 import cruizlib.globals
+from cruizlib.commands.conanconf import ConanConfigBoolean
 from cruizlib.constants import DEFAULT_CACHE_NAME
 from cruizlib.interop.pod import ConanHook
 

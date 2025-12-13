@@ -27,6 +27,7 @@ from .conanenv import get_conan_env
 from .conaninvocation import ConanInvocation
 
 if typing.TYPE_CHECKING:
+    from cruizlib.commands.conanconf import ConanConfigBoolean
     from cruizlib.interop.packagebinaryparameters import PackageBinaryParameters
     from cruizlib.interop.packageidparameters import PackageIdParameters
     from cruizlib.interop.packagenode import PackageNode
@@ -35,7 +36,6 @@ if typing.TYPE_CHECKING:
     from cruizlib.interop.reciperevisionsparameters import RecipeRevisionsParameters
     from cruizlib.interop.searchrecipesparameters import SearchRecipesParameters
 
-    from .conanconf import ConanConfigBoolean
     from .logdetails import LogDetails
 
 logger = logging.getLogger(__name__)
