@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import typing
 
-from .basesettings import (
+from cruizlib.settings.managers.basesettings import (
     BaseSettings,
     CommonSettings,
     DictSetting,
@@ -14,6 +14,7 @@ from .basesettings import (
     SettingMeta,
     StringSetting,
 )
+
 from .valueclasses import DictValue, ListValue, ScalarValue
 from .writermixin import _WriterMixin
 

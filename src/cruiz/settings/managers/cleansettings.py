@@ -6,7 +6,8 @@ import pathlib
 
 from PySide6 import QtCore, QtWidgets
 
-from .basesettings import BaseSettings
+from cruizlib.settings.managers.basesettings import BaseSettings
+
 from .recentrecipes import RecentRecipeSettingsDeleter, RecentRecipeSettingsWriter
 from .recipe import RecipeSettingsDeleter
 

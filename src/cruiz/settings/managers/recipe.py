@@ -12,8 +12,7 @@ from multiprocessing import cpu_count
 from PySide6 import QtCore
 
 from cruizlib.exceptions import InconsistentSettingsError
-
-from .basesettings import (
+from cruizlib.settings.managers.basesettings import (
     BaseSettings,
     BoolSetting,
     ComparableCommonSettings,
@@ -24,6 +23,7 @@ from .basesettings import (
     WorkflowCwd,
     WorkflowCwdSetting,
 )
+
 from .valueclasses import DictValue, ScalarValue
 from .writermixin import _WriterMixin
 

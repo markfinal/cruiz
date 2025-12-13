@@ -12,7 +12,7 @@ import typing
 
 from PySide6 import QtCore
 
-from .managers.basesettings import BaseSettings
+from cruizlib.settings.managers.basesettings import BaseSettings
 
 
 CURRENT_SETTINGS_VERSION = 9

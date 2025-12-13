@@ -8,7 +8,7 @@ import typing
 
 from PySide6 import QtCore
 
-from .basesettings import BaseSettings, CommonSettings
+from cruizlib.settings.managers.basesettings import BaseSettings, CommonSettings
 
 if typing.TYPE_CHECKING:
     import types

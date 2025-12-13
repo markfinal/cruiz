@@ -20,7 +20,6 @@ from cruiz.manage_local_cache import ManageLocalCachesDialog
 from cruiz.model.graphaslistmodel import DependenciesListModel, DependenciesTreeModel
 from cruiz.pyside6.recipe_window import Ui_RecipeWindow
 from cruiz.revealonfilesystem import reveal_on_filesystem
-from cruiz.settings.managers.basesettings import WorkflowCwd
 from cruiz.settings.managers.fontpreferences import FontSettingsReader, FontUsage
 from cruiz.settings.managers.generalpreferences import GeneralSettingsReader
 from cruiz.settings.managers.namedlocalcache import NamedLocalCacheSettingsReader
@@ -36,6 +35,7 @@ import cruizlib.workers.api as workers_api
 from cruizlib.exceptions import RecipeInspectionError
 from cruizlib.interop.commandparameters import CommandParameters
 from cruizlib.interop.dependencygraph import dependencygraph_from_node_dependees
+from cruizlib.settings.managers.basesettings import WorkflowCwd
 from cruizlib.workers.utils.text2html import text_to_html
 
 try:

@@ -8,7 +8,7 @@ import typing
 
 from PySide6 import QtCore, QtGui
 
-from .basesettings import (
+from cruizlib.settings.managers.basesettings import (
     BaseSettings,
     BoolSetting,
     ColourSetting,
@@ -16,6 +16,7 @@ from .basesettings import (
     SettingMeta,
     StringSetting,
 )
+
 from .valueclasses import ScalarValue
 from .writermixin import _WriterMixin
 

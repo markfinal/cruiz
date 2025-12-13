@@ -7,7 +7,7 @@ from enum import Enum
 
 from PySide6 import QtGui
 
-from .basesettings import BaseSettings
+from cruizlib.settings.managers.basesettings import BaseSettings
 
 
 class _WriterMixin:

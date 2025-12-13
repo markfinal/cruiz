@@ -7,13 +7,14 @@ from __future__ import annotations
 import typing
 from enum import Enum
 
-from .basesettings import (
+from cruizlib.settings.managers.basesettings import (
     BaseSettings,
     ComparableCommonSettings,
     IntSetting,
     SettingMeta,
     StringSetting,
 )
+
 from .valueclasses import ScalarValue
 from .writermixin import _WriterMixin
 

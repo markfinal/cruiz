@@ -6,12 +6,13 @@ from __future__ import annotations
 
 import typing
 
-from .basesettings import (
+from cruizlib.settings.managers.basesettings import (
     BaseSettings,
     ComparableCommonSettings,
     SettingMeta,
     StringSetting,
 )
+
 from .valueclasses import ScalarValue
 from .writermixin import _WriterMixin
 

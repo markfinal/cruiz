@@ -4,7 +4,7 @@
 
 from cruiz.restart import restart_cruiz
 
-from .basesettings import BaseSettings
+from cruizlib.settings.managers.basesettings import BaseSettings
 
 
 def factory_reset() -> None:
