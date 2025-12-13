@@ -17,6 +17,8 @@ from unittest.mock import MagicMock
 from PySide6 import QtCore
 
 import cruizlib.workers.api as workers_api
+from cruizlib.commands.messagereplyprocessor import MessageReplyProcessor
+from cruizlib.commands.metarequestconaninvocation import MetaRequestConanInvocation
 from cruizlib.globals import CONAN_MAJOR_VERSION, CONAN_VERSION_COMPONENTS
 from cruizlib.interop.commandparameters import CommandParameters
 from cruizlib.interop.message import (
@@ -28,8 +30,6 @@ from cruizlib.interop.message import (
     Stdout,
     Success,
 )
-from cruizlib.messagereplyprocessor import MessageReplyProcessor
-from cruizlib.workers.metarequestconaninvocation import MetaRequestConanInvocation
 
 # pylint: disable=wrong-import-order
 import pytest

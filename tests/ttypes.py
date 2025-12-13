@@ -6,6 +6,7 @@ import typing
 
 from PySide6 import QtCore
 
+from cruizlib.commands.messagereplyprocessor import MessageReplyProcessor
 from cruizlib.interop.commandparameters import CommandParameters
 from cruizlib.interop.message import Message
 from cruizlib.interop.packagebinaryparameters import PackageBinaryParameters
@@ -13,7 +14,6 @@ from cruizlib.interop.packageidparameters import PackageIdParameters
 from cruizlib.interop.packagerevisionsparameters import PackageRevisionsParameters
 from cruizlib.interop.reciperevisionsparameters import RecipeRevisionsParameters
 from cruizlib.interop.searchrecipesparameters import SearchRecipesParameters
-from cruizlib.messagereplyprocessor import MessageReplyProcessor
 from cruizlib.multiprocessingmessagequeuetype import (
     MultiProcessingMessageQueueType,
     MultiProcessingStringJoinableQueueType,
