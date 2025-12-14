@@ -191,6 +191,7 @@ addopts = [
     "--cov", "cruizlib",
     "--cov-report", "term-missing:skip-covered",
     "--import-mode=importlib",
+    "-x",
 ]
 pythonpath = [
     "tests",
