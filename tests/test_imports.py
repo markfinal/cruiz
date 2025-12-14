@@ -5,7 +5,13 @@ import os
 import pathlib
 import sys
 
+import pytest
 
+
+@pytest.mark.skipif(
+    sys.version_info < (3, 13),
+    reason="multiprocessing type annotation quirks in older Python versions",
+)
 def test_no_gui_imports() -> None:
     """Ensure no GUI imports are in the cruizlib package."""
     current_file_path = pathlib.Path(__file__)
