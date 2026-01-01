@@ -23,7 +23,7 @@
    <item row="2" column="1">
     <widget class="QLabel" name="label_4">
      <property name="text">
-      <string>Author: Mark Final (c) 2020-2025</string>
+      <string>Author: Mark Final (c) 2020-2026</string>
      </property>
     </widget>
    </item>
